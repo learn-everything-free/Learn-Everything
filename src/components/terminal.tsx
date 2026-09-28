@@ -65,7 +65,7 @@ export function LabTerminal({
           term.write("\x1b[2J\x1b[H");
           continue;
         }
-        term.writeln(out);
+        term.writeln(out.replace(/\n/g, "\r\n"));
       }
     };
     const submit = (submitted: string) => {

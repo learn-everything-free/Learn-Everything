@@ -18,6 +18,8 @@ export default function Home() {
   const continueTasks = ["linux-create-project", "docker-run-app"]
     .map((slug) => getTask(slug)!)
     .filter(Boolean);
+  const totalSkills = paths.reduce((n, p) => n + p.skills.length, 0);
+  const totalTasks = paths.reduce((n, p) => n + countTasks(p), 0);
 
   return (
     <div className="mx-auto max-w-[1200px]">
@@ -53,9 +55,9 @@ export default function Home() {
       <section className="border-y border-rule">
         <div className="grid grid-cols-2 divide-rule sm:grid-cols-4 sm:divide-x">
           {[
-            ["3", "learning paths"],
-            ["16", "skills"],
-            ["6", "hands-on tasks live"],
+            [String(paths.length), "learning paths"],
+            [String(totalSkills), "skills"],
+            [String(totalTasks), "hands-on tasks live"],
             ["100%", "free, forever"],
           ].map(([value, label]) => (
             <div key={label} className="px-6 py-8 lg:px-10">
