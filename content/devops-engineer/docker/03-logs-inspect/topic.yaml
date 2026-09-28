@@ -1,0 +1,6 @@
+slug: 03-logs-inspect
+title: Logs & Inspection
+summary: Containers are black boxes until you read their output.
+order: 3
+tasks:
+  - docker-capture-logs

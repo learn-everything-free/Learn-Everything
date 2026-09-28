@@ -1,0 +1,38 @@
+slug: net-verify-http
+title: Prove a Service Answers HTTP 200
+type: challenge
+difficulty: intermediate
+description: Deploy the app image on port 8080 and then prove — with curl, not faith — that it
+  answers HTTP 200. This combines Docker and networking; the validator makes a real request against
+  the port.
+requirements:
+  - A container from app:latest is running
+  - Port 8080 is mapped
+  - curl against localhost:8080 returns HTTP 200
+environment: ubuntu:24.04 + docker
+validation:
+  - validator: container_running
+    image: app:latest
+    label: container from app:latest running
+  - validator: http_status
+    port: 8080
+    label: HTTP 200 on localhost:8080
+steps:
+  - title: Start the container on port 8080
+    detail: docker run -d -p 8080:80 app:latest starts the app detached and forwards host port 8080 to
+      the container's port 80.
+    command: docker run -d -p 8080:80 app:latest
+  - title: Confirm the port mapping
+    detail: docker ps should show 0.0.0.0:8080->80/tcp. The left side is the host port curl will hit.
+    command: docker ps
+  - title: Request the health endpoint
+    detail: curl prints the response. HTTP/1.1 200 OK is the success code — this is what load balancers
+      and Kubernetes probes check.
+    command: curl http://localhost:8080/health
+  - title: See what failure looks like
+    detail: "Optional but valuable: if the container were down, curl would report 'Connection refused'.
+      Recognizing this error message is half of debugging connectivity."
+    command: curl http://localhost:9999
+  - title: Submit for validation
+    detail: The validator checks the container is running and that the port actually serves — the same
+      thing your curl proved.

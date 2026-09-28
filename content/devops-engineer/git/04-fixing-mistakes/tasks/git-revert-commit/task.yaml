@@ -1,0 +1,41 @@
+slug: git-revert-commit
+title: Revert a Bad Commit
+type: scenario
+difficulty: intermediate
+description: A teammate committed a bug and you need main clean again — without rewriting history
+  that others already have. Undo the last commit with git revert, which adds an inverse commit.
+requirements:
+  - ~/project is a Git repository
+  - A revert commit exists (message starts with 'Revert')
+environment: ubuntu:24.04 + git
+validation:
+  - validator: git_repo
+    path: /home/learner/project
+    label: ~/project is a Git repository
+  - validator: git_commit
+    path: /home/learner/project
+    message: 'Revert "bug: ship it broken"'
+    label: revert commit exists
+steps:
+  - title: Enter the repository
+    detail: Reverts operate on the current branch's history.
+    command: cd ~/project
+  - title: Simulate the bad commit
+    detail: Create and commit a change with a bad message — this stands in for the bug you're undoing.
+    command: touch bugfix.txt
+  - title: Stage and commit it
+    detail: Stage, then commit with the (deliberately bad) message.
+    command: git add .
+  - title: Commit
+    detail: This is the commit we'll undo.
+    command: 'git commit -m "bug: ship it broken"'
+  - title: Confirm the history
+    detail: git log shows the bad commit on top. git revert HEAD undoes exactly this commit.
+    command: git log
+  - title: Revert it
+    detail: git revert HEAD creates a NEW commit that inverses the last one. History grows instead of
+      being rewritten — safe for shared branches, unlike git reset.
+    command: git revert HEAD
+  - title: Verify and submit
+    detail: git log should now end with a 'Revert' commit. Then submit for validation.
+    command: git log

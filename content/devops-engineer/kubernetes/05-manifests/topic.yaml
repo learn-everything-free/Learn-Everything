@@ -1,0 +1,6 @@
+slug: 05-manifests
+title: YAML Manifests
+summary: "Declarative configuration: the way real clusters are managed."
+order: 5
+tasks:
+  - k8s-apply-yaml

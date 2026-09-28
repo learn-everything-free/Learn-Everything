@@ -1,0 +1,6 @@
+slug: 04-users-processes
+title: Processes
+summary: Everything running on the machine is a process with a PID.
+order: 4
+tasks:
+  - linux-find-process

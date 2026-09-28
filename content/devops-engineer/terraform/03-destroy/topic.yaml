@@ -1,0 +1,6 @@
+slug: 03-destroy
+title: Destroy
+summary: Infrastructure as code cuts both ways.
+order: 3
+tasks:
+  - tf-destroy

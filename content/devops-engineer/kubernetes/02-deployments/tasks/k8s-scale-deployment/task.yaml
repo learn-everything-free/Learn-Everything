@@ -1,0 +1,35 @@
+slug: k8s-scale-deployment
+title: Deploy and Scale a ReplicaSet
+type: practice
+difficulty: beginner
+description: Nobody runs bare Pods in production. A Deployment keeps a chosen number of identical
+  Pods alive and replaces any that die. Create one with 3 replicas.
+requirements:
+  - Deployment web exists
+  - Deployment web is running exactly 3 replicas
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: k8s_deployment_replicas
+    namespace: default
+    name: web
+    replicas: 3
+    label: deployment default/web has 3 replicas
+steps:
+  - title: Create the Deployment
+    detail: kubectl create deployment makes a Deployment (which creates its Pods). --replicas 3 asks the
+      controller to keep three copies alive at all times.
+    command: kubectl create deployment web --image=nginx:1.27 --replicas=3
+  - title: List the Pods
+    detail: kubectl get pods now shows three web-<hash> Pods. The hash is the ReplicaSet — delete one
+      and the Deployment replaces it, that's self-healing.
+    command: kubectl get pods
+  - title: Scale it
+    detail: kubectl scale changes the desired replica count. The Deployment controller notices the gap
+      and starts the difference. Scale to 3 here (it starts at 3, so this is a no-op — try 2, then
+      back to 3).
+    command: kubectl scale deployment web --replicas=3
+  - title: Verify
+    detail: kubectl get deployments should show 3/3 READY for web.
+    command: kubectl get deployments
+  - title: Submit for validation
+    detail: The validator checks the Deployment's replica count against the cluster.

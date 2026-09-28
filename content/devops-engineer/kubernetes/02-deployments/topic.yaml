@@ -1,0 +1,6 @@
+slug: 02-deployments
+title: Deployments & Scaling
+summary: Replicas, self-healing and rolling updates.
+order: 2
+tasks:
+  - k8s-scale-deployment

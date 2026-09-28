@@ -1,0 +1,49 @@
+slug: git-first-commit
+title: Your First Commit
+type: guided
+difficulty: beginner
+description: Initialize a Git repository in ~/project, stage every file and create the initial
+  commit with the message 'init'. Every command is explained in the walkthrough.
+requirements:
+  - ~/project is a Git repository
+  - One commit with message 'init' exists
+environment: ubuntu:24.04 + git
+validation:
+  - validator: git_repo
+    path: /home/learner/project
+    label: ~/project is a Git repository
+  - validator: git_commit
+    path: /home/learner/project
+    message: init
+    label: commit 'init' exists
+steps:
+  - title: Enter the project folder
+    detail: If you already created ~/project in the Linux task, just run the cd. Otherwise create it
+      first with mkdir ~/project.
+    command: cd ~/project
+  - title: Initialize the repository
+    detail: git init turns the current directory into a Git repository by creating a hidden .git folder.
+      Run this inside ~/project, not your home directory.
+    command: git init
+  - title: Add a file to commit
+    detail: An empty repository has nothing to commit. Create a README so the first commit has content.
+    command: touch README.md
+  - title: Stage everything
+    detail: "git add . stages every new or changed file in the current directory. Staging is Git's
+      staging area: you pick what goes into the next commit."
+    command: git add .
+  - title: Check the status
+    detail: git status shows the branch you're on and what's staged. README.md should be listed as a
+      change to be committed.
+    command: git status
+  - title: Create the commit
+    detail: git commit records the staged snapshot permanently. The -m flag supplies the message inline
+      — 'init' is the convention for a first commit.
+    command: git commit -m "init"
+  - title: Verify the history
+    detail: git log lists the commit history newest first. You should see one commit with the message
+      'init'.
+    command: git log
+  - title: Submit for validation
+    detail: The validator checks that ~/project is a Git repository and that a commit with the message
+      'init' exists in it.

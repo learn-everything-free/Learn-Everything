@@ -1,0 +1,40 @@
+slug: linux-find-process
+title: Identify a Running Process
+type: practice
+difficulty: beginner
+description: An application called 'app' is running on this machine. Find its PID with ps, confirm
+  it from the command line arguments, and record it.
+requirements:
+  - Directory ~/report exists
+  - File ~/report/app-pid.txt exists and contains the PID of the app process
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/app-pid.txt
+    label: ~/report/app-pid.txt
+  - validator: file_contains
+    path: /home/learner/report/app-pid.txt
+    value: "942"
+    label: app-pid.txt contains the PID 942
+steps:
+  - title: List all running processes
+    detail: "ps aux shows every process: user, PID, CPU/mem usage, and the full command. aux means: all
+      users, include processes without a terminal, show full command lines."
+    command: ps aux
+  - title: Filter for the app process
+    detail: Piping ps into grep is the classic way to find one process. You should see a line with
+      /usr/local/bin/app --port 8080.
+    command: ps aux | grep app
+  - title: Read the PID
+    detail: The second column is the PID — the number every process tool (kill, top, nice) uses to refer
+      to the process. Note it down.
+  - title: Record the PID
+    detail: Write the PID you found (942) into the report file. Substitute it in the command below if
+      you saw a different one.
+    command: "echo 'PID: 942' > ~/report/app-pid.txt"
+  - title: Verify and submit
+    detail: cat the file to confirm, then submit.
+    command: cat ~/report/app-pid.txt

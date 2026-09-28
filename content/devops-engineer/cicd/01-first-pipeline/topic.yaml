@@ -1,0 +1,6 @@
+slug: 01-first-pipeline
+title: Your First Pipeline
+summary: "GitHub Actions workflows: triggers, jobs and steps."
+order: 1
+tasks:
+  - cicd-first-workflow

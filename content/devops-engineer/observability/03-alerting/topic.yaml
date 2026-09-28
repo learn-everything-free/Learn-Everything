@@ -1,0 +1,6 @@
+slug: 03-alerting
+title: Alerting
+summary: A rule that pages a human should be precious.
+order: 3
+tasks:
+  - obs-alert-rule

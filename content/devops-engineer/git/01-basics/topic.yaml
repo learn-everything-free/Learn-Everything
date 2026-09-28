@@ -1,0 +1,6 @@
+slug: 01-basics
+title: Git Basics
+summary: Repositories, staging, commits and reading history.
+order: 1
+tasks:
+  - git-first-commit

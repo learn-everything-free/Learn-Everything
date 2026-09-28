@@ -1,0 +1,5 @@
+slug: ml-pipelines
+title: ML Pipelines
+summary: Data and training pipelines that rerun reliably.
+path: mlops-engineer
+order: 2

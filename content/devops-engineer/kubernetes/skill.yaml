@@ -1,0 +1,5 @@
+slug: kubernetes
+title: Kubernetes
+summary: Pods, deployments, services and debugging workloads in cluster.
+path: devops-engineer
+order: 8

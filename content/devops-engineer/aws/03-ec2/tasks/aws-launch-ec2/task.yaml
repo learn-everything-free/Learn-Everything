@@ -1,0 +1,31 @@
+slug: aws-launch-ec2
+title: Launch an EC2 Instance
+type: guided
+difficulty: beginner
+description: EC2 is AWS's virtual machine service. Launch an instance from an AMI, confirm it's
+  running, then terminate it — the full lifecycle in one task.
+requirements:
+  - An EC2 instance from ami-0abcdef1234567890 is running
+environment: aws-cli (lab profile)
+validation:
+  - validator: aws_ec2_instance_running
+    image: ami-0abcdef1234567890
+    label: instance from ami-0abcdef1234567890 running
+steps:
+  - title: Launch an instance
+    detail: aws ec2 run-instances starts a VM. --image-id picks the AMI (the machine image); in this
+      lab, t2.micro is the default instance type — the free-tier classic.
+    command: aws ec2 run-instances --image-id ami-0abcdef1234567890
+  - title: Read the response
+    detail: "The JSON contains InstanceId (i-...) and State: running. Note the ID — you'll need it to
+      terminate this exact machine later."
+  - title: Describe your instances
+    detail: "aws ec2 describe-instances lists everything. Filtering is a big part of real AWS CLI usage:
+      --filters 'Name=instance-state-name,Values=running'."
+    command: aws ec2 describe-instances
+  - title: Submit for validation
+    detail: The validator checks for a running instance from the AMI you launched.
+  - title: Terminate it (after the validator passes)
+    detail: "Termination is the bill-safety habit to build: a forgotten instance is a forgotten monthly
+      invoice. Run this once you've submitted, and verify with describe-instances."
+    command: aws ec2 terminate-instances --instance-ids i-0123456789abcdef0

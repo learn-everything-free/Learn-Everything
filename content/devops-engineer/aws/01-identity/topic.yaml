@@ -1,0 +1,6 @@
+slug: 01-identity
+title: Identity & Access
+summary: Who are you on AWS, and what are you allowed to do?
+order: 1
+tasks:
+  - aws-verify-identity

@@ -1,0 +1,37 @@
+slug: git-add-remote
+title: Connect to a Remote
+type: guided
+difficulty: beginner
+description: Local commits are only half the story. Add GitHub as a remote and push your branch. In
+  this lab the push is simulated — the workflow is identical to the real thing.
+requirements:
+  - Remote 'origin' points at a github.com URL
+  - Branch pushed to the remote
+environment: ubuntu:24.04 + git
+validation:
+  - validator: git_repo
+    path: /home/learner/project
+    label: ~/project is a Git repository
+  - validator: git_remote
+    path: /home/learner/project
+    url: github.com
+    label: origin remote points at github.com
+steps:
+  - title: Enter the repository
+    detail: Remotes are stored per repository inside .git/config.
+    command: cd ~/project
+  - title: Add the remote
+    detail: git remote add origin <url> stores the URL under the name 'origin' — the conventional name
+      for the repository you cloned from or push to. On GitHub, create an empty repo first and copy
+      its URL.
+    command: git remote add origin https://github.com/learner/demo.git
+  - title: Verify the remote
+    detail: git remote -v lists every remote with its fetch and push URLs. Both should show your
+      github.com URL.
+    command: git remote -v
+  - title: Push
+    detail: git push uploads committed work. -u sets upstream tracking so future pushes can be a bare
+      'git push'.
+    command: git push -u origin main
+  - title: Submit for validation
+    detail: The validator checks that origin points at github.com.

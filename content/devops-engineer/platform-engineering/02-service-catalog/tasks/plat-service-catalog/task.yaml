@@ -1,0 +1,31 @@
+slug: plat-service-catalog
+title: Register a Service in the Catalog
+type: guided
+difficulty: beginner
+description: Backstage-style catalogs read a catalog-info.yaml from each repository. Write one for
+  the service you templated — ownership, domain and component type.
+requirements:
+  - File ~/templates/service-template/catalog-info.yaml exists
+  - It declares a Component owned by a team
+environment: ubuntu:24.04
+validation:
+  - validator: file_contains
+    path: /home/learner/templates/service-template/catalog-info.yaml
+    value: "kind: Component"
+    label: "declares kind: Component"
+  - validator: file_contains
+    path: /home/learner/templates/service-template/catalog-info.yaml
+    value: "owner:"
+    label: declares an owner
+steps:
+  - title: Enter the template repository
+    detail: The catalog file lives at the repo root, next to the code.
+    command: cd ~/templates/service-template
+  - title: Write the catalog descriptor
+    detail: "apiVersion and kind: Component identify it as a service; metadata gives it a name;
+      spec.owner points at a catalog group — the team paged when it breaks."
+    command: "echo 'apiVersion: backstage.io/v1alpha1\\nkind: Component\\nmetadata:\\n  name:
+      service-template\\nspec:\\n  type: service\\n  owner: platform-team' > catalog-info.yaml"
+  - title: Review and submit
+    detail: cat the file. Every service in the company gets one of these — together they form the catalog.
+    command: cat catalog-info.yaml

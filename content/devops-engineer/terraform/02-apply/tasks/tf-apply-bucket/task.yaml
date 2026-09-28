@@ -1,0 +1,28 @@
+slug: tf-apply-bucket
+title: Apply the Configuration
+type: practice
+difficulty: beginner
+description: terraform apply executes the plan and writes what it created into terraform.tfstate —
+  the file Terraform uses to remember what belongs to it.
+requirements:
+  - aws_s3_bucket.demo exists in the Terraform state
+environment: terraform 1.7
+validation:
+  - validator: terraform_resource_in_state
+    path: /home/learner/infra
+    resource: aws_s3_bucket.demo
+    label: state contains aws_s3_bucket.demo
+steps:
+  - title: Enter the module
+    detail: State is stored per directory — always work from the module root.
+    command: cd ~/infra
+  - title: Apply with auto-approve
+    detail: terraform apply normally asks for confirmation; -auto-approve skips the prompt (in CI you'd
+      guard this with plan reviews instead).
+    command: terraform apply -auto-approve
+  - title: Inspect the state
+    detail: terraform state list prints every resource Terraform manages. It should show
+      aws_s3_bucket.demo — this is the source of truth Terraform reconciles against.
+    command: terraform state list
+  - title: Submit for validation
+    detail: The validator reads the same state file Terraform wrote.

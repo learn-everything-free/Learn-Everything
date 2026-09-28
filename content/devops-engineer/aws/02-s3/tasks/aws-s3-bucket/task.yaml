@@ -1,0 +1,41 @@
+slug: aws-s3-bucket
+title: Create a Bucket and Upload an Object
+type: practice
+difficulty: beginner
+description: "S3 is the storage everything else leans on: backups, static sites, Terraform state, ML
+  datasets. Create a bucket, upload a file into it and list what's inside."
+requirements:
+  - A bucket named learner-demo-bucket exists
+  - The bucket contains an uploaded object
+environment: aws-cli (lab profile)
+validation:
+  - validator: aws_s3_bucket_exists
+    bucket: learner-demo-bucket
+    label: bucket learner-demo-bucket exists
+  - validator: aws_s3_object_exists
+    bucket: learner-demo-bucket
+    key: demo.txt
+    label: demo.txt uploaded to the bucket
+steps:
+  - title: Create the bucket
+    detail: aws s3 mb makes a bucket. Bucket names are globally unique across all of AWS — that's why
+      real names look like mycompany-logs-eu-west-1.
+    command: aws s3 mb s3://learner-demo-bucket
+  - title: List your buckets
+    detail: aws s3 ls with no target lists every bucket you own.
+    command: aws s3 ls
+  - title: Create a file to upload
+    detail: Any file works — this one stands in for a backup or a static site asset.
+    command: mkdir ~/report
+  - title: Upload it
+    detail: aws s3 cp copies local files to S3 (and back). The destination is s3://bucket/key — the key
+      is the full object path.
+    command: echo 'demo object' > ~/report/demo.txt
+  - title: Copy to S3
+    detail: aws s3 cp ~/report/demo.txt s3://learner-demo-bucket/demo.txt
+    command: aws s3 cp ~/report/demo.txt s3://learner-demo-bucket/demo.txt
+  - title: List the bucket contents
+    detail: aws s3 ls s3://bucket lists objects in that bucket. Your demo.txt should be there.
+    command: aws s3 ls s3://learner-demo-bucket
+  - title: Submit for validation
+    detail: The validator checks the bucket exists and holds your object.

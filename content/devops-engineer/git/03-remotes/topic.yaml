@@ -1,0 +1,6 @@
+slug: 03-remotes
+title: Remotes & GitHub
+summary: Connect a local repository to the world.
+order: 3
+tasks:
+  - git-add-remote

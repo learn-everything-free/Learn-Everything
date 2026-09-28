@@ -1,0 +1,6 @@
+slug: 02-images
+title: Building Images
+summary: Dockerfiles, build contexts and tagging.
+order: 2
+tasks:
+  - docker-build-image

@@ -1,0 +1,5 @@
+slug: terraform
+title: Terraform
+summary: "Infrastructure as code: write it, plan it, apply it, destroy it."
+path: devops-engineer
+order: 7

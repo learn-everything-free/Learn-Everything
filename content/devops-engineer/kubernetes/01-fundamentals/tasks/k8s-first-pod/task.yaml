@@ -1,0 +1,30 @@
+slug: k8s-first-pod
+title: Run Your First Pod
+type: guided
+difficulty: beginner
+description: A Pod is one or more containers that share network and storage — the smallest thing
+  Kubernetes runs. Create one imperatively and watch it reach the Running state.
+requirements:
+  - Pod web exists
+  - Pod web is Running
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: k8s_pod_running
+    namespace: default
+    name: web
+    label: pod default/web is Running
+steps:
+  - title: Create the Pod
+    detail: kubectl run creates a single Pod imperatively. --image specifies the container image. This
+      is the fastest path; in real projects you usually write YAML manifests instead.
+    command: kubectl run web --image=nginx:1.27
+  - title: Watch the Pod status
+    detail: kubectl get pods lists Pods in the current namespace. Fresh Pods sit in ContainerCreating
+      while the image is pulled, then flip to Running.
+    command: kubectl get pods
+  - title: Inspect the Pod
+    detail: "kubectl describe pod web shows the full picture: image, node, events. When anything goes
+      wrong, the Events section at the bottom is where the answer lives."
+    command: kubectl describe pod web
+  - title: Submit for validation
+    detail: The validator asks the cluster itself whether default/web is Running.

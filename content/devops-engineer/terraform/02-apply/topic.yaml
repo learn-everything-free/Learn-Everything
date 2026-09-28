@@ -1,0 +1,6 @@
+slug: 02-apply
+title: Apply & State
+summary: Turning plans into real resources — and tracking them in state.
+order: 2
+tasks:
+  - tf-apply-bucket

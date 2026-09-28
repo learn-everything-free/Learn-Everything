@@ -1,0 +1,6 @@
+slug: 03-dns
+title: DNS
+summary: Names to addresses — the directory service of the internet.
+order: 3
+tasks:
+  - net-resolve-dns

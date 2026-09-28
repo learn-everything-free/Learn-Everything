@@ -1,0 +1,6 @@
+slug: 02-s3
+title: S3 — Object Storage
+summary: Buckets, objects and naming rules.
+order: 2
+tasks:
+  - aws-s3-bucket

@@ -1,0 +1,6 @@
+slug: 01-fundamentals
+title: Fundamentals & Pods
+summary: What Kubernetes is and how Pods, the smallest deployable units, work.
+order: 1
+tasks:
+  - k8s-first-pod

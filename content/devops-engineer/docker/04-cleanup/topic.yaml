@@ -1,0 +1,6 @@
+slug: 04-cleanup
+title: Cleanup & Lifecycle
+summary: Stop, remove and keep the machine tidy.
+order: 4
+tasks:
+  - docker-cleanup

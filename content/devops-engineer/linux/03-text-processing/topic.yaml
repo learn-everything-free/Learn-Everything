@@ -1,0 +1,6 @@
+slug: 03-text-processing
+title: Text Processing & Pipes
+summary: grep, wc, pipes and redirection — how engineers actually read logs.
+order: 3
+tasks:
+  - linux-log-pipeline

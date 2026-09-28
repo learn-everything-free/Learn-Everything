@@ -1,0 +1,6 @@
+slug: 04-debugging
+title: Debugging Workloads
+summary: CrashLoopBackOff is a clue, not a verdict.
+order: 4
+tasks:
+  - k8s-debug-crash

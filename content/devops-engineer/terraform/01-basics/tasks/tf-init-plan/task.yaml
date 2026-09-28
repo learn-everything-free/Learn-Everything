@@ -1,0 +1,42 @@
+slug: tf-init-plan
+title: Write Your First Configuration
+type: guided
+difficulty: beginner
+description: Terraform turns .tf files into real infrastructure. Write a configuration that declares
+  an S3 bucket, initialize the provider and generate a plan — the read-only preview every change
+  should start with.
+requirements:
+  - Directory ~/infra contains main.tf with an aws_s3_bucket resource
+  - terraform init has been run in ~/infra
+  - A plan was generated successfully
+environment: terraform 1.7
+validation:
+  - validator: file_contains
+    path: /home/learner/infra/main.tf
+    value: aws_s3_bucket
+    label: main.tf declares an aws_s3_bucket
+  - validator: terraform_initialized
+    path: /home/learner/infra
+    label: terraform init completed in ~/infra
+steps:
+  - title: Create the project directory
+    detail: One directory = one Terraform root module. Keep it isolated from everything else.
+    command: mkdir ~/infra
+  - title: Enter it and declare the resource
+    detail: 'The next command writes main.tf. resource "aws_s3_bucket" "demo" is HCL: TYPE NAME. The
+      block body is empty here — defaults only.'
+    command: cd ~/infra
+  - title: Write main.tf
+    detail: echo 'resource "aws_s3_bucket" "demo" {}' > main.tf — this is your entire infrastructure
+      definition. Terraform figures out the rest.
+    command: echo 'resource "aws_s3_bucket" "demo" {}' > main.tf
+  - title: Initialize
+    detail: terraform init downloads the provider plugins your configuration needs (hashicorp/aws here)
+      and sets up the backend. Run it once per module, and after every provider change.
+    command: terraform init
+  - title: Plan
+    detail: "terraform plan compares the code with reality and prints the diff: + means will be created.
+      Read the plan before every apply — it's your last line of defense."
+    command: terraform plan
+  - title: Submit for validation
+    detail: The validator checks main.tf declares the bucket and that init ran in this directory.

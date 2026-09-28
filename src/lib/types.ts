@@ -31,6 +31,8 @@ export interface Topic {
   title: string;
   summary: string;
   tasks: Task[];
+  /** compiled HTML of the topic's lesson.md (undefined when absent) */
+  lesson?: string;
 }
 
 export interface Skill {

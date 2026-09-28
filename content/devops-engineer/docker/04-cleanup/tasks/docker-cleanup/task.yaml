@@ -1,0 +1,43 @@
+slug: docker-cleanup
+title: Clean Up Containers and Images
+type: practice
+difficulty: beginner
+description: Leftover containers and images eat disk on every real machine. Stop the running app,
+  remove its container, then remove the image itself — and prove it's gone.
+requirements:
+  - No container from app:latest is running
+  - Image app:latest has been removed locally
+environment: docker:24
+validation:
+  - validator: no_container_running
+    image: app:latest
+    label: no running container from app:latest
+  - validator: image_removed
+    image: app:latest
+    label: image app:latest removed
+steps:
+  - title: List what's running
+    detail: docker ps shows the containers you started in earlier tasks. Note the container ID of the
+      app container.
+    command: docker ps
+  - title: Stop the container
+    detail: "docker stop asks the process to shut down gracefully (SIGTERM, then SIGKILL). $(docker ps
+      -q) is command substitution: the shell runs the inner command and pastes its output (the
+      running container IDs) into the stop command."
+    command: docker stop $(docker ps -q)
+  - title: Confirm nothing is running
+    detail: docker ps shows an empty list. docker ps -a still shows the stopped container — stopped
+      containers are kept so they can be restarted or inspected.
+    command: docker ps -a
+  - title: Remove the stopped container
+    detail: docker rm deletes a container for good. Passing every container ID via $(docker ps -aq)
+      cleans them all in one go.
+    command: docker rm $(docker ps -aq)
+  - title: Remove the image
+    detail: docker rmi deletes the image from local storage. It fails if any container still uses it —
+      which is exactly the safety you want.
+    command: docker rmi app:latest
+  - title: Verify everything is gone
+    detail: docker images should no longer list app, and docker ps -a should have no app containers.
+      Then submit.
+    command: docker images

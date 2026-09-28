@@ -1,0 +1,35 @@
+slug: net-find-listening-port
+title: Find What's Listening on Which Port
+type: practice
+difficulty: beginner
+description: "'Port 8080 is in use' is a daily incident. Use ss to list listening sockets, find the
+  port the app process listens on and record it."
+requirements:
+  - Directory ~/report exists
+  - File ~/report/app-port.txt exists and contains the app's listening port
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/app-port.txt
+    label: ~/report/app-port.txt
+  - validator: file_contains
+    path: /home/learner/report/app-port.txt
+    value: "port: 8080"
+    label: "app-port.txt says 'port: 8080'"
+steps:
+  - title: List listening TCP sockets
+    detail: "ss -tlnp shows: t TCP sockets, l listening only, n numeric ports, p the owning process.
+      Three services are listening on this machine."
+    command: ss -tlnp
+  - title: Find the app's port
+    detail: Match the Process column to the app. Its local address is *:8080 — meaning it accepts
+      connections on port 8080 on every interface. Port 22 is sshd, 53 is the local DNS resolver.
+  - title: Record the port
+    detail: Write the port number into the report file.
+    command: "echo 'port: 8080' > ~/report/app-port.txt"
+  - title: Verify and submit
+    detail: cat the file, then submit. The validator checks the recorded port matches the real listener.
+    command: cat ~/report/app-port.txt

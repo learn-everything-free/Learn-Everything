@@ -1,0 +1,6 @@
+slug: 03-services
+title: Services
+summary: Stable networking for unstable Pods.
+order: 3
+tasks:
+  - k8s-expose-service

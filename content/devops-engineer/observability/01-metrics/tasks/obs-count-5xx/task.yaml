@@ -1,0 +1,42 @@
+slug: obs-count-5xx
+title: Count HTTP 5xx Errors
+type: practice
+difficulty: beginner
+description: Every dashboard number starts as raw events. The app's access log is at
+  /var/log/app/access.log — count the HTTP 500 responses and record the number your dashboard would
+  show.
+requirements:
+  - Directory ~/report exists
+  - File ~/report/5xx.txt exists and contains the 500 count
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/5xx.txt
+    label: ~/report/5xx.txt
+  - validator: file_contains
+    path: /home/learner/report/5xx.txt
+    value: "5xx errors: 6"
+    label: "5xx.txt says '5xx errors: 6'"
+steps:
+  - title: Look at the access log
+    detail: 'The common log format ends each line with the status code: "GET /api/items HTTP/1.1" 200
+      512. Status 500 means the server failed.'
+    command: cat /var/log/app/access.log
+  - title: Filter the 500s
+    detail: grep 500 matches lines containing '500' — in this log that's exactly the failed requests
+      (sizes and IPs never contain 500).
+    command: grep 500 /var/log/app/access.log
+  - title: Count them
+    detail: "grep -c prints the count instead of the lines. The pipe version does the same: grep 500
+      file | wc -l."
+    command: grep -c 500 /var/log/app/access.log
+  - title: Record the number
+    detail: Write the count you measured (6) into the report. This is the same number a metrics scraper
+      would turn into a graph.
+    command: "echo '5xx errors: 6' > ~/report/5xx.txt"
+  - title: Verify and submit
+    detail: cat the file, then submit.
+    command: cat ~/report/5xx.txt

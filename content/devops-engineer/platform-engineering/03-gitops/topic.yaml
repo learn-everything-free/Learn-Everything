@@ -1,0 +1,6 @@
+slug: 03-gitops
+title: GitOps with ArgoCD
+summary: Git as the single source of truth for what runs.
+order: 3
+tasks:
+  - plat-gitops-app

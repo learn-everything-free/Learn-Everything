@@ -1,0 +1,40 @@
+slug: net-resolve-dns
+title: Resolve a Hostname
+type: guided
+difficulty: beginner
+description: Before a connection is made, a name becomes an IP. Resolve lab.internal with dig,
+  compare with /etc/hosts and record the answer.
+requirements:
+  - Directory ~/report exists
+  - File ~/report/dns.txt exists and contains the IP for lab.internal
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/dns.txt
+    label: ~/report/dns.txt
+  - validator: file_contains
+    path: /home/learner/report/dns.txt
+    value: 10.0.0.42
+    label: dns.txt contains 10.0.0.42
+steps:
+  - title: Check the resolver configuration
+    detail: cat /etc/resolv.conf shows which DNS servers the system asks — nameserver 127.0.0.53 is the
+      local systemd resolver.
+    command: cat /etc/resolv.conf
+  - title: Check /etc/hosts
+    detail: Before DNS is queried, the OS checks /etc/hosts. lab.internal → 10.0.0.42 is mapped there —
+      static entries always win.
+    command: cat /etc/hosts
+  - title: Query DNS with dig
+    detail: dig asks the resolver directly. The ANSWER SECTION shows lab.internal. 300 IN A 10.0.0.42 —
+      an A record mapping the name to an IPv4 address, cached for 300 seconds.
+    command: dig lab.internal
+  - title: Record the answer
+    detail: Write the resolved IP into the report file.
+    command: "echo 'lab.internal: 10.0.0.42' > ~/report/dns.txt"
+  - title: Verify and submit
+    detail: cat the file, then submit.
+    command: cat ~/report/dns.txt

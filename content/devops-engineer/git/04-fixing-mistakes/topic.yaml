@@ -1,0 +1,6 @@
+slug: 04-fixing-mistakes
+title: Fixing Mistakes
+summary: Reverting bad changes without rewriting history.
+order: 4
+tasks:
+  - git-revert-commit

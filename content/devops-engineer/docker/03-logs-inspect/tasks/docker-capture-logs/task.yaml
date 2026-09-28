@@ -1,0 +1,36 @@
+slug: docker-capture-logs
+title: Capture Container Output
+type: practice
+difficulty: beginner
+description: Run the app, capture its logs into a file with shell redirection and verify the port it
+  listens on. Reading container output is the first step of debugging any container.
+requirements:
+  - A container from app:latest is running
+  - File ~/report/container.log exists containing the container's output
+environment: docker:24
+validation:
+  - validator: container_running
+    image: app:latest
+    label: container from app:latest running
+  - validator: file_contains
+    path: /home/learner/report/container.log
+    value: listening on 0.0.0.0:80
+    label: container.log has the app's output
+steps:
+  - title: Start the app container
+    detail: Detached with no port mapping — logs are the focus here, not networking.
+    command: docker run -d app:latest
+  - title: Read its logs
+    detail: docker logs with no argument shows the most recent container's output. You should see
+      'listening on 0.0.0.0:80'.
+    command: docker logs
+  - title: Capture the logs to a file
+    detail: "Redirection works on any command: > writes the command's output into a file. Create the
+      report directory first if you haven't yet."
+    command: mkdir ~/report
+  - title: Redirect the logs
+    detail: docker logs > ~/report/container.log — then cat the file to confirm the capture.
+    command: docker logs > ~/report/container.log
+  - title: Verify and submit
+    detail: The validator checks the file contains the real container output.
+    command: cat ~/report/container.log

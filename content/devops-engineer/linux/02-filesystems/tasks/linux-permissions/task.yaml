@@ -1,0 +1,42 @@
+slug: linux-permissions
+title: Lock Down a Secret File
+type: practice
+difficulty: beginner
+description: Create a secrets file with restrictive permissions. Only the owner should be able to
+  read and write it — nobody else. This is exactly how SSH private keys work.
+requirements:
+  - Directory ~/secure exists
+  - File ~/secure/secret.txt exists
+  - Permissions on secret.txt are 600 (owner read/write only)
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/secure
+    label: ~/secure
+  - validator: file_exists
+    path: /home/learner/secure/secret.txt
+    label: ~/secure/secret.txt
+  - validator: file_mode
+    path: /home/learner/secure/secret.txt
+    mode: "600"
+    label: secret.txt has mode 600
+steps:
+  - title: Create the directory
+    detail: A dedicated directory keeps secrets out of world-readable places.
+    command: mkdir ~/secure
+  - title: Create the file
+    detail: "touch creates an empty file. New files usually get mode 644: everyone can read them."
+    command: touch ~/secure/secret.txt
+  - title: Inspect the current permissions
+    detail: "ls -l shows permissions as the first column, like -rw-r--r--. Three triples: owner, group,
+      others (r=read, w=write, x=execute)."
+    command: ls -l ~/secure
+  - title: Restrict the file to the owner
+    detail: "chmod changes mode bits. 600 is octal: owner gets read+write (6 = 4+2), group gets nothing
+      (0), others get nothing (0)."
+    command: chmod 600 ~/secure/secret.txt
+  - title: Verify the new mode
+    detail: The ls -l output should now show -rw-------. Compare it with the previous listing.
+    command: ls -l ~/secure
+  - title: Submit for validation
+    detail: The validator checks the file exists and its mode is exactly 600.

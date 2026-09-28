@@ -1,0 +1,51 @@
+slug: cicd-first-workflow
+title: Write Your First GitHub Actions Workflow
+type: guided
+difficulty: beginner
+description: A pipeline is a file in the repository — that's the whole trick. Create the exact
+  directory layout GitHub Actions expects and write a workflow that runs on every push.
+requirements:
+  - File ~/project/.github/workflows/ci.yml exists
+  - Workflow triggers on push
+  - Workflow checks out the code with actions/checkout
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/project/.github/workflows/ci.yml
+    label: workflow file exists
+  - validator: file_contains
+    path: /home/learner/project/.github/workflows/ci.yml
+    value: "on: push"
+    label: workflow triggers on push
+  - validator: file_contains
+    path: /home/learner/project/.github/workflows/ci.yml
+    value: actions/checkout@v4
+    label: workflow checks out the code
+steps:
+  - title: Enter the project
+    detail: Workflows always live inside the repository, in a hidden .github directory at the repo root.
+    command: cd ~/project
+  - title: Create the workflows directory
+    detail: GitHub only picks up workflow files from .github/workflows/ — the path is not configurable.
+    command: mkdir -p ~/project/.github/workflows
+  - title: Start the workflow file
+    detail: "name is the display name; on: push is the trigger — the workflow runs on every push to the
+      repository."
+    command: "echo 'name: CI' > ~/project/.github/workflows/ci.yml"
+  - title: Add the trigger
+    detail: Append the trigger line. >> appends instead of overwriting.
+    command: "echo 'on: push' >> ~/project/.github/workflows/ci.yml"
+  - title: Add the job
+    detail: jobs group steps; runs-on chooses the runner VM — ubuntu-latest is the standard choice.
+    command: echo 'jobs:' >> ~/project/.github/workflows/ci.yml
+  - title: Add the build job and checkout step
+    detail: Every job starts from a fresh VM, so the first step is always actions/checkout@v4 to pull
+      your code onto the runner.
+    command: echo '  build:' >> ~/project/.github/workflows/ci.yml
+  - title: Finish the workflow
+    detail: "Add runs-on, then steps with - uses: actions/checkout@v4. Run cat to review the whole file."
+    command: "echo '    runs-on: ubuntu-latest' >> ~/project/.github/workflows/ci.yml"
+  - title: Add the checkout step and verify
+    detail: "Append '    steps:' and '      - uses: actions/checkout@v4', then cat the file. Then submit
+      — the validator parses the YAML you wrote."
+    command: cat ~/project/.github/workflows/ci.yml

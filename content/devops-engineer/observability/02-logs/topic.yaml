@@ -1,0 +1,6 @@
+slug: 02-logs
+title: Log Triage
+summary: Extract the signal from the noise.
+order: 2
+tasks:
+  - obs-extract-errors

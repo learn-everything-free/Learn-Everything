@@ -1,0 +1,6 @@
+slug: 01-metrics
+title: Metrics from Logs
+summary: Numbers come from somewhere — learn to extract them.
+order: 1
+tasks:
+  - obs-count-5xx

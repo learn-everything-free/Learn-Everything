@@ -1,0 +1,46 @@
+slug: linux-inspect-files
+title: Find the Largest Log
+type: challenge
+difficulty: beginner
+description: Something is writing huge log files to /var/log/app. Inspect the filesystem, find the
+  largest .log file in that directory and record it in ~/report/largest.txt. The walkthrough shows
+  every command.
+requirements:
+  - Directory ~/report exists
+  - File ~/report/largest.txt exists and names the largest log file
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/largest.txt
+    label: ~/report/largest.txt
+  - validator: file_contains
+    path: /home/learner/report/largest.txt
+    value: app-2026-09-26.log
+    label: largest.txt names the largest log
+steps:
+  - title: Inspect the log directory
+    detail: cd changes your current directory. /var/log/app is where the application writes its logs.
+    command: cd /var/log/app
+  - title: List files sorted by size
+    detail: "ls with three useful flags: -l long format, -h human-readable sizes (K/M/G instead of raw
+      bytes), and -S sort largest first. The biggest file is on top."
+    command: ls -lhS
+  - title: Go back home
+    detail: cd with no arguments returns to your home directory.
+    command: cd ~
+  - title: Create the report directory
+    detail: mkdir ~/report creates the directory the report will live in.
+    command: mkdir ~/report
+  - title: Write the largest log file's name into the report
+    detail: echo prints text; the > redirect writes that text into a file, creating it if needed. The
+      largest file from step 2 was app-2026-09-26.log.
+    command: echo app-2026-09-26.log > ~/report/largest.txt
+  - title: Verify the report contents
+    detail: cat prints a file's contents. If it shows app-2026-09-26.log, you're done.
+    command: cat ~/report/largest.txt
+  - title: Submit for validation
+    detail: The validator checks that ~/report exists, that largest.txt exists, and that its content
+      names the correct file.

@@ -26,6 +26,12 @@ export default async function SkillPage({ params }: PageProps<"/paths/[slug]/[sk
             <p className="font-mono text-caption uppercase text-ash">TOPIC</p>
             <h2 className="mt-2 text-subheading tracking-[-0.01em]">{topic.title}</h2>
             <p className="mt-2 text-body-sm text-smoke">{topic.summary}</p>
+            {topic.lesson ? (
+              <div
+                className="lesson mt-4 max-w-2xl text-body-sm text-graphite"
+                dangerouslySetInnerHTML={{ __html: topic.lesson }}
+              />
+            ) : null}
             <div className="mt-6 grid gap-4">
               {topic.tasks.map((task) => (
                 <Link

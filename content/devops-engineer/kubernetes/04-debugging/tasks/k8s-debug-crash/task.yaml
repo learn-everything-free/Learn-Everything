@@ -1,0 +1,37 @@
+slug: k8s-debug-crash
+title: Diagnose a Crashing Pod
+type: scenario
+difficulty: intermediate
+description: A Pod called api in this cluster is stuck in CrashLoopBackOff. Find out why from its
+  logs, identify the missing piece, and record it. Failure is part of the curriculum.
+requirements:
+  - File ~/report/crash.txt exists naming the missing environment variable
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: file_contains
+    path: /home/learner/report/crash.txt
+    value: DB_HOST
+    label: crash.txt names DB_HOST
+steps:
+  - title: See the Pod state
+    detail: kubectl get pods shows api in CrashLoopBackOff — Kubernetes restarted it repeatedly and is
+      now backing off. The state says the container exits; not why.
+    command: kubectl get pods
+  - title: Describe the Pod
+    detail: "kubectl describe pod api shows events: Back-off restarting failed container. Still not the
+      reason — events describe the restart loop, not the crash."
+    command: kubectl describe pod api
+  - title: Read the container logs
+    detail: "kubectl logs api prints what the process wrote before dying. THIS is where the reason is:
+      the app requires an environment variable that the Pod spec doesn't set."
+    command: kubectl logs api
+  - title: Record the finding
+    detail: The log names the missing variable. Write it into the report file — in a real cluster the
+      fix would be adding it to the Pod spec or a ConfigMap.
+    command: mkdir ~/report
+  - title: Write the report
+    detail: Record the variable name from the logs (DB_HOST).
+    command: "echo 'missing env: DB_HOST' > ~/report/crash.txt"
+  - title: Submit for validation
+    detail: The validator checks your report names the right variable.
+    command: cat ~/report/crash.txt

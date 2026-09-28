@@ -1,0 +1,48 @@
+slug: git-feature-branch
+title: Ship a Feature Branch
+type: practice
+difficulty: beginner
+description: "The daily Git loop: branch, commit on the branch, merge back to main. Create a branch
+  called 'feature', commit on it and merge it into main."
+requirements:
+  - ~/project is a Git repository
+  - Branch 'feature' exists and was merged into main
+environment: ubuntu:24.04 + git
+validation:
+  - validator: git_repo
+    path: /home/learner/project
+    label: ~/project is a Git repository
+  - validator: git_branch
+    path: /home/learner/project
+    branch: feature
+    label: branch 'feature' exists and is merged
+steps:
+  - title: Enter the repository
+    detail: If you completed the first-commit task, ~/project is already a repository.
+    command: cd ~/project
+  - title: Create the branch
+    detail: git branch feature creates a new pointer to the current commit. Nothing is checked out yet —
+      the working tree doesn't change.
+    command: git branch feature
+  - title: Switch to it
+    detail: git checkout feature (or the newer git switch feature) moves HEAD to the branch. New commits
+      now land on 'feature', not 'main'.
+    command: git checkout feature
+  - title: Commit a change on the branch
+    detail: Make a file, stage it and commit. This is the work you'd do for a real feature.
+    command: touch feature.txt
+  - title: Stage and commit
+    detail: Stage the new file and record the commit with a clear message.
+    command: git add .
+  - title: Commit
+    detail: The commit message describes the change, not the mechanics.
+    command: git commit -m "add feature"
+  - title: Merge back into main
+    detail: checkout main first, then git merge feature replays the branch's commits onto main.
+      Fast-forward means main simply moved ahead — no conflicts.
+    command: git checkout main
+  - title: Merge
+    detail: git merge feature brings the feature work into main.
+    command: git merge feature
+  - title: Submit for validation
+    detail: The validator checks the branch exists and was merged into main.

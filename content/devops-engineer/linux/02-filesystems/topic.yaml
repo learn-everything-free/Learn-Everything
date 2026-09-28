@@ -1,0 +1,6 @@
+slug: 02-filesystems
+title: Filesystems & Permissions
+summary: "Everything is a file: paths, modes, owners and the tools that inspect them."
+order: 2
+tasks:
+  - linux-permissions

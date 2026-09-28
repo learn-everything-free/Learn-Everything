@@ -1,0 +1,173 @@
+version: 1
+validators:
+  - id: file_exists
+    kind: file
+    description: A file exists at the given path.
+    params:
+      - path
+    fields:
+      path: "{{path}}"
+  - id: file_contains
+    kind: filecontains
+    description: A file exists and contains the expected content.
+    params:
+      - path
+      - value
+    fields:
+      path: "{{path}}"
+      value: "{{value}}"
+  - id: directory_exists
+    kind: directory
+    description: A directory exists at the given path.
+    params:
+      - path
+    fields:
+      path: "{{path}}"
+  - id: file_mode
+    kind: filemode
+    description: A file has the expected octal permission mode.
+    params:
+      - path
+      - mode
+    fields:
+      path: "{{path}}"
+      value: "{{mode}}"
+  - id: container_running
+    kind: container
+    description: A container built from the image is running.
+    params:
+      - image
+    fields:
+      path: "{{image}}"
+  - id: port_mapped
+    kind: port
+    description: A running container maps the given host port.
+    params:
+      - port
+    fields:
+      port: "{{port}}"
+  - id: http_status
+    kind: http
+    description: Something serves HTTP on the given port (expected 200).
+    params:
+      - port
+    fields:
+      port: "{{port}}"
+  - id: no_container_running
+    kind: nocontainer
+    description: No container from the image is running.
+    params:
+      - image
+    fields:
+      path: "{{image}}"
+  - id: image_removed
+    kind: noimage
+    description: The image no longer exists locally.
+    params:
+      - image
+    fields:
+      path: "{{image}}"
+  - id: git_repo
+    kind: gitrepo
+    description: A git repository is initialized at the path.
+    params:
+      - path
+    fields:
+      path: "{{path}}"
+  - id: git_commit
+    kind: gitcommit
+    description: A commit with the given message exists in the repository.
+    params:
+      - path
+      - message
+    fields:
+      path: "{{path}}"
+      value: "{{message}}"
+  - id: git_branch
+    kind: gitbranch
+    description: The branch exists (and was merged, for merge tasks).
+    params:
+      - path
+      - branch
+    fields:
+      path: "{{path}}"
+      value: "{{branch}}"
+  - id: git_remote
+    kind: gitremote
+    description: A remote with the given URL is configured.
+    params:
+      - path
+      - url
+    fields:
+      path: "{{path}}"
+      value: "{{url}}"
+  - id: k8s_pod_running
+    kind: k8spod
+    description: The pod exists in the namespace and is Running.
+    params:
+      - namespace
+      - name
+    fields:
+      path: "{{namespace}}/{{name}}"
+  - id: k8s_deployment_replicas
+    kind: k8sdeployment
+    description: The deployment exists with the expected replica count.
+    params:
+      - namespace
+      - name
+      - replicas
+    fields:
+      value: "{{namespace}}/{{name}}:{{replicas}}"
+  - id: k8s_service_exists
+    kind: k8sservice
+    description: The service exists in the namespace.
+    params:
+      - namespace
+      - name
+    fields:
+      path: "{{namespace}}/{{name}}"
+  - id: terraform_initialized
+    kind: tfinit
+    description: terraform init has been run in the directory.
+    params:
+      - path
+    fields:
+      path: "{{path}}"
+  - id: terraform_resource_in_state
+    kind: tfresource
+    description: The resource exists in the terraform state of the directory.
+    params:
+      - path
+      - resource
+    fields:
+      path: "{{path}}"
+      value: "{{resource}}"
+  - id: terraform_state_empty
+    kind: tfempty
+    description: The terraform state of the directory holds no resources.
+    params:
+      - path
+    fields:
+      path: "{{path}}"
+  - id: aws_s3_bucket_exists
+    kind: awss3
+    description: The S3 bucket exists.
+    params:
+      - bucket
+    fields:
+      value: "{{bucket}}"
+  - id: aws_s3_object_exists
+    kind: awss3object
+    description: The object exists in the S3 bucket.
+    params:
+      - bucket
+      - key
+    fields:
+      value: "{{bucket}}/{{key}}"
+  - id: aws_ec2_instance_running
+    kind: awsec2
+    description: An EC2 instance from the image is running.
+    params:
+      - image
+    fields:
+      value: "{{image}}"

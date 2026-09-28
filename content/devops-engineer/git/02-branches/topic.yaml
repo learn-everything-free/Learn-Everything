@@ -1,0 +1,6 @@
+slug: 02-branches
+title: Branches & Merging
+summary: Isolate work, then bring it back together.
+order: 2
+tasks:
+  - git-feature-branch

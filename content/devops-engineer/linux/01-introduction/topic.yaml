@@ -1,0 +1,7 @@
+slug: 01-introduction
+title: Introduction
+summary: The shell, the filesystem and why Linux runs the world's infrastructure.
+order: 1
+tasks:
+  - linux-create-project
+  - linux-inspect-files

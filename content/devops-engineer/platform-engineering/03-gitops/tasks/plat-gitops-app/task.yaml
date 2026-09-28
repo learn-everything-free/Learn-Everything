@@ -1,0 +1,37 @@
+slug: plat-gitops-app
+title: Declare a GitOps Application
+type: guided
+difficulty: intermediate
+description: GitOps means the cluster syncs itself from Git. Write the ArgoCD Application manifest
+  that tells the controller to watch a repo and apply everything in it.
+requirements:
+  - File ~/gitops/app.yaml exists
+  - It declares an argoproj.io Application watching a Git repo
+environment: ubuntu:24.04
+validation:
+  - validator: file_contains
+    path: /home/learner/gitops/app.yaml
+    value: argoproj.io/v1alpha1
+    label: ArgoCD Application manifest
+  - validator: file_contains
+    path: /home/learner/gitops/app.yaml
+    value: "repoURL:"
+    label: declares the source repo
+steps:
+  - title: Create the gitops directory
+    detail: In real setups this manifest lives in a dedicated config repository that ArgoCD itself watches.
+    command: mkdir ~/gitops
+  - title: Write the Application manifest
+    detail: source.repoURL is the Git repo to sync FROM; destination is the cluster and namespace to
+      sync TO; syncPolicy automated means no human clicks.
+    command: "echo 'apiVersion: argoproj.io/v1alpha1\\nkind: Application\\nmetadata:\\n  name:
+      service-template\\nspec:\\n  source:\\n    repoURL:
+      https://github.com/learner/service-template.git\\n    targetRevision:
+      main\\n  destination:\\n    server: https://kubernetes.default.svc\\n    namespace:
+      default\\n  syncPolicy:\\n    automated: {}' > ~/gitops/app.yaml"
+  - title: Understand the drift loop
+    detail: "From now on: someone edits the repo, ArgoCD notices, the cluster changes. Nobody
+      kubectl-applies by hand — that's the whole GitOps idea."
+  - title: Verify and submit
+    detail: cat the manifest, then submit.
+    command: cat ~/gitops/app.yaml

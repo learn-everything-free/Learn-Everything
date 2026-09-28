@@ -1,0 +1,38 @@
+slug: obs-extract-errors
+title: Extract Errors for the Incident Report
+type: practice
+difficulty: beginner
+description: During an incident you hand the on-call engineer a filtered log, not a gigabyte file.
+  Extract every ERROR line from yesterday's app log into a dedicated file.
+requirements:
+  - File ~/report/errors.log exists
+  - It contains only ERROR lines from the 2026-09-27 application log
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/report/errors.log
+    label: ~/report/errors.log exists
+  - validator: file_contains
+    path: /home/learner/report/errors.log
+    value: ERROR
+    label: errors.log contains ERROR lines
+  - validator: file_contains
+    path: /home/learner/report/errors.log
+    value: 2026-09-27
+    label: errors.log lines come from the right day
+steps:
+  - title: Review the source log
+    detail: "Yesterday's log is /var/log/app/app-2026-09-27.log. Scan its shape: timestamp, level,
+      message."
+    command: head /var/log/app/app-2026-09-27.log
+  - title: Extract only the errors
+    detail: grep ERROR keeps just the error lines — this filtered stream is what goes to the on-call
+      engineer.
+    command: grep ERROR /var/log/app/app-2026-09-27.log
+  - title: Save it to a file
+    detail: The > redirect writes grep's output into errors.log — a proper incident artifact instead of
+      a copy-paste.
+    command: grep ERROR /var/log/app/app-2026-09-27.log > ~/report/errors.log
+  - title: Verify and submit
+    detail: cat shows three ERROR lines, all from 2026-09-27. Then submit.
+    command: cat ~/report/errors.log

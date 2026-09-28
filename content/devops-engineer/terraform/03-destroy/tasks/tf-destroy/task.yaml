@@ -1,0 +1,27 @@
+slug: tf-destroy
+title: Destroy It All
+type: practice
+difficulty: beginner
+description: The most underrated Terraform command. Destroy everything the module created and
+  confirm the state is empty — the same reflex that keeps cloud bills at zero.
+requirements:
+  - Terraform state in ~/infra is empty
+environment: terraform 1.7
+validation:
+  - validator: terraform_state_empty
+    path: /home/learner/infra
+    label: state in ~/infra is empty
+steps:
+  - title: Enter the module
+    detail: Destroy, like apply, acts on the current directory's state.
+    command: cd ~/infra
+  - title: Destroy
+    detail: "terraform destroy -auto-approve reverses the apply: every resource in state is deleted. In
+      production you'd run a destroy plan first and read every line."
+    command: terraform destroy -auto-approve
+  - title: Confirm the state is empty
+    detail: terraform state list should print nothing. The infrastructure no longer exists, and neither
+      does the bill.
+    command: terraform state list
+  - title: Submit for validation
+    detail: The validator confirms the state in ~/infra holds no resources.

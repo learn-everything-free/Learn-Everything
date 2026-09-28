@@ -1,0 +1,6 @@
+slug: 01-golden-paths
+title: Golden Path Templates
+summary: Make the right way the easy way.
+order: 1
+tasks:
+  - plat-scaffold-template

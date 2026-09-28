@@ -1,0 +1,6 @@
+slug: 04-policies
+title: Policy & Guardrails
+summary: Guardrails that make violations impossible, not forbidden.
+order: 4
+tasks:
+  - plat-admission-policy

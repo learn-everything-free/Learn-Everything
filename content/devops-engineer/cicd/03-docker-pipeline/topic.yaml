@@ -1,0 +1,6 @@
+slug: 03-docker-pipeline
+title: Build & Push Images
+summary: Ship a container image from the pipeline.
+order: 3
+tasks:
+  - cicd-docker-workflow

@@ -1,0 +1,37 @@
+slug: plat-admission-policy
+title: Write an Admission Policy
+type: practice
+difficulty: intermediate
+description: Platform teams enforce policy at admission time — the cluster simply rejects workloads
+  that break the rules. Write a Kyverno-style policy banning privileged containers.
+requirements:
+  - File ~/policies/no-privileged.yaml exists
+  - "It validates that privileged: false is required"
+environment: ubuntu:24.04
+validation:
+  - validator: file_contains
+    path: /home/learner/policies/no-privileged.yaml
+    value: ClusterPolicy
+    label: declares a ClusterPolicy
+  - validator: file_contains
+    path: /home/learner/policies/no-privileged.yaml
+    value: "privileged: false"
+    label: "requires privileged: false"
+steps:
+  - title: Create the policies directory
+    detail: Policies are applied cluster-wide, so they live apart from app manifests.
+    command: mkdir ~/policies
+  - title: Write the policy
+    detail: "A ClusterPolicy with validationFailureAction: Enforce means violations are REJECTED, not
+      just reported. The pattern checks every Pod's securityContext."
+    command: "echo 'apiVersion: kyverno.io/v1\\nkind: ClusterPolicy\\nmetadata:\\n  name:
+      no-privileged\\nspec:\\n  validationFailureAction: Enforce\\n  rules:\\n    - name:
+      require-non-privileged\\n      match:\\n        any:\\n        -
+      resources:\\n            kinds:\\n              - Pod\\n      validate:\\n        message:
+      \"Privileged containers are not
+      allowed.\"\\n        pattern:\\n          spec:\\n            containers:\\n              -
+      securityContext:\\n                  privileged: false' > ~/policies/no-privileged.yaml"
+  - title: Review and submit
+    detail: cat the policy. From the moment it's applied, no privileged Pod can enter the cluster —
+      policy as code, enforced by the platform.
+    command: cat ~/policies/no-privileged.yaml

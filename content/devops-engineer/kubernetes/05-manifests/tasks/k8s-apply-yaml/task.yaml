@@ -1,0 +1,41 @@
+slug: k8s-apply-yaml
+title: Apply a Manifest
+type: guided
+difficulty: beginner
+description: Imperative commands are for learning; YAML manifests are for real life. Write a Pod
+  manifest and apply it — the declarative workflow behind GitOps and ArgoCD.
+requirements:
+  - File ~/manifests/pod.yaml exists
+  - Pod web-yaml is Running
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: file_exists
+    path: /home/learner/manifests/pod.yaml
+    label: manifest exists
+  - validator: k8s_pod_running
+    namespace: default
+    name: web-yaml
+    label: pod default/web-yaml is Running
+steps:
+  - title: Create the manifests directory
+    detail: Manifests live in the repository in real projects — one place, reviewable.
+    command: mkdir ~/manifests
+  - title: Write the manifest
+    detail: One echo with \n separators writes the whole file. apiVersion/kind say WHAT the object is;
+      metadata.name names it; spec.containers declares the container. Note the two-space indentation
+      — it's meaningful in YAML.
+    command: "echo 'apiVersion: v1\\nkind: Pod\\nmetadata:\\n  name:
+      web-yaml\\nspec:\\n  containers:\\n  - name: nginx\\n    image: nginx:1.27' >
+      ~/manifests/pod.yaml"
+  - title: Review the manifest
+    detail: cat prints the file. If the indentation looks wrong, rewrite it — YAML is whitespace-sensitive.
+    command: cat ~/manifests/pod.yaml
+  - title: Apply it
+    detail: kubectl apply -f reads the file and makes the cluster match it. Then kubectl get pods shows
+      web-yaml Running.
+    command: kubectl apply -f ~/manifests/pod.yaml
+  - title: Verify
+    detail: kubectl get pods should list web-yaml with STATUS Running.
+    command: kubectl get pods
+  - title: Submit for validation
+    detail: The validator checks the manifest file and the resulting Pod.

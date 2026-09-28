@@ -1,0 +1,37 @@
+slug: cicd-docker-workflow
+title: Build and Push a Docker Image in CI
+type: practice
+difficulty: intermediate
+description: "The final pipeline stage for most services: build an image and publish it to a
+  registry. Extend the workflow with Docker build and push steps."
+requirements:
+  - The workflow logs in to the registry
+  - The workflow builds with docker/build-push-action
+environment: ubuntu:24.04
+validation:
+  - validator: file_contains
+    path: /home/learner/project/.github/workflows/ci.yml
+    value: docker/login-action@v3
+    label: workflow logs in to the registry
+  - validator: file_contains
+    path: /home/learner/project/.github/workflows/ci.yml
+    value: docker/build-push-action@v6
+    label: workflow builds and pushes the image
+steps:
+  - title: Add registry login
+    detail: docker/login-action@v3 authenticates against Docker Hub (or GHCR). Credentials come from
+      repository secrets — never hardcode them.
+    command: "echo '      - uses: docker/login-action@v3' >> ~/project/.github/workflows/ci.yml"
+  - title: Understand secrets
+    detail: ${{ secrets.DOCKERHUB_TOKEN }} is injected by Actions at runtime. You can't echo it back —
+      CI masks secrets in logs.
+  - title: Add build and push
+    detail: "docker/build-push-action@v6 builds the image from the repo's Dockerfile and pushes it,
+      with: tagging it as latest on every push to main."
+    command: "echo '      - uses: docker/build-push-action@v6' >> ~/project/.github/workflows/ci.yml"
+  - title: Tag the image
+    detail: "with: with push: true and tags: learner/demo:latest finishes the pipeline."
+    command: echo '        with:' >> ~/project/.github/workflows/ci.yml
+  - title: Verify and submit
+    detail: cat the file, review the complete pipeline, then submit.
+    command: cat ~/project/.github/workflows/ci.yml

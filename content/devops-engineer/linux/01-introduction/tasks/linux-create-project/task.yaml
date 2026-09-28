@@ -1,0 +1,48 @@
+slug: linux-create-project
+title: Create a Project Structure
+type: practice
+difficulty: beginner
+description: Create a project directory containing a src folder, a tests folder and a README.md.
+  Follow the walkthrough below — every command is explained, and the validator checks what you
+  actually built.
+requirements:
+  - Directory ~/project exists
+  - Directory ~/project/src exists
+  - Directory ~/project/tests exists
+  - File ~/project/README.md exists
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project
+    label: ~/project
+  - validator: directory_exists
+    path: /home/learner/project/src
+    label: ~/project/src
+  - validator: directory_exists
+    path: /home/learner/project/tests
+    label: ~/project/tests
+  - validator: file_exists
+    path: /home/learner/project/README.md
+    label: ~/project/README.md
+steps:
+  - title: Check where you are
+    detail: pwd prints your working directory. You should be in /home/learner — the ~ character is shell
+      shorthand for your home directory, so ~/project means /home/learner/project.
+    command: pwd
+  - title: Create the project directory
+    detail: mkdir makes a new directory. Giving the full ~/project path works from anywhere.
+    command: mkdir ~/project
+  - title: Create the src and tests folders
+    detail: mkdir accepts several arguments at once, so one command creates both folders. This is why we
+      made the parent first — mkdir does not create missing parents by default.
+    command: mkdir ~/project/src ~/project/tests
+  - title: Create the README file
+    detail: touch creates an empty file (or updates its timestamp if the file already exists).
+    command: touch ~/project/README.md
+  - title: Verify the structure
+    detail: ls lists directory contents; -R makes it recursive, printing every subfolder. You should see
+      project/ containing src/, tests/ and README.md.
+    command: ls -R ~
+  - title: Submit for validation
+    detail: "The validator re-checks the real state of the environment: the three directories and the
+      README file."

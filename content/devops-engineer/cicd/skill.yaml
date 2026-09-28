@@ -1,0 +1,5 @@
+slug: cicd
+title: CI/CD
+summary: Pipelines that test, build and ship on every change.
+path: devops-engineer
+order: 5

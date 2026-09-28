@@ -1,0 +1,47 @@
+slug: docker-build-image
+title: Build Your Own Image
+type: guided
+difficulty: beginner
+description: Instead of consuming images, make one. Write a Dockerfile, build it with a tag and run
+  a container from your own image.
+requirements:
+  - Directory ~/build exists with a Dockerfile
+  - Image myapp:1.0 exists locally
+  - A container from myapp:1.0 is running
+environment: docker:24
+validation:
+  - validator: file_exists
+    path: /home/learner/build/Dockerfile
+    label: ~/build/Dockerfile exists
+  - validator: container_running
+    image: myapp:1.0
+    label: container from myapp:1.0 running
+steps:
+  - title: Create a build directory
+    detail: docker build sends a directory (the build context) to the daemon. Keeping builds in their
+      own folder keeps contexts small.
+    command: mkdir ~/build
+  - title: Write a Dockerfile
+    detail: FROM scratch starts from nothing; COPY adds a file into the image; CMD is what runs when a
+      container starts. One echo per line builds the file up.
+    command: echo 'FROM scratch' > ~/build/Dockerfile
+  - title: Add the copy instruction
+    detail: This appends the COPY line to the Dockerfile with >>.
+    command: echo 'COPY app /app' >> ~/build/Dockerfile
+  - title: Add the start command
+    detail: The final line. cat the Dockerfile to see all three instructions.
+    command: echo 'CMD ["/app"]' >> ~/build/Dockerfile
+  - title: Enter the build directory
+    detail: docker build is always run from the directory containing the Dockerfile — the build context.
+    command: cd ~/build
+  - title: Build the image
+    detail: docker build reads the Dockerfile and produces an image. -t myapp:1.0 tags it with a name
+      and version. The . means 'use the current directory as context'. Then verify with docker
+      images.
+    command: docker build -t myapp:1.0 .
+  - title: Run a container from your image
+    detail: "Now your image is first-class: run it detached with a port mapping, exactly like the
+      official one."
+    command: docker run -d -p 8081:80 myapp:1.0
+  - title: Submit for validation
+    detail: The validator checks the Dockerfile exists and a container from myapp:1.0 is running.

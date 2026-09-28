@@ -1,0 +1,34 @@
+slug: k8s-expose-service
+title: Expose a Deployment
+type: guided
+difficulty: beginner
+description: Pods come and go, so their IPs are useless as an address. A Service gives a stable
+  virtual IP and DNS name in front of a set of Pods.
+requirements:
+  - A Service named web-svc exists
+  - The Service forwards to the web deployment on port 80
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: k8s_service_exists
+    namespace: default
+    name: web-svc
+    label: service default/web-svc exists
+  - validator: k8s_deployment_replicas
+    namespace: default
+    name: web
+    replicas: 1
+    label: deployment default/web exists
+steps:
+  - title: Make sure the Deployment exists
+    detail: Services select Pods by label. If you completed the deployment task it's already there;
+      otherwise create one replica.
+    command: kubectl create deployment web --image=nginx:1.27
+  - title: Expose it
+    detail: kubectl expose creates a Service targeting the Deployment's Pods. --port is what clients
+      call (80); --target-port is what the container listens on (8080 here — the app's port).
+    command: kubectl expose deployment web --name=web-svc --port=80 --target-port=8080
+  - title: Verify the Service
+    detail: kubectl get services lists it with a stable CLUSTER-IP and the port mapping 80/TCP.
+    command: kubectl get services
+  - title: Submit for validation
+    detail: The validator checks the Service and the Deployment behind it.

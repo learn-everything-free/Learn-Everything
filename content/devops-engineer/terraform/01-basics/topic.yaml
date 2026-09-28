@@ -1,0 +1,6 @@
+slug: 01-basics
+title: Init & Plan
+summary: HCL, providers and the plan that predicts every change.
+order: 1
+tasks:
+  - tf-init-plan

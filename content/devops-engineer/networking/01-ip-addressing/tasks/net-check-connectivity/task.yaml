@@ -1,0 +1,44 @@
+slug: net-check-connectivity
+title: Trace Your Network Setup
+type: guided
+difficulty: beginner
+description: Every container and server has an IP, a route to the outside world and a way to test
+  reachability. Find this machine's addresses and prove connectivity to the default gateway.
+requirements:
+  - Directory ~/report exists
+  - File ~/report/gateway.txt exists and contains the default gateway IP
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/gateway.txt
+    label: ~/report/gateway.txt
+  - validator: file_contains
+    path: /home/learner/report/gateway.txt
+    value: 172.17.0.1
+    label: gateway.txt names the gateway 172.17.0.1
+steps:
+  - title: Show the network interfaces
+    detail: "ip a lists every interface. lo is the loopback (127.0.0.1 — yourself), eth0 is the real
+      interface with this machine's IP: 172.17.0.2/16."
+    command: ip a
+  - title: Show the routing table
+    detail: "ip route shows where packets go. The 'default via' line names the gateway — the router that
+      forwards traffic to the rest of the network. Here: 172.17.0.1."
+    command: ip route
+  - title: Ping the gateway
+    detail: ping sends ICMP echo requests and waits for replies. 0% packet loss against the gateway
+      proves the local network works.
+    command: ping 172.17.0.1
+  - title: Ping a hostname
+    detail: ping also accepts hostnames — this exercises DNS before ICMP. lab.internal resolves through
+      /etc/hosts and DNS in this lab.
+    command: ping lab.internal
+  - title: Record the gateway
+    detail: Write the gateway IP you found into the report file.
+    command: "echo 'gateway: 172.17.0.1' > ~/report/gateway.txt"
+  - title: Verify and submit
+    detail: cat the file to confirm, then submit.
+    command: cat ~/report/gateway.txt

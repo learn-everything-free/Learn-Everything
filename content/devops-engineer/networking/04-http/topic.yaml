@@ -1,0 +1,6 @@
+slug: 04-http
+title: HTTP & curl
+summary: The protocol every platform ultimately serves.
+order: 4
+tasks:
+  - net-verify-http

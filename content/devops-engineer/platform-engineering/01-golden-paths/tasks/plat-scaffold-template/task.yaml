@@ -1,0 +1,52 @@
+slug: plat-scaffold-template
+title: Scaffold a Service Template
+type: practice
+difficulty: beginner
+description: "A golden path starts as a template repository: everything a new service needs,
+  pre-wired. Scaffold one — structure, Dockerfile, CI workflow — exactly like a platform team would
+  ship it."
+requirements:
+  - Directory ~/templates/service-template exists
+  - It contains src/, tests/, Dockerfile and .github/workflows/ci.yml
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/templates/service-template
+    label: template directory
+  - validator: directory_exists
+    path: /home/learner/templates/service-template/src
+    label: src/ present
+  - validator: directory_exists
+    path: /home/learner/templates/service-template/tests
+    label: tests/ present
+  - validator: file_exists
+    path: /home/learner/templates/service-template/Dockerfile
+    label: Dockerfile present
+  - validator: file_exists
+    path: /home/learner/templates/service-template/.github/workflows/ci.yml
+    label: CI workflow present
+steps:
+  - title: Create the template root
+    detail: Templates live in their own repository; here, one directory stands in for it.
+    command: mkdir -p ~/templates/service-template
+  - title: Add the source and test directories
+    detail: "Convention over configuration: every service gets the same layout, so any engineer can
+      navigate any repo."
+    command: mkdir -p ~/templates/service-template/src ~/templates/service-template/tests
+  - title: Write the Dockerfile
+    detail: A pre-written, hardened Dockerfile is the heart of a golden path — teams inherit best
+      practice without reading a wiki.
+    command: echo 'FROM python:3.12-slim\nCOPY src /app\nCMD ["python", "/app/main.py"]' >
+      ~/templates/service-template/Dockerfile
+  - title: Write the CI workflow
+    detail: The workflow directory is nested — mkdir -p creates all levels.
+    command: mkdir -p ~/templates/service-template/.github/workflows
+  - title: Fill in the workflow
+    detail: "A minimal pipeline: checkout and test. Every service created from this template starts with
+      working CI."
+    command: "echo 'name: CI\\non: push\\njobs:\\n  test:\\n    runs-on:
+      ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4' >
+      ~/templates/service-template/.github/workflows/ci.yml"
+  - title: Review and submit
+    detail: ls -R shows the full template. Then submit — the validator checks every required piece.
+    command: ls -R ~/templates/service-template

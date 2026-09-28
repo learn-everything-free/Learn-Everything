@@ -1,83 +1,148 @@
-import type { LearningPath, Skill, Topic, Task } from "./types";
+import {
+  paths as pathRecords,
+  skills as skillRecords,
+  topics as topicRecords,
+  tasks as taskRecords,
+  lessons as lessonRecords,
+  validators as validatorRegistry,
+} from "#content";
+import type { LearningPath, Skill, Topic, Task, Step } from "./types";
+import type { ValidatorCheck } from "./shell";
 
 export type { TaskType, Difficulty, Step, Task, Topic, Skill, LearningPath } from "./types";
-export type { ValidatorCheck } from "./shell";
+export type { ValidatorCheck };
 
-import { linuxSkill } from "./content/linux";
-import { networkingSkill } from "./content/networking";
-import { gitSkill } from "./content/git";
-import { dockerSkill } from "./content/docker";
-import { cicdSkill } from "./content/cicd";
-import { awsSkill } from "./content/aws";
-import { terraformSkill } from "./content/terraform";
-import { kubernetesSkill } from "./content/kubernetes";
-import { observabilitySkill } from "./content/observability";
-import { platformSkill } from "./content/platform";
+type VeliteTask = (typeof taskRecords)[number];
+type VeliteRegistry = (typeof validatorRegistry)["validators"][number];
 
-const devopsPath: LearningPath = {
-  slug: "devops-engineer",
-  title: "DevOps Engineer",
-  role: "PATH 01",
-  tagline:
-    "From the Linux shell to production Kubernetes — the full infrastructure toolchain, learned by operating it.",
-  skills: [
-    linuxSkill,
-    networkingSkill,
-    gitSkill,
-    dockerSkill,
-    cicdSkill,
-    awsSkill,
-    terraformSkill,
-    kubernetesSkill,
-    observabilitySkill,
-    platformSkill,
-  ],
-};
 
-const aiEngineerPath: LearningPath = {
-  slug: "ai-engineer",
-  title: "AI Engineer",
-  role: "PATH 02",
-  tagline:
-    "From Python fundamentals to RAG, agents, MCP and LLMOps — building AI systems that actually run.",
-  skills: [
-    { slug: "python", title: "Python", summary: "The working language of AI engineering.", topics: [] },
-    { slug: "llm-fundamentals", title: "LLM Fundamentals", summary: "Tokens, context windows and inference.", topics: [] },
-    { slug: "prompt-engineering", title: "Prompt Engineering", summary: "Structured outputs and reliable instructions.", topics: [] },
-    { slug: "rag", title: "RAG", summary: "Retrieval-augmented generation end to end.", topics: [] },
-    { slug: "agents", title: "Agents & MCP", summary: "Tool use, agent loops and the Model Context Protocol.", topics: [] },
-    { slug: "llmops", title: "LLMOps", summary: "Evaluation, observability and serving in production.", topics: [] },
-  ],
-};
+const dirOf = (file: string) => file.split("/").slice(0, -1).join("/");
 
-const mlopsPath: LearningPath = {
-  slug: "mlops-engineer",
-  title: "MLOps Engineer",
-  role: "PATH 03",
-  tagline:
-    "Pipelines, tracking, registries and serving — the infrastructure discipline behind machine learning in production.",
-  skills: [
-    { slug: "python", title: "Python", summary: "The working language of ML engineering.", topics: [] },
-    { slug: "ml-pipelines", title: "ML Pipelines", summary: "Data and training pipelines that rerun reliably.", topics: [] },
-    { slug: "model-tracking", title: "Model Tracking", summary: "Experiments, metrics and reproducibility.", topics: [] },
-    { slug: "model-serving", title: "Model Serving", summary: "Serving models as dependable APIs.", topics: [] },
-    { slug: "monitoring", title: "Monitoring", summary: "Drift, latency and the health of ML systems.", topics: [] },
-  ],
-};
+// ---------- validator registry resolution ----------
 
-export const paths: LearningPath[] = [devopsPath, aiEngineerPath, mlopsPath];
+function resolveValidation(task: VeliteTask, registry: VeliteRegistry[]): ValidatorCheck[] {
+  return task.validation.map((entry) => {
+    const def = registry.find((v) => v.id === entry.validator);
+    if (!def) {
+      throw new Error(
+        `${task.file}: unknown validator '${entry.validator}' (registered: ${registry.map((v) => v.id).join(", ")})`,
+      );
+    }
+    const params = entry as Record<string, unknown>;
+    const missing = def.params.filter((p) => params[p] === undefined);
+    if (missing.length) {
+      throw new Error(`${task.file}: validator '${entry.validator}' missing params: ${missing.join(", ")}`);
+    }
+    const unknown = Object.keys(params).filter(
+      (k) => !["validator", "label", ...def.params].includes(k),
+    );
+    if (unknown.length) {
+      throw new Error(`${task.file}: validator '${entry.validator}' has unknown params: ${unknown.join(", ")}`);
+    }
+    const check = {
+      kind: def.kind as ValidatorCheck["kind"],
+      label: entry.label,
+    } as ValidatorCheck;
+    for (const [field, template] of Object.entries(def.fields)) {
+      const match = template.match(/^\{\{(\w+)\}\}$/);
+      if (match) {
+        const value = params[match[1]];
+        (check as unknown as Record<string, unknown>)[field] =
+          typeof value === "number" ? value : String(value);
+      } else {
+        (check as unknown as Record<string, unknown>)[field] = template.replace(
+          /\{\{(\w+)\}\}/g,
+          (_m: string, p: string) => String(params[p]),
+        );
+      }
+    }
+    return check;
+  });
+}
+
+function toTask(task: VeliteTask, registry: VeliteRegistry[]): Task {
+  return {
+    slug: task.slug,
+    title: task.title,
+    type: task.type as Task["type"],
+    difficulty: task.difficulty as Task["difficulty"],
+    description: task.description,
+    requirements: task.requirements,
+    env: task.environment,
+    checks: resolveValidation(task, registry),
+    steps: task.steps as Step[],
+  };
+}
+
+// ---------- joins ----------
+
+const taskBySlug = new Map<string, Task>(
+  taskRecords.map((t) => [t.slug, toTask(t, validatorRegistry.validators)]),
+);
+
+const lessonByDir = new Map<string, string>(
+  lessonRecords.map((l) => [dirOf(l.file), l.content]),
+);
+
+const topicsBySkillDir = new Map<string, Topic[]>();
+for (const topic of [...topicRecords].sort((a, b) => a.order - b.order)) {
+  const skillDir = dirOf(dirOf(topic.file)); // strip topic/ dir
+  const topics = topicsBySkillDir.get(skillDir) ?? [];
+  topics.push({
+    slug: topic.slug,
+    title: topic.title,
+    summary: topic.summary,
+    tasks: topic.tasks
+      .map((slug) => taskBySlug.get(slug))
+      .filter((t): t is Task => !!t),
+    lesson: lessonByDir.get(dirOf(topic.file)),
+  });
+  topicsBySkillDir.set(skillDir, topics);
+}
+
+const skillsByPathSlug = new Map<string, Skill[]>();
+for (const skill of [...skillRecords].sort((a, b) => a.order - b.order)) {
+  const skillDir = dirOf(skill.file);
+  const list = skillsByPathSlug.get(skill.path) ?? [];
+  list.push({
+    slug: skill.slug,
+    title: skill.title,
+    summary: skill.summary,
+    topics: topicsBySkillDir.get(skillDir) ?? [],
+  });
+  skillsByPathSlug.set(skill.path, list);
+}
+
+const builtPaths: LearningPath[] = [...pathRecords]
+  .sort((a, b) => a.order - b.order)
+  .map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    role: p.role,
+    tagline: p.tagline,
+    skills: skillsByPathSlug.get(p.slug) ?? [],
+  }));
+
+// ---------- public API (unchanged for the app) ----------
+
+export const paths: LearningPath[] = builtPaths;
 
 export function getPath(slug: string): LearningPath | undefined {
   return paths.find((p) => p.slug === slug);
 }
 
-export function getSkill(pathSlug: string, skillSlug: string): { path: LearningPath; skill: Skill } | undefined {
+export function getSkill(
+  pathSlug: string,
+  skillSlug: string,
+): { path: LearningPath; skill: Skill } | undefined {
   const path = getPath(pathSlug);
   const skill = path?.skills.find((s) => s.slug === skillSlug);
   return path && skill ? { path, skill } : undefined;
 }
 
-export function getTask(taskSlug: string): { task: Task; path: LearningPath; skill: Skill; topic: Topic } | undefined {
+export function getTask(
+  taskSlug: string,
+): { task: Task; path: LearningPath; skill: Skill; topic: Topic } | undefined {
   for (const path of paths) {
     for (const skill of path.skills) {
       for (const topic of skill.topics) {

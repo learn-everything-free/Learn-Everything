@@ -1,0 +1,35 @@
+slug: aws-verify-identity
+title: Verify Your AWS Identity
+type: guided
+difficulty: beginner
+description: "Before touching any AWS service, always confirm who the CLI is acting as.
+  Misconfigured credentials are the #1 cause of 'why can't I access anything'."
+requirements:
+  - Directory ~/report exists
+  - File ~/report/account.txt exists and contains the AWS account ID
+environment: aws-cli (lab profile)
+validation:
+  - validator: directory_exists
+    path: /home/learner/report
+    label: ~/report
+  - validator: file_exists
+    path: /home/learner/report/account.txt
+    label: ~/report/account.txt
+  - validator: file_contains
+    path: /home/learner/report/account.txt
+    value: "844399650771"
+    label: account.txt contains the account ID
+steps:
+  - title: Call STS
+    detail: aws sts get-caller-identity asks the Security Token Service who you are. It works with any
+      valid credentials and costs nothing.
+    command: aws sts get-caller-identity
+  - title: Read the response
+    detail: "Three fields: UserId, Account (844399650771 in this lab) and the Arn — which also tells you
+      whether you're a user, a role or a federated session."
+  - title: Record the account ID
+    detail: Write it into the report file.
+    command: "echo 'account: 844399650771' > ~/report/account.txt"
+  - title: Verify and submit
+    detail: cat the file, then submit. The validator compares against the lab's real account ID.
+    command: cat ~/report/account.txt

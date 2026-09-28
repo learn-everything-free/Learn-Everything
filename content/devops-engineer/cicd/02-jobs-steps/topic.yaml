@@ -1,0 +1,6 @@
+slug: 02-jobs-steps
+title: Jobs & Testing
+summary: Make the pipeline prove something.
+order: 2
+tasks:
+  - cicd-add-tests

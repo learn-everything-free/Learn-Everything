@@ -1,0 +1,47 @@
+slug: obs-alert-rule
+title: Write a Prometheus Alert Rule
+type: guided
+difficulty: intermediate
+description: "Alert rules are YAML files too. Write a Prometheus rule that fires when the error rate
+  stays too high — and learn the two halves of every alert: expression and duration."
+requirements:
+  - File ~/alerts/rules.yml exists
+  - It defines an alert named HighErrorRate with a Prometheus expression
+environment: ubuntu:24.04
+validation:
+  - validator: file_contains
+    path: /home/learner/alerts/rules.yml
+    value: HighErrorRate
+    label: alert named HighErrorRate
+  - validator: file_contains
+    path: /home/learner/alerts/rules.yml
+    value: "expr:"
+    label: alert has an expression
+  - validator: file_contains
+    path: /home/learner/alerts/rules.yml
+    value: "for: 5m"
+    label: alert waits 5 minutes before firing
+steps:
+  - title: Create the rules directory
+    detail: Prometheus loads rule files from configured paths — one directory keeps them tidy.
+    command: mkdir ~/alerts
+  - title: Start the rule file
+    detail: groups wrap rules; a rule has name, expr, for and labels. The expr is PromQL.
+    command: echo 'groups:' > ~/alerts/rules.yml
+  - title: Add the group and alert name
+    detail: HighErrorRate says exactly what broke — alert names are the first thing you see at 3am, so
+      make them readable.
+    command: "echo '- name: app-alerts' >> ~/alerts/rules.yml"
+  - title: Add the expression
+    detail: "expr: is PromQL — here: rate of 5xx responses over 5 minutes divided by total request rate,
+      above 5%. That's 'more than 5% of requests failing'."
+    command: echo '  rules:' >> ~/alerts/rules.yml
+  - title: Finish the rule
+    detail: "Write the rule body: '- alert: HighErrorRate', '  expr:
+      rate(http_requests_total{status=~\"5..\"}[5m]) / rate(http_requests_total[5m]) > 0.05',
+      '  for: 5m'. The for clause stops blips from paging you."
+    command: "echo '  - alert: HighErrorRate' >> ~/alerts/rules.yml"
+  - title: Add expression and duration lines
+    detail: "Append '    expr: rate(http_requests_total{status=~\"5..\"}[5m]) /
+      rate(http_requests_total[5m]) > 0.05' and '    for: 5m'. Then cat the file and submit."
+    command: cat ~/alerts/rules.yml

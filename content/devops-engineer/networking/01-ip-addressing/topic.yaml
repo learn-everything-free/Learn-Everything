@@ -1,0 +1,6 @@
+slug: 01-ip-addressing
+title: IP Addressing & Routes
+summary: Which address is yours and where packets leave the machine.
+order: 1
+tasks:
+  - net-check-connectivity

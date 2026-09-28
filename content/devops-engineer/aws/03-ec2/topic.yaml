@@ -1,0 +1,6 @@
+slug: 03-ec2
+title: EC2 — Virtual Machines
+summary: Launch, describe and terminate instances.
+order: 3
+tasks:
+  - aws-launch-ec2

@@ -1,0 +1,6 @@
+slug: 02-service-catalog
+title: Service Catalog
+summary: If it isn't in the catalog, it doesn't exist.
+order: 2
+tasks:
+  - plat-service-catalog

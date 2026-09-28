@@ -1,0 +1,6 @@
+slug: 02-ports-sockets
+title: Ports & Sockets
+summary: How a single machine serves many services at once.
+order: 2
+tasks:
+  - net-find-listening-port

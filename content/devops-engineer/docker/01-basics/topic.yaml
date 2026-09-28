@@ -1,0 +1,6 @@
+slug: 01-basics
+title: Containers & Images
+summary: Images, layers, running containers and inspecting what they do.
+order: 1
+tasks:
+  - docker-run-app
