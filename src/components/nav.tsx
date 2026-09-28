@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useProgress, totalXp } from "@/lib/progress";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const links = [
   { href: "/", label: "Home" },
@@ -79,6 +80,7 @@ export function Nav() {
         </div>
 
         <div className="flex items-center gap-2.5">
+          <ThemeToggle />
           {xp > 0 && (
             <Link
               href="/paths"

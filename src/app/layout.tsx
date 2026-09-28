@@ -23,9 +23,15 @@ export const metadata: Metadata = {
     "Learn it. Practice it. Break it. Fix it. Build it. A free, hands-on technical learning platform.",
 };
 
+// Runs before paint: restores the stored theme, else follows the system.
+const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem("le-theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable} h-full antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+      </head>
       <body className="min-h-full flex flex-col bg-eggshell text-ink">
         <Nav />
         <main className="flex-1">{children}</main>

@@ -10,7 +10,7 @@ export function CompletedBadge({ slug }: { slug: string }) {
   const { completed } = useProgress();
   if (!(slug in completed)) return null;
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-0.5 text-xs font-medium tracking-tight text-emerald-700 border border-emerald-200/80">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-0.5 text-xs font-medium tracking-tight text-emerald-700 border border-emerald-200/80 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30">
       ✓ Completed
     </span>
   );

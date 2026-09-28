@@ -431,7 +431,7 @@ export function LabClient({
                   className={`rounded-full px-5 py-1.5 font-mono text-caption uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-40 ${
                     passed
                       ? "bg-emerald-400 text-[#191918] hover:opacity-85"
-                      : "bg-eggshell text-ink hover:opacity-80"
+                      : "bg-[#fdfcfc] text-[#191918] hover:opacity-80"
                   }`}
                 >
                   {passed ? "Passed ✓" : "Submit"}

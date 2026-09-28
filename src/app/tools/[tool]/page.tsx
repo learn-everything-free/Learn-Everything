@@ -285,7 +285,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                     </span>
                   </div>
                   <div className="mt-3 overflow-x-auto rounded-xl border border-stone bg-ink px-4 py-3 text-eggshell">
-                    <code className="font-mono text-xs font-medium text-emerald-400">
+                    <code className="font-mono text-xs font-medium text-emerald-600 dark:text-emerald-400">
                       {item.command}
                     </code>
                   </div>
@@ -337,10 +337,10 @@ export default async function ToolDetailPage({ params }: PageProps) {
             {tool.pitfalls.map((pitfall, i) => (
               <div
                 key={i}
-                className="rounded-[22px] border border-amber-200/80 bg-amber-50/40 p-7"
+                className="rounded-[22px] border border-amber-200/80 bg-amber-50/40 p-7 dark:border-amber-500/25 dark:bg-amber-500/5"
               >
                 <div className="flex items-center gap-2">
-                  <span className="flex size-6 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-900">
+                  <span className="flex size-6 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-900 dark:bg-amber-500/20 dark:text-amber-300">
                     !
                   </span>
                   <h3 className="text-base font-semibold text-graphite">
@@ -353,7 +353,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                     <p className="font-mono text-[10px] uppercase text-ash tracking-wider">
                       Symptom
                     </p>
-                    <p className="mt-1 text-body-sm font-mono text-amber-950 bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/60">
+                    <p className="mt-1 text-body-sm font-mono text-amber-950 bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/60 dark:text-amber-200 dark:bg-amber-500/10 dark:border-amber-500/25">
                       {pitfall.symptom}
                     </p>
                   </div>
@@ -388,7 +388,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                   key={i}
                   className="flex items-start gap-3 rounded-xl border border-stone/60 bg-eggshell p-4"
                 >
-                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mt-0.5">
+                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mt-0.5 dark:bg-emerald-500/15 dark:text-emerald-300">
                     ✓
                   </span>
                   <span className="text-body-sm text-graphite leading-relaxed">

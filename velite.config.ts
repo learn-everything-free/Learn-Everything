@@ -125,7 +125,17 @@ export default defineConfig({
       pattern: "*/**/lesson.md",
       schema: s.strictObject({
         content: s.markdown({
-          rehypePlugins: [[rehypePrettyCode, { theme: "github-light" }]],
+          rehypePlugins: [
+            // Dual themes: light is rendered inline, dark is exposed per-token
+            // as a --shiki-dark custom property and consumed in globals.css.
+            [
+              rehypePrettyCode,
+              {
+                themes: { light: "github-light", dark: "github-dark" },
+                keepBackground: false,
+              },
+            ],
+          ],
         }),
         file: contentPath,
       }),

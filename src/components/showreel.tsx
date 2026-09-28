@@ -228,7 +228,7 @@ export function ShowreelSection() {
               }`}
             >
               <span className="font-mono text-[10px] uppercase text-ash">0{i + 1}</span>
-              <p className={`font-mono text-xs ${i === scene ? "text-eggshell" : "text-smoke"}`}>
+              <p className={`font-mono text-xs ${i === scene ? "text-[#edece0]" : "text-smoke"}`}>
                 {c}
               </p>
               {i === scene && (

@@ -1,14 +1,44 @@
 @import "tailwindcss";
 
-@theme {
+/* Class-based dark mode: the boot script in layout.tsx sets `.dark` on <html>
+   before first paint (localStorage preference, falling back to system). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Runtime theme variables. The palette is inverted as a whole: in dark mode
+   `eggshell` becomes the canvas, `ink` becomes the primary text/fill, and the
+   intermediate tones shift accordingly — so `bg-ink text-eggshell` and every
+   other token pairing keeps working without per-component overrides. */
+:root {
+  --le-eggshell: #fdfcfc;
+  --le-taupe: #f5f3f1;
+  --le-stone: #ebe8e4;
+  --le-ink: #000000;
+  --le-graphite: #44403b;
+  --le-smoke: #777169;
+  --le-ash: #a59f97;
+  color-scheme: light;
+}
+
+.dark {
+  --le-eggshell: #141311;
+  --le-taupe: #1d1b18;
+  --le-stone: #2d2b26;
+  --le-ink: #f0eee6;
+  --le-graphite: #c9c4ba;
+  --le-smoke: #9c968b;
+  --le-ash: #6e6961;
+  color-scheme: dark;
+}
+
+@theme inline {
   /* Colors — ElevenLabs reference (DESIGN.md) */
-  --color-eggshell: #fdfcfc;
-  --color-warm-taupe: #f5f3f1;
-  --color-stone: #ebe8e4;
-  --color-ink: #000000;
-  --color-graphite: #44403b;
-  --color-smoke: #777169;
-  --color-ash: #a59f97;
+  --color-eggshell: var(--le-eggshell);
+  --color-warm-taupe: var(--le-taupe);
+  --color-stone: var(--le-stone);
+  --color-ink: var(--le-ink);
+  --color-graphite: var(--le-graphite);
+  --color-smoke: var(--le-smoke);
+  --color-ash: var(--le-ash);
   --color-violet-spark: #0447ff;
   --color-ember-orange: #ff4704;
 
@@ -70,6 +100,20 @@ body {
   color: var(--color-ink);
 }
 
+/* Smooth token swap when the theme toggles */
+body,
+body * {
+  transition-property: background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  body,
+  body * {
+    transition-property: none;
+  }
+}
+
 /* Lesson markdown (compiled from content/**\/lesson.md by velite) */
 .lesson h1 {
   font-size: 18px;
@@ -114,6 +158,15 @@ body {
 .lesson pre code {
   background: transparent;
   padding: 0;
+}
+
+/* Dark-mode syntax highlighting: rehype-pretty-code emits the light theme
+   inline plus a --shiki-dark custom property per token; consume it here. */
+.dark .lesson pre {
+  background: var(--le-taupe);
+}
+.dark .lesson pre span {
+  color: var(--shiki-dark) !important;
 }
 
 /* ---- Showreel animations (homepage video-style sections) ---- */

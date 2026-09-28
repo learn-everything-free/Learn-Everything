@@ -83,7 +83,7 @@ export default function Home() {
         </div>
 
         {/* Terminal Teaser Card */}
-        <div className="overflow-hidden rounded-[26px] border border-stone/90 bg-[#121417] p-6 shadow-xl text-eggshell">
+        <div className="overflow-hidden rounded-[26px] border border-stone/90 bg-[#121417] p-6 shadow-xl text-[#edece0]">
           <div className="flex items-center justify-between border-b border-stone/20 pb-4">
             <div className="flex items-center gap-2">
               <span className="size-3 rounded-full bg-rose-500/80" />
@@ -298,7 +298,7 @@ export default function Home() {
                   <span className="font-mono text-[10px] uppercase text-ash tracking-wider">
                     {skill.title}
                   </span>
-                  <span className="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-medium">
+                  <span className="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-medium dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30">
                     {task.difficulty}
                   </span>
                 </div>
