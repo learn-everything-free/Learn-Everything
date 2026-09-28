@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import "./globals.css";
 
-const sans = Instrument_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const sans = localFont({
+  src: "../fonts/InstrumentSans.woff2",
   variable: "--font-instrument-sans",
+  display: "swap",
 });
 
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
+const mono = localFont({
+  src: "../fonts/JetBrainsMono.woff2",
   variable: "--font-jetbrains-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
