@@ -6,8 +6,8 @@ import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import type { LabShell } from "@/lib/shell";
 
-const PROMPT_USER = "\x1b[38;2;252;170;45mlearner@lab\x1b[0m";
-const PROMPT_PATH = "\x1b[38;2;117;117;111m";
+const PROMPT_USER = "\x1b[38;2;255;71;4mlearner@lab\x1b[0m";
+const PROMPT_PATH = "\x1b[38;2;165;159;151m";
 
 export type CommandRunner = (command: string) => void;
 
@@ -31,7 +31,7 @@ export function LabTerminal({
       theme: {
         background: "#191918",
         foreground: "#edece0",
-        cursor: "#fcaa2d",
+        cursor: "#ff4704",
         cursorAccent: "#191918",
         selectionBackground: "#75756f88",
         black: "#191918",

@@ -61,8 +61,8 @@ export function LabClient({
   };
 
   return (
-    <div className="mx-auto max-w-[1200px] px-6 py-12 lg:px-10">
-      <p className="font-mono text-mono-xs uppercase text-stone">
+    <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-16">
+      <p className="font-mono text-caption uppercase text-ash">
         <Link href="/paths" className="hover:text-ink">Paths</Link>
         {" / "}
         <Link href={`/paths/${path.slug}`} className="hover:text-ink">{path.title}</Link>
@@ -73,22 +73,24 @@ export function LabClient({
       <div className="mt-8 grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
         {/* Task brief */}
         <div>
-          <h1 className="text-heading tracking-[-0.05em]">{task.title}</h1>
+          <h1 className="text-heading font-light tracking-[-0.02em]">{task.title}</h1>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Badge variant="amber">{taskTypeLabel[task.type]}</Badge>
+            <Badge variant="ink">{taskTypeLabel[task.type]}</Badge>
             <Badge>{task.difficulty}</Badge>
-            <Badge variant="ink">{task.env}</Badge>
+            <Badge variant="outline">{task.env}</Badge>
           </div>
-          <p className="mt-6 text-body tracking-[-0.04em] text-stone">{task.description}</p>
+          <p className="mt-6 text-body text-smoke">{task.description}</p>
 
-          <h2 className="mt-10 border-t border-rule pt-8 font-mono text-mono-sm uppercase">Requirements</h2>
-          <ul className="mt-4 divide-y divide-rule border-y border-rule">
+          <h2 className="mt-10 border-t border-stone pt-8 font-mono text-caption uppercase text-ash">
+            Requirements
+          </h2>
+          <ul className="mt-4 divide-y divide-stone border-y border-stone">
             {(results ? task.checks.map((c) => c.label) : task.requirements).map((req, i) => {
               const result = results?.[i];
               return (
-                <li key={i} className="flex items-center justify-between gap-4 py-3 text-body-sm tracking-[-0.04em]">
+                <li key={i} className="flex items-center justify-between gap-4 py-3 text-body-sm">
                   <span>{req}</span>
-                  <span className="font-mono text-mono-sm">
+                  <span className="font-mono text-mono-xs">
                     {result ? (result.pass ? "✓" : "✗") : "○"}
                   </span>
                 </li>
@@ -99,23 +101,23 @@ export function LabClient({
           {hasRuntimeChecks ? (
             <div className="mt-6">
               {results === null ? (
-                <p className="font-mono text-mono-sm text-stone">
-                  VALIDATOR: IDLE — run <span className="text-amber">Submit</span> when you believe the task is done
+                <p className="font-mono text-mono-xs text-smoke">
+                  VALIDATOR: IDLE — run Submit when you believe the task is done
                 </p>
               ) : passed ? (
-                <p className="font-mono text-mono-sm">
-                  <span className="text-amber">PASS</span>
-                  <span className="text-stone"> — all checks passed against environment state · +50 XP</span>
+                <p className="flex items-center gap-2 font-mono text-mono-xs">
+                  <span className="size-2 rounded-full bg-ember-orange" aria-hidden />
+                  <span>PASS — all checks passed against environment state · +50 XP</span>
                 </p>
               ) : (
-                <p className="font-mono text-mono-sm">
-                  <span className="text-stone">FAIL</span> — {results.filter((r) => !r.pass).length} check(s) failing:
+                <p className="font-mono text-mono-xs text-smoke">
+                  FAIL — {results.filter((r) => !r.pass).length} check(s) failing:
                 </p>
               )}
               {results && !passed && (
                 <ul className="mt-3 space-y-1">
                   {results.filter((r) => !r.pass).map((r) => (
-                    <li key={r.label} className="font-mono text-mono-sm text-stone">
+                    <li key={r.label} className="font-mono text-mono-xs text-smoke">
                       ✗ {r.label} — {r.detail}
                     </li>
                   ))}
@@ -123,35 +125,34 @@ export function LabClient({
               )}
             </div>
           ) : (
-            <p className="mt-6 font-mono text-mono-sm text-stone">
+            <p className="mt-6 font-mono text-mono-xs text-smoke">
               VALIDATOR: PENDING RUNTIME — this task needs the full container/Kubernetes lab runtime (not part of the browser preview).
             </p>
           )}
 
           {/* Walkthrough — every step explained, nothing hidden */}
-          <h2 className="mt-10 border-t border-rule pt-8 font-mono text-mono-sm uppercase">
-            Walkthrough <span className="text-stone">— {task.steps.length} steps</span>
+          <h2 className="mt-10 border-t border-stone pt-8 font-mono text-caption uppercase text-ash">
+            Walkthrough <span className="text-ash">— {task.steps.length} steps</span>
           </h2>
-          <ol className="mt-6 divide-y divide-rule border-y border-rule">
+          <ol className="mt-6 space-y-8">
             {task.steps.map((step, i) => {
               const cmd = step.command;
               return (
-              <li key={i} className="py-6">
-                <div className="flex items-baseline gap-4">
-                  <span className="font-mono text-mono-sm text-stone">
+                <li key={i} className="flex items-baseline gap-4">
+                  <span className="font-mono text-mono-xs text-ash">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-body tracking-[-0.04em]">{step.title}</p>
-                    <p className="mt-2 text-body-sm tracking-[-0.04em] text-stone">{step.detail}</p>
+                    <p className="text-body-sm font-medium">{step.title}</p>
+                    <p className="mt-1.5 text-body-sm text-smoke">{step.detail}</p>
                     {cmd ? (
-                      <div className="mt-4 flex items-center justify-between gap-4 rounded-[2px] border border-rule bg-ink py-2.5 pl-4 pr-2.5">
-                        <code className="overflow-x-auto whitespace-nowrap font-mono text-mono-sm text-linen">
+                      <div className="mt-3 flex items-center justify-between gap-4 rounded-[10px] border border-stone bg-warm-taupe py-2 pl-4 pr-2">
+                        <code className="overflow-x-auto whitespace-nowrap font-mono text-mono-sm text-graphite">
                           {cmd}
                         </code>
                         <button
                           onClick={() => runner(cmd)}
-                          className="shrink-0 rounded-[2px] bg-amber px-3 py-1.5 font-mono text-mono-xs uppercase text-ink transition-opacity hover:opacity-80"
+                          className="shrink-0 rounded-full border border-stone bg-ink px-3 py-1 font-mono text-caption uppercase text-eggshell transition-opacity hover:opacity-80"
                           title={`Runs "${cmd}" in the terminal`}
                         >
                           Run ↘
@@ -159,25 +160,26 @@ export function LabClient({
                       </div>
                     ) : null}
                   </div>
-                </div>
-              </li>
+                </li>
               );
             })}
           </ol>
-          <p className="mt-4 font-mono text-mono-xs uppercase text-stone">
+          <p className="mt-4 font-mono text-caption uppercase text-ash">
             Run sends the command straight into the lab terminal — or type it yourself
           </p>
 
           {/* AI tutor */}
-          <h2 className="mt-10 border-t border-rule pt-8 font-mono text-mono-sm uppercase">AI Tutor</h2>
+          <h2 className="mt-10 border-t border-stone pt-8 font-mono text-caption uppercase text-ash">
+            AI Tutor
+          </h2>
           <div className="mt-4 space-y-3">
             {tutor.map((m, i) => (
               <p
                 key={i}
                 className={
                   m.role === "you"
-                    ? "text-body-sm tracking-[-0.04em] text-stone"
-                    : "border-l-2 border-amber px-5 py-2 text-body-sm tracking-[-0.04em]"
+                    ? "text-body-sm text-smoke"
+                    : "rounded-[10px] bg-warm-taupe px-4 py-2.5 text-body-sm"
                 }
               >
                 {m.role === "you" ? "You: " : "Tutor: "}
@@ -191,48 +193,48 @@ export function LabClient({
               onChange={(e) => setTutorInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && askTutor()}
               placeholder="Describe what you tried…"
-              className="w-full rounded-[2px] border border-rule bg-cream px-4 py-2.5 text-body-sm tracking-[-0.04em] outline-none placeholder:text-ash focus:border-amber"
+              className="w-full rounded-[4px] border border-stone bg-eggshell px-4 py-2.5 text-body-sm outline-none placeholder:text-ash focus:border-ink"
             />
             <button
               onClick={askTutor}
-              className="rounded-[2px] bg-ink px-5 py-2.5 text-caption tracking-[-0.03em] text-cream transition-colors hover:bg-stone"
+              className="rounded-full border border-stone bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-80"
             >
               Ask
             </button>
           </div>
-          <p className="mt-3 font-mono text-mono-xs uppercase text-stone">
+          <p className="mt-3 font-mono text-caption uppercase text-ash">
             Tutor guides debugging — it does not generate answers
           </p>
         </div>
 
         {/* Terminal */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <div className="overflow-hidden rounded-[2px] border border-rule bg-ink">
-            <div className="flex items-center justify-between border-b border-stone/40 px-4 py-2.5">
+        <div className="lg:sticky lg:top-8 lg:self-start">
+          <div className="overflow-hidden rounded-[20px] border border-stone bg-[#191918] shadow-[var(--shadow-subtle)]">
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
               <div className="flex items-center gap-1.5">
                 <span className="size-2 rounded-full bg-ash" />
-                <span className="size-2 rounded-full bg-stone" />
-                <span className="size-2 rounded-full bg-linen" />
+                <span className="size-2 rounded-full bg-smoke" />
+                <span className="size-2 rounded-full bg-[#ebe8e4]" />
               </div>
-              <p className="font-mono text-mono-xs uppercase text-ash">
+              <p className="font-mono text-caption uppercase text-ash">
                 learner@lab — {task.env}
               </p>
             </div>
             <LabTerminal shell={shell} bindRunner={bindRunner} />
-            <div className="flex items-center justify-between border-t border-stone/40 px-4 py-3">
+            <div className="flex items-center justify-between border-t border-white/10 px-5 py-3">
               <button
                 onClick={reset}
-                className="rounded-[2px] border border-ash px-4 py-2 font-mono text-mono-sm uppercase text-ash transition-colors hover:border-linen hover:text-linen"
+                className="rounded-full border border-white/20 px-4 py-1.5 font-mono text-caption uppercase text-ash transition-colors hover:border-[#ebe8e4] hover:text-[#ebe8e4]"
               >
                 Reset Lab
               </button>
-              <p className="hidden font-mono text-mono-xs uppercase text-stone sm:block">
-                Session is disposable — destroy to start fresh
+              <p className="hidden font-mono text-caption uppercase text-smoke sm:block">
+                Session is disposable
               </p>
               <button
                 onClick={submit}
                 disabled={!hasRuntimeChecks}
-                className="rounded-[2px] bg-amber px-5 py-2 font-mono text-mono-sm uppercase text-ink transition-colors hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-full bg-eggshell px-5 py-1.5 font-mono text-caption uppercase text-ink transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Submit
               </button>

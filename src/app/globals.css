@@ -1,63 +1,71 @@
 @import "tailwindcss";
 
 @theme {
-  /* Colors — Relace warm-paper reference (DESIGN.md) */
-  --color-cream: #fffef2;
-  --color-ink: #191918;
-  --color-rule: #000000;
-  --color-stone: #75756f;
-  --color-linen: #edece0;
-  --color-ash: #bab9b0;
-  --color-amber: #fcaa2d;
+  /* Colors — ElevenLabs reference (DESIGN.md) */
+  --color-eggshell: #fdfcfc;
+  --color-warm-taupe: #f5f3f1;
+  --color-stone: #ebe8e4;
+  --color-ink: #000000;
+  --color-graphite: #44403b;
+  --color-smoke: #777169;
+  --color-ash: #a59f97;
+  --color-violet-spark: #0447ff;
+  --color-ember-orange: #ff4704;
 
   /* Fonts */
-  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Type scale */
-  --text-mono-xs: 10px;
-  --text-mono-xs--line-height: 1.2;
-  --text-mono-xs--letter-spacing: 0.04em;
-  --text-mono-sm: 12px;
-  --text-mono-sm--line-height: 1.2;
-  --text-mono-sm--letter-spacing: 0.03em;
-  --text-caption: 14px;
-  --text-caption--line-height: 1.5;
-  --text-caption--letter-spacing: -0.03em;
-  --text-body-sm: 16px;
+  --text-caption: 10px;
+  --text-caption--line-height: 1.6;
+  --text-body-sm: 14px;
   --text-body-sm--line-height: 1.5;
-  --text-body-sm--letter-spacing: -0.04em;
-  --text-body: 18px;
+  --text-body-sm--letter-spacing: 0.14px;
+  --text-body: 16px;
   --text-body--line-height: 1.5;
-  --text-body--letter-spacing: -0.04em;
-  --text-subheading: 20px;
-  --text-subheading--line-height: 1.06;
-  --text-subheading--letter-spacing: -0.03em;
+  --text-body--letter-spacing: 0.16px;
+  --text-subheading: 18px;
+  --text-subheading--line-height: 1.6;
+  --text-body-lg: 20px;
+  --text-body-lg--line-height: 1.35;
+  --text-heading-sm: 32px;
+  --text-heading-sm--line-height: 1.13;
+  --text-heading-sm--letter-spacing: -0.64px;
   --text-heading: 36px;
-  --text-heading--line-height: 1.1;
-  --text-heading--letter-spacing: -0.05em;
-  --text-heading-lg: 40px;
-  --text-heading-lg--line-height: 1.1;
-  --text-heading-lg--letter-spacing: -0.04em;
-  --text-display: 64px;
-  --text-display--line-height: 1.1;
-  --text-display--letter-spacing: -0.05em;
+  --text-heading--line-height: 1.17;
+  --text-heading--letter-spacing: -0.72px;
+  --text-display: 48px;
+  --text-display--line-height: 1.08;
+  --text-display--letter-spacing: -0.96px;
 
-  /* Radii — 2px everywhere except pills */
-  --radius-card: 2px;
-  --radius-full: 800px;
+  /* Mono scale */
+  --text-mono-xs: 11px;
+  --text-mono-xs--line-height: 1.5;
+  --text-mono-sm: 13px;
+  --text-mono-sm--line-height: 1.69;
 
-  /* Spacing */
-  --spacing-60: 60px;
+  /* Radii */
+  --radius-full: 9999px;
+  --radius-input: 4px;
+  --radius-card: 20px;
+  --radius-large-card: 24px;
+
+  /* Shadows — whisper elevation only */
+  --shadow-subtle:
+    rgba(0, 0, 0, 0.4) 0px 0px 1px 0px,
+    rgba(0, 0, 0, 0.04) 0px 1px 1px 0px,
+    rgba(0, 0, 0, 0.04) 0px 2px 4px 0px;
+  --shadow-inset-hairline: rgba(0, 0, 0, 0.075) 0px 0px 0px 0.5px inset;
 }
 
 body {
-  background: var(--color-cream);
+  background: var(--color-eggshell);
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
 
 ::selection {
-  background: var(--color-amber);
+  background: var(--color-stone);
   color: var(--color-ink);
 }

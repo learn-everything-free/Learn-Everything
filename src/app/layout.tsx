@@ -5,9 +5,10 @@ import { Footer } from "@/components/footer";
 import "./globals.css";
 
 const sans = localFont({
-  src: "../fonts/InstrumentSans.woff2",
-  variable: "--font-instrument-sans",
+  src: "../fonts/Inter.woff2",
+  variable: "--font-inter",
   display: "swap",
+  weight: "100 900",
 });
 
 const mono = localFont({
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-cream text-ink">
+      <body className="min-h-full flex flex-col bg-eggshell text-ink">
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />
