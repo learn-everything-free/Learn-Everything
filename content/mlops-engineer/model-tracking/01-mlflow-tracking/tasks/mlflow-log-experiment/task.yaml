@@ -1,0 +1,36 @@
+slug: mlflow-log-experiment
+title: Configure an MLflow Tracking Server Manifest
+type: practice
+difficulty: intermediate
+description: Set up an MLflow tracking server configuration with backend SQLite store and artifact S3 bucket path.
+requirements:
+  - Directory ~/mlflow exists
+  - File ~/mlflow/tracking-server.sh exists
+  - File ~/mlflow/tracking-server.sh contains "backend-store-uri"
+  - File ~/mlflow/tracking-server.sh contains "default-artifact-root"
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/mlflow
+    label: ~/mlflow
+  - validator: file_exists
+    path: /home/learner/mlflow/tracking-server.sh
+    label: ~/mlflow/tracking-server.sh
+  - validator: file_contains
+    path: /home/learner/mlflow/tracking-server.sh
+    value: backend-store-uri
+    label: Backend database URI configured
+  - validator: file_contains
+    path: /home/learner/mlflow/tracking-server.sh
+    value: default-artifact-root
+    label: Default artifact root path configured
+steps:
+  - title: Initialize mlflow directory
+    detail: Create directory to hold MLflow launch scripts.
+    command: mkdir -p ~/mlflow
+  - title: Write server startup script
+    detail: Create tracking-server.sh with backend-store-uri and default-artifact-root flags.
+    command: "echo 'mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://mlops-artifacts/models --host 0.0.0.0 --port 5000' > ~/mlflow/tracking-server.sh"
+  - title: Make script executable
+    detail: Add executable bit to the script.
+    command: chmod +x ~/mlflow/tracking-server.sh

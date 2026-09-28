@@ -1,0 +1,7 @@
+slug: 01-fundamentals
+title: Prompt Engineering Fundamentals
+summary: Learn system prompting, zero-shot vs few-shot paradigms, and temperature tuning.
+order: 1
+tasks:
+  - prompt-zero-few-shot
+  - prompt-structured-json

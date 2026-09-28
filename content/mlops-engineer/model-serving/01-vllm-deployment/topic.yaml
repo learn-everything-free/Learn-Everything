@@ -1,0 +1,6 @@
+slug: 01-vllm-deployment
+title: High-Throughput Inference with vLLM
+summary: PagedAttention, KV cache management, and continuous batching architectures for serving LLMs.
+order: 1
+tasks:
+  - vllm-serve-model

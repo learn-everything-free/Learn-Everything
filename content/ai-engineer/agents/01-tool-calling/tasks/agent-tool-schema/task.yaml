@@ -1,0 +1,36 @@
+slug: agent-tool-schema
+title: Declare an Agent Tool Calling Definition
+type: practice
+difficulty: intermediate
+description: Construct a production tool schema for an agent allowing it to restart unhealthy services with confirmation parameters.
+requirements:
+  - Directory ~/agent-tools exists
+  - File ~/agent-tools/restart-tool.json exists
+  - File ~/agent-tools/restart-tool.json contains "restart_service"
+  - File ~/agent-tools/restart-tool.json contains "parameters"
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/agent-tools
+    label: ~/agent-tools
+  - validator: file_exists
+    path: /home/learner/agent-tools/restart-tool.json
+    label: ~/agent-tools/restart-tool.json
+  - validator: file_contains
+    path: /home/learner/agent-tools/restart-tool.json
+    value: restart_service
+    label: Tool name restart_service registered
+  - validator: file_contains
+    path: /home/learner/agent-tools/restart-tool.json
+    value: parameters
+    label: JSON Schema parameters block present
+steps:
+  - title: Create agent-tools directory
+    detail: Setup directory to hold tool manifests.
+    command: mkdir -p ~/agent-tools
+  - title: Write tool schema definition
+    detail: Define the JSON structure with function name, description, and parameter types.
+    command: "echo '{\"name\": \"restart_service\", \"description\": \"Restart a kubernetes or systemd service\", \"parameters\": {\"type\": \"object\", \"properties\": {\"service_name\": {\"type\": \"string\"}}, \"required\": [\"service_name\"]}}' > ~/agent-tools/restart-tool.json"
+  - title: Check manifest
+    detail: Verify the tool schema is valid.
+    command: cat ~/agent-tools/restart-tool.json

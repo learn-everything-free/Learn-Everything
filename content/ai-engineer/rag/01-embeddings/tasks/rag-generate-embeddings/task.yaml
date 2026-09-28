@@ -1,0 +1,36 @@
+slug: rag-generate-embeddings
+title: Build a Vector Index Pipeline Config
+type: practice
+difficulty: intermediate
+description: Configure a document chunking and vector index pipeline specification with chunk size and overlap parameters.
+requirements:
+  - Directory ~/rag-pipeline exists
+  - File ~/rag-pipeline/indexing-config.yaml exists
+  - File ~/rag-pipeline/indexing-config.yaml contains "chunk_size"
+  - File ~/rag-pipeline/indexing-config.yaml contains "cosine"
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/rag-pipeline
+    label: ~/rag-pipeline
+  - validator: file_exists
+    path: /home/learner/rag-pipeline/indexing-config.yaml
+    label: ~/rag-pipeline/indexing-config.yaml
+  - validator: file_contains
+    path: /home/learner/rag-pipeline/indexing-config.yaml
+    value: chunk_size
+    label: Document chunk size specified
+  - validator: file_contains
+    path: /home/learner/rag-pipeline/indexing-config.yaml
+    value: cosine
+    label: Similarity metric set to cosine
+steps:
+  - title: Initialize pipeline directory
+    detail: Create a workspace for the retrieval indexing pipeline.
+    command: mkdir -p ~/rag-pipeline
+  - title: Author the indexer YAML config
+    detail: Define the embedding model, vector dimensions, chunk size (512), and distance metric.
+    command: "echo -e 'embedding:\n  model: text-embedding-3-small\n  dimension: 1536\n  metric: cosine\nchunking:\n  chunk_size: 512\n  chunk_overlap: 50' > ~/rag-pipeline/indexing-config.yaml"
+  - title: Verify indexing config
+    detail: Confirm the configuration matches vector search parameters.
+    command: cat ~/rag-pipeline/indexing-config.yaml

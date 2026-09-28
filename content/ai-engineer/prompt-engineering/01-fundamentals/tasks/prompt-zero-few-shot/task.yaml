@@ -1,0 +1,36 @@
+slug: prompt-zero-few-shot
+title: Craft a Few-Shot Classification Prompt
+type: practice
+difficulty: beginner
+description: Build a few-shot prompt configuration file that classifies production alerts into incident severities (P1, P2, P3).
+requirements:
+  - Directory ~/prompts exists
+  - File ~/prompts/alert-classifier.json exists
+  - File ~/prompts/alert-classifier.json contains "P1"
+  - File ~/prompts/alert-classifier.json contains "few_shot"
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/prompts
+    label: ~/prompts
+  - validator: file_exists
+    path: /home/learner/prompts/alert-classifier.json
+    label: ~/prompts/alert-classifier.json
+  - validator: file_contains
+    path: /home/learner/prompts/alert-classifier.json
+    value: P1
+    label: Alert classification P1 rule defined
+  - validator: file_contains
+    path: /home/learner/prompts/alert-classifier.json
+    value: few_shot
+    label: Exemplar few_shot section present
+steps:
+  - title: Create the prompt repository directory
+    detail: Create a dedicated directory to store prompt templates and test configs.
+    command: mkdir -p ~/prompts
+  - title: Author the few-shot template
+    detail: Write a JSON configuration containing system role, few_shot examples, and P1 severity labels.
+    command: "echo '{\"role\": \"system\", \"instruction\": \"Classify alerts\", \"few_shot\": [{\"input\": \"disk full\", \"output\": \"P1\"}]}' > ~/prompts/alert-classifier.json"
+  - title: Verify prompt structure
+    detail: Ensure the file contains valid JSON with the expected keys.
+    command: cat ~/prompts/alert-classifier.json

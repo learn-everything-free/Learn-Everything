@@ -1,0 +1,36 @@
+slug: prompt-structured-json
+title: Define a Strict JSON Schema Output Format
+type: practice
+difficulty: beginner
+description: Define an OpenAI/Anthropic compatible JSON Schema specification file for structured model extraction.
+requirements:
+  - Directory ~/schemas exists
+  - File ~/schemas/incident-schema.json exists
+  - File ~/schemas/incident-schema.json contains "type"
+  - File ~/schemas/incident-schema.json contains "required"
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/schemas
+    label: ~/schemas
+  - validator: file_exists
+    path: /home/learner/schemas/incident-schema.json
+    label: ~/schemas/incident-schema.json
+  - validator: file_contains
+    path: /home/learner/schemas/incident-schema.json
+    value: type
+    label: Type specification defined
+  - validator: file_contains
+    path: /home/learner/schemas/incident-schema.json
+    value: required
+    label: Required fields array present
+steps:
+  - title: Create schemas directory
+    detail: Make a directory to hold JSON schema definitions for API validation.
+    command: mkdir -p ~/schemas
+  - title: Generate JSON schema definition
+    detail: Define properties for service, error_code, and severity with strict required keys.
+    command: "echo '{\"type\": \"object\", \"properties\": {\"service\": {\"type\": \"string\"}, \"severity\": {\"type\": \"string\"}}, \"required\": [\"service\", \"severity\"]}' > ~/schemas/incident-schema.json"
+  - title: Validate schema file
+    detail: View the file content to confirm proper JSON format.
+    command: cat ~/schemas/incident-schema.json

@@ -1,0 +1,6 @@
+slug: 01-mlflow-tracking
+title: Experiment Tracking with MLflow
+summary: Track hyperparameters, training loss curves, evaluation metrics, and model artifacts in a unified registry.
+order: 1
+tasks:
+  - mlflow-log-experiment

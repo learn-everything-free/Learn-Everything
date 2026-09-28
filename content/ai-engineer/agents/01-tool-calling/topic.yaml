@@ -1,0 +1,6 @@
+slug: 01-tool-calling
+title: Function Calling and Tool Definitions
+summary: Declare callable tool interfaces for LLMs using OpenAPI and JSON schema specs.
+order: 1
+tasks:
+  - agent-tool-schema

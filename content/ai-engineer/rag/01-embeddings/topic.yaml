@@ -1,0 +1,6 @@
+slug: 01-embeddings
+title: Embeddings and Vector Search
+summary: Vector representations of semantic text, cosine similarity, and chunking heuristics.
+order: 1
+tasks:
+  - rag-generate-embeddings

@@ -1,0 +1,36 @@
+slug: vllm-serve-model
+title: Configure a vLLM Model Serving Daemon
+type: practice
+difficulty: intermediate
+description: Construct a production configuration file for a vLLM serving container with GPU memory utilization and tensor parallel settings.
+requirements:
+  - Directory ~/serving exists
+  - File ~/serving/vllm-config.yaml exists
+  - File ~/serving/vllm-config.yaml contains "gpu_memory_utilization"
+  - File ~/serving/vllm-config.yaml contains "max_model_len"
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/serving
+    label: ~/serving
+  - validator: file_exists
+    path: /home/learner/serving/vllm-config.yaml
+    label: ~/serving/vllm-config.yaml
+  - validator: file_contains
+    path: /home/learner/serving/vllm-config.yaml
+    value: gpu_memory_utilization
+    label: GPU memory utilization parameter set
+  - validator: file_contains
+    path: /home/learner/serving/vllm-config.yaml
+    value: max_model_len
+    label: Max model context length bounded
+steps:
+  - title: Create serving config directory
+    detail: Create directory to hold model deployment configs.
+    command: mkdir -p ~/serving
+  - title: Write vLLM configuration
+    detail: Specify model path, port 8000, 0.90 GPU memory utilization, and 8192 context length.
+    command: "echo -e 'model: meta-llama/Llama-3.1-8B-Instruct\nhost: 0.0.0.0\nport: 8000\ngpu_memory_utilization: 0.90\nmax_model_len: 8192\ntensor_parallel_size: 1' > ~/serving/vllm-config.yaml"
+  - title: Inspect serving file
+    detail: Review the created configuration file.
+    command: cat ~/serving/vllm-config.yaml
