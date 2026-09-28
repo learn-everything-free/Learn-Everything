@@ -23,14 +23,16 @@ export default async function SkillPage({ params }: PageProps<"/paths/[slug]/[sk
       <div className="mt-14 space-y-16">
         {skill.topics.map((topic) => (
           <section key={topic.slug}>
-            <div className="border-b border-rule pb-4">
-              <p className="font-mono text-mono-xs uppercase text-stone">TOPIC</p>
-              <h2 className="mt-2 text-subheading tracking-[-0.03em]">{topic.title}</h2>
-              <p className="mt-2 text-body-sm tracking-[-0.04em] text-stone">{topic.summary}</p>
-            </div>
-            <div className="divide-y divide-rule">
+            <p className="font-mono text-mono-xs uppercase text-stone">TOPIC</p>
+            <h2 className="mt-2 text-subheading tracking-[-0.03em]">{topic.title}</h2>
+            <p className="mt-2 text-body-sm tracking-[-0.04em] text-stone">{topic.summary}</p>
+            <div className="mt-6 divide-y divide-rule border-t border-rule">
               {topic.tasks.map((task) => (
-                <div key={task.slug} className="flex flex-wrap items-center justify-between gap-4 border-l-2 border-amber py-5 pl-6 pr-2 sm:pl-10">
+                <Link
+                  key={task.slug}
+                  href={`/lab/${task.slug}`}
+                  className="group flex flex-wrap items-center justify-between gap-4 border-l-2 border-amber py-5 pl-6 pr-2 transition-colors hover:bg-linen sm:pl-10"
+                >
                   <div>
                     <p className="text-body tracking-[-0.04em]">{task.title}</p>
                     <div className="mt-2 flex flex-wrap gap-2">
@@ -38,13 +40,10 @@ export default async function SkillPage({ params }: PageProps<"/paths/[slug]/[sk
                       <Badge>{task.difficulty}</Badge>
                     </div>
                   </div>
-                  <Link
-                    href={`/lab/${task.slug}`}
-                    className="font-mono text-mono-sm text-stone transition-colors hover:text-ink"
-                  >
+                  <span className="font-mono text-mono-sm text-stone transition-colors group-hover:text-ink">
                     Open lab ↗
-                  </Link>
-                </div>
+                  </span>
+                </Link>
               ))}
             </div>
           </section>
