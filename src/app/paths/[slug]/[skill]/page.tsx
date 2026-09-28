@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { paths, getSkill, taskTypeLabel } from "@/lib/data";
 import { getTool } from "@/lib/tools";
 import { Badge, SectionHeader } from "@/components/ui";
+import { CompletedBadge } from "@/components/progress";
 import { ToolIcon } from "@/components/icons";
 
 export function generateStaticParams() {
@@ -148,7 +149,10 @@ export default async function SkillPage({ params }: PageProps) {
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2">
-                            <Badge variant={diffBadge}>{task.difficulty}</Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge variant={diffBadge}>{task.difficulty}</Badge>
+                              <CompletedBadge slug={task.slug} />
+                            </div>
                             <span className="font-mono text-[10px] text-smoke">
                               {taskTypeLabel[task.type]}
                             </span>

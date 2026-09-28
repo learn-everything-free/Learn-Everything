@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { paths, countTasks } from "@/lib/data";
 import { Badge, StatCard, SectionHeader } from "@/components/ui";
+import { TaskProgressMeter, XpCounter } from "@/components/progress";
 
 export const metadata = { title: "Learning Paths — Learn Everything" };
 
@@ -23,6 +24,7 @@ export default function PathsPage() {
           Every skill breaks down into manageable topics mixing foundational knowledge with hands-on
           tasks verified by an automated validator.
         </p>
+        <XpCounter />
       </div>
 
       {/* Metrics */}
@@ -100,16 +102,21 @@ export default function PathsPage() {
                   </div>
                 </div>
 
-                <div className="mt-8 border-t border-stone/70 pt-5 flex items-center justify-between">
-                  <span className="font-mono text-xs text-smoke">
-                    {p.skills.length} skills · {pathTaskCount} tasks
-                  </span>
-                  <Link
-                    href={`/paths/${p.slug}`}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-xs font-medium text-eggshell transition-opacity hover:opacity-85"
-                  >
-                    Open Curriculum ↗
-                  </Link>
+                <div className="mt-8 border-t border-stone/70 pt-5 space-y-4">
+                  <TaskProgressMeter
+                    slugs={p.skills.flatMap((s) => s.topics.flatMap((t) => t.tasks.map((task) => task.slug)))}
+                  />
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-smoke">
+                      {p.skills.length} skills · {pathTaskCount} tasks
+                    </span>
+                    <Link
+                      href={`/paths/${p.slug}`}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-xs font-medium text-eggshell transition-opacity hover:opacity-85"
+                    >
+                      Open Curriculum ↗
+                    </Link>
+                  </div>
                 </div>
               </div>
             );

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getPath, countTasks } from "@/lib/data";
 import { getTool } from "@/lib/tools";
 import { Badge, Card, SectionHeader } from "@/components/ui";
+import { TaskProgressMeter } from "@/components/progress";
 import { ToolIcon } from "@/components/icons";
 
 export function generateStaticParams() {
@@ -56,6 +57,10 @@ export default async function PathPage({ params }: PageProps) {
           <Badge variant="taupe">{totalTasks} interactive tasks live</Badge>
           <Badge variant="emerald">100% Free Sandbox</Badge>
         </div>
+
+        <div className="pt-4">
+          <TaskProgressMeter slugs={path.skills.flatMap((s) => s.topics.flatMap((t) => t.tasks.map((task) => task.slug)))} />
+        </div>
       </div>
 
       {/* Skills Grid */}
@@ -108,6 +113,13 @@ export default async function PathPage({ params }: PageProps) {
                   <p className="mt-3 text-body-sm text-smoke leading-relaxed">
                     {skill.summary}
                   </p>
+
+                  <div className="mt-4">
+                    <TaskProgressMeter
+                      slugs={skill.topics.flatMap((t) => t.tasks.map((task) => task.slug))}
+                      label="done"
+                    />
+                  </div>
 
                   {/* Topics breakdown */}
                   {topicCount > 0 ? (
