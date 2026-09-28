@@ -499,6 +499,10 @@ The learner should still **do the work**.
 
 The tutor ships with a provider-agnostic backend: set `AI_PROVIDER`, `AI_API_KEY` (and optionally `AI_MODEL` / `AI_BASE_URL` for OpenAI-compatible endpoints) in `.env.local` — see `.env.example`. Without configuration it falls back to built-in canned guidance, and it never receives or reveals task solutions — only the task description, validator state, and your recent commands.
 
+## 👤 Accounts & Saved Progress (optional)
+
+Learners can sign in with Google or GitHub (Auth.js, JWT sessions — **no database**) and their XP, streak, and completed labs sync across devices to a per-user record in Upstash Redis (free tier). Without any configuration everything still works from localStorage alone; signing in simply adds cross-device sync. Setup steps and callback URLs are documented in [`.env.example`](.env.example).
+
 ---
 
 ## 📚 Git-Based Learning Content

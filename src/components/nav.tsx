@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 import { useProgress, totalXp } from "@/lib/progress";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserMenu } from "@/components/user-menu";
 
 const links = [
   { href: "/", label: "Home" },
@@ -23,6 +25,7 @@ export function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const progress = useProgress();
   const xp = totalXp(progress);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -81,6 +84,7 @@ export function Nav() {
 
         <div className="flex items-center gap-2.5">
           <ThemeToggle />
+          <UserMenu />
           {xp > 0 && (
             <Link
               href="/paths"
@@ -149,14 +153,21 @@ export function Nav() {
             })}
           </div>
           <div className="mt-3 flex items-center gap-2.5 border-t border-stone pt-4">
-            <a
-              href="https://github.com/NotHarshhaa/Learn-Everything"
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 rounded-full border border-stone/80 bg-eggshell px-4 py-2 text-center text-xs font-medium text-graphite"
-            >
-              GitHub ↗
-            </a>
+            {session ? (
+              <button
+                onClick={() => void signOut()}
+                className="flex-1 rounded-full border border-stone/80 bg-eggshell px-4 py-2 text-center text-xs font-medium text-graphite"
+              >
+                Sign out
+              </button>
+            ) : (
+              <Link
+                href="/api/auth/signin"
+                className="flex-1 rounded-full border border-stone/80 bg-eggshell px-4 py-2 text-center text-xs font-medium text-graphite"
+              >
+                Sign in
+              </Link>
+            )}
             <Link
               href="/lab/linux-create-project"
               className="flex-1 rounded-full bg-ink px-4 py-2 text-center text-xs font-medium text-eggshell"

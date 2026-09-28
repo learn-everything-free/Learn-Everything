@@ -81,6 +81,66 @@ export function markCompleted(slug: string): void {
     completed: { ...state.completed, [slug]: new Date().toISOString() },
     streak: bumpStreak(state),
   });
+  scheduleCloudSync();
+}
+
+// ---- cloud sync ----------------------------------------------------------
+// Progress lives in localStorage first (instant, offline); a signed-in
+// learner's state is mirrored to /api/progress. On login the two states are
+// merged (union of completions, best streak) so neither device can lose work.
+
+function mergeStates(a: ProgressState, b: ProgressState): ProgressState {
+  const completed = { ...a.completed };
+  for (const [slug, ts] of Object.entries(b.completed)) {
+    const current = completed[slug];
+    if (!current || ts < current) completed[slug] = ts;
+  }
+  let streak = a.streak ?? b.streak;
+  if (a.streak && b.streak) {
+    streak = {
+      count: Math.max(a.streak.count, b.streak.count),
+      best: Math.max(a.streak.best, b.streak.best),
+      lastDate: a.streak.lastDate >= b.streak.lastDate ? a.streak.lastDate : b.streak.lastDate,
+    };
+  }
+  return { completed, streak };
+}
+
+let syncTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Debounced push of local progress; a no-op when signed out (server 401s). */
+function scheduleCloudSync(): void {
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    fetch("/api/progress", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(load()),
+    }).catch(() => {});
+  }, 2500);
+}
+
+/**
+ * Pull cloud progress, merge it with local, and push the merged result back.
+ * Called once when a session is detected (see user-menu.tsx).
+ */
+export async function syncProgress(): Promise<"synced" | "anonymous" | "unavailable"> {
+  try {
+    const res = await fetch("/api/progress", { cache: "no-store" });
+    if (res.status === 401) return "anonymous";
+    if (!res.ok) return "unavailable";
+    const remote = (await res.json()) as ProgressState;
+    const merged = mergeStates(load(), remote);
+    if (JSON.stringify(merged) !== JSON.stringify(load())) persist(merged);
+    await fetch("/api/progress", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(merged),
+    });
+    return "synced";
+  } catch {
+    return "unavailable";
+  }
 }
 
 export function completedCount(slugs: string[]): number {
