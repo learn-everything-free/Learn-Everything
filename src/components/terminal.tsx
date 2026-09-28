@@ -9,7 +9,15 @@ import type { LabShell } from "@/lib/shell";
 const PROMPT_USER = "\x1b[38;2;252;170;45mlearner@lab\x1b[0m";
 const PROMPT_PATH = "\x1b[38;2;117;117;111m";
 
-export function LabTerminal({ shell }: { shell: LabShell }) {
+export type CommandRunner = (command: string) => void;
+
+export function LabTerminal({
+  shell,
+  bindRunner,
+}: {
+  shell: LabShell;
+  bindRunner: (runner: CommandRunner) => void;
+}) {
   const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,16 +68,19 @@ export function LabTerminal({ shell }: { shell: LabShell }) {
         term.writeln(out);
       }
     };
+    const submit = (submitted: string) => {
+      const out = shell.run(submitted);
+      if (out.length) term.write("\r\n");
+      print(out);
+      prompt();
+    };
 
     const disposable = term.onData((data) => {
       for (const ch of data) {
         if (ch === "\r") {
           const submitted = line;
           line = "";
-          const out = shell.run(submitted);
-          if (out.length) term.write("\r\n");
-          print(out);
-          prompt();
+          submit(submitted);
         } else if (ch === "\x7f") {
           if (line.length) {
             line = line.slice(0, -1);
@@ -82,6 +93,18 @@ export function LabTerminal({ shell }: { shell: LabShell }) {
       }
     });
 
+    // Lets walkthrough "Run" buttons type a command into the terminal.
+    bindRunner((command) => {
+      for (const ch of command) {
+        line += ch;
+        term.write(ch);
+      }
+      term.write("\r\n");
+      const submitted = line;
+      line = "";
+      submit(submitted);
+    });
+
     const observer = new ResizeObserver(() => {
       try {
         fit.fit();
@@ -92,11 +115,12 @@ export function LabTerminal({ shell }: { shell: LabShell }) {
     observer.observe(hostRef.current!);
 
     return () => {
+      bindRunner(() => {});
       disposable.dispose();
       observer.disconnect();
       term.dispose();
     };
-  }, [shell]);
+  }, [shell, bindRunner]);
 
   return <div ref={hostRef} className="h-[420px] w-full lg:h-[520px]" />;
 }

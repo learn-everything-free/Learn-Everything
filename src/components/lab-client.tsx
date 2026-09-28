@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { LabShell, type CheckResult } from "@/lib/shell";
-import { LabTerminal } from "@/components/terminal";
+import { LabTerminal, type CommandRunner } from "@/components/terminal";
 import { Badge } from "@/components/ui";
 import { taskTypeLabel, type Task, type Skill, type Topic, type LearningPath } from "@/lib/data";
 
@@ -27,12 +27,14 @@ export function LabClient({
   topic: Topic;
 }) {
   const [results, setResults] = useState<CheckResult[] | null>(null);
-  const [hintsShown, setHintsShown] = useState(0);
   const [tutor, setTutor] = useState<{ role: "you" | "tutor"; text: string }[]>([
-    { role: "tutor", text: "I won't hand you the answer — but I'll help you find it. What have you tried?" },
+    { role: "tutor", text: "The walkthrough below has every command — but run each step and watch what actually changes. Where are you stuck?" },
   ]);
   const [tutorInput, setTutorInput] = useState("");
   const [shell, setShell] = useState(() => new LabShell());
+  const [runner, setRunner] = useState<CommandRunner>(() => () => {});
+
+  const bindRunner = useCallback((fn: CommandRunner) => setRunner(() => fn), []);
 
   const hasRuntimeChecks = task.checks.length > 0;
   const passed = results !== null && results.every((r) => r.pass);
@@ -126,25 +128,45 @@ export function LabClient({
             </p>
           )}
 
-          {/* Hints — progressive reveal */}
+          {/* Walkthrough — every step explained, nothing hidden */}
           <h2 className="mt-10 border-t border-rule pt-8 font-mono text-mono-sm uppercase">
-            Hints <span className="text-stone">({hintsShown}/{task.hints.length})</span>
+            Walkthrough <span className="text-stone">— {task.steps.length} steps</span>
           </h2>
-          <div className="mt-4">
-            {task.hints.slice(0, hintsShown).map((hint, i) => (
-              <div key={i} className="border-l-2 border-amber px-5 py-3">
-                <p className="text-body-sm tracking-[-0.04em]">{hint}</p>
-              </div>
-            ))}
-            {hintsShown < task.hints.length && (
-              <button
-                onClick={() => setHintsShown((n) => n + 1)}
-                className="mt-3 rounded-[2px] border border-rule px-5 py-2.5 text-caption tracking-[-0.03em] transition-colors hover:bg-linen"
-              >
-                Reveal hint {hintsShown + 1}
-              </button>
-            )}
-          </div>
+          <ol className="mt-6 divide-y divide-rule border-y border-rule">
+            {task.steps.map((step, i) => {
+              const cmd = step.command;
+              return (
+              <li key={i} className="py-6">
+                <div className="flex items-baseline gap-4">
+                  <span className="font-mono text-mono-sm text-stone">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-body tracking-[-0.04em]">{step.title}</p>
+                    <p className="mt-2 text-body-sm tracking-[-0.04em] text-stone">{step.detail}</p>
+                    {cmd ? (
+                      <div className="mt-4 flex items-center justify-between gap-4 rounded-[2px] border border-rule bg-ink py-2.5 pl-4 pr-2.5">
+                        <code className="overflow-x-auto whitespace-nowrap font-mono text-mono-sm text-linen">
+                          {cmd}
+                        </code>
+                        <button
+                          onClick={() => runner(cmd)}
+                          className="shrink-0 rounded-[2px] bg-amber px-3 py-1.5 font-mono text-mono-xs uppercase text-ink transition-opacity hover:opacity-80"
+                          title={`Runs "${cmd}" in the terminal`}
+                        >
+                          Run ↘
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </li>
+              );
+            })}
+          </ol>
+          <p className="mt-4 font-mono text-mono-xs uppercase text-stone">
+            Run sends the command straight into the lab terminal — or type it yourself
+          </p>
 
           {/* AI tutor */}
           <h2 className="mt-10 border-t border-rule pt-8 font-mono text-mono-sm uppercase">AI Tutor</h2>
@@ -196,7 +218,7 @@ export function LabClient({
                 learner@lab — {task.env}
               </p>
             </div>
-            <LabTerminal shell={shell} />
+            <LabTerminal shell={shell} bindRunner={bindRunner} />
             <div className="flex items-center justify-between border-t border-stone/40 px-4 py-3">
               <button
                 onClick={reset}

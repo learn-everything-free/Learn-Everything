@@ -363,8 +363,12 @@ export class LabShell {
       return [id, "listening on 0.0.0.0:80"];
     }
     if (sub === "logs") {
-      const c = this.containers.find((x) => x.id.startsWith(rest[0] ?? "@"));
-      if (!c) return [`Error: No such container: ${rest[0]}`];
+      if (!this.containers.length) return ["Error: no containers exist"];
+      const target = rest[0];
+      const c = target
+        ? this.containers.find((x) => x.id.startsWith(target))
+        : this.containers[this.containers.length - 1];
+      if (!c) return [`Error: No such container: ${target}`];
       return [c.logs];
     }
     return [`docker: '${sub}' is not a docker command (try run, ps, logs, images)`];

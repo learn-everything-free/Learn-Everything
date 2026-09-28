@@ -12,6 +12,12 @@ export type TaskType =
 
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 
+export interface Step {
+  title: string;
+  detail: string;
+  command?: string;
+}
+
 export interface Task {
   slug: string;
   title: string;
@@ -21,7 +27,7 @@ export interface Task {
   requirements: string[];
   env: string;
   checks: ValidatorCheck[];
-  hints: string[];
+  steps: Step[];
 }
 
 export interface Topic {
@@ -52,7 +58,7 @@ const linuxCreateProject: Task = {
   type: "practice",
   difficulty: "beginner",
   description:
-    "Create a project directory containing a src folder, a tests folder and a README.md. Figure out the commands yourself — the validator checks real environment state, not answers.",
+    "Create a project directory containing a src folder, a tests folder and a README.md. Follow the walkthrough below — every command is explained, and the validator checks what you actually built.",
   requirements: [
     "Directory ~/project exists",
     "Directory ~/project/src exists",
@@ -60,10 +66,43 @@ const linuxCreateProject: Task = {
     "File ~/project/README.md exists",
   ],
   env: "ubuntu:24.04",
-  hints: [
-    "mkdir creates directories. Can it create more than one at a time?",
-    "Directories and files both start from ~/project. Create the parent first.",
-    "touch creates an empty file. Then use ls -R ~/project to confirm.",
+  steps: [
+    {
+      title: "Check where you are",
+      detail:
+        "pwd prints your working directory. You should be in /home/learner — the ~ character is shell shorthand for your home directory, so ~/project means /home/learner/project.",
+      command: "pwd",
+    },
+    {
+      title: "Create the project directory",
+      detail:
+        "mkdir makes a new directory. With no arguments it operates relative to where you are, but giving the full ~/project path works from anywhere.",
+      command: "mkdir ~/project",
+    },
+    {
+      title: "Create the src and tests folders",
+      detail:
+        "mkdir accepts several arguments at once, so one command creates both folders. This is why we made the parent first — mkdir does not create missing parents by default.",
+      command: "mkdir ~/project/src ~/project/tests",
+    },
+    {
+      title: "Create the README file",
+      detail:
+        "touch creates an empty file (or updates its timestamp if the file already exists). It creates the file but leaves it empty.",
+      command: "touch ~/project/README.md",
+    },
+    {
+      title: "Verify the structure",
+      detail:
+        "ls lists directory contents; -R makes it recursive, printing every subfolder. You should see project/ containing src/, tests/ and README.md.",
+      command: "ls -R ~",
+    },
+    {
+      title: "Submit for validation",
+      detail:
+        "The validator re-checks the real state of the environment: the three directories and the README file. If everything exists, you pass.",
+      command: "",
+    },
   ],
   checks: [
     { kind: "directory", path: "/home/learner/project", label: "~/project" },
@@ -79,16 +118,54 @@ const linuxInspectFiles: Task = {
   type: "challenge",
   difficulty: "beginner",
   description:
-    "Something is writing huge log files to /var/log/app. Inspect the filesystem, find the largest .log file in that directory and create a file ~/report/largest.txt containing its name.",
+    "Something is writing huge log files to /var/log/app. Inspect the filesystem, find the largest .log file in that directory and record it in ~/report/largest.txt. The walkthrough shows every command.",
   requirements: [
     "Directory ~/report exists",
     "File ~/report/largest.txt exists and names the largest log file",
   ],
   env: "ubuntu:24.04",
-  hints: [
-    "ls -lhS sorts by size. Which file is on top?",
-    "You only need the file name, not its size.",
-    "echo 'name' > ~/report/largest.txt writes the name into the file.",
+  steps: [
+    {
+      title: "Inspect the log directory",
+      detail:
+        "cd changes your current directory. /var/log/app is where the application writes its logs — you cannot create the report until you know which file is the problem.",
+      command: "cd /var/log/app",
+    },
+    {
+      title: "List files sorted by size",
+      detail:
+        "ls with three useful flags: -l long format, -h human-readable sizes (K/M/G instead of raw bytes), and -S sort largest first. The biggest file is on top.",
+      command: "ls -lhS",
+    },
+    {
+      title: "Go back home and create the report folder",
+      detail:
+        "cd with no arguments returns to your home directory. Then create the folder the report will live in.",
+      command: "cd ~",
+    },
+    {
+      title: "Create the report directory",
+      detail: "mkdir ~/report creates the directory in your home folder.",
+      command: "mkdir ~/report",
+    },
+    {
+      title: "Write the largest log file's name into the report",
+      detail:
+        "echo prints text; the > redirect writes that text into a file, creating it if needed (and overwriting if it exists). The largest file from step 2 was app-2026-09-26.log.",
+      command: "echo app-2026-09-26.log > ~/report/largest.txt",
+    },
+    {
+      title: "Verify the report contents",
+      detail:
+        "cat prints a file's contents. If it shows app-2026-09-26.log, you're done.",
+      command: "cat ~/report/largest.txt",
+    },
+    {
+      title: "Submit for validation",
+      detail:
+        "The validator checks that ~/report exists, that largest.txt exists, and that its content names the correct file.",
+      command: "",
+    },
   ],
   checks: [
     { kind: "directory", path: "/home/learner/report", label: "~/report" },
@@ -103,13 +180,58 @@ const gitFirstCommit: Task = {
   type: "guided",
   difficulty: "beginner",
   description:
-    "Initialize a Git repository in ~/project, stage every file and create the initial commit with the message 'init'. Then confirm the history with git log.",
+    "Initialize a Git repository in ~/project, stage every file and create the initial commit with the message 'init'. Every command is explained in the walkthrough.",
   requirements: ["~/project is a Git repository", "One commit with message 'init' exists"],
   env: "ubuntu:24.04 + git",
-  hints: [
-    "git init turns a directory into a repository.",
-    "git add . stages everything in the working tree.",
-    "git commit -m 'init' records the staged snapshot.",
+  steps: [
+    {
+      title: "Create and enter the project folder",
+      detail:
+        "If you already created ~/project in the previous task, just run the cd. mkdir is safe to re-run: it will simply report the directory exists.",
+      command: "cd ~/project",
+    },
+    {
+      title: "Initialize the repository",
+      detail:
+        "git init turns the current directory into a Git repository by creating a hidden .git folder. Run this inside ~/project, not your home directory.",
+      command: "git init",
+    },
+    {
+      title: "Add a file to commit",
+      detail:
+        "An empty repository has nothing to commit. Create a README so the first commit has content.",
+      command: "touch README.md",
+    },
+    {
+      title: "Stage everything",
+      detail:
+        "git add . stages every new or changed file in the current directory. Staging is Git's staging area: you pick what goes into the next commit.",
+      command: "git add .",
+    },
+    {
+      title: "Check the status",
+      detail:
+        "git status shows the branch you're on and what's staged. README.md should be listed as a change to be committed.",
+      command: "git status",
+    },
+    {
+      title: "Create the commit",
+      detail:
+        "git commit records the staged snapshot permanently. The -m flag supplies the message inline — 'init' is the convention for a first commit.",
+      command: "git commit -m \"init\"",
+    },
+    {
+      title: "Verify the history",
+      detail:
+        "git log lists the commit history newest first. You should see one commit with the message 'init'.",
+      command: "git log",
+    },
+    {
+      title: "Submit for validation",
+      detail:
+        "The validator checks that ~/project is a Git repository and that a commit with the message 'init' exists in it.",
+      command: "",
+    },
   ],
   checks: [
     { kind: "gitrepo", path: "/home/learner/project", label: "~/project is a Git repository" },
@@ -123,17 +245,44 @@ const dockerChallenge: Task = {
   type: "challenge",
   difficulty: "intermediate",
   description:
-    "A simple HTTP application image (app:latest) is already pulled on this machine. Deploy it as a container so it is reachable on port 8080. The validator inspects container state and port mappings — not your commands.",
+    "A simple HTTP application image (app:latest) is already pulled on this machine. Deploy it as a container so it is reachable on port 8080. The walkthrough shows the exact commands and what every flag does.",
   requirements: [
     "A container built from app:latest is running",
     "Port 8080 is exposed and mapped",
     "The application answers with HTTP 200",
   ],
   env: "docker:24",
-  hints: [
-    "docker ps -a shows containers in every state — what does yours say?",
-    "If the container exits immediately, inspect the logs: docker logs <id>.",
-    "docker run -d -p 8080:80 app:latest publishes the container on the host.",
+  steps: [
+    {
+      title: "Confirm the image is available",
+      detail:
+        "docker images lists every image stored locally. You should see app with the tag latest — that's the application you need to deploy.",
+      command: "docker images",
+    },
+    {
+      title: "Run the container",
+      detail:
+        "docker run starts a container from an image. -d runs it detached (in the background) and prints the container ID. -p 8080:80 publishes ports: host 8080 forwards to the container's port 80, where the app listens. The order is host:container.",
+      command: "docker run -d -p 8080:80 app:latest",
+    },
+    {
+      title: "Verify the container is running",
+      detail:
+        "docker ps lists running containers. Check STATUS is Up and PORTS shows 0.0.0.0:8080->80/tcp. If your container is missing, run docker ps -a — it lists stopped ones too, which usually means the app crashed on start.",
+      command: "docker ps",
+    },
+    {
+      title: "Inspect the application logs",
+      detail:
+        "docker logs prints everything the process wrote to stdout — with no argument it uses the latest container (in a real shell you pass the container ID). You should see 'listening on 0.0.0.0:80'. If a container exits immediately, this is the first place to look — the log tells you why it crashed.",
+      command: "docker logs",
+    },
+    {
+      title: "Submit for validation",
+      detail:
+        "The validator inspects container state and port mappings: a running container from app:latest with port 8080 mapped.",
+      command: "",
+    },
   ],
   checks: [
     { kind: "container", path: "app:latest", label: "container from app:latest running" },
@@ -147,13 +296,34 @@ const k8sPods: Task = {
   type: "guided",
   difficulty: "beginner",
   description:
-    "Create a Pod named web running nginx:1.27 in the default namespace and confirm it reaches the Running state.",
+    "Create a Pod named web running nginx:1.27 in the default namespace and confirm it reaches the Running state. These commands need the full Kubernetes lab runtime — the browser preview terminal does not include kubectl.",
   requirements: ["Pod web exists", "Pod web is Running"],
   env: "kubernetes 1.30 (kind)",
-  hints: [
-    "kubectl run web --image=nginx:1.27 is the fastest path.",
-    "kubectl get pods shows the current state.",
-    "If it is stuck in ContainerCreating, check kubectl describe pod web.",
+  steps: [
+    {
+      title: "Create the Pod",
+      detail:
+        "kubectl run creates a single Pod imperatively. --image specifies the container image. This is the fastest way to get a Pod running; in real projects you will usually write YAML manifests instead.",
+      command: "kubectl run web --image=nginx:1.27",
+    },
+    {
+      title: "Watch the Pod status",
+      detail:
+        "kubectl get pods lists Pods in the current namespace. Freshly created Pods sit in ContainerCreating while the image is pulled, then flip to Running. Re-run the command until STATUS shows Running.",
+      command: "kubectl get pods",
+    },
+    {
+      title: "Inspect the Pod in detail",
+      detail:
+        "kubectl describe prints the full picture of one object: events, container statuses, restarts. If the Pod is stuck in ContainerCreating or CrashLoopBackOff, the events at the bottom tell you why.",
+      command: "kubectl describe pod web",
+    },
+    {
+      title: "Submit for validation",
+      detail:
+        "The validator checks that Pod web exists in the default namespace and has reached the Running state. Requires the full lab runtime.",
+      command: "",
+    },
   ],
   checks: [],
 };
