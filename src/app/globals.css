@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors — Relace warm-paper reference (DESIGN.md) */
+  --color-cream: #fffef2;
+  --color-ink: #191918;
+  --color-rule: #000000;
+  --color-stone: #75756f;
+  --color-linen: #edece0;
+  --color-ash: #bab9b0;
+  --color-amber: #fcaa2d;
+
+  /* Fonts */
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Type scale */
+  --text-mono-xs: 10px;
+  --text-mono-xs--line-height: 1.2;
+  --text-mono-xs--letter-spacing: 0.04em;
+  --text-mono-sm: 12px;
+  --text-mono-sm--line-height: 1.2;
+  --text-mono-sm--letter-spacing: 0.03em;
+  --text-caption: 14px;
+  --text-caption--line-height: 1.5;
+  --text-caption--letter-spacing: -0.03em;
+  --text-body-sm: 16px;
+  --text-body-sm--line-height: 1.5;
+  --text-body-sm--letter-spacing: -0.04em;
+  --text-body: 18px;
+  --text-body--line-height: 1.5;
+  --text-body--letter-spacing: -0.04em;
+  --text-subheading: 20px;
+  --text-subheading--line-height: 1.06;
+  --text-subheading--letter-spacing: -0.03em;
+  --text-heading: 36px;
+  --text-heading--line-height: 1.1;
+  --text-heading--letter-spacing: -0.05em;
+  --text-heading-lg: 40px;
+  --text-heading-lg--line-height: 1.1;
+  --text-heading-lg--letter-spacing: -0.04em;
+  --text-display: 64px;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.05em;
+
+  /* Radii — 2px everywhere except pills */
+  --radius-card: 2px;
+  --radius-full: 800px;
+
+  /* Spacing */
+  --spacing-60: 60px;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
