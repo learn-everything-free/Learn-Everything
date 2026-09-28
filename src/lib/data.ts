@@ -161,6 +161,38 @@ export function countTasks(path: LearningPath): number {
   );
 }
 
+export function getTasksBySkillSlug(
+  skillSlug: string,
+): { task: Task; path: LearningPath; skill: Skill; topic: Topic }[] {
+  const result: { task: Task; path: LearningPath; skill: Skill; topic: Topic }[] = [];
+  for (const path of paths) {
+    for (const skill of path.skills) {
+      if (skill.slug === skillSlug) {
+        for (const topic of skill.topics) {
+          for (const task of topic.tasks) {
+            result.push({ task, path, skill, topic });
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+export function getAllTasks(): { task: Task; path: LearningPath; skill: Skill; topic: Topic }[] {
+  const result: { task: Task; path: LearningPath; skill: Skill; topic: Topic }[] = [];
+  for (const path of paths) {
+    for (const skill of path.skills) {
+      for (const topic of skill.topics) {
+        for (const task of topic.tasks) {
+          result.push({ task, path, skill, topic });
+        }
+      }
+    }
+  }
+  return result;
+}
+
 export const taskTypeLabel: Record<Task["type"], string> = {
   concept: "Concept",
   guided: "Guided Task",
@@ -169,3 +201,4 @@ export const taskTypeLabel: Record<Task["type"], string> = {
   scenario: "Scenario",
   project: "Project",
 };
+
