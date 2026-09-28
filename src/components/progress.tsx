@@ -42,13 +42,18 @@ export function TaskProgressMeter({
   );
 }
 
-/** Learner XP counter, driven by validated task completions. */
+/** Learner XP + streak, driven by validated task completions. */
 export function XpCounter() {
   const state = useProgress();
   const xp = totalXp(state);
+  const streak = state.streak;
+  const streakText =
+    streak && streak.count > 0
+      ? ` · ${streak.count}-day streak (best ${Math.max(streak.best, streak.count)})`
+      : "";
   return (
     <span className="font-mono text-caption uppercase text-smoke">
-      {xp > 0 ? `${xp} XP earned · ${XP_PER_TASK} per task` : "0 XP — pass a lab to start"}
+      {xp > 0 ? `${xp} XP earned · ${XP_PER_TASK} per task${streakText}` : "0 XP — pass a lab to start"}
     </span>
   );
 }

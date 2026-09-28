@@ -23,6 +23,11 @@ interface TutorTurn {
   text: string;
 }
 
+// Task types whose walkthrough is fully visible up front. For the rest, step 1
+// is shown and further steps reveal per failed submit (or on demand) — struggle
+// first is the point.
+const OPEN_WALKTHROUGH: Task["type"][] = ["concept", "guided", "project"];
+
 export function LabClient({
   task,
   path,
@@ -36,7 +41,10 @@ export function LabClient({
 }) {
   const [results, setResults] = useState<CheckResult[] | null>(null);
   const [tutor, setTutor] = useState<TutorTurn[]>([
-    { role: "tutor", text: "The walkthrough below has every command — but run each step and watch what actually changes. Where are you stuck?" },
+    {
+      role: "tutor",
+      text: "Tell me what you're stuck on — I'll nudge, not solve. Which requirement are you looking at?",
+    },
   ]);
   const [tutorBusy, setTutorBusy] = useState(false);
   const [tutorInput, setTutorInput] = useState("");
@@ -44,6 +52,11 @@ export function LabClient({
   const [runner, setRunner] = useState<CommandRunner>(() => () => {});
   const { completed } = useProgress();
   const doneAt = completed[task.slug];
+
+  const openWalkthrough = OPEN_WALKTHROUGH.includes(task.type);
+  const [revealedSteps, setRevealedSteps] = useState(() =>
+    openWalkthrough ? task.steps.length : Math.min(1, task.steps.length),
+  );
 
   const bindRunner = useCallback((fn: CommandRunner) => setRunner(() => fn), []);
 
@@ -58,7 +71,12 @@ export function LabClient({
     }
     const checkResults = shell.validate(task.checks);
     setResults(checkResults);
-    if (checkResults.every((r) => r.pass)) markCompleted(task.slug);
+    if (checkResults.every((r) => r.pass)) {
+      markCompleted(task.slug);
+    } else if (!openWalkthrough) {
+      // A failed attempt earns the next walkthrough step.
+      setRevealedSteps((n) => Math.min(n + 1, task.steps.length));
+    }
   };
 
   const reset = () => {
@@ -195,12 +213,19 @@ export function LabClient({
             </p>
           )}
 
-          {/* Walkthrough — every step explained, nothing hidden */}
+          {/* Walkthrough — guided/concept tasks show every step; practice,
+              challenge and scenario tasks reveal one step per failed attempt. */}
           <h2 className="mt-10 border-t border-stone pt-8 font-mono text-caption uppercase text-ash">
-            Walkthrough <span className="text-ash">— {task.steps.length} steps</span>
+            Walkthrough{" "}
+            <span className="text-ash">
+              —{" "}
+              {openWalkthrough
+                ? `${task.steps.length} steps`
+                : `${revealedSteps} of ${task.steps.length} steps revealed`}
+            </span>
           </h2>
           <ol className="mt-6 space-y-8">
-            {task.steps.map((step, i) => {
+            {task.steps.slice(0, revealedSteps).map((step, i) => {
               const cmd = step.command;
               return (
                 <li key={i} className="flex items-baseline gap-4">
@@ -229,9 +254,23 @@ export function LabClient({
               );
             })}
           </ol>
-          <p className="mt-4 font-mono text-caption uppercase text-ash">
-            Run sends the command straight into the lab terminal — or type it yourself
-          </p>
+          {revealedSteps < task.steps.length ? (
+            <div className="mt-6 border-t border-stone pt-5">
+              <button
+                onClick={() => setRevealedSteps((n) => Math.min(n + 1, task.steps.length))}
+                className="rounded-full border border-stone bg-eggshell px-4 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+              >
+                Reveal next step — {task.steps.length - revealedSteps} locked
+              </button>
+              <p className="mt-3 font-mono text-caption uppercase text-ash">
+                Steps also unlock each time the validator fails — try before you peek
+              </p>
+            </div>
+          ) : (
+            <p className="mt-4 font-mono text-caption uppercase text-ash">
+              Run sends the command straight into the lab terminal — or type it yourself
+            </p>
+          )}
 
           {/* AI tutor */}
           <h2 className="mt-10 border-t border-stone pt-8 font-mono text-caption uppercase text-ash">

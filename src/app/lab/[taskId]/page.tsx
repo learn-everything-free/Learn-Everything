@@ -8,5 +8,5 @@ export default async function LabPage({ params }: PageProps<"/lab/[taskId]">) {
   if (!found) notFound();
   const { task, path, skill, topic } = found;
 
-  return <LabClient task={task} path={path} skill={skill} topic={topic} />;
+  return <LabClient key={task.slug} task={task} path={path} skill={skill} topic={topic} />;
 }

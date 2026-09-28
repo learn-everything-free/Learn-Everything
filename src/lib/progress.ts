@@ -8,9 +8,19 @@ import { useSyncExternalStore } from "react";
 
 const KEY = "learn-everything.progress.v1";
 
+export interface StreakState {
+  /** consecutive days with at least one new completion */
+  count: number;
+  /** local day key (YYYY-MM-DD) of the last completion */
+  lastDate: string;
+  /** longest streak achieved */
+  best: number;
+}
+
 export interface ProgressState {
   /** task slug -> ISO timestamp of first completion */
   completed: Record<string, string>;
+  streak?: StreakState;
 }
 
 const EMPTY: ProgressState = { completed: {} };
@@ -49,10 +59,28 @@ function persist(next: ProgressState): void {
   for (const listener of listeners) listener();
 }
 
+function dayKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function bumpStreak(state: ProgressState): StreakState {
+  const today = dayKey(new Date());
+  const current = state.streak;
+  if (current?.lastDate === today) return current;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const count = current?.lastDate === dayKey(yesterday) ? current.count + 1 : 1;
+  return { count, lastDate: today, best: Math.max(count, current?.best ?? 0) };
+}
+
 export function markCompleted(slug: string): void {
   const state = load();
+  // Re-submitting an already-passed task must not farm streaks or XP.
   if (state.completed[slug]) return;
-  persist({ completed: { ...state.completed, [slug]: new Date().toISOString() } });
+  persist({
+    completed: { ...state.completed, [slug]: new Date().toISOString() },
+    streak: bumpStreak(state),
+  });
 }
 
 export function completedCount(slugs: string[]): number {

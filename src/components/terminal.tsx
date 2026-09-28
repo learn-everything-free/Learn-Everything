@@ -58,6 +58,31 @@ export function LabTerminal({
     prompt();
 
     let line = "";
+    // Up/Down recall over the shell's own history (same source the tutor sees).
+    let browseIndex = -1;
+    let savedLine = "";
+    const eraseLine = () => term.write("\b \b".repeat(line.length));
+    const recallHistory = (delta: -1 | 1) => {
+      const history = shell.history;
+      if (!history.length) return;
+      if (delta === -1) {
+        if (browseIndex === -1) {
+          savedLine = line;
+          browseIndex = history.length - 1;
+        } else if (browseIndex > 0) {
+          browseIndex--;
+        } else {
+          return;
+        }
+      } else {
+        if (browseIndex === -1) return;
+        browseIndex++;
+        if (browseIndex >= history.length) browseIndex = -1;
+      }
+      eraseLine();
+      line = browseIndex === -1 ? savedLine : history[browseIndex];
+      term.write(line);
+    };
     const print = (lines: string[]) => {
       for (const out of lines) {
         if (out === "__CLEAR__") {
@@ -69,6 +94,7 @@ export function LabTerminal({
       }
     };
     const submit = (submitted: string) => {
+      browseIndex = -1;
       const out = shell.run(submitted);
       if (out.length) term.write("\r\n");
       print(out);
@@ -76,6 +102,8 @@ export function LabTerminal({
     };
 
     const disposable = term.onData((data) => {
+      if (data === "\x1b[A") return recallHistory(-1);
+      if (data === "\x1b[B") return recallHistory(1);
       for (const ch of data) {
         if (ch === "\r") {
           const submitted = line;
@@ -95,6 +123,7 @@ export function LabTerminal({
 
     // Lets walkthrough "Run" buttons type a command into the terminal.
     bindRunner((command) => {
+      browseIndex = -1;
       for (const ch of command) {
         line += ch;
         term.write(ch);
