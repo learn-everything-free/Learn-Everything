@@ -2,6 +2,7 @@ import Link from "next/link";
 import { paths, countTasks, getTask, getTasksBySkillSlug, getAllTasks } from "@/lib/data";
 import { tools } from "@/lib/tools";
 import { Badge, Card, ProgressBar, SectionHeader, StatCard, ToolCard } from "@/components/ui";
+import { ShowreelSection, UsefulnessSection } from "@/components/showreel";
 
 export default function Home() {
   const continueTasks = [
@@ -113,6 +114,10 @@ export default function Home() {
               <p className="text-emerald-400">✓ Port 8080 mapped to container port 80 [PASS]</p>
               <p className="text-emerald-400">✓ HTTP status 200 returned from endpoint [PASS]</p>
               <p className="text-emerald-400">✓ Container restart policy enabled [PASS]</p>
+              <p className="text-stone">
+                <span className="text-emerald-400">$</span>{" "}
+                <span className="le-caret">▌</span>
+              </p>
             </div>
           </div>
 
@@ -127,6 +132,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Animated showreel — video-style product tour */}
+      <ShowreelSection />
+
+      {/* Why the platform is useful, per audience */}
+      <UsefulnessSection />
 
       {/* Metrics Row */}
       <section>
