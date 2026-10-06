@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { LabShell, type CheckResult } from "@/lib/shell";
 import { LabTerminal, type CommandRunner } from "@/components/terminal";
 import { Badge } from "@/components/ui";
 import { CompletedBadge } from "@/components/progress";
+import { LabNotes } from "@/components/lab-notes";
+import { recordVisit } from "@/lib/recent";
 import { markCompleted, useProgress, XP_PER_TASK } from "@/lib/progress";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { taskTypeLabel, type Task, type Skill, type Topic, type LearningPath } from "@/lib/data";
@@ -59,6 +61,11 @@ export function LabClient({
   const [runner, setRunner] = useState<CommandRunner>(() => () => {});
   const { completed } = useProgress();
   const doneAt = completed[task.slug];
+
+  // Track the visit so the dashboard can offer "jump back in".
+  useEffect(() => {
+    recordVisit(task.slug);
+  }, [task.slug]);
 
   const bindRunner = useCallback((fn: CommandRunner) => setRunner(() => fn), []);
 
@@ -388,6 +395,11 @@ export function LabClient({
                   {tutorBusy ? "…" : "Ask"}
                 </button>
               </div>
+            </section>
+
+            {/* 04 — Notebook */}
+            <section className="mt-12">
+              <LabNotes slug={task.slug} />
             </section>
           </div>
 

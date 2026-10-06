@@ -216,3 +216,42 @@ export const XP_PER_TASK = 50;
 export function totalXp(state: ProgressState): number {
   return Object.keys(state.completed).length * XP_PER_TASK;
 }
+
+// ---- data ownership -------------------------------------------------------
+// Learners can download their whole progress blob and re-import it on another
+// device. Import merges (like cloud sync) — it can never erase completions.
+
+export function exportProgress(): string {
+  return JSON.stringify(load(), null, 2);
+}
+
+export function importProgress(json: string): "ok" | "invalid" {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(json);
+  } catch {
+    return "invalid";
+  }
+  if (typeof parsed !== "object" || parsed === null) return "invalid";
+  const raw = parsed as Record<string, unknown>;
+  if (typeof raw.completed !== "object" || raw.completed === null) return "invalid";
+
+  const completed: Record<string, string> = {};
+  for (const [slug, ts] of Object.entries(raw.completed as Record<string, unknown>)) {
+    if (typeof slug === "string" && typeof ts === "string") completed[slug] = ts;
+  }
+  const bookmarks: Record<string, string> = {};
+  if (typeof raw.bookmarks === "object" && raw.bookmarks !== null) {
+    for (const [slug, ts] of Object.entries(raw.bookmarks as Record<string, unknown>)) {
+      if (typeof slug === "string" && typeof ts === "string") bookmarks[slug] = ts;
+    }
+  }
+  const streak =
+    typeof raw.streak === "object" && raw.streak !== null
+      ? (raw.streak as ProgressState["streak"])
+      : undefined;
+
+  persist(mergeStates(load(), { completed, bookmarks, streak }));
+  scheduleCloudSync();
+  return "ok";
+}

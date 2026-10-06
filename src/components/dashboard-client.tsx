@@ -1,12 +1,23 @@
 "use client";
 
-// Learner dashboard: level + XP, streak, per-path progress, achievements and
-// recent activity, all derived client-side from the progress store. The server
-// page only supplies the lightweight curriculum index.
+// Learner dashboard: level + XP, streak, activity heatmap, per-path progress,
+// jump-back-in, achievements, recent activity and data export/import — all
+// derived client-side from the progress store. The server page only supplies
+// the lightweight curriculum index.
 
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { useProgress, totalXp, toggleBookmark, XP_PER_TASK } from "@/lib/progress";
+import {
+  useProgress,
+  totalXp,
+  toggleBookmark,
+  exportProgress,
+  importProgress,
+  XP_PER_TASK,
+} from "@/lib/progress";
+import { useRecent } from "@/lib/recent";
 import { evaluateAchievements, levelForXp } from "@/lib/achievements";
+import { ActivityHeatmap } from "@/components/activity-heatmap";
 import type { CurriculumIndex, TaskIndexEntry } from "@/lib/curriculum-index";
 
 const TYPE_GLYPHS: Record<string, string> = {
@@ -36,6 +47,10 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
 
   const nextUp = index.tasks.filter((t) => !completedSet.has(t.slug)).slice(0, 3);
   const bookmarked = index.tasks.filter((t) => state.bookmarks && t.slug in state.bookmarks);
+  const recentVisits = useRecent()
+    .map((r) => ({ ...r, entry: index.tasks.find((t) => t.slug === r.slug) }))
+    .filter((r): r is typeof r & { entry: TaskIndexEntry } => Boolean(r.entry) && !completedSet.has(r.slug))
+    .slice(0, 4);
   const recent = [...completedSlugs]
     .sort((a, b) => (state.completed[a] < state.completed[b] ? 1 : -1))
     .slice(0, 8)
@@ -189,6 +204,31 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
         </div>
       </section>
 
+      {/* Activity heatmap */}
+      <ActivityHeatmap />
+
+      {/* Jump back in */}
+      {recentVisits.length > 0 && (
+        <section className="space-y-4">
+          <p className="font-mono text-caption uppercase tracking-wider text-ash">
+            Jump back in
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {recentVisits.map((r) => (
+              <Link
+                key={r.slug}
+                href={`/lab/${r.slug}`}
+                className="group flex items-center gap-3 rounded-full border border-stone/80 bg-warm-taupe/70 py-2 pl-4 pr-3 transition-colors hover:border-ink/30 hover:bg-warm-taupe"
+              >
+                <span className="size-1.5 rounded-full bg-ember-orange" aria-hidden />
+                <span className="text-body-sm font-medium text-ink">{r.entry.title}</span>
+                <span className="font-mono text-caption text-ash">{r.entry.skillTitle}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Bookmarks */}
       {bookmarked.length > 0 && (
         <section className="space-y-6">
@@ -276,6 +316,9 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
         </div>
       </section>
 
+      {/* Your data */}
+      <DataSection />
+
       {/* Recent activity */}
       <section className="space-y-6">
         <p className="font-mono text-caption uppercase tracking-wider text-ash">
@@ -344,5 +387,78 @@ function MiniTaskCard({ task, done }: { task: TaskIndexEntry; done: boolean }) {
         {done ? "Revisit" : "Launch ⚡"}
       </span>
     </Link>
+  );
+}
+
+/** Export / import the progress blob — your data, your file. */
+function DataSection() {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<string | null>(null);
+
+  const download = () => {
+    const blob = new Blob([exportProgress()], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "learn-everything-progress.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    setStatus("Downloaded learn-everything-progress.json");
+  };
+
+  const onFile = async (file: File) => {
+    const text = await file.text();
+    setStatus(
+      importProgress(text) === "ok"
+        ? "Imported — completions merged with what you already had."
+        : "That file doesn't look like Learn Everything progress data.",
+    );
+  };
+
+  return (
+    <div className="rounded-[24px] border border-stone/80 bg-warm-taupe/70 p-8">
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="max-w-xl">
+          <p className="font-mono text-caption uppercase tracking-wider text-ash">Your data</p>
+          <h2 className="mt-2 text-2xl font-light tracking-tight text-ink">
+            Take your progress with you
+          </h2>
+          <p className="mt-2 text-body-sm leading-relaxed text-smoke">
+            Download everything — completions, streak and bookmarks — as a JSON file. Import it on
+            another device and the two merge; importing can never erase work you already did.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={download}
+            className="rounded-full bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+          >
+            Export progress ↓
+          </button>
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="rounded-full border border-stone bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
+          >
+            Import a file…
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void onFile(file);
+              e.target.value = "";
+            }}
+          />
+        </div>
+      </div>
+      {status && (
+        <p className="mt-4 border-t border-stone/70 pt-4 font-mono text-caption text-smoke">
+          {status}
+        </p>
+      )}
+    </div>
   );
 }
