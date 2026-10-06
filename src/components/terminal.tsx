@@ -14,9 +14,15 @@ export type CommandRunner = (command: string) => void;
 export function LabTerminal({
   shell,
   bindRunner,
+  submitRef,
+  onCommand,
 }: {
   shell: LabShell;
   bindRunner: (runner: CommandRunner) => void;
+  /** Always-current submit closure — fired by Ctrl+Enter / ⌘+Enter. */
+  submitRef: React.RefObject<() => void>;
+  /** Fires after every executed command (typed or Run-button) — live checks. */
+  onCommand?: () => void;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
 
@@ -99,7 +105,18 @@ export function LabTerminal({
       if (out.length) term.write("\r\n");
       print(out);
       prompt();
+      onCommand?.();
     };
+
+    // Ctrl+Enter / ⌘+Enter submits the task via the client's latest closure.
+    term.attachCustomKeyEventHandler((e) => {
+      if (e.type === "keydown" && e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        submitRef.current?.();
+        return false;
+      }
+      return true;
+    });
 
     const disposable = term.onData((data) => {
       if (data === "\x1b[A") return recallHistory(-1);
@@ -149,7 +166,7 @@ export function LabTerminal({
       observer.disconnect();
       term.dispose();
     };
-  }, [shell, bindRunner]);
+  }, [shell, bindRunner, submitRef, onCommand]);
 
   return <div ref={hostRef} className="h-[420px] w-full lg:h-[520px]" />;
 }

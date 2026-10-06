@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { LabShell, type CheckResult } from "@/lib/shell";
 import { LabTerminal, type CommandRunner } from "@/components/terminal";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui";
 import { CompletedBadge } from "@/components/progress";
 import { LabNotes } from "@/components/lab-notes";
 import { recordVisit } from "@/lib/recent";
+import { formatMs, saveRecord, useRecord } from "@/lib/records";
 import { markCompleted, useProgress, XP_PER_TASK } from "@/lib/progress";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { taskTypeLabel, type Task, type Skill, type Topic, type LearningPath } from "@/lib/data";
@@ -42,13 +43,23 @@ export function LabClient({
   path,
   skill,
   topic,
+  nextTask = null,
 }: {
   task: Task;
   path: LearningPath;
   skill: Skill;
   topic: Topic;
+  nextTask?: { slug: string; title: string } | null;
 }) {
   const [results, setResults] = useState<CheckResult[] | null>(null);
+  // Live check state: re-validated after every executed command, before the
+  // learner hits Submit — requirements tick green as real state changes.
+  const [liveChecks, setLiveChecks] = useState<CheckResult[] | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const elapsedRef = useRef(0);
+  const [passedMs, setPassedMs] = useState<number | null>(null);
+  const [isPb, setIsPb] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [tutor, setTutor] = useState<TutorTurn[]>([
     {
       role: "tutor",
@@ -60,6 +71,8 @@ export function LabClient({
   const [shell, setShell] = useState(() => new LabShell());
   const [runner, setRunner] = useState<CommandRunner>(() => () => {});
   const { completed } = useProgress();
+  const streakCount = useProgress().streak?.count ?? 0;
+  const best = useRecord(task.slug);
   const doneAt = completed[task.slug];
 
   // Track the visit so the dashboard can offer "jump back in".
@@ -68,17 +81,37 @@ export function LabClient({
   }, [task.slug]);
 
   const bindRunner = useCallback((fn: CommandRunner) => setRunner(() => fn), []);
+  // Ctrl+Enter in the terminal fires whatever submit closure is current.
+  const submitRef = useRef<() => void>(() => {});
 
   const hasRuntimeChecks = task.checks.length > 0;
   const passed = results !== null && results.every((r) => r.pass);
-  const passedCount = results ? results.filter((r) => r.pass).length : 0;
+  const shown = results ?? liveChecks; // what the requirement list displays
+  const passedCount = shown ? shown.filter((r) => r.pass).length : 0;
   const passPct =
-    results && results.length > 0 ? Math.round((passedCount / results.length) * 100) : 0;
+    shown && shown.length > 0 ? Math.round((passedCount / shown.length) * 100) : 0;
+  const liveAllPass = results === null && shown !== null && shown.every((r) => r.pass);
+
+  // Solve timer: ticks until the task passes; reset restarts the clock.
+  useEffect(() => {
+    if (passed) return;
+    const id = window.setInterval(() => {
+      elapsedRef.current += 1;
+      setElapsed(elapsedRef.current);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [passed, shell]);
 
   const openWalkthrough = OPEN_WALKTHROUGH.includes(task.type);
   const [revealedSteps, setRevealedSteps] = useState(() =>
     openWalkthrough ? task.steps.length : Math.min(1, task.steps.length),
   );
+
+  // Re-run validation against the live shell state after every command.
+  const refreshLive = useCallback(() => {
+    if (!hasRuntimeChecks) return;
+    setLiveChecks(shell.validate(task.checks));
+  }, [shell, task.checks, hasRuntimeChecks]);
 
   const submit = () => {
     if (!hasRuntimeChecks) {
@@ -87,7 +120,11 @@ export function LabClient({
     }
     const checkResults = shell.validate(task.checks);
     setResults(checkResults);
+    setLiveChecks(checkResults);
     if (checkResults.every((r) => r.pass)) {
+      const solveMs = elapsedRef.current * 1000;
+      setPassedMs(solveMs);
+      setIsPb(saveRecord(task.slug, solveMs));
       markCompleted(task.slug);
     } else if (!openWalkthrough) {
       // A failed attempt earns the next walkthrough step.
@@ -97,8 +134,28 @@ export function LabClient({
 
   const reset = () => {
     setResults(null);
+    setLiveChecks(null);
+    setPassedMs(null);
+    setIsPb(false);
+    elapsedRef.current = 0;
+    setElapsed(0);
     setShell(new LabShell());
   };
+
+  const share = async () => {
+    const streakTxt = streakCount > 1 ? `, ${streakCount}-day streak` : "";
+    try {
+      await navigator.clipboard.writeText(
+        `I validated “${task.title}” on Learn Everything — +${XP_PER_TASK} XP${streakTxt} ⚡`,
+      );
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard unavailable (permissions/insecure context): no-op
+    }
+  };
+  // Ctrl+Enter inside the terminal always fires the latest submit closure.
+  submitRef.current = submit;
 
   const askTutor = async (override?: string) => {
     const text = (override ?? tutorInput).trim();
@@ -190,11 +247,21 @@ export function LabClient({
             <div className="w-full shrink-0 rounded-[20px] border border-stone bg-eggshell p-5 shadow-[var(--shadow-subtle)] lg:w-72">
               <div className="flex items-center justify-between">
                 <p className="font-mono text-caption uppercase tracking-wider text-ash">Validator</p>
-                {results && (
-                  <span className="font-mono text-mono-xs text-smoke">
-                    {passedCount}/{results.length} checks
+                <div className="flex items-center gap-2.5">
+                  <span title={passed ? "Solve time" : "Timer"} className="font-mono text-mono-xs text-smoke">
+                    ⏱ {formatMs((passedMs ?? elapsed) * 1000)}
                   </span>
-                )}
+                  {best !== undefined && (
+                    <span title="Your personal best on this task" className="font-mono text-mono-xs text-ash">
+                      PB {formatMs(best)}
+                    </span>
+                  )}
+                  {shown && (
+                    <span className="font-mono text-mono-xs text-smoke">
+                      {passedCount}/{shown.length} checks
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-stone/70">
                 <div
@@ -202,9 +269,9 @@ export function LabClient({
                   style={{ width: `${passPct}%` }}
                 />
               </div>
-              {results === null ? (
+              {shown === null ? (
                 <p className="mt-3 font-mono text-mono-xs text-smoke">
-                  IDLE — submit when you believe the task is done
+                  IDLE — checks run live as you type commands; submit when done
                 </p>
               ) : passed ? (
                 <p className="mt-3 flex items-center gap-2 font-mono text-mono-xs">
@@ -214,9 +281,16 @@ export function LabClient({
                     {doneAt && " · saved"}
                   </span>
                 </p>
+              ) : liveAllPass ? (
+                <p className="mt-3 flex items-center gap-2 font-mono text-mono-xs">
+                  <span className="size-2 animate-pulse rounded-full bg-emerald-500" aria-hidden />
+                  <span className="font-medium text-emerald-700 dark:text-emerald-300">
+                    ALL GREEN — Submit (or Ctrl+Enter) to bank the XP
+                  </span>
+                </p>
               ) : (
                 <p className="mt-3 font-mono text-mono-xs text-smoke">
-                  FAIL — {results!.length - passedCount} of {results!.length} failing (details below)
+                  {shown.length - passedCount} of {shown.length} checks open — the list updates live
                 </p>
               )}
             </div>
@@ -242,8 +316,8 @@ export function LabClient({
                 <span className="font-mono text-caption uppercase text-ash">live checks</span>
               </div>
               <ul className="mt-4 divide-y divide-stone rounded-[20px] border border-stone bg-eggshell shadow-[var(--shadow-subtle)]">
-                {results
-                  ? results.map((r, i) => (
+                {shown
+                  ? shown.map((r, i) => (
                       <li key={i} className="px-5 py-3.5 text-body-sm">
                         <div className="flex items-center justify-between gap-4">
                           <span className="flex items-center gap-3">
@@ -420,13 +494,35 @@ export function LabClient({
                   learner@lab — {task.env}
                 </p>
               </div>
-              <LabTerminal shell={shell} bindRunner={bindRunner} />
+              <LabTerminal
+                shell={shell}
+                bindRunner={bindRunner}
+                submitRef={submitRef}
+                onCommand={refreshLive}
+              />
               {passed && (
-                <div className="flex items-center gap-2 border-t border-emerald-400/20 bg-emerald-400/10 px-5 py-2.5">
-                  <span className="size-2 rounded-full bg-emerald-400" aria-hidden />
-                  <p className="font-mono text-mono-xs text-emerald-200">
-                    All checks passed — task complete · +{XP_PER_TASK} XP
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-emerald-400/20 bg-emerald-400/10 px-5 py-2.5">
+                  <p className="flex items-center gap-2 font-mono text-mono-xs text-emerald-200">
+                    <span className="size-2 rounded-full bg-emerald-400" aria-hidden />
+                    All checks passed · +{XP_PER_TASK} XP · ⏱ {formatMs(passedMs ?? 0)}
+                    {isPb && " · new PB!"}
                   </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={() => void share()}
+                      className="rounded-full border border-emerald-400/40 px-3 py-1 font-mono text-caption uppercase text-emerald-200 transition-colors hover:bg-emerald-400/10"
+                    >
+                      {copied ? "Copied ✓" : "Share ↗"}
+                    </button>
+                    {nextTask && (
+                      <Link
+                        href={`/lab/${nextTask.slug}`}
+                        className="rounded-full bg-emerald-400 px-3 py-1 font-mono text-caption font-medium uppercase text-[#191918] transition-opacity hover:opacity-85"
+                      >
+                        Next: {nextTask.title} →
+                      </Link>
+                    )}
+                  </div>
                 </div>
               )}
               <div className="flex items-center justify-between border-t border-white/10 px-5 py-3">
@@ -445,15 +541,18 @@ export function LabClient({
                   className={`rounded-full px-5 py-1.5 font-mono text-caption uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-40 ${
                     passed
                       ? "bg-emerald-400 text-[#191918] hover:opacity-85"
-                      : "bg-[#fdfcfc] text-[#191918] hover:opacity-80"
+                      : liveAllPass
+                        ? "animate-pulse bg-emerald-400 text-[#191918] hover:opacity-85"
+                        : "bg-[#fdfcfc] text-[#191918] hover:opacity-80"
                   }`}
                 >
-                  {passed ? "Passed ✓" : "Submit"}
+                  {passed ? "Passed ✓" : liveAllPass ? "Submit ⚡" : "Submit"}
                 </button>
               </div>
             </div>
             <p className="mt-4 text-center font-mono text-caption uppercase text-ash">
-              ↑/↓ recalls previous commands · type <span className="text-graphite">help</span> for the command list
+              ↑/↓ recalls commands · <span className="text-graphite">Ctrl+Enter</span> submits · type{" "}
+              <span className="text-graphite">help</span> for the command list
             </p>
           </div>
         </div>
