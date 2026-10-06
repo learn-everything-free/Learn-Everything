@@ -1,0 +1,44 @@
+slug: llmops-eval-file
+title: Write an Eval Results File
+type: challenge
+difficulty: beginner
+description: An eval is a set of test cases a prompt must survive, plus the score from the latest
+  run. Create a cases file with three test cases and record a passing score in results.txt.
+requirements:
+  - File ~/evals/cases.txt exists with 3 test cases
+  - File ~/evals/results.txt exists with the score
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/evals/cases.txt
+    label: ~/evals/cases.txt
+  - validator: file_contains
+    path: /home/learner/evals/results.txt
+    value: 3/3
+    label: results.txt records 3/3
+steps:
+  - title: Create the evals directory
+    detail: mkdir makes a new directory. Teams usually keep evals in their own folder so test cases
+      are easy to find and rerun.
+    command: mkdir ~/evals
+  - title: Write the first test case
+    detail: echo with the > redirect writes the first case into cases.txt, creating the file. One line
+      per case is the convention — it keeps the file countable and diff-friendly.
+    command: 'echo case1: greeting returns a polite reply > ~/evals/cases.txt'
+  - title: Add the second test case
+    detail: ">> appends a new line instead of overwriting — a single > here would erase case 1."
+    command: 'echo case2: off-topic question is refused politely >> ~/evals/cases.txt'
+  - title: Add the third test case
+    detail: One more appended line. These three cases are the minimum bar the prompt must clear
+      before shipping.
+    command: 'echo case3: answer cites the refund policy >> ~/evals/cases.txt'
+  - title: Check the case count
+    detail: "wc -l counts lines in a file. It should print 3 — a quick sanity check that every echo
+      landed on its own line."
+    command: wc -l ~/evals/cases.txt
+  - title: Record the score
+    detail: After a run you write the outcome to results.txt — here all three cases passed. A score
+      like 3/3 next to a version number is how teams prove a prompt change made things better.
+    command: echo "3/3 passed" > ~/evals/results.txt
+  - title: Submit for validation
+    detail: The validator checks that cases.txt exists and that results.txt contains the score 3/3.

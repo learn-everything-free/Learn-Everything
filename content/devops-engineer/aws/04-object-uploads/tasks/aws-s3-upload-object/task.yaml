@@ -1,0 +1,46 @@
+slug: aws-s3-upload-object
+title: Upload a Build Artifact
+type: practice
+difficulty: beginner
+description: Every CI run produces things worth keeping — test reports, build logs, binaries. Write
+  a build report to disk, create a bucket for artifacts and upload the file with aws s3 cp.
+requirements:
+  - File ~/build-report.txt exists with the build result
+  - Bucket learner-build-artifacts exists
+  - build-report.txt is uploaded into the bucket
+environment: aws-cli (lab profile)
+validation:
+  - validator: aws_s3_bucket_exists
+    bucket: learner-build-artifacts
+    label: bucket learner-build-artifacts exists
+  - validator: aws_s3_object_exists
+    bucket: learner-build-artifacts
+    key: build-report.txt
+    label: build-report.txt uploaded to the bucket
+steps:
+  - title: Write the build report
+    detail: echo prints text and the > redirect writes it into a file, creating it if needed. This
+      file stands in for any artifact a pipeline would produce.
+    command: echo 'build 42 successful' > ~/build-report.txt
+  - title: Check the contents
+    detail: cat prints the file. If it says 'build 42 successful', you have something to upload.
+    command: cat ~/build-report.txt
+  - title: Create the artifacts bucket
+    detail: aws s3 mb makes a bucket. Names are globally unique across all of AWS, which is why real
+      teams prefix them — learner-build-artifacts is yours.
+    command: aws s3 mb s3://learner-build-artifacts
+  - title: Confirm it is listed
+    detail: aws s3 ls with no target lists every bucket you own. Your new bucket should be the only
+      one.
+    command: aws s3 ls
+  - title: Upload the report
+    detail: aws s3 cp copies a local file into S3. The destination s3://bucket/key names the bucket
+      and the object key — the key is the object's full path inside the bucket.
+    command: aws s3 cp ~/build-report.txt s3://learner-build-artifacts/build-report.txt
+  - title: List the bucket contents
+    detail: aws s3 ls against a bucket lists its objects. build-report.txt should be there — the
+      upload replaced nothing, it simply added a new object.
+    command: aws s3 ls s3://learner-build-artifacts
+  - title: Submit for validation
+    detail: The validator checks the bucket exists and holds your object under the exact key you
+      uploaded.

@@ -1,0 +1,6 @@
+slug: 02-system-prompts
+title: System Prompts and Guardrails
+summary: Write system prompts that set behavior and hold the line against injected user instructions.
+order: 2
+tasks:
+  - prompt-system-guardrails

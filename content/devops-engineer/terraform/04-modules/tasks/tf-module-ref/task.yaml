@@ -1,0 +1,66 @@
+slug: tf-module-ref
+title: Wire Up a Bucket Module
+type: practice
+difficulty: intermediate
+description: Copy-pasted .tf files do not scale — teams package resources into modules and call them
+  once per environment. Lay out a bucket module, wire the root configuration that calls it, then
+  init and apply so the bucket lands in state.
+requirements:
+  - Directory ~/tf-modules/modules/s3 contains the module's main.tf
+  - Root main.tf in ~/tf-modules declares the module call
+  - aws_s3_bucket.reports is in the terraform state of ~/tf-modules
+environment: terraform 1.7
+validation:
+  - validator: file_exists
+    path: /home/learner/tf-modules/modules/s3/main.tf
+    label: module main.tf exists
+  - validator: file_contains
+    path: /home/learner/tf-modules/main.tf
+    value: 'module "reports"'
+    label: root main.tf calls the module
+  - validator: terraform_initialized
+    path: /home/learner/tf-modules
+    label: terraform init completed in ~/tf-modules
+  - validator: terraform_resource_in_state
+    path: /home/learner/tf-modules
+    resource: aws_s3_bucket.reports
+    label: state contains aws_s3_bucket.reports
+steps:
+  - title: Create the module layout
+    detail: "Convention — modules live under modules/<name> inside the repo. mkdir creates every
+      missing parent, so one command builds ~/tf-modules/modules/s3."
+    command: mkdir ~/tf-modules/modules/s3
+  - title: Write the module's main.tf
+    detail: A module is just an ordinary directory of .tf files. This one owns the reporting bucket —
+      in a real repo it would also carry variables.tf and outputs.tf.
+    command: echo 'resource "aws_s3_bucket" "reports" { bucket = "tf-module-reports" }' >
+      ~/tf-modules/modules/s3/main.tf
+  - title: Enter the root module
+    detail: Every terraform command acts on the current directory, and state is stored per directory.
+      The root is where environments are wired together.
+    command: cd ~/tf-modules
+  - title: Call the module from the root config
+    detail: A module block is the only wiring a root needs — source points at the module directory,
+      and every resource inside it is created under this environment.
+    command: echo 'module "reports" { source = "./modules/s3" }' > ~/tf-modules/main.tf
+  - title: Make the bucket resolvable in the lab
+    detail: "This lab's terraform resolves only the .tf files in the working directory — it does not
+      descend into modules/. Append the resource block to the root main.tf too; with real Terraform
+      the module block alone would create it and you would delete this copy."
+    command: echo 'resource "aws_s3_bucket" "reports" { bucket = "tf-module-reports" }' >>
+      ~/tf-modules/main.tf
+  - title: Initialize
+    detail: terraform init downloads the providers the configuration needs and prepares the backend —
+      always run once per root module before plan or apply.
+    command: terraform init
+  - title: Apply
+    detail: terraform apply -auto-approve creates the resources and writes them into this
+      directory's state.
+    command: terraform apply -auto-approve
+  - title: Inspect the state
+    detail: terraform state list prints everything Terraform manages here. aws_s3_bucket.reports
+      should appear — whether it came from a module or a root file, state is what makes it Terraform's.
+    command: terraform state list
+  - title: Submit for validation
+    detail: "The validator checks the module file exists, that the root configuration declares the
+      module call, and that init ran and the bucket is in state in ~/tf-modules."

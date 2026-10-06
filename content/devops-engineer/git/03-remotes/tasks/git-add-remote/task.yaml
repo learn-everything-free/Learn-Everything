@@ -17,9 +17,24 @@ validation:
     url: github.com
     label: origin remote points at github.com
 steps:
+  - title: Recreate the repository
+    detail: Every lab starts from a fresh shell — ~/project doesn't exist yet. mkdir makes it.
+    command: mkdir ~/project
   - title: Enter the repository
     detail: Remotes are stored per repository inside .git/config.
     command: cd ~/project
+  - title: Initialize with one commit
+    detail: A push needs committed work. git init, then give the repository a base commit.
+    command: git init
+  - title: Create a file to push
+    detail: A README is enough — the point of this lab is the remote, not the content.
+    command: touch README.md
+  - title: Stage and commit
+    detail: Stage everything, then record the 'init' commit on main.
+    command: git add .
+  - title: Commit
+    detail: Now there is a commit on main that the later push will upload.
+    command: git commit -m "init"
   - title: Add the remote
     detail: git remote add origin <url> stores the URL under the name 'origin' — the conventional name
       for the repository you cloned from or push to. On GitHub, create an empty repo first and copy

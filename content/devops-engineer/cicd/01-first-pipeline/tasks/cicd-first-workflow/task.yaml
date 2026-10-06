@@ -45,7 +45,10 @@ steps:
   - title: Finish the workflow
     detail: "Add runs-on, then steps with - uses: actions/checkout@v4. Run cat to review the whole file."
     command: "echo '    runs-on: ubuntu-latest' >> ~/project/.github/workflows/ci.yml"
-  - title: Add the checkout step and verify
-    detail: "Append '    steps:' and '      - uses: actions/checkout@v4', then cat the file. Then submit
-      — the validator parses the YAML you wrote."
+  - title: Add the checkout step
+    detail: Append the steps list with the checkout action — the line the validator looks for.
+    command: "echo - uses: actions/checkout@v4 >> ~/project/.github/workflows/ci.yml"
+  - title: Verify and submit
+    detail: cat prints the finished workflow. Then submit — the validator parses the YAML you
+      wrote.
     command: cat ~/project/.github/workflows/ci.yml

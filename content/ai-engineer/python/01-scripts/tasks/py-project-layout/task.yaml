@@ -1,0 +1,65 @@
+slug: py-project-layout
+title: Lay Out a Python Project
+type: practice
+difficulty: beginner
+description: Build the classic Python project skeleton — src/ for code, tests/ for tests, a README —
+  and turn it into a git repository with an initial commit. This is the shape nearly every real
+  Python project takes.
+requirements:
+  - Directories ~/ai-lab2/src and ~/ai-lab2/tests exist
+  - File ~/ai-lab2/README.md exists
+  - ~/ai-lab2 is a git repository with a commit
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ai-lab2/src
+    label: ~/ai-lab2/src
+  - validator: directory_exists
+    path: /home/learner/ai-lab2/tests
+    label: ~/ai-lab2/tests
+  - validator: file_exists
+    path: /home/learner/ai-lab2/README.md
+    label: ~/ai-lab2/README.md
+  - validator: git_repo
+    path: /home/learner/ai-lab2
+    label: ~/ai-lab2 is a git repository
+  - validator: git_commit
+    path: /home/learner/ai-lab2
+    message: initial project layout
+    label: commit "initial project layout" exists
+steps:
+  - title: Create the project root
+    detail: mkdir makes a new directory. This is the root of your second project — a separate folder
+      from the first keeps the two experiments independent.
+    command: mkdir ~/ai-lab2
+  - title: Create the src and tests folders
+    detail: mkdir accepts several arguments at once, so one command creates both folders. Python
+      projects conventionally keep importable code in src/ and test code in tests/.
+    command: mkdir ~/ai-lab2/src ~/ai-lab2/tests
+  - title: Write a README
+    detail: echo with the > redirect writes a one-line description into README.md. Every project
+      deserves at least a sentence telling the next person what it is.
+    command: echo "A Python project for AI engineering practice." > ~/ai-lab2/README.md
+  - title: Move into the project
+    detail: cd changes your current directory. Git always operates on the directory you are in, so
+      step inside ~/ai-lab2 before touching git.
+    command: cd ~/ai-lab2
+  - title: Initialize the git repository
+    detail: git init turns the current directory into a git repository, storing its bookkeeping in a
+      hidden .git/ folder it creates there. Run git init in whatever directory you want tracked.
+    command: git init
+  - title: Stage the files
+    detail: git add stages changes for the next commit. A plain dot means "everything in the current
+      directory", which picks up README.md and the two new folders.
+    command: git add .
+  - title: Make the first commit
+    detail: git commit -m records the staged snapshot permanently in the repository history. The -m
+      flag supplies the commit message — short, present-tense summaries like "initial project
+      layout" are the convention.
+    command: git commit -m "initial project layout"
+  - title: Verify with git log
+    detail: git log prints the commit history. You should see your one commit with its message.
+    command: git log
+  - title: Submit for validation
+    detail: The validator checks the src and tests directories, the README, that ~/ai-lab2 is a git
+      repository, and that a commit with the message "initial project layout" exists.

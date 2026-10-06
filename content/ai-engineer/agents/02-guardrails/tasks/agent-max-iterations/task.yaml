@@ -1,0 +1,52 @@
+slug: agent-max-iterations
+title: Bound an Agent Loop
+type: guided
+difficulty: beginner
+description: An agent without limits will retry a failing tool call forever. Write an agent config
+  that caps the loop at 10 iterations, plus a separate file declaring the error policy.
+requirements:
+  - Directory ~/agent-lab exists
+  - File ~/agent-lab/agent.yaml exists with max_iterations=10
+  - File ~/agent-lab/fallback.txt exists with an error policy
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/agent-lab/agent.yaml
+    label: ~/agent-lab/agent.yaml
+  - validator: file_contains
+    path: /home/learner/agent-lab/agent.yaml
+    value: max_iterations=10
+    label: agent.yaml caps the loop at 10
+  - validator: file_exists
+    path: /home/learner/agent-lab/fallback.txt
+    label: ~/agent-lab/fallback.txt
+  - validator: file_contains
+    path: /home/learner/agent-lab/fallback.txt
+    value: on_error=retry_once
+    label: fallback.txt sets the error policy
+steps:
+  - title: Create the agent-lab directory
+    detail: mkdir makes a new directory. Your agent's configuration will live here — one place to
+      look when you ask "why did the agent do that?".
+    command: mkdir ~/agent-lab
+  - title: Cap the loop length
+    detail: echo with the > redirect writes the setting into agent.yaml. max_iterations is the hard
+      stop on the think-act-observe loop — after 10 rounds the agent gives up instead of looping
+      forever on a problem it cannot solve.
+    command: echo max_iterations=10 > ~/agent-lab/agent.yaml
+  - title: Read the config back
+    detail: cat prints the file. A one-line config is normal — the value is not its size but the fact
+      that the limit is written down and versioned, not hardcoded somewhere in the code.
+    command: cat ~/agent-lab/agent.yaml
+  - title: Declare the error policy
+    detail: This setting goes into its own file, fallback.txt — one file per decision keeps each rule
+      easy to find and swap. on_error=retry_once means a failed tool call gets exactly one second
+      chance before the agent reports failure, instead of retrying silently forever.
+    command: echo on_error=retry_once > ~/agent-lab/fallback.txt
+  - title: Review the full setup
+    detail: ls lists the directory so you can see both config files in place. Together they bound the
+      agent in time (max_iterations) and in behavior (retry policy).
+    command: ls ~/agent-lab
+  - title: Submit for validation
+    detail: The validator checks that agent.yaml and fallback.txt exist, that agent.yaml contains
+      max_iterations=10, and that fallback.txt declares the retry policy.

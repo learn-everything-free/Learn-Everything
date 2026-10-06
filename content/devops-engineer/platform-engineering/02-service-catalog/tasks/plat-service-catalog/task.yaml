@@ -18,6 +18,9 @@ validation:
     value: "owner:"
     label: declares an owner
 steps:
+  - title: Create the template repository
+    detail: Every lab starts from a fresh shell — scaffolding first, then the descriptor.
+    command: mkdir -p ~/templates/service-template
   - title: Enter the template repository
     detail: The catalog file lives at the repo root, next to the code.
     command: cd ~/templates/service-template

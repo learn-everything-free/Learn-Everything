@@ -1,0 +1,55 @@
+slug: ml-py-requirements
+title: Pin the Project Dependencies
+type: guided
+difficulty: beginner
+description: Set up ~/ml-project with a pinned dependency file, a data directory and a dataset
+  manifest — the small ritual that makes every future experiment reproducible. Every command is
+  explained in the walkthrough.
+requirements:
+  - ~/ml-project/data directory exists
+  - requirements.txt pins scikit-learn 1.5.0
+  - data/datasets.txt lists train.csv and test.csv
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ml-project/data
+    label: ~/ml-project/data
+  - validator: file_exists
+    path: /home/learner/ml-project/requirements.txt
+    label: ~/ml-project/requirements.txt
+  - validator: file_contains
+    path: /home/learner/ml-project/requirements.txt
+    value: scikit-learn==1.5.0
+    label: scikit-learn pinned to 1.5.0
+  - validator: file_exists
+    path: /home/learner/ml-project/data/datasets.txt
+    label: data/datasets.txt
+steps:
+  - title: Create the project directory
+    detail: mkdir makes a new directory. The ~ is shorthand for your home directory
+      (/home/learner), so this creates /home/learner/ml-project.
+    command: mkdir ~/ml-project
+  - title: Move into it
+    detail: cd changes your current directory. Everything you create next lands inside ~/ml-project.
+    command: cd ~/ml-project
+  - title: Add a data directory
+    detail: Keeping data separate from code is the first habit of reproducible ML — experiments
+      change, data locations should not.
+    command: mkdir data
+  - title: Pin the dependencies
+    detail: echo prints text and the > redirect writes it into a file. Pinning the exact version
+      (scikit-learn==1.5.0) means this project trains identically next month.
+    command: echo scikit-learn==1.5.0 > requirements.txt
+  - title: Verify the pin
+    detail: cat prints a file's contents. You should see the exact pinned version.
+    command: cat requirements.txt
+  - title: Write the dataset manifest
+    detail: A one-line manifest naming the train and test files. Six months from now this file
+      answers "which data did we use?".
+    command: echo train.csv, test.csv > data/datasets.txt
+  - title: Inspect the data directory
+    detail: ls lists a directory's contents. datasets.txt should be there.
+    command: ls data
+  - title: Submit for validation
+    detail: The validator checks that the data directory, the pinned requirements file and the
+      dataset manifest all exist as you built them.

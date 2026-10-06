@@ -21,6 +21,9 @@ validation:
     value: 2026-09-27
     label: errors.log lines come from the right day
 steps:
+  - title: Create the report directory
+    detail: The report will live in ~/report — every lab starts from a fresh shell, so make it first.
+    command: mkdir ~/report
   - title: Review the source log
     detail: "Yesterday's log is /var/log/app/app-2026-09-27.log. Scan its shape: timestamp, level,
       message."

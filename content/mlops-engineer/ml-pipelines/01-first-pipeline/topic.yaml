@@ -1,0 +1,7 @@
+slug: 01-first-pipeline
+title: Your First Pipeline
+summary: Declare a training DAG as files, then package it as a container image.
+order: 1
+tasks:
+  - pipe-dag-files
+  - pipe-docker-stage

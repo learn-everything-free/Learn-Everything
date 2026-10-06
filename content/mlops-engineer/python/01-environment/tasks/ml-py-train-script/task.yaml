@@ -1,0 +1,61 @@
+slug: ml-py-train-script
+title: First Training Script
+type: practice
+difficulty: beginner
+description: Create a minimal training script and metrics file in ~/train-lab, then lock the work
+  in with your first commit — version control is not just for web apps.
+requirements:
+  - train.py exists and calls model.fit
+  - metrics.txt records accuracy=0.87
+  - ~/train-lab is a Git repository with commit 'first training run'
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/train-lab/train.py
+    label: ~/train-lab/train.py
+  - validator: file_contains
+    path: /home/learner/train-lab/train.py
+    value: model.fit(
+    label: train.py calls model.fit
+  - validator: file_exists
+    path: /home/learner/train-lab/metrics.txt
+    label: ~/train-lab/metrics.txt
+  - validator: git_repo
+    path: /home/learner/train-lab
+    label: ~/train-lab is a Git repository
+  - validator: git_commit
+    path: /home/learner/train-lab
+    message: first training run
+    label: commit 'first training run' exists
+steps:
+  - title: Create and enter the lab directory
+    detail: One mkdir, one cd. This directory becomes both your project and your Git repository.
+    command: mkdir ~/train-lab
+  - title: Move into it
+    detail: git init in the next step turns the current directory into a repository, so be in the
+      right place.
+    command: cd ~/train-lab
+  - title: Initialize the repository
+    detail: git init creates the hidden .git folder that tracks history.
+    command: git init
+  - title: Write the training script
+    detail: The heart of every ML job in one line — fitting a model to training data. The >
+      redirect writes the line into train.py.
+    command: echo model.fit(X_train, y_train) > train.py
+  - title: Record the metrics
+    detail: A flat metrics file is the simplest honest log of a run — framework-agnostic and
+      diff-able in Git.
+    command: echo accuracy=0.87 > metrics.txt
+  - title: Give the commit some content
+    detail: An empty directory has nothing to commit. A README describing the run keeps the
+      repository self-explanatory.
+    command: touch README.md
+  - title: Stage and commit
+    detail: git add . stages everything; git commit -m records the snapshot with your message.
+    command: git add .
+  - title: Create the commit
+    detail: The message 'first training run' is exactly what the validator looks for.
+    command: git commit -m "first training run"
+  - title: Verify and submit
+    detail: git log should show your commit. The validator re-checks the files and the commit.
+    command: git log

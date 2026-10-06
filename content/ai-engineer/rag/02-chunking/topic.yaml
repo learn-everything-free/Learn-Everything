@@ -1,0 +1,6 @@
+slug: 02-chunking
+title: Chunking Documents
+summary: Split long documents into chunk files and track them with a manifest before embedding.
+order: 2
+tasks:
+  - rag-chunk-docs

@@ -1,0 +1,45 @@
+slug: mon-accuracy-metric
+title: Log the Quality Metrics
+type: guided
+difficulty: beginner
+description: Create ~/monitoring with a metrics file and an explicit alerting threshold — because
+  a number is only meaningful once you have written down what it is allowed to drop to.
+requirements:
+  - metrics.txt records accuracy=0.87
+  - threshold.txt records threshold=0.85
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/monitoring/metrics.txt
+    label: ~/monitoring/metrics.txt
+  - validator: file_exists
+    path: /home/learner/monitoring/threshold.txt
+    label: ~/monitoring/threshold.txt
+  - validator: file_contains
+    path: /home/learner/monitoring/metrics.txt
+    value: accuracy=0.87
+    label: accuracy metric logged
+  - validator: file_contains
+    path: /home/learner/monitoring/threshold.txt
+    value: threshold=0.85
+    label: alert threshold recorded
+steps:
+  - title: Create the monitoring directory
+    detail: Monitoring artifacts deserve their own home, separate from training code.
+    command: mkdir ~/monitoring
+  - title: Move into it
+    detail: Everything below is created relative to ~/monitoring.
+    command: cd ~/monitoring
+  - title: Log the accuracy
+    detail: One honest number from the latest evaluation run. Key=value format stays readable in
+      any dashboard or diff.
+    command: echo accuracy=0.87 > metrics.txt
+  - title: Write the alerting threshold
+    detail: The threshold is the contract — accuracy is allowed to fall to 0.85, no further,
+      without someone getting paged.
+    command: echo threshold=0.85 > threshold.txt
+  - title: Review both files
+    detail: cat prints a file. Check both — the metric and the contract it must honour.
+    command: cat metrics.txt threshold.txt
+  - title: Submit for validation
+    detail: The validator checks both files exist with the exact metric and threshold values.

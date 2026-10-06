@@ -41,7 +41,14 @@ steps:
       rate(http_requests_total{status=~\"5..\"}[5m]) / rate(http_requests_total[5m]) > 0.05',
       '  for: 5m'. The for clause stops blips from paging you."
     command: "echo '  - alert: HighErrorRate' >> ~/alerts/rules.yml"
-  - title: Add expression and duration lines
-    detail: "Append '    expr: rate(http_requests_total{status=~\"5..\"}[5m]) /
-      rate(http_requests_total[5m]) > 0.05' and '    for: 5m'. Then cat the file and submit."
+  - title: Add the expression line
+    detail: The PromQL condition — more than 5% of requests failing over 5 minutes. Indentation is
+      cosmetic in this lab; the validator reads the content.
+    command: "echo expr: rate(http_requests_total{status=~\"5..\"}[5m]) / rate(http_requests_total[5m]) >0.05 >> ~/alerts/rules.yml"
+  - title: Add the duration clause
+    detail: The for clause is what stops a 30-second blip from paging someone — the alert must stay
+      firing continuously for 5 minutes first.
+    command: "echo for: 5m >> ~/alerts/rules.yml"
+  - title: Verify and submit
+    detail: cat prints the finished rule — alert name, expression and duration. Then submit.
     command: cat ~/alerts/rules.yml

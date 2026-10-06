@@ -1,0 +1,39 @@
+slug: llm-token-budget
+title: Set a Token Budget
+type: guided
+difficulty: beginner
+description: Every LLM API call carries two cost knobs — which model you call and how many tokens it
+  may generate. Write a small config file that captures both, the way real applications do.
+requirements:
+  - Directory ~/llm-lab exists
+  - File ~/llm-lab/config.txt exists with a model line and a max_tokens line
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/llm-lab/config.txt
+    label: ~/llm-lab/config.txt
+  - validator: file_contains
+    path: /home/learner/llm-lab/config.txt
+    value: max_tokens=1024
+    label: config.txt sets max_tokens=1024
+steps:
+  - title: Create the llm-lab directory
+    detail: mkdir makes a new directory. Everything you build in this topic lives inside ~/llm-lab —
+      the ~ is shorthand for your home directory, /home/learner.
+    command: mkdir ~/llm-lab
+  - title: Write the model setting
+    detail: echo prints text and the > redirect writes it into a file, creating it if needed. The first
+      line names the model to call — gpt-4o-mini is a small, cheap model, a sensible default for
+      experiments.
+    command: echo model=gpt-4o-mini > ~/llm-lab/config.txt
+  - title: Append the token budget
+    detail: A single > overwrites a file, so a second line needs >> — the append redirect. It adds the
+      new text on the next line instead of replacing what is there. max_tokens caps how much the
+      model may generate per call, which caps the cost.
+    command: echo max_tokens=1024 >> ~/llm-lab/config.txt
+  - title: Read the config back
+    detail: cat prints a file's contents. You should see both lines — the model choice and the token
+      budget.
+    command: cat ~/llm-lab/config.txt
+  - title: Submit for validation
+    detail: The validator checks that config.txt exists and contains the max_tokens=1024 setting.

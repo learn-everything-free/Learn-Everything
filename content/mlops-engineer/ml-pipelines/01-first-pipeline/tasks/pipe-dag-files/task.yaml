@@ -1,0 +1,55 @@
+slug: pipe-dag-files
+title: Declare the Pipeline DAG
+type: guided
+difficulty: beginner
+description: Lay out ~/pipeline with one file per step and a pipeline.yaml that names the execution
+  order — the shape every orchestrator (Airflow, Dagster, Kubeflow) recognises instantly.
+requirements:
+  - ~/pipeline/steps contains ingest.txt, features.txt and train.txt
+  - pipeline.yaml declares the step order ingest,features,train
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/pipeline/steps
+    label: ~/pipeline/steps
+  - validator: file_exists
+    path: /home/learner/pipeline/steps/ingest.txt
+    label: steps/ingest.txt
+  - validator: file_exists
+    path: /home/learner/pipeline/steps/features.txt
+    label: steps/features.txt
+  - validator: file_exists
+    path: /home/learner/pipeline/steps/train.txt
+    label: steps/train.txt
+  - validator: file_contains
+    path: /home/learner/pipeline/pipeline.yaml
+    value: steps=ingest,features,train
+    label: pipeline.yaml declares the step order
+steps:
+  - title: Create the pipeline root
+    detail: One directory for the whole pipeline definition.
+    command: mkdir ~/pipeline
+  - title: Move into it
+    detail: Everything below is created relative to ~/pipeline.
+    command: cd ~/pipeline
+  - title: Add the steps directory
+    detail: One file per step keeps the DAG inspectable — anyone can see what runs without
+      reading code.
+    command: mkdir steps
+  - title: Declare the ingest step
+    detail: The first step of every ML pipeline — pulling raw data from its source.
+    command: echo read_raw_data > steps/ingest.txt
+  - title: Declare the feature step
+    detail: Feature engineering — transforming raw data into model-ready columns.
+    command: echo transform_features > steps/features.txt
+  - title: Declare the train step
+    detail: The final step — fitting the model on the prepared features.
+    command: echo fit_model > steps/train.txt
+  - title: Write the execution order
+    detail: The DAG in one line. Orchestrators read exactly this kind of ordered declaration to
+      build their dependency graph.
+    command: echo steps=ingest,features,train > pipeline.yaml
+  - title: Inspect and submit
+    detail: cat prints the pipeline definition. The validator checks every step file and the
+      declared order.
+    command: cat pipeline.yaml

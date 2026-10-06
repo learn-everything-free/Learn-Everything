@@ -1,0 +1,6 @@
+slug: 02-serving-stack
+title: The Serving Stack
+summary: Build a serving image and put it on a port, like production does.
+order: 2
+tasks:
+  - vllm-port-serve

@@ -1,0 +1,7 @@
+slug: 01-prompt-versioning
+title: Prompt Versioning and Evals
+summary: Treat prompts like code — commit each version to git and grade every change against test cases.
+order: 1
+tasks:
+  - llmops-version-prompts
+  - llmops-eval-file

@@ -26,6 +26,6 @@ steps:
   - title: Submit for validation
     detail: The validator checks for a running instance from the AMI you launched.
   - title: Terminate it (after the validator passes)
-    detail: "Termination is the bill-safety habit to build: a forgotten instance is a forgotten monthly
-      invoice. Run this once you've submitted, and verify with describe-instances."
-    command: aws ec2 terminate-instances --instance-ids i-0123456789abcdef0
+    detail: Termination is the bill-safety habit to build — a forgotten instance is a forgotten
+      monthly invoice. Once the validator has passed, run 'aws ec2 terminate-instances
+      --instance-ids <the id from step 2>' yourself and verify with describe-instances.

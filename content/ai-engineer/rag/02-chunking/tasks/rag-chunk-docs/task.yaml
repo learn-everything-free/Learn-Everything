@@ -1,0 +1,57 @@
+slug: rag-chunk-docs
+title: Split a Document into Chunks
+type: practice
+difficulty: beginner
+description: Retrieval pipelines split documents into chunk files before embedding them. Create a
+  chunks directory holding two one-line chunks, then write a manifest.txt that lists both filenames.
+requirements:
+  - Directory ~/rag-lab/chunks exists
+  - Files chunk-01.txt and chunk-02.txt exist
+  - manifest.txt lists both chunk filenames
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/rag-lab/chunks/chunk-01.txt
+    label: ~/rag-lab/chunks/chunk-01.txt
+  - validator: file_exists
+    path: /home/learner/rag-lab/chunks/chunk-02.txt
+    label: ~/rag-lab/chunks/chunk-02.txt
+  - validator: file_exists
+    path: /home/learner/rag-lab/manifest.txt
+    label: ~/rag-lab/manifest.txt
+  - validator: file_contains
+    path: /home/learner/rag-lab/manifest.txt
+    value: chunk-01.txt
+    label: manifest lists chunk-01.txt
+steps:
+  - title: Create the lab and chunks directories
+    detail: mkdir accepts several arguments at once — this creates the lab root and, inside it, a
+      chunks folder. Real pipelines store each chunk as its own file or row so it can be embedded
+      and retrieved independently.
+    command: mkdir ~/rag-lab ~/rag-lab/chunks
+  - title: Write the first chunk
+    detail: echo with the > redirect writes one line into chunk-01.txt. Each chunk is one coherent
+      passage — in production these would be paragraphs or sections cut from a longer document.
+    command: 'echo "Chunk 1: What retrieval-augmented generation is." > ~/rag-lab/chunks/chunk-01.txt'
+  - title: Write the second chunk
+    detail: A second chunk file, same idea. Numbered names keep chunks in reading order without
+      needing anything fancier than ls.
+    command: 'echo "Chunk 2: How embeddings make text searchable." > ~/rag-lab/chunks/chunk-02.txt'
+  - title: List the chunks directory
+    detail: ls shows what you built — chunk-01.txt and chunk-02.txt side by side.
+    command: ls ~/rag-lab/chunks
+  - title: Start the manifest
+    detail: A manifest is an index file that lists the pieces of a dataset. echo with > writes the
+      first filename into manifest.txt.
+    command: echo chunk-01.txt > ~/rag-lab/manifest.txt
+  - title: Add the second entry
+    detail: ">> appends the second filename on its own line. One filename per line is what makes a
+      manifest easy to loop over in a script."
+    command: echo chunk-02.txt >> ~/rag-lab/manifest.txt
+  - title: Read the manifest back
+    detail: cat prints the manifest — you should see both filenames, one per line, matching exactly
+      what ls showed.
+    command: cat ~/rag-lab/manifest.txt
+  - title: Submit for validation
+    detail: The validator checks that both chunk files exist, that manifest.txt exists, and that it
+      lists chunk-01.txt.

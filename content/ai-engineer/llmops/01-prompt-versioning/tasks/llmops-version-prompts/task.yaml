@@ -1,0 +1,63 @@
+slug: llmops-version-prompts
+title: Version Your Prompts in Git
+type: practice
+difficulty: beginner
+description: Prompts change constantly, and "which wording was live last Tuesday?" is only answerable
+  if every version is committed. Put a v1 system prompt and an improved v2 into a git repository as
+  two separate commits.
+requirements:
+  - Directory ~/prompts is a git repository
+  - Commit "v1 prompt" exists
+  - Commit "v2 prompt" exists
+environment: ubuntu:24.04
+validation:
+  - validator: git_repo
+    path: /home/learner/prompts
+    label: ~/prompts is a git repository
+  - validator: git_commit
+    path: /home/learner/prompts
+    message: v1 prompt
+    label: commit "v1 prompt" exists
+  - validator: git_commit
+    path: /home/learner/prompts
+    message: v2 prompt
+    label: commit "v2 prompt" exists
+steps:
+  - title: Create the prompts directory
+    detail: mkdir makes a new directory. This folder will hold every version of your system prompt,
+      just like a source folder holds every version of your code.
+    command: mkdir ~/prompts
+  - title: Move into it and initialize git
+    detail: cd changes your current directory. git init then turns ~/prompts into a git repository —
+      git always tracks the directory you are standing in, so this order matters.
+    command: cd ~/prompts
+  - title: Initialize the repository
+    detail: git init creates the hidden .git/ folder where history is stored. From now on, commits
+      made here stay with this directory.
+    command: git init
+  - title: Write the first system prompt
+    detail: echo with the > redirect writes the starting prompt into system-v1.txt. Naming files by
+      version — v1, v2 — makes the timeline obvious even before you open git log.
+    command: echo "You are a helpful support assistant." > ~/prompts/system-v1.txt
+  - title: Commit version 1
+    detail: git add stages the new file and git commit -m records it with the message "v1 prompt".
+      Together they snapshot this exact wording into the repository's history.
+    command: git add system-v1.txt
+  - title: Record the commit
+    detail: The commit message is your changelog entry — one short line saying which version this is.
+    command: git commit -m "v1 prompt"
+  - title: Write the improved version
+    detail: The improved prompt goes into its own file, system-v2.txt, so v1 stays untouched on disk.
+      Keeping every version side by side lets you diff, roll back or A/B test them later.
+    command: echo "You are a concise support assistant. Answer in at most three sentences." > ~/prompts/system-v2.txt
+  - title: Stage and commit version 2
+    detail: The same pair of commands as before — stage the new file, then commit it under the
+      message "v2 prompt". Your repository now shows exactly how the prompt evolved.
+    command: git add system-v2.txt
+  - title: Record the second commit
+    detail: The second commit lands on top of the first. git log would now show both, oldest to
+      newest.
+    command: git commit -m "v2 prompt"
+  - title: Submit for validation
+    detail: The validator checks that ~/prompts is a git repository and that commits with the messages
+      "v1 prompt" and "v2 prompt" both exist.

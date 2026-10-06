@@ -1,0 +1,6 @@
+slug: 02-guardrails
+title: Agent Guardrails
+summary: Cap how long an agent loop may run and decide what happens when a tool call fails.
+order: 2
+tasks:
+  - agent-max-iterations

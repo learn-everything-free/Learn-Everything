@@ -17,9 +17,12 @@ validation:
     message: init
     label: commit 'init' exists
 steps:
+  - title: Create the project folder
+    detail: Every lab starts from a fresh shell, so ~/project doesn't exist yet. mkdir makes it.
+    command: mkdir ~/project
   - title: Enter the project folder
-    detail: If you already created ~/project in the Linux task, just run the cd. Otherwise create it
-      first with mkdir ~/project.
+    detail: cd changes your current directory. Run git init here in the next step — not in your
+      home directory.
     command: cd ~/project
   - title: Initialize the repository
     detail: git init turns the current directory into a Git repository by creating a hidden .git folder.

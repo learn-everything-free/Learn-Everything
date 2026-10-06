@@ -1,0 +1,46 @@
+slug: mlflow-model-registry
+title: Register the Champion Model
+type: practice
+difficulty: intermediate
+description: Lay out a registry at ~/registry with a versioned home for the finance-net model, then
+  mark v3 as the Production champion. This is the structure MLflow's registry automates.
+requirements:
+  - ~/registry/models/finance-net/v3 exists
+  - stage.txt marks v3 as stage=Production
+  - description.txt records the evaluation evidence
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/registry/models/finance-net/v3/stage.txt
+    label: registry/models/finance-net/v3/stage.txt
+  - validator: file_contains
+    path: /home/learner/registry/models/finance-net/v3/stage.txt
+    value: stage=Production
+    label: v3 marked as Production
+  - validator: file_exists
+    path: /home/learner/registry/models/finance-net/v3/description.txt
+    label: v3/description.txt
+steps:
+  - title: Create the versioned path
+    detail: mkdir creates missing parent directories as needed, so one command builds the whole
+      registry/models/finance-net/v3 tree.
+    command: mkdir ~/registry/models/finance-net/v3
+  - title: Move into the version folder
+    detail: Everything this version needs — weights in real life, metadata here — lives in its
+      own folder.
+    command: cd ~/registry/models/finance-net/v3
+  - title: Mark the stage
+    detail: stage=Production is the registry's loudest statement — this version serves real
+      traffic. Stages like Staging and Archived sit beside it in a real registry.
+    command: echo stage=Production > stage.txt
+  - title: Record the evidence
+    detail: A champion model without recorded evidence is a rumour. Note the metric and the
+      holdout that produced it.
+    command: echo F1=0.91 on the 2026-09 holdout > description.txt
+  - title: Inspect the version folder
+    detail: ls shows both files. In a real registry this folder would also hold the serialized
+      weights and a signature file.
+    command: ls
+  - title: Submit for validation
+    detail: The validator checks the versioned path exists, the stage is Production, and the
+      evidence file is present.

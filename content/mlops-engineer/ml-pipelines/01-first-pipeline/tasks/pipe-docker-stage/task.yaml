@@ -1,0 +1,44 @@
+slug: pipe-docker-stage
+title: Containerize the Pipeline
+type: practice
+difficulty: intermediate
+description: Turn the pipeline into a runnable image. Building it yourself is how you learn why
+  images — not laptops — are the unit of execution in MLOps.
+requirements:
+  - A Dockerfile exists in ~/pipeline-img
+  - An image pipeline:v1 is built
+  - A container from pipeline:v1 is running
+environment: docker:24
+validation:
+  - validator: file_exists
+    path: /home/learner/pipeline-img/Dockerfile
+    label: ~/pipeline-img/Dockerfile
+  - validator: container_running
+    image: pipeline:v1
+    label: container from pipeline:v1 is running
+steps:
+  - title: Create the build directory
+    detail: A docker build always needs a build context — a directory holding the Dockerfile.
+    command: mkdir ~/pipeline-img
+  - title: Move into the build context
+    detail: The docker build command at the end refers to this directory with a dot.
+    command: cd ~/pipeline-img
+  - title: Write the Dockerfile
+    detail: A Dockerfile declares how the image is assembled. FROM picks the base image — here the
+      official Python image, the natural home for a training pipeline.
+    command: echo FROM python:3.12-slim > Dockerfile
+  - title: Build the image
+    detail: docker build reads the Dockerfile and stores the result under the -t tag. In this lab
+      images must be built before they can run — there is no registry to pull from.
+    command: docker build -t pipeline:v1 .
+  - title: Run a container from the image
+    detail: docker run starts a container. The -d flag detaches it so it keeps running in the
+      background — a pipeline stage should not need your terminal.
+    command: docker run -d pipeline:v1
+  - title: Confirm it is up
+    detail: docker ps lists running containers with their image and status. Your pipeline:v1
+      container should say Up.
+    command: docker ps
+  - title: Submit for validation
+    detail: The validator checks the Dockerfile exists and that a container built from pipeline:v1
+      is running.

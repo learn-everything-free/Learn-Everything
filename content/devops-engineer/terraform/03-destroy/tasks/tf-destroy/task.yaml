@@ -12,9 +12,22 @@ validation:
     path: /home/learner/infra
     label: state in ~/infra is empty
 steps:
+  - title: Create the module directory
+    detail: Every lab starts from a fresh shell — build the module root first.
+    command: mkdir ~/infra
   - title: Enter the module
     detail: Destroy, like apply, acts on the current directory's state.
     command: cd ~/infra
+  - title: Declare the bucket
+    detail: The same resource the apply task used — there must be something in state before
+      destroy has anything to remove.
+    command: echo 'resource "aws_s3_bucket" "demo" {}' > main.tf
+  - title: Initialize and apply
+    detail: init prepares the provider; apply creates the bucket and writes it into state.
+    command: terraform init
+  - title: Apply
+    detail: Now the state holds aws_s3_bucket.demo — something real to destroy.
+    command: terraform apply -auto-approve
   - title: Destroy
     detail: "terraform destroy -auto-approve reverses the apply: every resource in state is deleted. In
       production you'd run a destroy plan first and read every line."

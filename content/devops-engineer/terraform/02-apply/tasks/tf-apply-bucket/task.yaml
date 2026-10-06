@@ -13,9 +13,20 @@ validation:
     resource: aws_s3_bucket.demo
     label: state contains aws_s3_bucket.demo
 steps:
+  - title: Create the module directory
+    detail: Every lab starts from a fresh shell — build the module root first.
+    command: mkdir ~/infra
   - title: Enter the module
     detail: State is stored per directory — always work from the module root.
     command: cd ~/infra
+  - title: Declare the bucket
+    detail: An HCL resource block — type aws_s3_bucket, name demo. This is the whole configuration
+      the apply will execute.
+    command: echo 'resource "aws_s3_bucket" "demo" {}' > main.tf
+  - title: Initialize
+    detail: terraform init downloads the provider plugins and prepares the backend. Apply refuses
+      to run without it.
+    command: terraform init
   - title: Apply with auto-approve
     detail: terraform apply normally asks for confirmation; -auto-approve skips the prompt (in CI you'd
       guard this with plan reviews instead).

@@ -1,0 +1,6 @@
+slug: 02-registry
+title: The Model Registry
+summary: Give every trained model a versioned home and an honest stage label.
+order: 2
+tasks:
+  - mlflow-model-registry

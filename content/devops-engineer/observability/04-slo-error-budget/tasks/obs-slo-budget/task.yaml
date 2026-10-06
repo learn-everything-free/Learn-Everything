@@ -1,0 +1,52 @@
+slug: obs-slo-budget
+title: Write the SLO and Its Error Budget
+type: challenge
+difficulty: intermediate
+description: The product team promised customers 99.9% availability this quarter — a promise nobody
+  can act on until it is written down as two numbers. Record the target in ~/slo/slo.txt and work
+  out the error budget it implies into ~/slo/budget.txt.
+requirements:
+  - Directory ~/slo exists containing slo.txt and budget.txt
+  - slo.txt records the availability target of 99.9
+  - budget.txt records the matching error budget of 0.1
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/slo/slo.txt
+    label: ~/slo/slo.txt
+  - validator: file_exists
+    path: /home/learner/slo/budget.txt
+    label: ~/slo/budget.txt
+  - validator: file_contains
+    path: /home/learner/slo/slo.txt
+    value: availability_target=99.9
+    label: slo.txt records the 99.9 target
+  - validator: file_contains
+    path: /home/learner/slo/budget.txt
+    value: error_budget=0.1
+    label: budget.txt records the 0.1 budget
+steps:
+  - title: Make a home for the SLO
+    detail: Service-level work tends to accrete files — targets, budgets, burn-rate notes. One
+      directory keeps them together.
+    command: mkdir ~/slo
+  - title: Write the availability target
+    detail: 99.9 availability is 'three nines' — the SLO itself. It is the promise, not the reality;
+      measuring whether you kept it is what the dashboards from earlier tasks are for.
+    command: echo 'availability_target=99.9' > ~/slo/slo.txt
+  - title: Work out the budget
+    detail: "The error budget is whatever the target leaves over: 100 - 99.9 = 0.1. That means 0.1%
+      of requests may fail — or, for a service with 30 days of uptime, about 43 minutes of total
+      downtime per month. That is the number you are allowed to spend on risky releases."
+    command: echo 'error_budget=0.1' > ~/slo/budget.txt
+  - title: Read the promise back
+    detail: cat prints the file. If it says availability_target=99.9, the SLO is on record exactly
+      as the product team phrased it.
+    command: cat ~/slo/slo.txt
+  - title: Review both files
+    detail: cat accepts several files at once. Side by side, the promise and the allowance should
+      always add up to 100.
+    command: cat ~/slo/slo.txt ~/slo/budget.txt
+  - title: Submit for validation
+    detail: "The validator checks both files exist and contain the exact numbers: availability
+      target 99.9 in slo.txt, error budget 0.1 in budget.txt."

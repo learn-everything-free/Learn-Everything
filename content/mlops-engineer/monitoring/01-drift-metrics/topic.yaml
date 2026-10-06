@@ -1,0 +1,7 @@
+slug: 01-drift-metrics
+title: Metrics & Drift
+summary: Log model quality honestly, then detect when the world moves under it.
+order: 1
+tasks:
+  - mon-accuracy-metric
+  - mon-drift-alert

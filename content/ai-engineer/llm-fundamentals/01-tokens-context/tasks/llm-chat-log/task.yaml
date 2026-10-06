@@ -1,0 +1,53 @@
+slug: llm-chat-log
+title: Count the Turns in a Chat Log
+type: challenge
+difficulty: beginner
+description: Applications log every user turn so they can be replayed and analyzed later. Build a
+  four-line chat transcript, count its lines with wc, and record the turn count in a summary file.
+requirements:
+  - File ~/llm-lab/transcript.txt exists with exactly 4 lines
+  - File ~/llm-lab/summary.txt exists and records the turn count
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/llm-lab/transcript.txt
+    label: ~/llm-lab/transcript.txt
+  - validator: file_exists
+    path: /home/learner/llm-lab/summary.txt
+    label: ~/llm-lab/summary.txt
+  - validator: file_contains
+    path: /home/learner/llm-lab/summary.txt
+    value: "4"
+    label: summary.txt records 4 turns
+steps:
+  - title: Create the lab directory
+    detail: mkdir makes a new directory. You may already have ~/llm-lab from the previous task — that
+      is fine, the files here are new.
+    command: mkdir ~/llm-lab
+  - title: Write the first user turn
+    detail: echo with the > redirect writes one line into transcript.txt, creating the file. Each line
+      will represent one user turn in the conversation.
+    command: 'echo user: what is a token? > ~/llm-lab/transcript.txt'
+  - title: Log the second turn
+    detail: ">> appends a line instead of overwriting — remember, a single > would erase the first
+      turn. Keep using >> for every line that follows."
+    command: 'echo user: how big is the context window? >> ~/llm-lab/transcript.txt'
+  - title: Log the third turn
+    detail: Another appended line. Real chat logs store exactly this kind of raw turn text before any
+      processing.
+    command: 'echo user: what does max_tokens control? >> ~/llm-lab/transcript.txt'
+  - title: Log the fourth turn
+    detail: The final appended line. The transcript now holds four complete user turns.
+    command: 'echo user: how are tokens priced? >> ~/llm-lab/transcript.txt'
+  - title: Count the lines
+    detail: "wc is the word count tool and -l asks it to count lines only. It should print 4 — one per
+      logged turn. wc works on any text file, which is why it shows up in half of all shell
+      pipelines."
+    command: wc -l ~/llm-lab/transcript.txt
+  - title: Write the summary
+    detail: Write the count you just measured into summary.txt. Feeding measured facts into a summary
+      file — rather than guessing — is exactly how eval scripts report results.
+    command: echo "4 user turns logged" > ~/llm-lab/summary.txt
+  - title: Submit for validation
+    detail: The validator checks that transcript.txt and summary.txt exist, and that summary.txt
+      records the count 4.

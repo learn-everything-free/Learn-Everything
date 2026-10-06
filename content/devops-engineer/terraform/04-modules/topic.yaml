@@ -1,0 +1,6 @@
+slug: 04-modules
+title: Modules
+summary: Package resources once and reuse them in every environment.
+order: 4
+tasks:
+  - tf-module-ref

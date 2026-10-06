@@ -1,0 +1,55 @@
+slug: docker-port-conflict
+title: Untangle a Port Conflict
+type: scenario
+difficulty: intermediate
+description: Staging needs its own copy of the app, but production already owns host port 8080 —
+  and publishing a second container onto a busy host port fails with 'port is already allocated'.
+  Prove who owns 8080, find a genuinely free port and give staging its own front door.
+requirements:
+  - A container from app:latest is running
+  - Port 8080 stays mapped to the production container
+  - Staging runs on a different host port (8082)
+environment: docker:24
+validation:
+  - validator: container_running
+    image: app:latest
+    label: container from app:latest running
+  - validator: port_mapped
+    port: 8080
+    label: port 8080 still mapped
+  - validator: port_mapped
+    port: 8082
+    label: staging on port 8082
+steps:
+  - title: Start the production container
+    detail: This container already owns host port 8080. -d detaches it, -p 8080:80 forwards host
+      8080 to the container's port 80 (order is host:container).
+    command: docker run -d -p 8080:80 app:latest
+  - title: Read the port mapping
+    detail: docker ps lists running containers. The PORTS column shows 0.0.0.0:8080->80/tcp — host
+      port 8080 is taken, and it is taken by exactly one container.
+    command: docker ps
+  - title: Prove who answers on 8080
+    detail: curl against localhost:8080 gets HTTP 200 — the container is reachable through the host
+      port. Anything else that tried to bind 8080 on this host would have nowhere to go.
+    command: curl http://localhost:8080
+  - title: Check the host's listening ports
+    detail: ss -tlnp lists every LISTENing TCP socket with the owning process. 8080 is already
+      spoken for; nothing in the list claims 8082, so that port is free.
+    command: ss -tlnp
+  - title: Launch staging on the free port
+    detail: "Had you run -p 8080:80 again, a real daemon would refuse with 'Bind for 0.0.0.0:8080
+      failed: port is already allocated' — only one process can listen on a host port. The fix is
+      never clever, just a different port: 8082."
+    command: docker run -d -p 8082:80 app:latest
+  - title: Verify both containers
+    detail: docker ps should show two healthy containers — one mapped to 8080, one to 8082. Each
+      has its own host port and neither blocks the other.
+    command: docker ps
+  - title: Prove staging answers too
+    detail: The same curl, new port. HTTP 200 on 8082 confirms staging is reachable through its own
+      mapping while production keeps serving on 8080.
+    command: curl http://localhost:8082
+  - title: Submit for validation
+    detail: "The validator checks container state and port mappings: a running app:latest container,
+      port 8080 still mapped, and staging reachable on 8082."

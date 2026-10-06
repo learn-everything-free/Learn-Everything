@@ -1,0 +1,71 @@
+slug: cicd-secret-guard
+title: Guard the Deploy Secrets
+type: practice
+difficulty: intermediate
+description: A deploy workflow needs AWS credentials — and pasting them into the YAML is how leaks
+  happen. Write a deploy workflow that reads its keys from GitHub Secrets, then record the secret
+  inventory in a checklist file so the next engineer knows what exists and where it lives.
+requirements:
+  - File ~/project/.github/workflows/deploy.yaml exists
+  - The workflow checks out the code and reads AWS_ACCESS_KEY_ID from GitHub Secrets
+  - File ~/project/secrets-checklist.txt documents the AWS_ACCESS_KEY_ID secret
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/project/.github/workflows/deploy.yaml
+    label: deploy workflow exists
+  - validator: file_contains
+    path: /home/learner/project/.github/workflows/deploy.yaml
+    value: actions/checkout@v4
+    label: deploy workflow checks out the code
+  - validator: file_contains
+    path: /home/learner/project/.github/workflows/deploy.yaml
+    value: secrets.AWS_ACCESS_KEY_ID
+    label: workflow reads the key from GitHub Secrets
+  - validator: file_exists
+    path: /home/learner/project/secrets-checklist.txt
+    label: secrets checklist exists
+  - validator: file_contains
+    path: /home/learner/project/secrets-checklist.txt
+    value: GitHub Secrets
+    label: checklist points to GitHub Secrets
+steps:
+  - title: Create the workflows directory
+    detail: GitHub only reads workflow files from .github/workflows/ inside the repository — the same
+      hidden directory the CI workflow lives in. mkdir -p creates every missing parent at once.
+    command: mkdir -p ~/project/.github/workflows
+  - title: Start the deploy workflow
+    detail: "Same skeleton as any workflow — a display name, a trigger and a jobs block. This one
+      deploys instead of testing, so it gets its own file."
+    command: "echo 'name: Deploy\\non: push\\njobs:\\n deploy:' > ~/project/.github/workflows/deploy.yaml"
+  - title: Add the runner and steps list
+    detail: "runs-on picks the runner VM; steps: opens the list of actions this job performs."
+    command: "echo ' runs-on: ubuntu-latest\\n steps:' >> ~/project/.github/workflows/deploy.yaml"
+  - title: Add checkout and the credentials action
+    detail: "actions/checkout@v4 pulls the code, then configure-aws-credentials@v4 injects the keys —
+      note it reads secrets.AWS_ACCESS_KEY_ID from the GitHub Secrets store, never a literal value
+      written into the file."
+    command: "echo ' - uses: actions/checkout@v4\\n - uses:
+      aws-actions/configure-aws-credentials@v4\\n   with:\\n    aws-access-key-id: ${{
+      secrets.AWS_ACCESS_KEY_ID }}' >> ~/project/.github/workflows/deploy.yaml"
+  - title: Add the deploy step
+    detail: The last step runs the deploy script. Because the credentials action already exported
+      them, the script needs no secrets of its own.
+    command: "echo ' - run: ./deploy.sh' >> ~/project/.github/workflows/deploy.yaml"
+  - title: Review the workflow
+    detail: cat the whole file. Nothing in it is a literal credential — the runner resolves the
+      secrets at runtime, so the YAML is safe to commit.
+    command: cat ~/project/.github/workflows/deploy.yaml
+  - title: Write the secrets checklist
+    detail: A one-file inventory of which secrets exist and how they are stored. Future you (and your
+      teammates) should never have to guess where credentials come from.
+    command: "echo 'AWS_ACCESS_KEY_ID - stored in GitHub Secrets, read by
+      aws-actions/configure-aws-credentials@v4\\nAWS_SECRET_ACCESS_KEY - stored the same way; rotate
+      immediately if it ever appears in a log\\nNever commit credentials to the repository' >
+      ~/project/secrets-checklist.txt"
+  - title: Verify the checklist
+    detail: cat the checklist to confirm both secrets are documented, then submit.
+    command: cat ~/project/secrets-checklist.txt
+  - title: Submit for validation
+    detail: "The validator checks the workflow file exists, that it checks out the code and reads
+      secrets.AWS_ACCESS_KEY_ID, and that the checklist documents where the secrets live."

@@ -1,0 +1,53 @@
+slug: py-first-script
+title: Write Your First Script
+type: guided
+difficulty: beginner
+description: Create the ~/ai-lab directory, write a tiny Python script and pin a dependency in a
+  requirements.txt. In a real terminal you would run these files with the python command — here the
+  focus is on the files themselves.
+requirements:
+  - File ~/ai-lab/app.py exists and prints a greeting
+  - File ~/ai-lab/requirements.txt exists and pins httpx
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/ai-lab/app.py
+    label: ~/ai-lab/app.py
+  - validator: file_contains
+    path: /home/learner/ai-lab/app.py
+    value: print("hello from ai-lab")
+    label: app.py prints the greeting
+  - validator: file_exists
+    path: /home/learner/ai-lab/requirements.txt
+    label: ~/ai-lab/requirements.txt
+  - validator: file_contains
+    path: /home/learner/ai-lab/requirements.txt
+    value: httpx==0.27.0
+    label: requirements.txt pins httpx
+steps:
+  - title: Check where you are
+    detail: pwd prints your working directory. You should be in /home/learner — the ~ character is shell
+      shorthand for your home directory, so ~/ai-lab means /home/learner/ai-lab.
+    command: pwd
+  - title: Create the ai-lab directory
+    detail: mkdir makes a new directory. Everything for this first project will live inside it.
+    command: mkdir ~/ai-lab
+  - title: Write the Python script
+    detail: "echo prints text and the > redirect writes it into a file, creating it if needed. This one
+      line is a complete Python program: print outputs whatever is between the quotes when the script
+      runs."
+    command: echo 'print("hello from ai-lab")' > ~/ai-lab/app.py
+  - title: Read the script back
+    detail: cat prints a file's contents. You should see exactly the one line you just wrote.
+    command: cat ~/ai-lab/app.py
+  - title: Pin a dependency
+    detail: Python projects list their external libraries in requirements.txt, one per line, usually
+      pinned to an exact version with ==. httpx is the HTTP client most AI code uses to call model
+      APIs — pinning 0.27.0 means a teammate installs exactly what you tested with.
+    command: echo httpx==0.27.0 > ~/ai-lab/requirements.txt
+  - title: List the project
+    detail: ls lists the contents of a directory. Both app.py and requirements.txt should be there.
+    command: ls ~/ai-lab
+  - title: Submit for validation
+    detail: The validator checks that app.py exists and contains the print line, and that
+      requirements.txt exists and pins httpx==0.27.0.

@@ -1,0 +1,7 @@
+slug: 01-tokens-context
+title: Tokens and Context Windows
+summary: Why LLMs bill and think in tokens, and how the context window shapes what a model can see.
+order: 1
+tasks:
+  - llm-token-budget
+  - llm-chat-log

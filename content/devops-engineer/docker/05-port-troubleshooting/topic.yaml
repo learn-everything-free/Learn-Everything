@@ -1,0 +1,6 @@
+slug: 05-port-troubleshooting
+title: Port Conflicts
+summary: What happens when two containers want the same host port, and how to remap safely.
+order: 5
+tasks:
+  - docker-port-conflict

@@ -17,11 +17,26 @@ validation:
     message: 'Revert "bug: ship it broken"'
     label: revert commit exists
 steps:
+  - title: Recreate the repository
+    detail: Every lab starts from a fresh shell — ~/project doesn't exist yet. mkdir makes it.
+    command: mkdir ~/project
   - title: Enter the repository
     detail: Reverts operate on the current branch's history.
     command: cd ~/project
+  - title: Initialize the repository
+    detail: A revert needs history to undo, so git init first.
+    command: git init
+  - title: Create a base file
+    detail: A README gives main its base commit, separate from the bad one.
+    command: touch README.md
+  - title: Stage and commit the base
+    detail: Stage everything, then record the 'init' commit.
+    command: git add .
+  - title: Commit
+    detail: The repository now has one clean commit on main.
+    command: git commit -m "init"
   - title: Simulate the bad commit
-    detail: Create and commit a change with a bad message — this stands in for the bug you're undoing.
+    detail: Create a change with a bad message — this stands in for the bug you're undoing.
     command: touch bugfix.txt
   - title: Stage and commit it
     detail: Stage, then commit with the (deliberately bad) message.

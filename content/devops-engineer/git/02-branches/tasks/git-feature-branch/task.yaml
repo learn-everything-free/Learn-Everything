@@ -17,9 +17,25 @@ validation:
     branch: feature
     label: branch 'feature' exists and is merged
 steps:
+  - title: Recreate the repository
+    detail: Every lab starts from a fresh shell — ~/project doesn't exist yet. mkdir makes it.
+    command: mkdir ~/project
   - title: Enter the repository
-    detail: If you completed the first-commit task, ~/project is already a repository.
+    detail: All git commands below run from inside ~/project.
     command: cd ~/project
+  - title: Initialize the repository
+    detail: A branch points at a commit, and an empty repository has none. git init first, then
+      give main a base commit to branch from.
+    command: git init
+  - title: Give main something to carry
+    detail: A README makes the base commit non-empty — the feature branch will split from it.
+    command: touch README.md
+  - title: Stage the base commit
+    detail: Stage everything in the repository.
+    command: git add .
+  - title: Commit the base
+    detail: Now main has one commit that 'feature' can point at.
+    command: git commit -m "init"
   - title: Create the branch
     detail: git branch feature creates a new pointer to the current commit. Nothing is checked out yet —
       the working tree doesn't change.

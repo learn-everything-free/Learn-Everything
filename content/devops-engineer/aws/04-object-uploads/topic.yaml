@@ -1,0 +1,6 @@
+slug: 04-object-uploads
+title: Object Uploads
+summary: Put real files into S3 — build artifacts, reports and backups.
+order: 4
+tasks:
+  - aws-s3-upload-object

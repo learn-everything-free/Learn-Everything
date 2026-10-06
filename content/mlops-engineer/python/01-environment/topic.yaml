@@ -1,0 +1,7 @@
+slug: 01-environment
+title: Environments & Dependencies
+summary: Pin your dependencies and separate code from data before the first training run.
+order: 1
+tasks:
+  - ml-py-requirements
+  - ml-py-train-script

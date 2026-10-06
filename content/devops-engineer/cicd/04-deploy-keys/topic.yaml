@@ -1,0 +1,6 @@
+slug: 04-deploy-keys
+title: Deployments & Secrets
+summary: Ship from the pipeline — without leaking credentials into the repository.
+order: 4
+tasks:
+  - cicd-secret-guard

@@ -1,0 +1,54 @@
+slug: mon-drift-alert
+title: Call the Drift Verdict
+type: challenge
+difficulty: intermediate
+description: The feature distribution moved — baseline mean 0.42, current mean 0.61. Record both
+  sides in ~/drift-lab and write the verdict file the on-call engineer will actually read.
+requirements:
+  - baseline.txt records mean=0.42
+  - current.txt records mean=0.61
+  - verdict.txt declares DRIFT DETECTED
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/drift-lab/baseline.txt
+    label: ~/drift-lab/baseline.txt
+  - validator: file_exists
+    path: /home/learner/drift-lab/current.txt
+    label: ~/drift-lab/current.txt
+  - validator: file_contains
+    path: /home/learner/drift-lab/baseline.txt
+    value: mean=0.42
+    label: baseline mean recorded
+  - validator: file_contains
+    path: /home/learner/drift-lab/current.txt
+    value: mean=0.61
+    label: current mean recorded
+  - validator: file_contains
+    path: /home/learner/drift-lab/verdict.txt
+    value: DRIFT DETECTED
+    label: verdict declares drift
+steps:
+  - title: Create the drift lab
+    detail: One directory to hold the evidence and the verdict.
+    command: mkdir ~/drift-lab
+  - title: Move into it
+    detail: All three files below are created here.
+    command: cd ~/drift-lab
+  - title: Record the baseline
+    detail: The training-time distribution is the fixed reference point. Without it, "drift" is
+      just a feeling.
+    command: echo mean=0.42 > baseline.txt
+  - title: Record the current mean
+    detail: Today's live distribution. Compare it against baseline.txt, never against yesterday's
+      memory.
+    command: echo mean=0.61 > current.txt
+  - title: Compare the two
+    detail: 0.42 to 0.61 is a large shift — far beyond noise. This is the step where you actually
+      decide, rather than letting a dashboard decide for you.
+  - title: Write the verdict
+    detail: The file the on-call engineer reads first. Plain words beat dashboards at 3 a.m.
+    command: echo DRIFT DETECTED > verdict.txt
+  - title: Submit for validation
+    detail: The validator checks baseline and current means exist with the exact values and that
+      verdict.txt declares the drift.

@@ -620,9 +620,12 @@ export class LabShell {
   }
 
   private grep(args: string[], stdin?: string[]): string[] {
-    const count = args.some((a) => a.includes("c"));
-    const ignoreCase = args.some((a) => a.includes("i"));
-    const invert = args.some((a) => a.includes("v"));
+    // Only leading "-" tokens are flags — a path like /var/... must not turn
+    // on the -v (invert) match just because it contains the letter "v".
+    const flags = args.filter((a) => a.startsWith("-")).join("");
+    const count = flags.includes("c");
+    const ignoreCase = flags.includes("i");
+    const invert = flags.includes("v");
     const rest = args.filter((a) => !a.startsWith("-"));
     const pattern = rest[0];
     if (!pattern) return ["usage: grep [-civ] PATTERN [FILE]"];
@@ -718,7 +721,10 @@ export class LabShell {
       const tagIdx = rest.findIndex((a) => a === "-t");
       const tag = tagIdx !== -1 ? rest[tagIdx + 1] : undefined;
       const pathArg = rest[rest.length - 1] ?? ".";
-      const dockerfile = this.nodeAt(this.resolve(`${pathArg === "." ? "" : pathArg}/Dockerfile`.replace(/\/\//g, "/")) ?? []);
+      // "." means the current directory — resolve relative to cwd, not root.
+      const dockerfile = this.nodeAt(
+        this.resolve(pathArg === "." ? "Dockerfile" : `${pathArg}/Dockerfile`) ?? [],
+      );
       if (!dockerfile || dockerfile.type !== "file") {
         return ["docker: Cannot connect: Dockerfile not found in build context"];
       }
@@ -795,7 +801,17 @@ export class LabShell {
     if (sub === "commit") {
       if (!repo) return notRepo;
       const mIdx = rest.findIndex((a) => a === "-m");
-      const message = mIdx !== -1 ? rest[mIdx + 1]?.replace(/^["']|["']$/g, "") : "";
+      // The tokenizer splits on whitespace, so a quoted message arrives as
+      // several tokens ("v1 prompt" -> '"v1', 'prompt"'). Rejoin them and strip
+      // the surrounding quotes to recover the full message.
+      const message =
+        mIdx !== -1
+          ? rest
+              .slice(mIdx + 1)
+              .join(" ")
+              .replace(/^["']|["']$/g, "")
+              .replace(/["']$/, "")
+          : "";
       if (!this.staged.has(repo)) return ["nothing to commit (use \"git add\" to stage)"];
       if (!message) return ["Aborting commit due to empty commit message."];
       this.commits.push({ repo, message, branch: this.currentBranch.get(repo) ?? "main" });
@@ -889,9 +905,12 @@ export class LabShell {
     const [sub, ...rest] = args;
     if (!sub) return ["kubectl: command required (try 'kubectl get pods')"];
     const positional = rest.filter((a, i) => !a.startsWith("-") && rest[i - 1] !== "--image" && rest[i - 1] !== "-n");
+    // Accept both "--flag value" and the "--flag=value" form kubectl docs use.
     const flagVal = (name: string) => {
       const i = rest.findIndex((a) => a === name);
-      return i !== -1 ? rest[i + 1] : undefined;
+      if (i !== -1) return rest[i + 1];
+      const eq = rest.find((a) => a.startsWith(`${name}=`));
+      return eq ? eq.slice(name.length + 1) : undefined;
     };
     if (sub === "run") {
       const name = rest[0];
@@ -924,7 +943,9 @@ export class LabShell {
       return [`deployment.apps/${name} created`];
     }
     if (sub === "scale") {
-      const name = positional[0]?.replace(/^deployment\//, "");
+      // "kubectl scale deployment web" and "kubectl scale web" both work.
+      const nameArg = positional.find((p) => !["deployment", "pod", "service"].includes(p));
+      const name = nameArg?.replace(/^deployment\//, "");
       const replicas = parseInt(flagVal("--replicas") ?? "1", 10);
       const dep = this.deployments.get(`default/${name}`);
       if (!dep) return [`Error from server (NotFound): deployments.apps "${name}" not found`];
@@ -932,13 +953,14 @@ export class LabShell {
       return [`deployment.apps/${name} scaled`];
     }
     if (sub === "expose") {
-      const name = positional[0]?.replace(/^deployment\//, "").replace(/^pod\//, "");
-      const svcName = flagVal("--name") ?? name;
+      const nameArg = positional.find((p) => !["deployment", "pod", "service"].includes(p));
+      const name = nameArg?.replace(/^deployment\//, "").replace(/^pod\//, "");
       const port = parseInt(flagVal("--port") ?? "80", 10);
       const targetPort = parseInt((flagVal("--target-port") ?? "80").toString(), 10);
-      if (!this.deployments.has(`default/${name}`) && !this.pods.has(`default/${name}`)) {
-        return [`Error from server (NotFound): ${name} not found`];
+      if (!name || (!this.deployments.has(`default/${name}`) && !this.pods.has(`default/${name}`))) {
+        return [`Error from server (NotFound): ${name ?? "target"} not found`];
       }
+      const svcName = flagVal("--name") ?? name;
       this.services.set(`default/${svcName}`, { ns: "default", name: svcName, port, targetPort });
       return [`service/${svcName} exposed`];
     }
@@ -1150,7 +1172,8 @@ export class LabShell {
     if (service === "ec2") {
       if (operation === "run-instances") {
         const image = rest[rest.indexOf("--image-id") + 1] ?? "ami-00000000";
-        const count = parseInt(rest[rest.indexOf("--count") + 1] ?? "1", 10);
+        const countIdx = rest.indexOf("--count");
+        const count = countIdx !== -1 ? parseInt(rest[countIdx + 1] ?? "1", 10) : 1;
         const created: string[] = [];
         for (let i = 0; i < count; i++) {
           const id = `i-${Math.random().toString(16).slice(2, 10)}`;

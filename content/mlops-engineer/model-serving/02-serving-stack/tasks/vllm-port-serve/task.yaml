@@ -1,0 +1,55 @@
+slug: vllm-port-serve
+title: Serve the Model on a Port
+type: practice
+difficulty: intermediate
+description: Build a vLLM serving image and run it published on host port 8000 — the last hop
+  between a model sitting on disk and a model answering HTTP requests.
+requirements:
+  - A Dockerfile exists in ~/serving-stack
+  - An image vllm-serve:v1 is built
+  - A container from vllm-serve:v1 is running, published on port 8000
+environment: docker:24
+validation:
+  - validator: file_exists
+    path: /home/learner/serving-stack/Dockerfile
+    label: ~/serving-stack/Dockerfile
+  - validator: container_running
+    image: vllm-serve:v1
+    label: container from vllm-serve:v1 is running
+  - validator: port_mapped
+    port: 8000
+    label: host port 8000 is mapped
+  - validator: http_status
+    port: 8000
+    label: HTTP responds on port 8000
+steps:
+  - title: Create the build directory
+    detail: Every image build starts from a directory — the build context that holds the
+      Dockerfile.
+    command: mkdir ~/serving-stack
+  - title: Move into the build context
+    detail: The build command's trailing dot refers to this directory.
+    command: cd ~/serving-stack
+  - title: Write the Dockerfile
+    detail: FROM picks vLLM's official OpenAI-compatible image as the base — the standard way to
+      serve open models behind an API.
+    command: echo FROM vllm/vllm-openai:latest > Dockerfile
+  - title: Build the serving image
+    detail: The -t tag names the result vllm-serve:v1. In this lab images must be built before
+      they can run — there is no registry to pull from.
+    command: docker build -t vllm-serve:v1 .
+  - title: Run it published on port 8000
+    detail: -d detaches, and -p 8000:80 publishes the container's port 80 on the host's port
+      8000. That mapping is what makes the model reachable.
+    command: docker run -d -p 8000:80 vllm-serve:v1
+  - title: Confirm the mapping
+    detail: docker ps shows running containers with their PORTS column — you should see
+      0.0.0.0:8000->80/tcp.
+    command: docker ps
+  - title: Probe the endpoint
+    detail: curl sends an HTTP request to the published port. Anything other than a connection
+      refusal means something is serving.
+    command: curl http://localhost:8000
+  - title: Submit for validation
+    detail: The validator checks the Dockerfile, the running container, the port mapping and
+      that HTTP answers on 8000.

@@ -1,0 +1,7 @@
+slug: 01-scripts
+title: Your First Python Script
+summary: Lay out a Python project on disk, pin a dependency and make it a real git repository.
+order: 1
+tasks:
+  - py-first-script
+  - py-project-layout
