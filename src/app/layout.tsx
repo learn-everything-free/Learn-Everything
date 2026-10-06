@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
+import { buildSearchIndex } from "@/lib/search-index";
 import "./globals.css";
 
 const sans = localFont({
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
 const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem("le-theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const searchItems = buildSearchIndex();
   return (
     <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable} h-full antialiased`}>
       <head>
@@ -35,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col bg-eggshell text-ink">
         <Providers>
-          <Nav />
+          <Nav searchItems={searchItems} />
           <main className="flex-1">{children}</main>
           <Footer />
         </Providers>

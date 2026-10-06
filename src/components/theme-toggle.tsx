@@ -5,25 +5,35 @@
 // flips it and persists the explicit choice in localStorage ("le-theme").
 // Until a choice is stored, the theme follows the OS preference.
 
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+
+// The <html> class attribute is an external store: subscribe to it with a
+// MutationObserver so the icon tracks the boot script and any other writer.
+function subscribe(onChange: () => void): () => void {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+}
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState<boolean | null>(null);
+  const dark = useSyncExternalStore(
+    subscribe,
+    () => document.documentElement.classList.contains("dark"),
+    () => false,
+  );
 
-  useEffect(() => {
-    setDark(document.documentElement.classList.contains("dark"));
-  }, []);
-
-  const toggle = () => {
-    const next = !dark;
-    setDark(next);
+  const toggle = useCallback(() => {
+    const next = !document.documentElement.classList.contains("dark");
     document.documentElement.classList.toggle("dark", next);
     try {
       localStorage.setItem("le-theme", next ? "dark" : "light");
     } catch {
       // storage unavailable: theme still toggles for this session
     }
-  };
+  }, []);
 
   return (
     <button

@@ -7,11 +7,14 @@ import { signOut, useSession } from "next-auth/react";
 import { useProgress, totalXp } from "@/lib/progress";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserMenu } from "@/components/user-menu";
+import { SearchDialog } from "@/components/search-dialog";
+import type { SearchItem } from "@/lib/search-index";
 
 const links = [
   { href: "/", label: "Home" },
   { href: "/paths", label: "Learning Paths" },
   { href: "/tools", label: "Tools" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
 function isActive(pathname: string, href: string): boolean {
@@ -19,7 +22,7 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-export function Nav() {
+export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,8 +37,13 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu whenever a route change lands.
-  useEffect(() => setMenuOpen(false), [pathname]);
+  // Close the mobile menu whenever a route change lands. Adjusting state
+  // during render (not in an effect) avoids a cascading re-render.
+  const [renderedPathname, setRenderedPathname] = useState(pathname);
+  if (renderedPathname !== pathname) {
+    setRenderedPathname(pathname);
+    setMenuOpen(false);
+  }
 
   return (
     <header
@@ -83,11 +91,12 @@ export function Nav() {
         </div>
 
         <div className="flex items-center gap-2.5">
+          <SearchDialog items={searchItems} />
           <ThemeToggle />
           <UserMenu />
           {xp > 0 && (
             <Link
-              href="/paths"
+              href="/dashboard"
               title="XP and streak from validated labs"
               className="hidden items-center gap-1.5 rounded-full border border-stone/80 bg-warm-taupe/80 px-3 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:bg-stone/60 sm:flex"
             >

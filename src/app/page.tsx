@@ -1,20 +1,14 @@
 import Link from "next/link";
-import { paths, countTasks, getTask, getTasksBySkillSlug, getAllTasks } from "@/lib/data";
+import { paths, countTasks, getTasksBySkillSlug } from "@/lib/data";
+import { buildCurriculumIndex } from "@/lib/curriculum-index";
 import { tools } from "@/lib/tools";
-import { Badge, Card, ProgressBar, SectionHeader, StatCard, ToolCard } from "@/components/ui";
+import { Badge, SectionHeader, StatCard, ToolCard } from "@/components/ui";
 import { ShowreelSection, UsefulnessSection } from "@/components/showreel";
+import { ContinueLearning } from "@/components/continue-learning";
 
 export default function Home() {
-  const continueTasks = [
-    "linux-create-project",
-    "docker-run-app",
-    "k8s-first-pod",
-    "tf-init-plan",
-  ]
-    .map((slug) => getTask(slug)!)
-    .filter(Boolean);
+  const curriculum = buildCurriculumIndex();
 
-  const totalSkills = paths.reduce((n, p) => n + p.skills.length, 0);
   const totalTasks = paths.reduce((n, p) => n + countTasks(p), 0);
 
   // Precompute task counts for tools
@@ -280,47 +274,22 @@ export default function Home() {
       {/* Hands-On Virtual Labs Preview */}
       <section className="space-y-8">
         <SectionHeader
-          tag="Zero Setup Required"
-          sub="Pick up a real task directly. Everything runs in an isolated browser terminal evaluated by our automated validation engine."
+          tag="Picks Up Where You Left Off"
+          sub="Labs are ordered into a curriculum. Completed ones are checked off automatically by the validator — the next four up are always ready below."
+          action={
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-ink hover:text-smoke transition-colors"
+            >
+              Your Dashboard →
+            </Link>
+          }
         >
           Jump Directly Into a Lab
         </SectionHeader>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {continueTasks.map(({ task, path, skill }) => (
-            <Link
-              key={task.slug}
-              href={`/lab/${task.slug}`}
-              className="group flex flex-col justify-between rounded-[22px] border border-stone/80 bg-warm-taupe/70 p-6 transition-all duration-200 hover:-translate-y-1 hover:border-ink/25 hover:bg-warm-taupe hover:shadow-md"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-[10px] uppercase text-ash tracking-wider">
-                    {skill.title}
-                  </span>
-                  <span className="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-medium dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30">
-                    {task.difficulty}
-                  </span>
-                </div>
-
-                <h3 className="mt-3 text-base font-medium text-ink group-hover:text-ink">
-                  {task.title}
-                </h3>
-                <p className="mt-2 text-xs text-smoke line-clamp-2 leading-relaxed">
-                  {task.description}
-                </p>
-              </div>
-
-              <div className="mt-6 border-t border-stone/60 pt-3 flex items-center justify-between">
-                <span className="font-mono text-[10px] text-ash">
-                  Env: {task.env}
-                </span>
-                <span className="text-xs font-semibold text-ink group-hover:underline">
-                  Launch ⚡
-                </span>
-              </div>
-            </Link>
-          ))}
+          <ContinueLearning order={curriculum.tasks} />
         </div>
       </section>
 

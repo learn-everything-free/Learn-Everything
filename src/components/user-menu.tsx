@@ -6,6 +6,7 @@
 // the local store (see syncProgress in lib/progress.ts).
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { syncProgress } from "@/lib/progress";
 
@@ -78,6 +79,13 @@ export function UserMenu() {
             <p className="border-t border-stone px-3 pb-2 pt-2 font-mono text-caption uppercase text-ash">
               Progress syncs to your account
             </p>
+            <Link
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+              className="block w-full rounded-[10px] px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-warm-taupe hover:text-ink"
+            >
+              Your dashboard
+            </Link>
             <button
               onClick={() => {
                 setOpen(false);
