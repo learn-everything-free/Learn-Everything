@@ -6,6 +6,19 @@ import { Badge, SectionHeader, StatCard, ToolCard } from "@/components/ui";
 import { ShowreelSection, UsefulnessSection } from "@/components/showreel";
 import { ContinueLearning } from "@/components/continue-learning";
 import { LabOfTheDay } from "@/components/lab-of-the-day";
+import { LoopsSection } from "@/components/loops-section";
+import { TerminalGif, type GifLine } from "@/components/terminal-gif";
+
+const HERO_LINES: GifLine[] = [
+  { kind: "out", text: "1. inspect the running container", tone: "dim" },
+  { kind: "cmd", text: "docker ps -a" },
+  { kind: "out", text: "9a4f21e018ab   nginx:alpine   Up 4 minutes   0.0.0.0:8080->80" },
+  { kind: "out", text: "2. automated validator checks real state", tone: "dim" },
+  { kind: "cmd", text: "validate-lab" },
+  { kind: "out", text: "✓ Port 8080 mapped to container port 80", tone: "ok" },
+  { kind: "out", text: "✓ HTTP 200 returned from the endpoint", tone: "ok" },
+  { kind: "out", text: "PASSED — +50 XP earned", tone: "ok" },
+];
 
 export default function Home() {
   const curriculum = buildCurriculumIndex();
@@ -35,7 +48,16 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-[1280px] space-y-24 px-6 pb-24 pt-12 lg:px-16 lg:pt-16">
       {/* Hero Section */}
-      <section className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <section className="relative grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+        {/* Soft product-accent glows behind the content */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-24 -z-10 size-[420px] rounded-full bg-[radial-gradient(circle,rgba(255,71,4,0.12),transparent_65%)] blur-2xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-24 top-1/3 -z-10 size-[380px] rounded-full bg-[radial-gradient(circle,rgba(4,71,255,0.10),transparent_65%)] blur-2xl"
+        />
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-stone/80 bg-warm-taupe/80 px-4 py-1.5 shadow-2xs">
             <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -77,56 +99,27 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Terminal Teaser Card */}
-        <div className="overflow-hidden rounded-[26px] border border-stone/90 bg-[#121417] p-6 shadow-xl text-[#edece0]">
-          <div className="flex items-center justify-between border-b border-stone/20 pb-4">
-            <div className="flex items-center gap-2">
-              <span className="size-3 rounded-full bg-rose-500/80" />
-              <span className="size-3 rounded-full bg-amber-500/80" />
-              <span className="size-3 rounded-full bg-emerald-500/80" />
-            </div>
-            <span className="font-mono text-[11px] text-ash">ubuntu@learn-sandbox:~</span>
-            <span className="rounded-full bg-emerald-950 px-2 py-0.5 font-mono text-[10px] text-emerald-400 border border-emerald-800/40">
-              VALIDATOR ACTIVE
-            </span>
-          </div>
-
-          <div className="mt-5 space-y-3 font-mono text-xs text-stone">
-            <p className="text-ash"># 1. Inspect running container status</p>
-            <p>
-              <span className="text-emerald-400">$</span> docker ps -a
-            </p>
-            <div className="rounded-lg bg-black/40 p-2.5 text-[11px] text-stone/80">
-              CONTAINER ID &nbsp;IMAGE &nbsp; &nbsp; &nbsp; &nbsp;STATUS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; PORTS<br />
-              9a4f21e018ab &nbsp;nginx:alpine &nbsp; Up 4 minutes &nbsp; &nbsp;0.0.0.0:8080-&gt;80
-            </div>
-
-            <p className="text-ash pt-1"># 2. Automated test verification</p>
-            <p>
-              <span className="text-emerald-400">$</span> validate-lab
-            </p>
-            <div className="space-y-1 text-[11px]">
-              <p className="text-emerald-400">✓ Port 8080 mapped to container port 80 [PASS]</p>
-              <p className="text-emerald-400">✓ HTTP status 200 returned from endpoint [PASS]</p>
-              <p className="text-emerald-400">✓ Container restart policy enabled [PASS]</p>
-              <p className="text-stone">
-                <span className="text-emerald-400">$</span>{" "}
-                <span className="le-caret">▌</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-5 border-t border-stone/20 pt-4 flex items-center justify-between">
-            <span className="font-mono text-[11px] text-ash">Ready to try yourself?</span>
-            <Link
-              href="/lab/docker-run-app"
-              className="font-mono text-xs font-semibold text-emerald-400 hover:text-emerald-300"
-            >
-              Open Docker Lab →
-            </Link>
-          </div>
-        </div>
+        {/* Live terminal — loops like a GIF, pauses on hover */}
+        <TerminalGif
+          lines={HERO_LINES}
+          title="ubuntu@learn-sandbox:~"
+          badge="Validator active"
+          footer={
+            <>
+              <span className="font-mono text-[11px] text-ash">Ready to try yourself?</span>
+              <Link
+                href="/lab/docker-run-app"
+                className="whitespace-nowrap font-mono text-xs font-semibold text-emerald-400 transition-colors hover:text-emerald-300"
+              >
+                Open Docker Lab →
+              </Link>
+            </>
+          }
+        />
       </section>
+
+      {/* Looping terminal GIFs — three real scenarios on infinite replay */}
+      <LoopsSection totalLabs={totalTasks} />
 
       {/* Animated showreel — video-style product tour */}
       <ShowreelSection />
