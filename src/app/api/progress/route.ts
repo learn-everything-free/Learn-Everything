@@ -1,6 +1,7 @@
 // Cloud progress store. GET returns the signed-in learner's persisted state;
-// PUT merges the posted state into it (union of completed tasks, best streak)
-// so a device that was offline can never erase newer cloud progress.
+// PUT merges the posted state into it — completions as a union (earliest
+// timestamp wins, best streak kept) so an offline device can never erase
+// newer cloud progress, bookmarks as a replacement so un-saving sticks.
 //
 // Storage is Upstash Redis over HTTP — a key-value record per user, no
 // database. Without Upstash credentials the endpoints return 501 and the
@@ -17,20 +18,27 @@ const redis =
     : null;
 
 const MAX_TASKS = 2000;
+const MAX_BOOKMARKS = 500;
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 365 * 2;
 
 interface StoredProgress {
   completed: Record<string, string>;
+  bookmarks?: Record<string, string>;
   streak?: { count: number; lastDate: string; best: number };
+}
+
+function isValidSlugMap(value: unknown, max: number): value is Record<string, string> {
+  if (typeof value !== "object" || value === null) return false;
+  const entries = Object.entries(value);
+  if (entries.length > max) return false;
+  return entries.every(([k, v]) => typeof k === "string" && k.length <= 200 && typeof v === "string");
 }
 
 function isStoredProgress(value: unknown): value is StoredProgress {
   if (typeof value !== "object" || value === null) return false;
-  const { completed, streak } = value as Record<string, unknown>;
-  if (typeof completed !== "object" || completed === null) return false;
-  const entries = Object.entries(completed);
-  if (entries.length > MAX_TASKS) return false;
-  if (!entries.every(([k, v]) => typeof k === "string" && typeof v === "string")) return false;
+  const { completed, bookmarks, streak } = value as Record<string, unknown>;
+  if (!isValidSlugMap(completed, MAX_TASKS)) return false;
+  if (bookmarks !== undefined && !isValidSlugMap(bookmarks, MAX_BOOKMARKS)) return false;
   if (streak !== undefined) {
     if (typeof streak !== "object" || streak === null) return false;
     const s = streak as Record<string, unknown>;
@@ -48,6 +56,11 @@ function merge(a: StoredProgress, b: StoredProgress): StoredProgress {
     // Keep the earliest completion timestamp.
     if (!current || ts < current) completed[slug] = ts;
   }
+  const bookmarks: Record<string, string> =
+    // Bookmarks are replaced with the client's map, not union-merged: a
+    // removal must stick across devices. Completions stay union-merged
+    // because they can never be undone.
+    b.bookmarks !== undefined ? b.bookmarks : (a.bookmarks ?? {});
   let streak: StoredProgress["streak"];
   if (a.streak && b.streak) {
     streak = {
@@ -58,7 +71,7 @@ function merge(a: StoredProgress, b: StoredProgress): StoredProgress {
   } else {
     streak = a.streak ?? b.streak;
   }
-  return { completed, streak };
+  return { completed, bookmarks, streak };
 }
 
 export async function GET() {

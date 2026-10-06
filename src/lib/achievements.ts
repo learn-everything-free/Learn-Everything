@@ -3,7 +3,7 @@
 // dashboard and any future surfaces can reuse them.
 
 import type { ProgressState } from "./progress";
-import type { CurriculumIndex } from "./curriculum-index";
+import type { AchievementIndex } from "./curriculum-index";
 
 // XP thresholds for named levels (50 XP per validated lab).
 export const LEVELS = [
@@ -47,7 +47,7 @@ export interface AchievementView extends AchievementDef {
 
 export function evaluateAchievements(
   state: ProgressState,
-  index: CurriculumIndex,
+  index: AchievementIndex,
 ): AchievementView[] {
   const completedSlugs = Object.keys(state.completed);
   const n = completedSlugs.length;
@@ -166,8 +166,8 @@ export function evaluateAchievements(
     const done = path.taskSlugs.filter((s) => completedSet.has(s)).length;
     defs.push({
       id: `path-${path.slug}`,
-      title: `${path.title} — Clear`,
-      description: `Complete all ${path.taskSlugs.length} labs in the ${path.title} path.`,
+      title: `${path.title ?? path.slug} — Clear`,
+      description: `Complete all ${path.taskSlugs.length} labs in the ${path.title ?? path.slug} path.`,
       glyph: "⚑",
       unlocked: done >= path.taskSlugs.length,
       hint: `${done} / ${path.taskSlugs.length} labs`,

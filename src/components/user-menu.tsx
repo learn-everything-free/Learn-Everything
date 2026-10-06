@@ -129,7 +129,7 @@ export function UserMenu() {
                 key={p.id}
                 onClick={() => {
                   setOpen(false);
-                  void signIn(p.id);
+                  void signIn(p.id, { callbackUrl: window.location.pathname });
                 }}
                 className="w-full rounded-[10px] px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-warm-taupe hover:text-ink"
               >

@@ -171,7 +171,7 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
               </button>
             ) : (
               <Link
-                href="/api/auth/signin"
+                href="/signin"
                 className="flex-1 rounded-full border border-stone/80 bg-eggshell px-4 py-2 text-center text-xs font-medium text-graphite"
               >
                 Sign in

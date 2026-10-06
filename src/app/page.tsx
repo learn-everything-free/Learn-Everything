@@ -5,6 +5,7 @@ import { tools } from "@/lib/tools";
 import { Badge, SectionHeader, StatCard, ToolCard } from "@/components/ui";
 import { ShowreelSection, UsefulnessSection } from "@/components/showreel";
 import { ContinueLearning } from "@/components/continue-learning";
+import { LabOfTheDay } from "@/components/lab-of-the-day";
 
 export default function Home() {
   const curriculum = buildCurriculumIndex();
@@ -287,6 +288,8 @@ export default function Home() {
         >
           Jump Directly Into a Lab
         </SectionHeader>
+
+        <LabOfTheDay tasks={curriculum.tasks} />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <ContinueLearning order={curriculum.tasks} />

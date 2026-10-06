@@ -832,6 +832,31 @@ learn-everything lab start
 
 Learning content lives under `content/` (see [Git-Based Learning Content](#-git-based-learning-content)). Browse an existing skill folder to see how lessons, tasks, and validators are organized.
 
+### Enable Google sign-in (optional, ~5 minutes)
+
+Sign-in and cloud progress sync are optional — the platform works fully from localStorage without them. To let learners sign in with Google (and sync progress across devices via Upstash Redis):
+
+1. **Create OAuth credentials** at [console.cloud.google.com](https://console.cloud.google.com) → *APIs & Services* → *Credentials* → *Create OAuth client ID* (type: Web application).
+2. **Add the authorized redirect URI** — one per environment you run:
+   * `http://localhost:3000/api/auth/callback/google` (local dev)
+   * `https://YOUR-DOMAIN/api/auth/callback/google` (production)
+3. **Copy the client ID and secret** into `.env.local` (see `.env.example`):
+
+   ```bash
+   AUTH_SECRET=$(openssl rand -base64 32)   # session signing key
+   AUTH_GOOGLE_ID=xxxxxxxx.apps.googleusercontent.com
+   AUTH_GOOGLE_SECRET=xxxxxxxx
+   ```
+
+4. **Add Upstash Redis** (free tier) at [console.upstash.com](https://console.upstash.com) → create a database → copy the REST credentials:
+
+   ```bash
+   UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
+   UPSTASH_REDIS_REST_TOKEN=xxxxxxxx
+   ```
+
+Restart the dev server — the sign-in menu and `/signin` page now offer **Continue with Google**, and each learner's completions, streak, bookmarks, and achievements sync to their account. GitHub sign-in works the same way with `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET`. Without Upstash credentials, sign-in still works but progress stays device-local.
+
 ---
 
 ## 🌐 Open Source

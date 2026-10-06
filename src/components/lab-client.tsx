@@ -7,6 +7,7 @@ import { LabTerminal, type CommandRunner } from "@/components/terminal";
 import { Badge } from "@/components/ui";
 import { CompletedBadge } from "@/components/progress";
 import { markCompleted, useProgress, XP_PER_TASK } from "@/lib/progress";
+import { BookmarkButton } from "@/components/bookmark-button";
 import { taskTypeLabel, type Task, type Skill, type Topic, type LearningPath } from "@/lib/data";
 
 // Offline fallback when no AI provider is configured (see .env.example).
@@ -170,6 +171,7 @@ export function LabClient({
               <Badge>{task.difficulty}</Badge>
               <Badge variant="outline">{task.env}</Badge>
               {doneAt && <CompletedBadge slug={task.slug} />}
+              <BookmarkButton slug={task.slug} />
             </div>
             <h1 className="mt-4 text-heading font-light tracking-[-0.02em] text-ink">
               {task.title}

@@ -20,6 +20,8 @@ export interface StreakState {
 export interface ProgressState {
   /** task slug -> ISO timestamp of first completion */
   completed: Record<string, string>;
+  /** task slug -> ISO timestamp of when it was bookmarked */
+  bookmarks?: Record<string, string>;
   streak?: StreakState;
 }
 
@@ -78,9 +80,22 @@ export function markCompleted(slug: string): void {
   // Re-submitting an already-passed task must not farm streaks or XP.
   if (state.completed[slug]) return;
   persist({
+    ...state,
     completed: { ...state.completed, [slug]: new Date().toISOString() },
     streak: bumpStreak(state),
   });
+  scheduleCloudSync();
+}
+
+export function toggleBookmark(slug: string): void {
+  const state = load();
+  const bookmarks = { ...(state.bookmarks ?? {}) };
+  if (bookmarks[slug]) {
+    delete bookmarks[slug];
+  } else {
+    bookmarks[slug] = new Date().toISOString();
+  }
+  persist({ ...state, bookmarks });
   scheduleCloudSync();
 }
 
@@ -95,6 +110,11 @@ function mergeStates(a: ProgressState, b: ProgressState): ProgressState {
     const current = completed[slug];
     if (!current || ts < current) completed[slug] = ts;
   }
+  const bookmarks = { ...(a.bookmarks ?? {}) };
+  for (const [slug, ts] of Object.entries(b.bookmarks ?? {})) {
+    const current = bookmarks[slug];
+    if (!current || ts < current) bookmarks[slug] = ts;
+  }
   let streak = a.streak ?? b.streak;
   if (a.streak && b.streak) {
     streak = {
@@ -103,21 +123,54 @@ function mergeStates(a: ProgressState, b: ProgressState): ProgressState {
       lastDate: a.streak.lastDate >= b.streak.lastDate ? a.streak.lastDate : b.streak.lastDate,
     };
   }
-  return { completed, streak };
+  return { completed, bookmarks, streak };
 }
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
+let pushPending = false;
+
+async function pushCloudState(): Promise<void> {
+  pushPending = false;
+  await fetch("/api/progress", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(load()),
+  }).catch(() => {});
+}
 
 /** Debounced push of local progress; a no-op when signed out (server 401s). */
 function scheduleCloudSync(): void {
+  pushPending = true;
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
-    fetch("/api/progress", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(load()),
-    }).catch(() => {});
+    void pushCloudState();
   }, 2500);
+}
+
+/**
+ * Fire any unsent progress push immediately. Called on page hide so closing
+ * the tab right after completing a lab can't drop the last completion.
+ */
+export function flushPendingSync(): void {
+  if (!pushPending) return;
+  if (typeof navigator === "undefined" || typeof navigator.sendBeacon !== "function") return;
+  pushPending = false;
+  if (syncTimer) clearTimeout(syncTimer);
+  try {
+    navigator.sendBeacon(
+      "/api/progress",
+      new Blob([JSON.stringify(load())], { type: "application/json" }),
+    );
+  } catch {
+    // beacon refused: the debounced push (or next load's merge) still covers it
+  }
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("pagehide", flushPendingSync);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushPendingSync();
+  });
 }
 
 /**

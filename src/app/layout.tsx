@@ -3,7 +3,9 @@ import localFont from "next/font/local";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
+import { AchievementToaster } from "@/components/achievement-toast";
 import { buildSearchIndex } from "@/lib/search-index";
+import { buildAchievementIndex } from "@/lib/curriculum-index";
 import "./globals.css";
 
 const sans = localFont({
@@ -30,6 +32,7 @@ const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem("le-theme");
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const searchItems = buildSearchIndex();
+  const achievementIndex = buildAchievementIndex();
   return (
     <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable} h-full antialiased`}>
       <head>
@@ -40,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Nav searchItems={searchItems} />
           <main className="flex-1">{children}</main>
           <Footer />
+          <AchievementToaster index={achievementIndex} />
         </Providers>
       </body>
     </html>

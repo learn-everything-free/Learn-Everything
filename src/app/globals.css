@@ -229,3 +229,37 @@ body * {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Achievement unlock toast */
+@keyframes le-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.le-toast-in {
+  animation: le-toast-in 0.28s ease-out;
+}
+
+/* Printable certificates: drop chrome, keep the sheet */
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .certificate-sheet {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}

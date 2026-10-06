@@ -5,7 +5,7 @@
 // page only supplies the lightweight curriculum index.
 
 import Link from "next/link";
-import { useProgress, totalXp, XP_PER_TASK } from "@/lib/progress";
+import { useProgress, totalXp, toggleBookmark, XP_PER_TASK } from "@/lib/progress";
 import { evaluateAchievements, levelForXp } from "@/lib/achievements";
 import type { CurriculumIndex, TaskIndexEntry } from "@/lib/curriculum-index";
 
@@ -35,6 +35,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
   const streakBest = Math.max(streak?.count ?? 0, streak?.best ?? 0);
 
   const nextUp = index.tasks.filter((t) => !completedSet.has(t.slug)).slice(0, 3);
+  const bookmarked = index.tasks.filter((t) => state.bookmarks && t.slug in state.bookmarks);
   const recent = [...completedSlugs]
     .sort((a, b) => (state.completed[a] < state.completed[b] ? 1 : -1))
     .slice(0, 8)
@@ -130,23 +131,34 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
                 path.taskSlugs.length === 0
                   ? 0
                   : Math.round((done / path.taskSlugs.length) * 100);
+              const cleared = path.taskSlugs.length > 0 && done === path.taskSlugs.length;
               return (
-                <Link key={path.slug} href={`/paths/${path.slug}`} className="group block">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <p className="text-body-sm font-medium text-ink group-hover:underline">
-                      {path.title}
-                    </p>
-                    <span className="font-mono text-caption text-smoke">
-                      {done}/{path.taskSlugs.length} labs · {pct}%
-                    </span>
-                  </div>
-                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-stone/80">
-                    <div
-                      className="h-full rounded-full bg-ink transition-all duration-500"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                </Link>
+                <div key={path.slug}>
+                  <Link href={`/paths/${path.slug}`} className="group block">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <p className="text-body-sm font-medium text-ink group-hover:underline">
+                        {path.title}
+                      </p>
+                      <span className="font-mono text-caption text-smoke">
+                        {done}/{path.taskSlugs.length} labs · {pct}%
+                      </span>
+                    </div>
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-stone/80">
+                      <div
+                        className="h-full rounded-full bg-ink transition-all duration-500"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </Link>
+                  {cleared && (
+                    <Link
+                      href={`/certificates/${path.slug}`}
+                      className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-amber-300/80 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-100 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300"
+                    >
+                      🏅 View your certificate
+                    </Link>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -176,6 +188,45 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
           </Link>
         </div>
       </section>
+
+      {/* Bookmarks */}
+      {bookmarked.length > 0 && (
+        <section className="space-y-6">
+          <div>
+            <p className="font-mono text-caption uppercase tracking-wider text-ash">
+              Saved labs
+            </p>
+            <h2 className="mt-2 text-3xl font-light tracking-[-0.02em] text-ink">
+              Bookmarked for later
+            </h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {bookmarked.map((t) => (
+              <div
+                key={t.slug}
+                className="flex items-center justify-between gap-3 rounded-[16px] border border-stone/80 bg-warm-taupe/70 px-5 py-4"
+              >
+                <Link href={`/lab/${t.slug}`} className="min-w-0 group">
+                  <p className="truncate text-body-sm font-medium text-ink group-hover:underline">
+                    {t.title}
+                  </p>
+                  <p className="truncate font-mono text-caption text-ash">
+                    {t.skillTitle} · {t.difficulty}
+                  </p>
+                </Link>
+                <button
+                  onClick={() => toggleBookmark(t.slug)}
+                  aria-label={`Remove ${t.title} from saved labs`}
+                  title="Remove bookmark"
+                  className="shrink-0 rounded-full border border-amber-300/80 bg-amber-50 px-2.5 py-1 font-mono text-caption text-amber-800 transition-colors hover:bg-amber-100 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300"
+                >
+                  ★
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Achievements */}
       <section className="space-y-6">

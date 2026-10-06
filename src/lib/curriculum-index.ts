@@ -33,6 +33,12 @@ export interface CurriculumIndex {
   paths: PathStats[];
 }
 
+/** Minimal shape evaluateAchievements needs — slim indexes satisfy it too. */
+export interface AchievementIndex {
+  tasks: { slug: string; type: string; pathSlug: string }[];
+  paths: { slug: string; title?: string; taskSlugs: string[] }[];
+}
+
 export function buildCurriculumIndex(): CurriculumIndex {
   const tasks: TaskIndexEntry[] = [];
   const taskSlugsSeen = new Set<string>();
@@ -73,4 +79,14 @@ export function buildCurriculumIndex(): CurriculumIndex {
   }
 
   return { tasks, paths: pathStats };
+}
+
+/** Slim index for the achievement toaster — no titles/descriptions, so it
+ *  stays tiny enough to ship on every page via the root layout. */
+export function buildAchievementIndex(): AchievementIndex {
+  const full = buildCurriculumIndex();
+  return {
+    tasks: full.tasks.map((t) => ({ slug: t.slug, type: t.type, pathSlug: t.pathSlug })),
+    paths: full.paths.map((p) => ({ slug: p.slug, title: p.title, taskSlugs: p.taskSlugs })),
+  };
 }
