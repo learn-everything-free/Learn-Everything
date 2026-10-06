@@ -108,7 +108,7 @@ export function UserMenu() {
           setOpen((o) => !o);
           void loadProviders();
         }}
-        className="hidden rounded-full bg-ink px-4 py-1.5 text-xs font-medium text-eggshell transition-opacity hover:opacity-85 sm:block"
+        className="hidden whitespace-nowrap rounded-full bg-ink px-4 py-2 text-xs font-medium text-eggshell transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-eggshell sm:block"
       >
         Sign in
       </button>

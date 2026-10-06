@@ -263,3 +263,18 @@ body * {
     max-width: none !important;
   }
 }
+
+/* Mobile nav menu drop-in */
+@keyframes le-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.le-menu-in {
+  animation: le-menu-in 0.22s ease-out;
+}
