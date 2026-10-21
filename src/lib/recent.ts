@@ -15,6 +15,10 @@ let cached: RecentEntry[] = [];
 let loaded = false;
 const listeners = new Set<() => void>();
 
+// Stable server snapshot: React compares snapshots by identity, so the
+// fallback must be the same array every time.
+const NO_RECENT: RecentEntry[] = [];
+
 function load(): RecentEntry[] {
   if (loaded) return cached;
   loaded = true;
@@ -55,9 +59,5 @@ function subscribe(listener: () => void): () => void {
 }
 
 export function useRecent(): RecentEntry[] {
-  return useSyncExternalStore(
-    subscribe,
-    load,
-    () => [] as RecentEntry[],
-  );
+  return useSyncExternalStore(subscribe, load, () => NO_RECENT);
 }

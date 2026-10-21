@@ -23,6 +23,10 @@ interface ToastItem {
 let active: ToastItem[] = [];
 const listeners = new Set<() => void>();
 
+// The server snapshot must be referentially stable — a fresh array on every
+// call makes React think the store changed and re-render forever.
+const NO_TOASTS: ToastItem[] = [];
+
 function emit(): void {
   for (const listener of listeners) listener();
 }
@@ -45,7 +49,7 @@ function subscribe(listener: () => void): () => void {
 
 export function AchievementToaster({ index }: { index: AchievementIndex }) {
   const state = useProgress();
-  const toasts = useSyncExternalStore(subscribe, () => active, () => [] as ToastItem[]);
+  const toasts = useSyncExternalStore(subscribe, () => active, () => NO_TOASTS);
 
   useEffect(() => {
     const unlocked = evaluateAchievements(state, index).filter((a) => a.unlocked);
