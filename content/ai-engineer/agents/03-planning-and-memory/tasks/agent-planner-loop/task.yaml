@@ -1,0 +1,46 @@
+slug: agent-planner-loop
+title: Design a Planning Loop
+type: challenge
+difficulty: advanced
+description: The agent loop is plan, act, observe, repeat - with a hard ceiling. Write the loop
+  configuration that keeps a run bounded and observable.
+requirements:
+  - File ~/agents/planner.json exists
+  - The configuration defines the plan and act steps
+  - The configuration caps the number of steps
+  - The configuration records the observations
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/agents/planner.json
+    label: ~/agents/planner.json
+  - validator: file_contains
+    path: /home/learner/agents/planner.json
+    value: plan
+    label: loop defines the planning step
+  - validator: file_contains
+    path: /home/learner/agents/planner.json
+    value: act
+    label: loop defines the acting step
+  - validator: file_contains
+    path: /home/learner/agents/planner.json
+    value: max_steps
+    label: loop caps the number of steps
+  - validator: file_contains
+    path: /home/learner/agents/planner.json
+    value: observation
+    label: loop records observations
+steps:
+  - title: Create the agents directory
+    detail: Loop configuration, tool manifests and memory schemas belong together.
+    command: mkdir ~/agents
+  - title: Write the loop configuration
+    detail: "max_steps is the brake - a loop without one is an infinite bill. observation names what
+      the agent reads back after each action."
+    command: >-
+      echo '{"loop": ["plan", "act", "observation"], "max_steps": 12, "observation": "tool_result", "stop_on": ["task_complete", "max_steps"], "trace": true}' > ~/agents/planner.json
+  - title: Verify the configuration
+    detail: cat prints the loop. Read the stop conditions - they are what makes the run safe.
+    command: cat ~/agents/planner.json
+  - title: Submit for validation
+    detail: The validator checks the loop steps, the cap and the observation handling.

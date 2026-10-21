@@ -1,0 +1,55 @@
+slug: docker-nonroot-image
+title: Run the Container as a Non-Root User
+type: challenge
+difficulty: advanced
+description: Containers are often root on the host's behalf, which turns any bug into a host bug.
+  Build an image that creates an unprivileged user and switches to it before the app starts.
+requirements:
+  - File ~/app/Dockerfile creates an unprivileged user
+  - The image runs as that user
+  - A container from app:secure is running and mapped to port 8081
+environment: docker:24
+validation:
+  - validator: file_exists
+    path: /home/learner/app/Dockerfile
+    label: ~/app/Dockerfile
+  - validator: file_contains
+    path: /home/learner/app/Dockerfile
+    value: adduser
+    label: Dockerfile creates a user
+  - validator: file_contains
+    path: /home/learner/app/Dockerfile
+    value: "USER appuser"
+    label: Dockerfile switches to that user
+  - validator: container_running
+    image: app:secure
+    label: container from app:secure running
+  - validator: port_mapped
+    port: 8081
+    label: port 8081 mapped
+steps:
+  - title: Create the app directory
+    detail: The Dockerfile lives next to the code it packages.
+    command: mkdir ~/app
+  - title: Start the Dockerfile
+    detail: "FROM picks the base image. Everything after it is a new layer on top."
+    command: "echo 'FROM app:latest' > ~/app/Dockerfile"
+  - title: Create the unprivileged user
+    detail: "adduser --system creates a user without a home directory or a password - the account
+      an application should run as."
+    command: "echo 'RUN adduser --system --no-create-home appuser' >> ~/app/Dockerfile"
+  - title: Switch to the user
+    detail: "USER applies to everything after it in the file. Put it last, right before the command
+      that starts the app."
+    command: "echo 'USER appuser' >> ~/app/Dockerfile"
+  - title: Build the image
+    detail: "docker build -t app:secure names the result. The tag is how you refer to it later."
+    command: docker build -t app:secure ~/app
+  - title: Run it
+    detail: "-d runs it detached, -p 8081:80 publishes it on host port 8081."
+    command: docker run -d -p 8081:80 app:secure
+  - title: Verify
+    detail: docker ps shows the container, its image and the port mapping.
+    command: docker ps
+  - title: Submit for validation
+    detail: The validator checks the Dockerfile and the running container.

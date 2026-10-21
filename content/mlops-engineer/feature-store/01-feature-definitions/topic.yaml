@@ -1,0 +1,7 @@
+slug: 01-feature-definitions
+title: Defining Features
+summary: Entities, features and the transformations that produce them - written down once.
+order: 1
+tasks:
+  - fs-feature-definition
+  - fs-feature-transformation

@@ -1,0 +1,39 @@
+slug: eval-ci-gate
+title: Gate Releases on Eval Results
+type: challenge
+difficulty: advanced
+description: A gate is a rule that fails the build. Write the gate configuration - the accuracy
+  floor, the regression limit and what happens when either is broken.
+requirements:
+  - File ~/evals/gate.yaml exists
+  - The gate sets a minimum accuracy
+  - The gate sets a maximum allowed regression
+  - The gate fails the build when a limit is broken
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/evals/gate.yaml
+    label: ~/evals/gate.yaml
+  - validator: file_contains
+    path: /home/learner/evals/gate.yaml
+    value: min_accuracy
+    label: gate sets an accuracy floor
+  - validator: file_contains
+    path: /home/learner/evals/gate.yaml
+    value: max_regression
+    label: gate limits regressions
+  - validator: file_contains
+    path: /home/learner/evals/gate.yaml
+    value: "on_failure"
+    label: gate defines what happens on failure
+steps:
+  - title: Write the gate configuration
+    detail: "min_accuracy is the floor the run must clear, max_regression is how much worse the new
+      version may be than the baseline."
+    command: >-
+      echo '{"baseline": "v12", "min_accuracy": 0.9, "max_regression": 0.02, "on_failure": "block_release"}' > ~/evals/gate.yaml
+  - title: Verify the gate
+    detail: cat prints the gate. A gate nobody reads is a gate that does not exist.
+    command: cat ~/evals/gate.yaml
+  - title: Submit for validation
+    detail: The validator checks the thresholds and the failure behaviour.

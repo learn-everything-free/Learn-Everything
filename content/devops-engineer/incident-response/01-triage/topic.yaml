@@ -1,0 +1,7 @@
+slug: 01-triage
+title: Triage Under Pressure
+summary: Read the evidence in the right order and write down what you actually know.
+order: 1
+tasks:
+  - ir-crashloop-triage
+  - ir-timeout-triage

@@ -1,0 +1,53 @@
+slug: k8s-resource-limits
+title: Set Resource Limits on a Deployment
+type: challenge
+difficulty: advanced
+description: A pod without limits can starve its neighbours or monopolise the node. Declare CPU and
+  memory limits, apply the manifest and check the rollout.
+requirements:
+  - File ~/k8s/deployment.yaml exists and declares a Deployment
+  - The manifest sets CPU and memory limits
+  - Deployment default/api runs with 3 replicas
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: file_exists
+    path: /home/learner/k8s/deployment.yaml
+    label: ~/k8s/deployment.yaml
+  - validator: file_contains
+    path: /home/learner/k8s/deployment.yaml
+    value: "kind: Deployment"
+    label: manifest declares a Deployment
+  - validator: file_contains
+    path: /home/learner/k8s/deployment.yaml
+    value: "cpu: 500m"
+    label: CPU limit set
+  - validator: file_contains
+    path: /home/learner/k8s/deployment.yaml
+    value: "memory: 512Mi"
+    label: memory limit set
+  - validator: k8s_deployment_replicas
+    namespace: default
+    name: api
+    replicas: 3
+    label: deployment default/api has 3 replicas
+steps:
+  - title: Create the manifests directory
+    detail: Every manifest for a service lives in the same folder in the repository.
+    command: mkdir ~/k8s
+  - title: Write the Deployment manifest
+    detail: "kind, name, replicas and image are the fields the cluster acts on. Add the resources
+      block right after the image."
+    command: "echo 'kind: Deployment\\nmetadata:\\n  name: api\\nspec:\\n  replicas: 3\\n  template:\\n    spec:\\n      containers:\\n        - name: api\\n          image: app:latest' > ~/k8s/deployment.yaml"
+  - title: Add the resource limits
+    detail: "limits is the ceiling the scheduler reserves: 500m of CPU and 512Mi of memory per
+      container."
+    command: "echo '          resources:\\n            limits:\\n              cpu: 500m\\n              memory: 512Mi' >> ~/k8s/deployment.yaml"
+  - title: Apply the manifest
+    detail: "kubectl apply -f makes the cluster match the file - it creates or updates what is
+      declared."
+    command: kubectl apply -f ~/k8s/deployment.yaml
+  - title: Confirm the rollout
+    detail: "kubectl get deployments shows the READY column as 3/3 once the three replicas are up."
+    command: kubectl get deployments
+  - title: Submit for validation
+    detail: The validator checks the limits in the manifest and the replica count in the cluster.

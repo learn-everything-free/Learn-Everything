@@ -1,0 +1,53 @@
+slug: serve-autoscale-hpa
+title: Autoscale the Serving Tier
+type: practice
+difficulty: intermediate
+description: Model servers are slow to start and expensive to keep warm. Write the autoscaler that
+  scales them on GPU utilisation instead of on request count.
+requirements:
+  - Directory ~/serving exists
+  - File ~/serving/hpa.yaml exists
+  - The config declares a HorizontalPodAutoscaler
+  - The config states the minimum and maximum replica counts
+  - The config scales on average utilisation
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/serving
+    label: ~/serving
+  - validator: file_exists
+    path: /home/learner/serving/hpa.yaml
+    label: ~/serving/hpa.yaml
+  - validator: file_contains
+    path: /home/learner/serving/hpa.yaml
+    value: HorizontalPodAutoscaler
+    label: autoscaler declared
+  - validator: file_contains
+    path: /home/learner/serving/hpa.yaml
+    value: minReplicas
+    label: minimum replicas stated
+  - validator: file_contains
+    path: /home/learner/serving/hpa.yaml
+    value: maxReplicas
+    label: maximum replicas stated
+  - validator: file_contains
+    path: /home/learner/serving/hpa.yaml
+    value: averageUtilization
+    label: scales on utilisation
+steps:
+  - title: Create the serving directory
+    detail: Serving configuration lives next to the model server configuration.
+    command: mkdir -p ~/serving
+  - title: Write the autoscaler
+    detail: "minReplicas is the warm floor - enough to survive a traffic spike while new replicas
+      start. maxReplicas is the budget ceiling."
+    command: >-
+      echo 'apiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: orders-serving\nspec:\n  minReplicas: 2\n  maxReplicas: 12' > ~/serving/hpa.yaml
+  - title: Add the scaling metric
+    detail: "averageUtilization on the GPU is the signal that matches the bottleneck - requests per
+      second would scale on the wrong thing."
+    command: >-
+      echo '  metrics:\n    - type: Resource\n      resource:\n        name: nvidia.com/gpu\n        target:\n          type: Utilization\n          averageUtilization: 70' >> ~/serving/hpa.yaml
+  - title: Verify and submit
+    detail: cat prints the autoscaler, then submit for validation.
+    command: cat ~/serving/hpa.yaml

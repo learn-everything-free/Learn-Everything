@@ -1,0 +1,7 @@
+slug: 01-eval-datasets
+title: Building Eval Datasets
+summary: The dataset is the product. Write test cases and golden answers worth trusting.
+order: 1
+tasks:
+  - eval-dataset-file
+  - eval-golden-set

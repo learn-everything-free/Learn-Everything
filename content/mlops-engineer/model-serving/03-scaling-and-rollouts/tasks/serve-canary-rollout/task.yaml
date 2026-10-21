@@ -1,0 +1,49 @@
+slug: serve-canary-rollout
+title: Roll Out a New Model Gradually
+type: challenge
+difficulty: advanced
+description: A new model goes live to a slice of the traffic first, with a rule that sends it back
+  if the metrics move the wrong way.
+requirements:
+  - File ~/serving/canary.yaml exists
+  - The file names the stable and the canary version
+  - The file splits the traffic between them
+  - The file states the rollback condition
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/serving/canary.yaml
+    label: ~/serving/canary.yaml
+  - validator: file_contains
+    path: /home/learner/serving/canary.yaml
+    value: stable
+    label: stable version named
+  - validator: file_contains
+    path: /home/learner/serving/canary.yaml
+    value: canary
+    label: canary version named
+  - validator: file_contains
+    path: /home/learner/serving/canary.yaml
+    value: weight
+    label: traffic weights stated
+  - validator: file_contains
+    path: /home/learner/serving/canary.yaml
+    value: rollback
+    label: rollback condition stated
+steps:
+  - title: Create the serving directory
+    detail: Rollout configuration lives next to the autoscaler.
+    command: mkdir -p ~/serving
+  - title: Write the rollout plan
+    detail: "weight is the share of the traffic each version receives. Ten percent is a sane start
+      - the point is to learn cheaply."
+    command: >-
+      echo 'stable:\n  version: orders-model/12\n  weight: 90\ncanary:\n  version: orders-model/13\n  weight: 10' > ~/serving/canary.yaml
+  - title: Add the rollback condition
+    detail: "Write the rollback rule while nothing is wrong. A rule written during the incident
+      never matches the incident."
+    command: >-
+      echo 'rollback:\n  when: p95_latency_ms_above_1200\n  observation_minutes: 30\n  action: route_all_traffic_to_stable' >> ~/serving/canary.yaml
+  - title: Verify and submit
+    detail: cat prints the plan, then submit for validation.
+    command: cat ~/serving/canary.yaml

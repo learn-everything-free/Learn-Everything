@@ -1,0 +1,52 @@
+slug: mlflow-model-tags
+title: Tag Every Model Version
+type: practice
+difficulty: intermediate
+description: Tags are the lineage of a model - the code, the data and the owner behind a set of
+  weights. Define the tag set every version must carry.
+requirements:
+  - Directory ~/mlflow exists
+  - File ~/mlflow/tags.yaml exists
+  - The tag set covers the code, the data and the owner
+  - The tag set states which tags are required
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/mlflow
+    label: ~/mlflow
+  - validator: file_exists
+    path: /home/learner/mlflow/tags.yaml
+    label: ~/mlflow/tags.yaml
+  - validator: file_contains
+    path: /home/learner/mlflow/tags.yaml
+    value: git_commit
+    label: code version tagged
+  - validator: file_contains
+    path: /home/learner/mlflow/tags.yaml
+    value: data_version
+    label: data version tagged
+  - validator: file_contains
+    path: /home/learner/mlflow/tags.yaml
+    value: owner
+    label: owner tagged
+  - validator: file_contains
+    path: /home/learner/mlflow/tags.yaml
+    value: required
+    label: required tags declared
+steps:
+  - title: Create the mlflow directory
+    detail: Tracking configuration lives next to the tracking server settings.
+    command: mkdir ~/mlflow
+  - title: Write the tag set
+    detail: "git_commit names the code, data_version names the training data, owner names the
+      human who answers for it."
+    command: >-
+      echo 'tags:\n  - name: git_commit\n    description: commit of the training code\n  - name: data_version\n    description: version of the training dataset\n  - name: owner\n    description: team responsible for the model' > ~/mlflow/tags.yaml
+  - title: Mark the required tags
+    detail: "required is the list the tracking server enforces on registration. A model without an
+      owner is a model nobody maintains."
+    command: >-
+      echo 'required:\n  - git_commit\n  - data_version\n  - owner' >> ~/mlflow/tags.yaml
+  - title: Verify and submit
+    detail: cat prints the tag set, then submit for validation.
+    command: cat ~/mlflow/tags.yaml

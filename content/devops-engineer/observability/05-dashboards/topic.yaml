@@ -1,0 +1,7 @@
+slug: 05-dashboards
+title: Dashboards & Burn Rates
+summary: Put the right numbers on one screen, and alert on how fast the error budget is burning.
+order: 5
+tasks:
+  - obs-dashboard-json
+  - obs-burn-rate-rule

@@ -1,0 +1,48 @@
+slug: fs-feature-transformation
+title: Write the Feature Transformation
+type: practice
+difficulty: intermediate
+description: The transformation is where the raw events become the columns a model trains on.
+  Write it once, with a schema, so training and serving agree.
+requirements:
+  - File ~/feast/features.py exists
+  - The file defines a transformation function
+  - The file declares the source schema with typed fields
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/feast/features.py
+    label: ~/feast/features.py
+  - validator: file_contains
+    path: /home/learner/feast/features.py
+    value: "def user_activity_features"
+    label: transformation function defined
+  - validator: file_contains
+    path: /home/learner/feast/features.py
+    value: Schema
+    label: source schema declared
+  - validator: file_contains
+    path: /home/learner/feast/features.py
+    value: Field
+    label: schema fields declared
+steps:
+  - title: Write the transformation
+    detail: "One function, one input frame, one output frame. The function name in a feature
+      definition has to match this name exactly."
+    command: >-
+      echo 'def user_activity_features(df, ts):\n    df = df.assign(last_seen=ts)\n    return df' > ~/feast/features.py
+  - title: Add the schema
+    detail: "The schema tells the store how each column is typed. Wrong types are the classic
+      reason training and serving disagree."
+    command: >-
+      echo '\nfrom feast import Field, Schema, Entity' >> ~/feast/features.py
+  - title: Declare the entity
+    detail: "Entity, Schema and Field are the three objects every feature store definition
+      mentions."
+    command: >-
+      echo '\nuser = Entity(name="user", join_keys=["user_id"])\nuser_activity_schema = Schema(fields=[Field(name="sessions_7d", dtype="Int64"), Field(name="spend_30d", dtype="Float32")])' >> ~/feast/features.py
+  - title: Verify the transformation
+    detail: cat prints the module. The names here must match the feature view exactly.
+    command: cat ~/feast/features.py
+  - title: Submit for validation
+    detail: The validator checks the function and the schema declarations.

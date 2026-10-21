@@ -1,0 +1,56 @@
+slug: aws-rotate-access-key
+title: Document a Key Rotation Runbook
+type: challenge
+difficulty: advanced
+description: Keys outlive the people who created them. Write the script that creates a replacement
+  key, deploys it and revokes the old one - in that order.
+requirements:
+  - Directory ~/aws exists
+  - File ~/aws/rotate-keys.sh exists
+  - The script identifies the caller before it changes anything
+  - The script creates the new key and deletes the old one
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/aws
+    label: ~/aws
+  - validator: file_exists
+    path: /home/learner/aws/rotate-keys.sh
+    label: ~/aws/rotate-keys.sh
+  - validator: file_contains
+    path: /home/learner/aws/rotate-keys.sh
+    value: get-caller-identity
+    label: script checks the caller identity first
+  - validator: file_contains
+    path: /home/learner/aws/rotate-keys.sh
+    value: create-access-key
+    label: script creates the replacement key
+  - validator: file_contains
+    path: /home/learner/aws/rotate-keys.sh
+    value: delete-access-key
+    label: script revokes the old key
+steps:
+  - title: Create the aws directory
+    detail: Runbooks and the scripts they describe belong together.
+    command: mkdir ~/aws
+  - title: Start the script
+    detail: The shebang has to be the first line - nothing else comes before it.
+    command: "echo '#!/bin/bash' > ~/aws/rotate-keys.sh"
+  - title: Identify the caller first
+    detail: "aws sts get-caller-identity prints which identity the CLI is using. A rotation script
+      that cannot say who it is, should not run."
+    command: "echo 'aws sts get-caller-identity' >> ~/aws/rotate-keys.sh"
+  - title: Create the replacement key
+    detail: "create-access-key issues a new secret. Write it down before you revoke anything - the
+      old key is your only way back in."
+    command: "echo 'aws iam create-access-key --user-name learner' >> ~/aws/rotate-keys.sh"
+  - title: Revoke the old key
+    detail: "delete-access-key removes the previous secret. Only after the new one is deployed does
+      this line run."
+    command: "echo 'aws iam delete-access-key --user-name learner --access-key-id $OLD_KEY' >> ~/aws/rotate-keys.sh"
+  - title: Make it executable
+    detail: chmod 700 keeps the script owner-only - it handles live credentials.
+    command: chmod 700 ~/aws/rotate-keys.sh
+  - title: Verify and submit
+    detail: cat prints the runbook script, then submit for validation.
+    command: cat ~/aws/rotate-keys.sh

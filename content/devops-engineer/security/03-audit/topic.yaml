@@ -1,0 +1,6 @@
+slug: 03-audit
+title: Auditing & Evidence
+summary: Turn raw logs into findings someone can act on - with numbers attached to names.
+order: 3
+tasks:
+  - sec-audit-noisy-client

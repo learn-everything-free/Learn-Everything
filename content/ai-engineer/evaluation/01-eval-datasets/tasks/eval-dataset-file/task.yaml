@@ -1,0 +1,54 @@
+slug: eval-dataset-file
+title: Write an Evaluation Dataset
+type: guided
+difficulty: beginner
+description: An eval dataset is a list of cases the model has to survive. Write three cases for a
+  support assistant - one line of JSON each.
+requirements:
+  - Directory ~/evals exists
+  - File ~/evals/dataset.jsonl exists
+  - Every case has an id, an input and an expected output
+  - The dataset contains at least three cases
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/evals
+    label: ~/evals
+  - validator: file_exists
+    path: /home/learner/evals/dataset.jsonl
+    label: ~/evals/dataset.jsonl
+  - validator: file_contains
+    path: /home/learner/evals/dataset.jsonl
+    value: "id"
+    label: cases carry an id
+  - validator: file_contains
+    path: /home/learner/evals/dataset.jsonl
+    value: "input"
+    label: cases carry the input
+  - validator: file_contains
+    path: /home/learner/evals/dataset.jsonl
+    value: "expected"
+    label: cases carry the expected output
+steps:
+  - title: Create the evals directory
+    detail: Every eval run needs its dataset - keep them in one folder.
+    command: mkdir ~/evals
+  - title: Write the first case
+    detail: "One JSON object per line. id names the case, input is what the user says, expected is
+      what a good answer looks like."
+    command: >-
+      echo '{"id": "refund-1", "input": "How long do refunds take?", "expected": "Refunds are processed within 5 business days"}' > ~/evals/dataset.jsonl
+  - title: Add the second case
+    detail: ">> appends a line instead of overwriting the file. Every case should probe a different
+      failure mode."
+    command: >-
+      echo '{"id": "policy-1", "input": "Can I return a used item?", "expected": "Items must be unused and in the original packaging"}' >> ~/evals/dataset.jsonl
+  - title: Add the third case
+    detail: "Include the hard case - the one your users hit and your prompt fails on."
+    command: >-
+      echo '{"id": "edge-1", "input": "Refund my order but it was delivered to the wrong address", "expected": "Offer a replacement shipment and confirm the refund window"}' >> ~/evals/dataset.jsonl
+  - title: Check the line count
+    detail: "wc -l counts the cases - three is the smallest dataset that can catch anything."
+    command: wc -l ~/evals/dataset.jsonl
+  - title: Submit for validation
+    detail: The validator checks the file and the fields every case needs.

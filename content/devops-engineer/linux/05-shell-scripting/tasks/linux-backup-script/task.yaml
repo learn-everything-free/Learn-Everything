@@ -1,0 +1,52 @@
+slug: linux-backup-script
+title: Write a Backup Script
+type: guided
+difficulty: beginner
+description: A backup you have to remember to run is a backup you do not have. Write a script that
+  archives the project directory and can only be run by its owner.
+requirements:
+  - Directory ~/scripts exists
+  - File ~/scripts/backup.sh exists and starts with a shebang
+  - The script archives with tar
+  - Permissions on ~/scripts/backup.sh are 700 (owner only, executable)
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/scripts
+    label: ~/scripts
+  - validator: file_exists
+    path: /home/learner/scripts/backup.sh
+    label: ~/scripts/backup.sh
+  - validator: file_contains
+    path: /home/learner/scripts/backup.sh
+    value: "#!/bin/bash"
+    label: script starts with a shebang
+  - validator: file_contains
+    path: /home/learner/scripts/backup.sh
+    value: tar
+    label: script archives with tar
+  - validator: file_mode
+    path: /home/learner/scripts/backup.sh
+    mode: "700"
+    label: backup.sh has mode 700
+steps:
+  - title: Create the scripts directory
+    detail: Keep your scripts together, away from the data they touch.
+    command: mkdir ~/scripts
+  - title: Write the shebang
+    detail: "#!/bin/bash tells the kernel which interpreter runs the file. Without it the script is
+      just text."
+    command: "echo '#!/bin/bash' > ~/scripts/backup.sh"
+  - title: Add the archive command
+    detail: "tar -czf writes a compressed archive: -c creates, -z compresses with gzip, -f names
+      the output file."
+    command: "echo 'tar -czf ~/backups/project.tar.gz ~/project' >> ~/scripts/backup.sh"
+  - title: Make it owner-only
+    detail: "chmod 700 makes the script executable by its owner and invisible to everyone else - the
+      right mode for anything that touches data."
+    command: chmod 700 ~/scripts/backup.sh
+  - title: Verify the script
+    detail: "ls -l shows the mode column: -rwx------ means owner only, with the executable bit set."
+    command: ls -l ~/scripts
+  - title: Submit for validation
+    detail: The validator checks the shebang, the tar call and the mode.

@@ -1,0 +1,7 @@
+slug: 02-access-control
+title: Access Control & Least Privilege
+summary: Lock down remote access, keep administrative privileges narrow, and make audits repeatable.
+order: 2
+tasks:
+  - sec-ssh-hardening
+  - sec-audit-script

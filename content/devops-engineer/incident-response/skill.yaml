@@ -1,0 +1,5 @@
+slug: incident-response
+title: Incident Response
+summary: Triage, mitigate and learn from production failures - one command at a time, no guessing.
+path: devops-engineer
+order: 12

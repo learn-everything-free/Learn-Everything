@@ -1,0 +1,60 @@
+slug: git-ignore-patterns
+title: Write a .gitignore That Actually Works
+type: practice
+difficulty: intermediate
+description: A .gitignore is a list of patterns, not a list of files - one line can cover a thousand
+  files. Create a repository with rules for environment files, logs and build output.
+requirements:
+  - ~/project is a Git repository
+  - File ~/project/.gitignore exists and ignores environment files, logs and build directories
+  - "A commit with message 'chore: add gitignore' exists"
+environment: ubuntu:24.04 + git
+validation:
+  - validator: git_repo
+    path: /home/learner/project
+    label: ~/project is a Git repository
+  - validator: file_exists
+    path: /home/learner/project/.gitignore
+    label: ~/project/.gitignore
+  - validator: file_contains
+    path: /home/learner/project/.gitignore
+    value: ".env"
+    label: ignores environment files
+  - validator: file_contains
+    path: /home/learner/project/.gitignore
+    value: "*.log"
+    label: ignores log files
+  - validator: file_contains
+    path: /home/learner/project/.gitignore
+    value: "build/"
+    label: ignores build output
+  - validator: git_commit
+    path: /home/learner/project
+    message: "chore: add gitignore"
+    label: "commit 'chore: add gitignore' exists"
+steps:
+  - title: Create the project folder
+    detail: Every lab starts from a fresh shell, so the folder does not exist yet.
+    command: mkdir ~/project
+  - title: Enter the repository
+    detail: All Git commands below run from inside ~/project.
+    command: cd ~/project
+  - title: Initialize the repository
+    detail: git init creates the hidden .git directory that turns a folder into a repository.
+    command: git init
+  - title: Write the ignore rules
+    detail: "One pattern per line: .env for environment files, *.log for any log file anywhere in
+      the tree, build/ for the whole directory."
+    command: "echo '.env\\n*.log\\nbuild/' > .gitignore"
+  - title: Stage the rules
+    detail: "git add . stages everything in the current directory - here, the ignore file itself."
+    command: git add .
+  - title: Commit the rules
+    detail: "The commit message describes the intent: chore is the conventional prefix for
+      housekeeping."
+    command: 'git commit -m "chore: add gitignore"'
+  - title: Verify the history
+    detail: git log prints the commits newest first.
+    command: git log
+  - title: Submit for validation
+    detail: The validator checks the repository, the ignore rules and the commit message.

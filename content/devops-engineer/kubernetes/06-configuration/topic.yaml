@@ -1,0 +1,7 @@
+slug: 06-configuration
+title: Configuration & Resource Limits
+summary: Keep configuration out of images, and tell the scheduler what each workload is allowed to use.
+order: 6
+tasks:
+  - k8s-config-env
+  - k8s-resource-limits

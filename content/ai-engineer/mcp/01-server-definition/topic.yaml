@@ -1,0 +1,7 @@
+slug: 01-server-definition
+title: Defining an MCP Server
+summary: What a server is, which transports it speaks and how its tools are described.
+order: 1
+tasks:
+  - mcp-server-manifest
+  - mcp-tool-definitions

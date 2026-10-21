@@ -1,0 +1,49 @@
+slug: llm-sampling-config
+title: Configure the Sampling Knobs
+type: guided
+difficulty: beginner
+description: temperature, top_p and max_tokens decide how a model answers. Write the sampling
+  configuration your application will send with every request.
+requirements:
+  - Directory ~/llm-lab exists
+  - File ~/llm-lab/sampling.json exists
+  - The config sets temperature and top_p
+  - The config caps the output length and pins the seed
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/llm-lab
+    label: ~/llm-lab
+  - validator: file_exists
+    path: /home/learner/llm-lab/sampling.json
+    label: ~/llm-lab/sampling.json
+  - validator: file_contains
+    path: /home/learner/llm-lab/sampling.json
+    value: temperature
+    label: temperature configured
+  - validator: file_contains
+    path: /home/learner/llm-lab/sampling.json
+    value: top_p
+    label: top_p configured
+  - validator: file_contains
+    path: /home/learner/llm-lab/sampling.json
+    value: max_tokens
+    label: output length capped
+  - validator: file_contains
+    path: /home/learner/llm-lab/sampling.json
+    value: seed
+    label: seed pinned for reproducibility
+steps:
+  - title: Create the llm-lab directory
+    detail: Model settings live next to the rest of the experiment configuration.
+    command: mkdir ~/llm-lab
+  - title: Write the sampling configuration
+    detail: "temperature 0.2 keeps answers close to the training distribution - use a higher value
+      for creative work, zero for classification. The seed makes runs comparable."
+    command: >-
+      echo '{"model": "gpt-4o-mini", "temperature": 0.2, "top_p": 0.9, "max_tokens": 800, "seed": 42}' > ~/llm-lab/sampling.json
+  - title: Verify the configuration
+    detail: cat prints the settings. Change one value at a time, or your comparisons mean nothing.
+    command: cat ~/llm-lab/sampling.json
+  - title: Submit for validation
+    detail: The validator checks the four sampling knobs.

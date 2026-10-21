@@ -1,0 +1,43 @@
+slug: rag-hybrid-search
+title: Blend Dense and Sparse Retrieval
+type: challenge
+difficulty: advanced
+description: Dense vectors find meaning, keyword search finds exact identifiers. Blend the two and
+  add a reranker on top - then say how much weight each side gets.
+requirements:
+  - File ~/rag/hybrid-search.yaml exists
+  - The config defines a dense and a sparse retriever
+  - The config states the weights for each retriever
+  - The config enables a reranking step
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/rag/hybrid-search.yaml
+    label: ~/rag/hybrid-search.yaml
+  - validator: file_contains
+    path: /home/learner/rag/hybrid-search.yaml
+    value: dense
+    label: dense retriever defined
+  - validator: file_contains
+    path: /home/learner/rag/hybrid-search.yaml
+    value: sparse
+    label: sparse retriever defined
+  - validator: file_contains
+    path: /home/learner/rag/hybrid-search.yaml
+    value: weights
+    label: retriever weights stated
+  - validator: file_contains
+    path: /home/learner/rag/hybrid-search.yaml
+    value: rerank
+    label: reranking step enabled
+steps:
+  - title: Write the hybrid configuration
+    detail: "dense finds meaning, sparse finds the exact token. The weights decide which one leads
+      - 0.7 dense and 0.3 sparse is a common starting point."
+    command: >-
+      echo 'retrievers:\n  dense:\n    index: docs-embeddings\n    top_k: 20\n  sparse:\n    index: docs-keywords\n    top_k: 20\nweights:\n  dense: 0.7\n  sparse: 0.3\nrerank:\n  enabled: true\n  model: bge-reranker-large\n  top_n: 5' > ~/rag/hybrid-search.yaml
+  - title: Verify the configuration
+    detail: cat prints the configuration. Every weight should add up to one.
+    command: cat ~/rag/hybrid-search.yaml
+  - title: Submit for validation
+    detail: The validator checks both retrievers, the weights and the reranker.

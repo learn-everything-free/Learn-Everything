@@ -1,0 +1,53 @@
+slug: sec-rotate-credential
+title: Rotate a Leaked Credential
+type: practice
+difficulty: intermediate
+description: A key that leaked is a key you rotate, not one you delete. Issue a replacement
+  credential, protect it like the original, and leave a trail that proves the rotation happened.
+requirements:
+  - Directory ~/credentials exists
+  - File ~/credentials/api-key.txt exists with mode 600
+  - File ~/credentials/rotation.log records the rotation
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/credentials
+    label: ~/credentials
+  - validator: file_exists
+    path: /home/learner/credentials/api-key.txt
+    label: ~/credentials/api-key.txt
+  - validator: file_mode
+    path: /home/learner/credentials/api-key.txt
+    mode: "600"
+    label: api-key.txt has mode 600
+  - validator: file_exists
+    path: /home/learner/credentials/rotation.log
+    label: ~/credentials/rotation.log
+  - validator: file_contains
+    path: /home/learner/credentials/rotation.log
+    value: rotated
+    label: rotation.log records the rotation
+  - validator: file_contains
+    path: /home/learner/credentials/rotation.log
+    value: AKIA
+    label: rotation.log names the revoked key
+steps:
+  - title: Create the credentials directory
+    detail: Keep live credentials in one folder with strict permissions, never scattered in project trees.
+    command: mkdir ~/credentials
+  - title: Write the replacement key
+    detail: "The new key has a fresh prefix - AKIA identifies an AWS access key id. Old and new
+      values must never live in the same file."
+    command: "echo 'AKIA3EXAMPLE9NEWKEY' > ~/credentials/api-key.txt"
+  - title: Protect the new key
+    detail: The replacement inherits the strictest permissions you have - a rotated secret is still a secret.
+    command: chmod 600 ~/credentials/api-key.txt
+  - title: Start the rotation log
+    detail: "Audit trails are written as you go, not reconstructed later. Name the credential you revoked."
+    command: "echo 'rotated AKIA3EXAMPLE9OLDKEY on 2026-10-02' > ~/credentials/rotation.log"
+  - title: Record the invalidation
+    detail: "The old key must be revoked, not just replaced. Both facts belong in the log."
+    command: "echo 'revoked old key and redeployed services' >> ~/credentials/rotation.log"
+  - title: Verify and submit
+    detail: ls -l shows the mode, cat shows the trail. Then submit.
+    command: cat ~/credentials/rotation.log

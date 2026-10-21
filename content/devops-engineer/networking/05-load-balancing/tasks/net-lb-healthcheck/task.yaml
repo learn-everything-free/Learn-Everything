@@ -1,0 +1,57 @@
+slug: net-lb-healthcheck
+title: Add a Health Check to the Proxy
+type: challenge
+difficulty: advanced
+description: A proxy is only as good as its health check. Start the application, prove it answers,
+  and script the exact same question so the proxy can keep asking it.
+requirements:
+  - A container from app:latest is running and mapped to port 8080
+  - The application answers with HTTP 200
+  - File ~/nginx/health.sh exists and curls the health endpoint
+environment: ubuntu:24.04 + docker
+validation:
+  - validator: container_running
+    image: app:latest
+    label: container from app:latest running
+  - validator: port_mapped
+    port: 8080
+    label: port 8080 mapped
+  - validator: http_status
+    port: 8080
+    label: health endpoint answers HTTP 200
+  - validator: file_exists
+    path: /home/learner/nginx/health.sh
+    label: ~/nginx/health.sh
+  - validator: file_contains
+    path: /home/learner/nginx/health.sh
+    value: curl
+    label: script uses curl
+  - validator: file_contains
+    path: /home/learner/nginx/health.sh
+    value: /health
+    label: script checks the health endpoint
+steps:
+  - title: Create the nginx directory
+    detail: The health check script lives next to the proxy configuration.
+    command: mkdir ~/nginx
+  - title: Start the application
+    detail: "docker run -d runs the container in the background and -p 8080:80 publishes host port
+      8080 on the container's port 80."
+    command: docker run -d -p 8080:80 app:latest
+  - title: Prove it answers
+    detail: "curl prints the status line and the body. If you get connection refused, the container
+      is not running or the port is not mapped."
+    command: curl http://localhost:8080/health
+  - title: Start the health check script
+    detail: The shebang again - a script without it is not runnable.
+    command: "echo '#!/bin/bash' > ~/nginx/health.sh"
+  - title: Add the check
+    detail: "curl -f turns an HTTP error into a non-zero exit code, which is exactly what a load
+      balancer needs to know."
+    command: "echo 'curl -f http://localhost:8080/health' >> ~/nginx/health.sh"
+  - title: Make it executable
+    detail: chmod 700 lets the owner run the script and nobody else modify it.
+    command: chmod 700 ~/nginx/health.sh
+  - title: Verify and submit
+    detail: cat prints the script, then submit for validation.
+    command: cat ~/nginx/health.sh

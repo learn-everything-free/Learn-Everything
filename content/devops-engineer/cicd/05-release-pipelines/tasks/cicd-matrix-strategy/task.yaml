@@ -1,0 +1,57 @@
+slug: cicd-matrix-strategy
+title: Build a Version Matrix
+type: challenge
+difficulty: advanced
+description: One pipeline, many versions. Declare a matrix strategy so every job runs once per Python
+  version and the matrix grows without editing the file.
+requirements:
+  - Directory ~/ci exists
+  - File ~/ci/matrix.yml exists
+  - The job declares a matrix strategy
+  - The matrix lists the Python versions to test
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ci
+    label: ~/ci
+  - validator: file_exists
+    path: /home/learner/ci/matrix.yml
+    label: ~/ci/matrix.yml
+  - validator: file_contains
+    path: /home/learner/ci/matrix.yml
+    value: "strategy:"
+    label: job declares a strategy
+  - validator: file_contains
+    path: /home/learner/ci/matrix.yml
+    value: "matrix:"
+    label: strategy declares a matrix
+  - validator: file_contains
+    path: /home/learner/ci/matrix.yml
+    value: "python-version:"
+    label: matrix lists the Python versions
+steps:
+  - title: Create the ci directory
+    detail: Every pipeline file gets its own name inside the ci folder.
+    command: mkdir ~/ci
+  - title: Name the workflow
+    detail: "name is the display name in the Actions tab."
+    command: "echo 'name: test' > ~/ci/matrix.yml"
+  - title: Open the jobs block
+    detail: jobs group the steps of the pipeline.
+    command: "echo 'jobs:' >> ~/ci/matrix.yml"
+  - title: Name the test job
+    detail: "runs-on picks the runner image. The matrix below decides how many copies run."
+    command: "echo '  test:\\n    runs-on: ubuntu-latest' >> ~/ci/matrix.yml"
+  - title: Add the strategy
+    detail: "strategy tells the runner to expand this job into several - one per matrix entry."
+    command: "echo '    strategy:' >> ~/ci/matrix.yml"
+  - title: Declare the matrix
+    detail: "matrix lists the axes: every combination of the entries becomes one job."
+    command: "echo '      matrix:\\n        python-version: [\"3.11\", \"3.12\"]' >> ~/ci/matrix.yml"
+  - title: Add the setup step
+    detail: "actions/setup-python installs the interpreter named by the matrix entry - the same
+      step works for every version."
+    command: "echo '    steps:\\n      - uses: actions/setup-python@v5' >> ~/ci/matrix.yml"
+  - title: Verify and submit
+    detail: cat prints the workflow, then submit for validation.
+    command: cat ~/ci/matrix.yml

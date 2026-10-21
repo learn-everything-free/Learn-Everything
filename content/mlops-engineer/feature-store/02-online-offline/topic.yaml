@@ -1,0 +1,7 @@
+slug: 02-online-offline
+title: Online & Offline Parity
+summary: Serving fresh values online, materialising them offline, and keeping the two in step.
+order: 2
+tasks:
+  - fs-online-store-config
+  - fs-materialization-job

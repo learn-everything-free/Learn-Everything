@@ -1,0 +1,43 @@
+slug: fs-online-store-config
+title: Configure the Online Store
+type: practice
+difficulty: intermediate
+description: The online store is the low-latency copy your model reads at request time. Write its
+  configuration - where it lives, how it is keyed and how long values stay fresh.
+requirements:
+  - File ~/feast/online_store.yaml exists
+  - The config names the online store and its provider
+  - The config states the key and the time to live
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/feast/online_store.yaml
+    label: ~/feast/online_store.yaml
+  - validator: file_contains
+    path: /home/learner/feast/online_store.yaml
+    value: online_store
+    label: online store declared
+  - validator: file_contains
+    path: /home/learner/feast/online_store.yaml
+    value: redis
+    label: provider named
+  - validator: file_contains
+    path: /home/learner/feast/online_store.yaml
+    value: key
+    label: key configured
+  - validator: file_contains
+    path: /home/learner/feast/online_store.yaml
+    value: ttl
+    label: time to live configured
+steps:
+  - title: Write the online store configuration
+    detail: "provider says which system holds the values, key says how a row is addressed and ttl
+      says how long a value may be served before it is considered stale."
+    command: >-
+      echo 'online_store:\n  provider: redis\n  connection_string: "redis://localhost:6379"\n  key: "feast:user_activity"\n  ttl: 86400' > ~/feast/online_store.yaml
+  - title: Verify the configuration
+    detail: cat prints the config. A ttl that is too long serves stale features without anyone
+      noticing.
+    command: cat ~/feast/online_store.yaml
+  - title: Submit for validation
+    detail: The validator checks the store, the provider, the key and the ttl.

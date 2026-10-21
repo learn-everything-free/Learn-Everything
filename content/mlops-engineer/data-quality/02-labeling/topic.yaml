@@ -1,0 +1,6 @@
+slug: 02-labeling
+title: Labeling & Ground Truth
+summary: Labels are a human product - define them, review them, and measure agreement.
+order: 2
+tasks:
+  - dq-labeling-guidelines

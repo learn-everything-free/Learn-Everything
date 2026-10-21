@@ -1,0 +1,7 @@
+slug: 05-release-pipelines
+title: Release Pipelines
+summary: Promotion, approval gates and matrix builds - the parts of CI/CD that touch production.
+order: 5
+tasks:
+  - cicd-approval-workflow
+  - cicd-matrix-strategy

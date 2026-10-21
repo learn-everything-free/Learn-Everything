@@ -1,0 +1,7 @@
+slug: 03-model-lineage
+title: Model Lineage & Promotion
+summary: What went into a model, and how a version becomes the one everybody serves.
+order: 3
+tasks:
+  - mlflow-model-tags
+  - mlflow-alias-stages

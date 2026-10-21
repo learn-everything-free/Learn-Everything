@@ -1,0 +1,46 @@
+slug: obs-dashboard-json
+title: Build a Dashboard Definition
+type: practice
+difficulty: intermediate
+description: Dashboards are code - a JSON definition that can be reviewed and deployed. Build one
+  for the API with a request-rate panel and an error-rate panel.
+requirements:
+  - Directory ~/dashboards exists
+  - File ~/dashboards/api.json exists
+  - The dashboard has a title and at least two panels
+  - Every panel states the expression it plots
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/dashboards
+    label: ~/dashboards
+  - validator: file_exists
+    path: /home/learner/dashboards/api.json
+    label: ~/dashboards/api.json
+  - validator: file_contains
+    path: /home/learner/dashboards/api.json
+    value: panels
+    label: dashboard declares panels
+  - validator: file_contains
+    path: /home/learner/dashboards/api.json
+    value: "Request rate"
+    label: request rate panel present
+  - validator: file_contains
+    path: /home/learner/dashboards/api.json
+    value: expr
+    label: panels state their expression
+steps:
+  - title: Create the dashboards directory
+    detail: Dashboard definitions are versioned next to the service they describe.
+    command: mkdir ~/dashboards
+  - title: Write the dashboard definition
+    detail: "A dashboard has a title and a list of panels; each panel has a title and the expression
+      it plots. One echo writes the whole document."
+    command: >-
+      echo '{"title": "API Overview", "panels": [{"id": 1, "title": "Request rate", "expr": "rate(http_requests_total[5m])"}, {"id": 2, "title": "Error rate", "expr": "rate(http_requests_total{status=~\"5..\"}[5m])"}]}' > ~/dashboards/api.json
+  - title: Verify the definition
+    detail: cat prints the JSON. Count the panels - two is the minimum that makes a dashboard
+      useful.
+    command: cat ~/dashboards/api.json
+  - title: Submit for validation
+    detail: The validator checks the title, the panels and their expressions.

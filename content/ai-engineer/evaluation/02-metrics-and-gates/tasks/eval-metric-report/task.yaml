@@ -1,0 +1,39 @@
+slug: eval-metric-report
+title: Report the Metrics of a Run
+type: practice
+difficulty: intermediate
+description: A run is only useful if it produces comparable numbers. Write the report with the
+  accuracy, the latency and the cost per request.
+requirements:
+  - File ~/evals/report.json exists
+  - The report states the accuracy of the run
+  - The report states the p95 latency
+  - The report states the cost per request
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/evals/report.json
+    label: ~/evals/report.json
+  - validator: file_contains
+    path: /home/learner/evals/report.json
+    value: accuracy
+    label: report states accuracy
+  - validator: file_contains
+    path: /home/learner/evals/report.json
+    value: p95_latency_ms
+    label: report states p95 latency
+  - validator: file_contains
+    path: /home/learner/evals/report.json
+    value: cost_per_request_usd
+    label: report states cost per request
+steps:
+  - title: Write the run report
+    detail: "accuracy says whether the answers were right, p95_latency_ms says whether the
+      experience was fast enough, cost_per_request_usd says whether it was worth it."
+    command: >-
+      echo '{"model": "gpt-4o-mini", "cases": 50, "accuracy": 0.92, "p95_latency_ms": 1450, "cost_per_request_usd": 0.0007}' > ~/evals/report.json
+  - title: Verify the report
+    detail: cat prints the report. Compare it with the last run before you celebrate.
+    command: cat ~/evals/report.json
+  - title: Submit for validation
+    detail: The validator checks the three metrics every release decision depends on.

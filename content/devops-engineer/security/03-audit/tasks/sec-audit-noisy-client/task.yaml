@@ -1,0 +1,55 @@
+slug: sec-audit-noisy-client
+title: Find the Noisy Client in the Access Log
+type: scenario
+difficulty: advanced
+description: Six requests in the access log failed and five of them came from the same client
+  address. Isolate the failures, attribute them to a source, and write the finding the security
+  team will actually act on.
+requirements:
+  - Directory ~/audit exists
+  - File ~/audit/5xx.log contains only the failing requests
+  - File ~/audit/finding.txt names the offending client address and the failure count
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/audit
+    label: ~/audit
+  - validator: file_exists
+    path: /home/learner/audit/5xx.log
+    label: ~/audit/5xx.log
+  - validator: file_contains
+    path: /home/learner/audit/5xx.log
+    value: 500
+    label: 5xx.log holds the failing requests
+  - validator: file_exists
+    path: /home/learner/audit/finding.txt
+    label: ~/audit/finding.txt
+  - validator: file_contains
+    path: /home/learner/audit/finding.txt
+    value: 10.0.0.5
+    label: finding names client 10.0.0.5
+  - validator: file_contains
+    path: /home/learner/audit/finding.txt
+    value: "failed requests: 5"
+    label: finding records 5 failed requests
+steps:
+  - title: Create the audit directory
+    detail: Every lab starts from a fresh shell, so the folder does not exist yet.
+    command: mkdir ~/audit
+  - title: Review the access log
+    detail: "The common log format puts the client address first and the status code near the end."
+    command: cat /var/log/app/access.log
+  - title: Isolate the failures
+    detail: "grep keeps the lines that mention a 500 status. Redirect them into a file so the evidence
+      outlives your terminal session."
+    command: grep 500 /var/log/app/access.log > ~/audit/5xx.log
+  - title: Attribute the failures
+    detail: "Now count how many of those failures came from 10.0.0.5. One pipe per command is the rule
+      in this lab, so filter first and count second."
+    command: grep 10.0.0.5 ~/audit/5xx.log | wc -l
+  - title: Write the finding
+    detail: "Record who and how many. The security team needs the client address and the count, not a
+      narrative."
+    command: "echo 'client 10.0.0.5 - failed requests: 5' > ~/audit/finding.txt"
+  - title: Submit for validation
+    detail: The validator checks the extracted evidence and the finding.

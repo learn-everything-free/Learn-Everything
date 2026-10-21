@@ -1,0 +1,7 @@
+slug: 02-mitigation
+title: Mitigation & Recovery
+summary: Restore service first, then keep the fix - a manifest, a service and a record of both.
+order: 2
+tasks:
+  - ir-rollout-recovery
+  - ir-traffic-restore

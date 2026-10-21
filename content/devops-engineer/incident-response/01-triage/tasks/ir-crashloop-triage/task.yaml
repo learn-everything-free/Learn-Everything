@@ -1,0 +1,43 @@
+slug: ir-crashloop-triage
+title: Triage a CrashLoopBackOff
+type: scenario
+difficulty: intermediate
+description: The api pod has been restarting since the last deploy. Find why it dies and write the
+  one-line root cause your incident channel needs right now.
+requirements:
+  - Directory ~/incident exists
+  - File ~/incident/root-cause.txt names the missing environment variable
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: directory_exists
+    path: /home/learner/incident
+    label: ~/incident
+  - validator: file_exists
+    path: /home/learner/incident/root-cause.txt
+    label: ~/incident/root-cause.txt
+  - validator: file_contains
+    path: /home/learner/incident/root-cause.txt
+    value: DB_HOST
+    label: root cause names DB_HOST
+steps:
+  - title: See the cluster state
+    detail: kubectl get pods lists every pod with its status. CrashLoopBackOff means the container
+      starts, fails, and is restarted again and again.
+    command: kubectl get pods
+  - title: Read the container logs
+    detail: "kubectl logs api prints what the process wrote before it died. The last lines of a
+      crashing container are the incident."
+    command: kubectl logs api
+  - title: Confirm with describe
+    detail: "kubectl describe pod api adds the events. Back-off restarting failed container is the
+      kubelet repeating what the logs already told you."
+    command: kubectl describe pod api
+  - title: Create the incident folder
+    detail: Everything you collect during an incident belongs in one place, in the order you found it.
+    command: mkdir ~/incident
+  - title: Write the root cause
+    detail: "The log says the process exited because an environment variable was missing. Record the
+      variable name exactly as the application expects it."
+    command: "echo 'missing environment variable DB_HOST' > ~/incident/root-cause.txt"
+  - title: Submit for validation
+    detail: The validator checks that you named the missing variable.

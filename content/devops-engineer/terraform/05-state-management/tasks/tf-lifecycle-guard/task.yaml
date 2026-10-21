@@ -1,0 +1,60 @@
+slug: tf-lifecycle-guard
+title: Guard a Bucket with a Lifecycle Rule
+type: challenge
+difficulty: advanced
+description: Some infrastructure must never be destroyed by a stray command. Declare a bucket with
+  a prevent_destroy lifecycle rule and apply it.
+requirements:
+  - Directory ~/infra exists
+  - File ~/infra/main.tf declares a bucket with prevent_destroy
+  - terraform has been initialised in ~/infra
+  - The bucket is in the state after apply
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/infra
+    label: ~/infra
+  - validator: file_exists
+    path: /home/learner/infra/main.tf
+    label: ~/infra/main.tf
+  - validator: file_contains
+    path: /home/learner/infra/main.tf
+    value: prevent_destroy
+    label: lifecycle rule prevents destroy
+  - validator: terraform_initialized
+    path: /home/learner/infra
+    label: terraform initialised in ~/infra
+  - validator: terraform_resource_in_state
+    path: /home/learner/infra
+    resource: aws_s3_bucket.archive
+    label: aws_s3_bucket.archive is in the state
+steps:
+  - title: Create the infrastructure directory
+    detail: Every Terraform stack gets its own folder - the state file belongs to it.
+    command: mkdir ~/infra
+  - title: Enter the stack
+    detail: terraform init and apply only work in the directory that holds the configuration.
+    command: cd ~/infra
+  - title: Declare the bucket
+    detail: "A resource block has a type and a name - aws_s3_bucket.archive is the address Terraform
+      uses for it."
+    command: "echo 'resource \"aws_s3_bucket\" \"archive\" {' > ~/infra/main.tf"
+  - title: Add the lifecycle rule
+    detail: "prevent_destroy = true makes Terraform refuse to destroy this resource. The rule
+      belongs inside the resource block."
+    command: "echo 'lifecycle {\\nprevent_destroy = true\\n}' >> ~/infra/main.tf"
+  - title: Close the resource block
+    detail: One closing brace ends the resource block.
+    command: "echo '}' >> ~/infra/main.tf"
+  - title: Initialise the stack
+    detail: "terraform init downloads the providers and prepares the backend. Nothing else works
+      before it."
+    command: terraform init
+  - title: Plan the change
+    detail: "terraform plan shows what will be created before anything happens. Always read it."
+    command: terraform plan
+  - title: Apply the change
+    detail: "terraform apply -auto-approve creates the resource and records it in the state file."
+    command: terraform apply -auto-approve
+  - title: Submit for validation
+    detail: The validator checks the lifecycle rule, the initialisation and the state.

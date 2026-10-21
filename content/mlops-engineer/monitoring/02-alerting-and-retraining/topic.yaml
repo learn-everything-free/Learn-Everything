@@ -1,0 +1,7 @@
+slug: 02-alerting-and-retraining
+title: Alerting & Retraining
+summary: The thresholds that page someone, and the drift that starts a new training run.
+order: 2
+tasks:
+  - mon-alert-thresholds
+  - mon-retraining-trigger

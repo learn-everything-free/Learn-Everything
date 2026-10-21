@@ -1,0 +1,62 @@
+slug: dq-labeling-guidelines
+title: Write Labeling Guidelines
+type: practice
+difficulty: intermediate
+description: Label quality caps model quality. Write the guidelines a new annotator can follow
+  without asking anyone a question.
+requirements:
+  - Directory ~/data/labels exists
+  - File ~/data/labels/guidelines.md exists
+  - The guidelines define the label set and each label
+  - The guidelines cover tie-breakers and the agreement target
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/data/labels
+    label: ~/data/labels
+  - validator: file_exists
+    path: /home/learner/data/labels/guidelines.md
+    label: ~/data/labels/guidelines.md
+  - validator: file_contains
+    path: /home/learner/data/labels/guidelines.md
+    value: "Label set"
+    label: label set defined
+  - validator: file_contains
+    path: /home/learner/data/labels/guidelines.md
+    value: "Definition"
+    label: each label has a definition
+  - validator: file_contains
+    path: /home/learner/data/labels/guidelines.md
+    value: "Tie-breaker"
+    label: tie-breakers documented
+  - validator: file_contains
+    path: /home/learner/data/labels/guidelines.md
+    value: agreement
+    label: agreement target stated
+steps:
+  - title: Create the labels directory
+    detail: Guidelines live with the data they describe.
+    command: mkdir -p ~/data/labels
+  - title: Write the label set
+    detail: "The label set is the closed list of answers an annotator may choose. Three labels beat
+      five vague ones."
+    command: >-
+      echo '# Label set\n\n- spam\n- not_spam\n- unsure' > ~/data/labels/guidelines.md
+  - title: Define each label
+    detail: "Definition means one sentence an annotator can apply without asking. Quote the example
+      that settles the edge case."
+    command: >-
+      echo '\n## Definition\n\n- spam - the message is unsolicited bulk promotion.' >> ~/data/labels/guidelines.md
+  - title: Add the tie-breaker
+    detail: "Tie-breaker rules decide what happens when a message is both - the rule you write
+      here is the rule your annotators will use."
+    command: >-
+      echo '\n## Tie-breaker\n\nA message from a known sender is never spam.' >> ~/data/labels/guidelines.md
+  - title: Set the agreement target
+    detail: "Measure agreement between two annotators on the same batch. Below the target, rewrite
+      the guidelines before labelling more data."
+    command: >-
+      echo '\n## Agreement\n\nTarget agreement is 0.9 across two annotators on the same batch.' >> ~/data/labels/guidelines.md
+  - title: Verify and submit
+    detail: cat the guidelines, then submit for validation.
+    command: cat ~/data/labels/guidelines.md

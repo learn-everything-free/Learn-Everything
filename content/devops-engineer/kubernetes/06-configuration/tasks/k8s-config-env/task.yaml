@@ -1,0 +1,47 @@
+slug: k8s-config-env
+title: Keep Configuration Out of the Image
+type: practice
+difficulty: intermediate
+description: The same image runs in staging and in production - only the configuration differs.
+  Write a ConfigMap that holds the environment-specific settings.
+requirements:
+  - Directory ~/k8s exists
+  - File ~/k8s/config.yaml declares a ConfigMap
+  - The ConfigMap carries the DB_HOST and APP_MODE settings
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: directory_exists
+    path: /home/learner/k8s
+    label: ~/k8s
+  - validator: file_exists
+    path: /home/learner/k8s/config.yaml
+    label: ~/k8s/config.yaml
+  - validator: file_contains
+    path: /home/learner/k8s/config.yaml
+    value: "kind: ConfigMap"
+    label: manifest declares a ConfigMap
+  - validator: file_contains
+    path: /home/learner/k8s/config.yaml
+    value: DB_HOST
+    label: ConfigMap carries DB_HOST
+  - validator: file_contains
+    path: /home/learner/k8s/config.yaml
+    value: APP_MODE
+    label: ConfigMap carries APP_MODE
+steps:
+  - title: Create the manifests directory
+    detail: All configuration for a service belongs in one folder in the repository.
+    command: mkdir ~/k8s
+  - title: Declare the ConfigMap
+    detail: "kind says what the object is, metadata.name names it. A ConfigMap stores key/value
+      configuration - never secrets."
+    command: "echo 'kind: ConfigMap\\nmetadata:\\n  name: api-config' > ~/k8s/config.yaml"
+  - title: Add the data block
+    detail: "data holds the actual settings. One key per line, value after the colon."
+    command: "echo 'data:\\n  DB_HOST: db.internal' >> ~/k8s/config.yaml"
+  - title: Add the mode setting
+    detail: "APP_MODE is what switches the same image between staging and production."
+    command: "echo '  APP_MODE: production' >> ~/k8s/config.yaml"
+  - title: Verify and submit
+    detail: cat prints the manifest. Then submit for validation.
+    command: cat ~/k8s/config.yaml

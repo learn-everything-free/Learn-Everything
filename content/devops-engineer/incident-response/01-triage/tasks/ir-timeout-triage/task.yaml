@@ -1,0 +1,48 @@
+slug: ir-timeout-triage
+title: Explain the Upstream Timeouts
+type: scenario
+difficulty: advanced
+description: Yesterday's application log is full of failed requests. Work out which dependency
+  broke first and write the timeline entry that says so - cause, not fallout.
+requirements:
+  - Directory ~/incident exists
+  - File ~/incident/errors.log holds only the ERROR lines
+  - File ~/incident/timeline.md names the failing dependency and the first failure timestamp
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/incident
+    label: ~/incident
+  - validator: file_exists
+    path: /home/learner/incident/errors.log
+    label: ~/incident/errors.log
+  - validator: file_contains
+    path: /home/learner/incident/timeline.md
+    value: cache
+    label: timeline names the cache dependency
+  - validator: file_contains
+    path: /home/learner/incident/timeline.md
+    value: "00:03:18"
+    label: timeline records the first failure timestamp
+steps:
+  - title: Create the incident folder
+    detail: The redirect in a later step writes files, but it cannot create directories.
+    command: mkdir ~/incident
+  - title: Open yesterday's log
+    detail: "The app rotates logs per day: /var/log/app/app-2026-09-27.log holds yesterday's events,
+      with the time at the start of every line."
+    command: cat /var/log/app/app-2026-09-27.log
+  - title: Save the failures
+    detail: "Redirect the filtered errors into the incident folder - a timeline must be reproducible
+      from artifacts, not from memory."
+    command: grep ERROR /var/log/app/app-2026-09-27.log > ~/incident/errors.log
+  - title: Read the first failure
+    detail: "head -n 1 prints the first line of the file. That line holds the timestamp of the first
+      failure and the dependency it names."
+    command: head -n 1 ~/incident/errors.log
+  - title: Write the timeline entry
+    detail: "The first ERROR line is a refused connection to the cache at 00:03:18. Record the time
+      first, then the dependency."
+    command: "echo '00:03:18 - cache connection refused - first failure' > ~/incident/timeline.md"
+  - title: Submit for validation
+    detail: The validator checks the dependency and the timestamp.

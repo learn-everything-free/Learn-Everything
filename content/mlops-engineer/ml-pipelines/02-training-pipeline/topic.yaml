@@ -1,0 +1,7 @@
+slug: 02-training-pipeline
+title: The Training Pipeline
+summary: The stage that fits the model, and the stage that publishes what it produced.
+order: 2
+tasks:
+  - pipe-training-stage
+  - pipe-model-artifact

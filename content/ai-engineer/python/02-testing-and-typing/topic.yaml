@@ -1,0 +1,7 @@
+slug: 02-testing-and-typing
+title: Testing & Typing Your AI Code
+summary: Tests that catch a broken prompt call, and types that make the shape of a message obvious.
+order: 2
+tasks:
+  - py-pytest-suite
+  - py-type-hints

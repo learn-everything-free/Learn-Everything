@@ -1,0 +1,46 @@
+slug: llmops-canary-config
+title: Plan a Canary Rollout
+type: challenge
+difficulty: advanced
+description: Never swap a model in one step. Send a slice of the traffic to the candidate, watch
+  the metrics, and know exactly when to roll back.
+requirements:
+  - File ~/llmops/canary.yaml exists
+  - The config names the baseline and the candidate
+  - The config splits the traffic between them
+  - The config states the rollback criteria
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/llmops/canary.yaml
+    label: ~/llmops/canary.yaml
+  - validator: file_contains
+    path: /home/learner/llmops/canary.yaml
+    value: baseline
+    label: baseline model named
+  - validator: file_contains
+    path: /home/learner/llmops/canary.yaml
+    value: candidate
+    label: candidate model named
+  - validator: file_contains
+    path: /home/learner/llmops/canary.yaml
+    value: traffic_split
+    label: traffic split stated
+  - validator: file_contains
+    path: /home/learner/llmops/canary.yaml
+    value: rollback_if
+    label: rollback criteria stated
+steps:
+  - title: Create the llmops directory
+    detail: Rollout plans live with the rest of the deployment configuration.
+    command: mkdir ~/llmops
+  - title: Write the canary plan
+    detail: "traffic_split sends ten percent of the requests to the candidate. rollback_if is the
+      condition that sends it back - write it before you need it."
+    command: >-
+      echo 'baseline: model-v12\ncandidate: model-v13\ntraffic_split: {baseline: 90, candidate: 10}\nobserve_for_minutes: 30\nrollback_if: error_rate_above_0.02' > ~/llmops/canary.yaml
+  - title: Verify the plan
+    detail: cat prints the plan. Read the rollback condition out loud to somebody else.
+    command: cat ~/llmops/canary.yaml
+  - title: Submit for validation
+    detail: The validator checks both models, the traffic split and the rollback criteria.

@@ -1,0 +1,48 @@
+slug: ir-traffic-restore
+title: Bring Traffic Back to the Service
+type: challenge
+difficulty: advanced
+description: The pods are healthy again, but clients still get nothing - the Service in front of them
+  is gone. Recreate it and record every command you ran.
+requirements:
+  - Service default/api exists
+  - File ~/incident/actions.md lists the restore steps
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: k8s_service_exists
+    namespace: default
+    name: api
+    label: service default/api exists
+  - validator: file_exists
+    path: /home/learner/incident/actions.md
+    label: ~/incident/actions.md
+  - validator: file_contains
+    path: /home/learner/incident/actions.md
+    value: "kubectl expose"
+    label: actions.md records the expose step
+  - validator: file_contains
+    path: /home/learner/incident/actions.md
+    value: "kubectl get svc"
+    label: actions.md records the verification step
+steps:
+  - title: Check what is missing
+    detail: kubectl get svc lists the Services in the namespace. An empty list explains why clients
+      see nothing at all.
+    command: kubectl get svc
+  - title: Recreate the deployment
+    detail: "A Service selects Pods by label, so the deployment has to exist first. Two replicas
+      is enough to prove traffic is balanced."
+    command: kubectl create deployment api --image=app:latest --replicas=2
+  - title: Expose it
+    detail: "kubectl expose deployment api creates a Service in front of the pods. --port is what
+      clients call, --target-port is what the container listens on."
+    command: kubectl expose deployment api --port=80 --target-port=8080
+  - title: Verify the Service
+    detail: kubectl get svc shows the stable CLUSTER-IP and the port mapping.
+    command: kubectl get svc
+  - title: Record the actions
+    detail: "Write the commands you ran into the incident folder. The next person on call needs the
+      sequence, not the story."
+    command: "echo 'kubectl create deployment api --image=app:latest\\nkubectl expose deployment api --port=80 --target-port=8080\\nkubectl get svc' > ~/incident/actions.md"
+  - title: Submit for validation
+    detail: The validator checks the Service and the recorded actions.

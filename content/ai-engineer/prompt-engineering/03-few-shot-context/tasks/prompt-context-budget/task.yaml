@@ -1,0 +1,39 @@
+slug: prompt-context-budget
+title: Budget the Context Window
+type: challenge
+difficulty: advanced
+description: Every request has a token budget - instructions, retrieved context, history and the
+  answer. Write the budget so nothing silently overflows the window.
+requirements:
+  - File ~/prompts/context-budget.yaml exists
+  - The budget states the total context size
+  - The budget reserves room for the answer
+  - The budget defines what to drop when the window fills up
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/prompts/context-budget.yaml
+    label: ~/prompts/context-budget.yaml
+  - validator: file_contains
+    path: /home/learner/prompts/context-budget.yaml
+    value: max_context_tokens
+    label: total context size stated
+  - validator: file_contains
+    path: /home/learner/prompts/context-budget.yaml
+    value: reserved_output_tokens
+    label: room reserved for the answer
+  - validator: file_contains
+    path: /home/learner/prompts/context-budget.yaml
+    value: truncation_strategy
+    label: overflow behaviour defined
+steps:
+  - title: Write the context budget
+    detail: "max_context_tokens is the whole window, reserved_output_tokens is what the answer needs,
+      and truncation_strategy says what gives way first."
+    command: >-
+      echo 'max_context_tokens: 128000\nreserved_output_tokens: 2000\ntruncation_strategy: drop_oldest_history_first' > ~/prompts/context-budget.yaml
+  - title: Verify the budget
+    detail: cat prints the budget. Check the numbers against the model you actually call.
+    command: cat ~/prompts/context-budget.yaml
+  - title: Submit for validation
+    detail: The validator checks the three budget fields.

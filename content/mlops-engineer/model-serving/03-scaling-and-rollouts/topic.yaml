@@ -1,0 +1,7 @@
+slug: 03-scaling-and-rollouts
+title: Scaling & Rollouts
+summary: Scale with the load you measure, and swap models without dropping a request.
+order: 3
+tasks:
+  - serve-autoscale-hpa
+  - serve-canary-rollout

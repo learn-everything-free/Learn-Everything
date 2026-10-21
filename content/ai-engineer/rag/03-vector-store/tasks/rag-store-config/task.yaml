@@ -1,0 +1,45 @@
+slug: rag-store-config
+title: Configure the Vector Store
+type: practice
+difficulty: intermediate
+description: The vector store holds the embeddings and answers the nearest-neighbour queries.
+  Write the store configuration - index type, vector dimension and how many replicas it runs.
+requirements:
+  - Directory ~/rag exists
+  - File ~/rag/store.yaml exists
+  - The config names the index type and the vector dimension
+  - The config states the replica count
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/rag
+    label: ~/rag
+  - validator: file_exists
+    path: /home/learner/rag/store.yaml
+    label: ~/rag/store.yaml
+  - validator: file_contains
+    path: /home/learner/rag/store.yaml
+    value: index_type
+    label: index type configured
+  - validator: file_contains
+    path: /home/learner/rag/store.yaml
+    value: dimension
+    label: vector dimension configured
+  - validator: file_contains
+    path: /home/learner/rag/store.yaml
+    value: replicas
+    label: replica count configured
+steps:
+  - title: Create the rag directory
+    detail: The indexing pipeline, the store and the query code belong in one place.
+    command: mkdir ~/rag
+  - title: Write the store configuration
+    detail: "The dimension has to match the embedding model exactly - a mismatch is the classic
+      cause of an empty search result."
+    command: >-
+      echo 'index_type: hnsw\ndimension: 1536\ndistance_metric: cosine\nreplicas: 2' > ~/rag/store.yaml
+  - title: Verify the configuration
+    detail: cat prints the store configuration. Compare the dimension with your embedding model.
+    command: cat ~/rag/store.yaml
+  - title: Submit for validation
+    detail: The validator checks the index type, the dimension and the replicas.

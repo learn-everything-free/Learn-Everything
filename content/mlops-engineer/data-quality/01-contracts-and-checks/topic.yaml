@@ -1,0 +1,7 @@
+slug: 01-contracts-and-checks
+title: Contracts & Checks
+summary: State what the data must look like, and let the pipeline fail when it does not.
+order: 1
+tasks:
+  - dq-schema-contract
+  - dq-quality-report

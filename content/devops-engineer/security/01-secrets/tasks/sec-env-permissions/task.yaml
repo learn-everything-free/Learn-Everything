@@ -1,0 +1,47 @@
+slug: sec-env-permissions
+title: Keep a Credentials File Private
+type: guided
+difficulty: beginner
+description: Application secrets belong in one file with owner-only permissions. Create ~/app/.env
+  with an API key and lock it down to mode 600 so no other account on the machine can read it.
+requirements:
+  - Directory ~/app exists
+  - File ~/app/.env exists and holds the API key
+  - Permissions on ~/app/.env are 600 (owner read/write only)
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/app
+    label: ~/app
+  - validator: file_exists
+    path: /home/learner/app/.env
+    label: ~/app/.env
+  - validator: file_contains
+    path: /home/learner/app/.env
+    value: API_KEY=
+    label: .env holds the API key
+  - validator: file_mode
+    path: /home/learner/app/.env
+    mode: "600"
+    label: .env has mode 600
+steps:
+  - title: Create the application directory
+    detail: One folder per service keeps configuration next to the code that reads it.
+    command: mkdir ~/app
+  - title: Write the environment file
+    detail: "The dot prefix is a convention: it signals to other engineers that the file holds
+      secrets. KEY=value pairs, one per line, no spaces around the equals sign."
+    command: "echo 'API_KEY=sk-live-9f2b7c41ae' > ~/app/.env"
+  - title: Check the default permissions
+    detail: "ls -l prints the mode in the first column. A new file is usually -rw-r--r-- (644):
+      readable by every account on the box."
+    command: ls -l ~/app
+  - title: Restrict it to the owner
+    detail: "chmod 600 gives the owner read and write and everybody else nothing. This is the same
+      mode SSH expects for a private key."
+    command: chmod 600 ~/app/.env
+  - title: Verify the new mode
+    detail: The listing now starts with -rw-------.
+    command: ls -l ~/app
+  - title: Submit for validation
+    detail: The validator checks the directory, the file, its contents and its mode.

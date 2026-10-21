@@ -1,0 +1,7 @@
+slug: 01-secrets
+title: Secrets & Credentials
+summary: Where credentials live, how they must be protected, and how to keep them out of Git history.
+order: 1
+tasks:
+  - sec-env-permissions
+  - sec-rotate-credential

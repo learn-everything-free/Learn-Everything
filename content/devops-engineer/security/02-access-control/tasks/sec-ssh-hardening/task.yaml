@@ -1,0 +1,56 @@
+slug: sec-ssh-hardening
+title: Harden the SSH Daemon
+type: practice
+difficulty: intermediate
+description: Password logins and root logins are the two most abused doors into a Linux box. Write
+  an sshd_config that closes both and trims the attack surface further.
+requirements:
+  - Directory ~/security exists
+  - File ~/security/sshd_config exists
+  - Root login is disabled
+  - Password authentication is disabled
+  - X11 forwarding is disabled
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/security
+    label: ~/security
+  - validator: file_exists
+    path: /home/learner/security/sshd_config
+    label: ~/security/sshd_config
+  - validator: file_contains
+    path: /home/learner/security/sshd_config
+    value: PermitRootLogin no
+    label: root login disabled
+  - validator: file_contains
+    path: /home/learner/security/sshd_config
+    value: PasswordAuthentication no
+    label: password authentication disabled
+  - validator: file_contains
+    path: /home/learner/security/sshd_config
+    value: X11Forwarding no
+    label: X11 forwarding disabled
+steps:
+  - title: Create the security directory
+    detail: Hardening configs are version controlled, so they live in a folder of their own.
+    command: mkdir ~/security
+  - title: Disable root login
+    detail: "PermitRootLogin no means even a valid root password cannot be used over SSH. Admins log
+      in as a normal user and elevate when they need to."
+    command: "echo 'PermitRootLogin no' > ~/security/sshd_config"
+  - title: Disable password authentication
+    detail: "PasswordAuthentication no forces key-based logins, which cannot be brute forced. On a real
+      server always keep a second session open while you test this."
+    command: "echo 'PasswordAuthentication no' >> ~/security/sshd_config"
+  - title: Disable X11 forwarding
+    detail: Unneeded remote GUI forwarding is extra attack surface on every single session.
+    command: "echo 'X11Forwarding no' >> ~/security/sshd_config"
+  - title: Cap authentication attempts
+    detail: "MaxAuthTries 3 limits password guessing per connection - another reason the auth log
+      stays boring."
+    command: "echo 'MaxAuthTries 3' >> ~/security/sshd_config"
+  - title: Verify the config
+    detail: cat prints the finished file. A hardening file is only as good as its last line.
+    command: cat ~/security/sshd_config
+  - title: Submit for validation
+    detail: The validator checks the file and the three hardening directives.

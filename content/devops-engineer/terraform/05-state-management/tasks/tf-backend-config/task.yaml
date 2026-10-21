@@ -1,0 +1,52 @@
+slug: tf-backend-config
+title: Configure a Remote Backend
+type: practice
+difficulty: intermediate
+description: Local state belongs to one laptop and disappears with it. Move it to an S3 bucket
+  with locking so a whole team can share one source of truth.
+requirements:
+  - Directory ~/infra exists
+  - File ~/infra/backend.tf exists
+  - The backend block configures an S3 bucket, a key and a region
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/infra
+    label: ~/infra
+  - validator: file_exists
+    path: /home/learner/infra/backend.tf
+    label: ~/infra/backend.tf
+  - validator: file_contains
+    path: /home/learner/infra/backend.tf
+    value: "backend \"s3\""
+    label: backend block configures S3
+  - validator: file_contains
+    path: /home/learner/infra/backend.tf
+    value: bucket
+    label: backend names the state bucket
+  - validator: file_contains
+    path: /home/learner/infra/backend.tf
+    value: region
+    label: backend names the region
+steps:
+  - title: Create the infrastructure directory
+    detail: One folder per Terraform stack - the backend file only applies to the stack it lives in.
+    command: mkdir ~/infra
+  - title: Open the terraform block
+    detail: "The terraform block is where the backend lives. It has to be in its own file so the
+      backend can be initialised before the rest of the configuration is read."
+    command: "echo 'terraform {' > ~/infra/backend.tf"
+  - title: Declare the S3 backend
+    detail: "backend \"s3\" tells Terraform where to keep the state. The quotes are required."
+    command: "echo 'backend \"s3\" {' >> ~/infra/backend.tf"
+  - title: Name the bucket and the key
+    detail: "bucket is the state bucket, key is the file name inside it. Use one key per state - a
+      shared key is a shared lock."
+    command: "echo 'bucket = \"acme-terraform-state\"\\nkey    = \"prod/terraform.tfstate\"' >> ~/infra/backend.tf"
+  - title: Set the region and close the block
+    detail: "region says where the bucket lives. Two closing braces end the backend and the
+      terraform block."
+    command: "echo 'region = \"eu-west-1\"\\n}' >> ~/infra/backend.tf"
+  - title: Verify and submit
+    detail: cat prints the backend configuration. Then submit for validation.
+    command: cat ~/infra/backend.tf

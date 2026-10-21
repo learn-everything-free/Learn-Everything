@@ -1,0 +1,56 @@
+slug: sec-audit-script
+title: Write a Reusable Audit Script
+type: challenge
+difficulty: intermediate
+description: Audits should be repeatable, not remembered. Write a script that lists the listening
+  sockets, counts the failed requests in the access log and is readable only by its owner.
+requirements:
+  - Directory ~/audit exists
+  - File ~/audit/audit.sh exists
+  - The script inspects listening sockets and searches the access log
+  - Permissions on ~/audit/audit.sh are 700 (owner only, executable)
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/audit
+    label: ~/audit
+  - validator: file_exists
+    path: /home/learner/audit/audit.sh
+    label: ~/audit/audit.sh
+  - validator: file_contains
+    path: /home/learner/audit/audit.sh
+    value: ss
+    label: script inspects listening sockets
+  - validator: file_contains
+    path: /home/learner/audit/audit.sh
+    value: grep
+    label: script searches the logs
+  - validator: file_mode
+    path: /home/learner/audit/audit.sh
+    mode: "700"
+    label: audit.sh has mode 700
+steps:
+  - title: Create the audit directory
+    detail: Audits are artifacts - keep them in a folder you can hand to an auditor.
+    command: mkdir ~/audit
+  - title: Start the script
+    detail: "The shebang tells the kernel which interpreter to run the file with. It has to be the very
+      first line."
+    command: "echo '#!/bin/bash' > ~/audit/audit.sh"
+  - title: List the listening sockets
+    detail: "ss -tlnp shows every TCP socket in LISTEN state and the process holding it - the fastest
+      way to spot a service listening on all interfaces."
+    command: "echo 'ss -tlnp' >> ~/audit/audit.sh"
+  - title: Count the failed requests
+    detail: "grep -c prints the number of matching lines instead of the lines themselves - the
+      quickest way to turn a log into a number an auditor can compare with last week."
+    command: "echo 'grep -c 500 /var/log/app/access.log' >> ~/audit/audit.sh"
+  - title: Make it owner-only
+    detail: "chmod 700 gives the owner read, write and execute and nobody else anything. An audit
+      script anyone can edit is not evidence."
+    command: chmod 700 ~/audit/audit.sh
+  - title: Verify the script
+    detail: "ls -l shows the mode column: -rwx------ means owner only, with the executable bit set."
+    command: ls -l ~/audit
+  - title: Submit for validation
+    detail: The validator checks the script content and its mode.

@@ -1,0 +1,47 @@
+slug: eval-golden-set
+title: Curate a Golden Answer Set
+type: practice
+difficulty: intermediate
+description: Golden answers are the reference the model is measured against, so they need a human
+  behind them. Write the approved answer and record who reviewed it.
+requirements:
+  - Directory ~/evals/golden exists
+  - File ~/evals/golden/refund-answer.txt exists
+  - The answer states the refund window
+  - File ~/evals/golden/review.txt records the reviewer and the date
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/evals/golden
+    label: ~/evals/golden
+  - validator: file_exists
+    path: /home/learner/evals/golden/refund-answer.txt
+    label: ~/evals/golden/refund-answer.txt
+  - validator: file_contains
+    path: /home/learner/evals/golden/refund-answer.txt
+    value: "5 business days"
+    label: answer states the refund window
+  - validator: file_exists
+    path: /home/learner/evals/golden/review.txt
+    label: ~/evals/golden/review.txt
+  - validator: file_contains
+    path: /home/learner/evals/golden/review.txt
+    value: reviewed_by
+    label: review file names the reviewer
+steps:
+  - title: Create the golden directory
+    detail: Golden answers live apart from the dataset - they are reviewed, versioned and signed off.
+    command: mkdir -p ~/evals/golden
+  - title: Write the approved answer
+    detail: "Write the answer exactly as the model should answer. Vague references are the fastest
+      way to a useless eval."
+    command: "echo 'Refunds are processed within 5 business days of the item being received.' > ~/evals/golden/refund-answer.txt"
+  - title: Record the review
+    detail: "An unreviewed golden answer is just another guess. Name the reviewer and the date."
+    command: "echo 'reviewed_by: support-lead' >> ~/evals/golden/review.txt"
+  - title: Add the review date
+    detail: The date tells the next person how stale this answer might be.
+    command: "echo 'reviewed_on: 2026-10-02' >> ~/evals/golden/review.txt"
+  - title: Verify and submit
+    detail: cat both files, then submit for validation.
+    command: cat ~/evals/golden/refund-answer.txt

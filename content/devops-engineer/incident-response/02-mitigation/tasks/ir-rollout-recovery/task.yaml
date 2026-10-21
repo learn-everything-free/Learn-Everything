@@ -1,0 +1,47 @@
+slug: ir-rollout-recovery
+title: Roll Forward with a Fixed Manifest
+type: challenge
+difficulty: intermediate
+description: The api deployment never got its configuration. Write the missing Deployment manifest
+  with three replicas, apply it and let the cluster agree.
+requirements:
+  - Directory ~/manifests exists
+  - File ~/manifests/api.yaml declares a Deployment named api with 3 replicas
+  - Deployment default/api runs with 3 replicas
+environment: kubernetes 1.30 (kind)
+validation:
+  - validator: directory_exists
+    path: /home/learner/manifests
+    label: ~/manifests
+  - validator: file_exists
+    path: /home/learner/manifests/api.yaml
+    label: ~/manifests/api.yaml
+  - validator: file_contains
+    path: /home/learner/manifests/api.yaml
+    value: "kind: Deployment"
+    label: manifest declares a Deployment
+  - validator: file_contains
+    path: /home/learner/manifests/api.yaml
+    value: "replicas: 3"
+    label: manifest requests 3 replicas
+  - validator: k8s_deployment_replicas
+    namespace: default
+    name: api
+    replicas: 3
+    label: deployment default/api has 3 replicas
+steps:
+  - title: Create the manifests directory
+    detail: Manifests are code - they belong in a folder you can commit and review.
+    command: mkdir ~/manifests
+  - title: Write the Deployment manifest
+    detail: "kind says WHAT the object is, metadata.name names it, image says what runs inside and
+      replicas says how many. One echo writes the whole manifest."
+    command: "echo 'kind: Deployment\\nmetadata:\\n  name: api\\nspec:\\n  replicas: 3\\n  template:\\n    spec:\\n      containers:\\n        - name: api\\n          image: app:latest' > ~/manifests/api.yaml"
+  - title: Apply it
+    detail: "kubectl apply -f makes the cluster match the file. In this lab it reports what it created."
+    command: kubectl apply -f ~/manifests/api.yaml
+  - title: Confirm the replica count
+    detail: kubectl get deployments shows the READY column as 3/3 once the rollout finished.
+    command: kubectl get deployments
+  - title: Submit for validation
+    detail: The validator asks the cluster how many replicas the deployment has.

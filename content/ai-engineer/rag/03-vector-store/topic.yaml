@@ -1,0 +1,7 @@
+slug: 03-vector-store
+title: The Vector Store
+summary: Where the embeddings live, and how a query finds the right chunk in it.
+order: 3
+tasks:
+  - rag-store-config
+  - rag-hybrid-search

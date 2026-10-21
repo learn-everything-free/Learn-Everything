@@ -1,0 +1,7 @@
+slug: 02-data-wrangling
+title: Data Wrangling with Pandas
+summary: Load the data, then clean it - before a single line of model code runs.
+order: 2
+tasks:
+  - ml-pandas-loader
+  - ml-pandas-cleaning

@@ -1,0 +1,5 @@
+slug: feature-store
+title: Feature Stores
+summary: The same features, computed once, served to training and to production alike.
+path: mlops-engineer
+order: 6

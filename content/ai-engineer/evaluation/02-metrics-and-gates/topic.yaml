@@ -1,0 +1,7 @@
+slug: 02-metrics-and-gates
+title: Metrics & Release Gates
+summary: Turn a run into numbers, and turn the numbers into a gate that blocks bad releases.
+order: 2
+tasks:
+  - eval-metric-report
+  - eval-ci-gate

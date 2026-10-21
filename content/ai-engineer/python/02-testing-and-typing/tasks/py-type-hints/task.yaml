@@ -1,0 +1,45 @@
+slug: py-type-hints
+title: Type Your Message Models
+type: guided
+difficulty: beginner
+description: A chat message is a small, fixed shape - and the shape is exactly where the bugs hide.
+  Model it as a dataclass with type hints.
+requirements:
+  - Directory ~/ai-lab/src exists
+  - File ~/ai-lab/src/messages.py exists
+  - The file defines a dataclass with typed fields
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ai-lab/src
+    label: ~/ai-lab/src
+  - validator: file_exists
+    path: /home/learner/ai-lab/src/messages.py
+    label: ~/ai-lab/src/messages.py
+  - validator: file_contains
+    path: /home/learner/ai-lab/src/messages.py
+    value: dataclass
+    label: file uses a dataclass
+  - validator: file_contains
+    path: /home/learner/ai-lab/src/messages.py
+    value: "str"
+    label: fields are typed
+  - validator: file_contains
+    path: /home/learner/ai-lab/src/messages.py
+    value: "->"
+    label: function return types are annotated
+steps:
+  - title: Create the source directory
+    detail: Keep the library code separate from the tests - src layout makes imports unambiguous.
+    command: mkdir -p ~/ai-lab/src
+  - title: Write the message model
+    detail: "A dataclass generates the constructor for you. The role is a str and the content is a
+      str - say so in the annotations."
+    command: "echo 'from dataclasses import dataclass\\n\\n@dataclass\\nclass Message:\\n    role: str\\n    content: str' > ~/ai-lab/src/messages.py"
+  - title: Add a helper function
+    detail: "The arrow annotation tells a reader - and your editor - what the function returns.
+      Typing is documentation that cannot go stale."
+    command: "echo '\\ndef user_message(text: str) -> Message:\\n    return Message(role=\"user\", content=text)' >> ~/ai-lab/src/messages.py"
+  - title: Verify and submit
+    detail: cat the module, then submit for validation.
+    command: cat ~/ai-lab/src/messages.py

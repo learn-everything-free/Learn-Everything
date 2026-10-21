@@ -1,0 +1,53 @@
+slug: linux-healthcheck-script
+title: Write a Health Check Script
+type: practice
+difficulty: intermediate
+description: Monitoring is a script that reports a number instead of a feeling. Write a health
+  check that reads the application log and prints a verdict a monitoring agent can scrape.
+requirements:
+  - Directory ~/scripts exists
+  - File ~/scripts/healthcheck.sh exists
+  - The script greps the application log for ERROR lines
+  - The script prints a healthy or degraded verdict
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/scripts
+    label: ~/scripts
+  - validator: file_exists
+    path: /home/learner/scripts/healthcheck.sh
+    label: ~/scripts/healthcheck.sh
+  - validator: file_contains
+    path: /home/learner/scripts/healthcheck.sh
+    value: grep
+    label: script greps the log
+  - validator: file_contains
+    path: /home/learner/scripts/healthcheck.sh
+    value: "/var/log/app"
+    label: script reads the application log
+  - validator: file_contains
+    path: /home/learner/scripts/healthcheck.sh
+    value: healthy
+    label: script prints a health verdict
+steps:
+  - title: Create the scripts directory
+    detail: One folder for every automation script you own.
+    command: mkdir ~/scripts
+  - title: Write the shebang
+    detail: The shebang has to be the first line of the file, with nothing in front of it.
+    command: "echo '#!/bin/bash' > ~/scripts/healthcheck.sh"
+  - title: Count the failures
+    detail: "grep -c prints the number of matching lines instead of the lines themselves - the
+      fastest way to turn a log into a signal."
+    command: "echo 'grep -c ERROR /var/log/app/app-2026-09-27.log' >> ~/scripts/healthcheck.sh"
+  - title: Write the verdict
+    detail: "The script compares the count against a threshold and prints a verdict. A monitoring
+      agent greps for exactly this word."
+    command: "echo 'if [ $ERRORS -gt 0 ]; then echo degraded; else echo healthy; fi' >> ~/scripts/healthcheck.sh"
+  - title: Make it executable
+    detail: "chmod 700 lets the owner run the script and nobody else touch it - a check that anyone
+      can rewrite is not a check."
+    command: chmod 700 ~/scripts/healthcheck.sh
+  - title: Verify and submit
+    detail: cat prints the finished script, then submit for validation.
+    command: cat ~/scripts/healthcheck.sh

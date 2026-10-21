@@ -1,0 +1,45 @@
+slug: mcp-server-manifest
+title: Declare an MCP Server Manifest
+type: guided
+difficulty: beginner
+description: Every MCP server starts with a manifest - who it is, which protocol version it speaks
+  and how clients should reach it. Write one for a documentation server.
+requirements:
+  - Directory ~/mcp exists
+  - File ~/mcp/server.json exists
+  - The manifest names the server and its protocol version
+  - The manifest declares the stdio transport
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/mcp
+    label: ~/mcp
+  - validator: file_exists
+    path: /home/learner/mcp/server.json
+    label: ~/mcp/server.json
+  - validator: file_contains
+    path: /home/learner/mcp/server.json
+    value: docs-server
+    label: server is named
+  - validator: file_contains
+    path: /home/learner/mcp/server.json
+    value: protocolVersion
+    label: protocol version declared
+  - validator: file_contains
+    path: /home/learner/mcp/server.json
+    value: stdio
+    label: stdio transport declared
+steps:
+  - title: Create the mcp directory
+    detail: Servers, client configs and tool manifests live together - one folder per server.
+    command: mkdir ~/mcp
+  - title: Write the manifest
+    detail: "name identifies the server, protocolVersion pins the contract it implements, and
+      transport says how the client talks to it. One echo writes the whole document."
+    command: >-
+      echo '{"name": "docs-server", "version": "1.0.0", "protocolVersion": "2024-11-05", "transport": "stdio"}' > ~/mcp/server.json
+  - title: Verify the manifest
+    detail: cat prints the manifest. The protocol version is the field clients check first.
+    command: cat ~/mcp/server.json
+  - title: Submit for validation
+    detail: The validator checks the name, the protocol version and the transport.

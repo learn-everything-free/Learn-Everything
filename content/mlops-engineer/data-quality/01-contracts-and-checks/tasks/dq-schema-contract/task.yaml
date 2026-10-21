@@ -1,0 +1,54 @@
+slug: dq-schema-contract
+title: Write a Data Contract
+type: guided
+difficulty: beginner
+description: A contract states the columns a table must have and the rules those columns must
+  follow. Write the contract for the users table.
+requirements:
+  - Directory ~/data/contracts exists
+  - File ~/data/contracts/users.yaml exists
+  - The contract declares the columns and their types
+  - The contract states the expectations - no nulls and known country codes
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/data/contracts
+    label: ~/data/contracts
+  - validator: file_exists
+    path: /home/learner/data/contracts/users.yaml
+    label: ~/data/contracts/users.yaml
+  - validator: file_contains
+    path: /home/learner/data/contracts/users.yaml
+    value: columns
+    label: columns declared
+  - validator: file_contains
+    path: /home/learner/data/contracts/users.yaml
+    value: expectations
+    label: expectations declared
+  - validator: file_contains
+    path: /home/learner/data/contracts/users.yaml
+    value: not_null
+    label: null check present
+  - validator: file_contains
+    path: /home/learner/data/contracts/users.yaml
+    value: accepted_values
+    label: value set check present
+steps:
+  - title: Create the contracts directory
+    detail: Contracts belong next to the data they describe, in one reviewable place.
+    command: mkdir -p ~/data/contracts
+  - title: Declare the columns
+    detail: "name and type per column. The type is the contract - a string where a number belongs
+      breaks every downstream aggregation."
+    command: >-
+      echo 'name: users\ncolumns:\n  - name: user_id\n    type: int64\n  - name: country\n    type: string\n  - name: created_at\n    type: timestamp' > ~/data/contracts/users.yaml
+  - title: Declare the expectations
+    detail: "expectations are the checks the pipeline runs. not_null means the column can never be
+      empty."
+    command: >-
+      echo 'expectations:\n  - name: user_id_not_null\n    type: not_null\n    column: user_id\n  - name: country_known\n    type: accepted_values\n    column: country\n    values: [DE, FR, NL, PL]' >> ~/data/contracts/users.yaml
+  - title: Verify the contract
+    detail: cat prints the contract. Add an expectation for every bug the team has hit.
+    command: cat ~/data/contracts/users.yaml
+  - title: Submit for validation
+    detail: The validator checks the columns, the expectations and both kinds of check.

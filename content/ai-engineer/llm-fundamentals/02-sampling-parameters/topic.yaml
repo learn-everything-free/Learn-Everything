@@ -1,0 +1,7 @@
+slug: 02-sampling-parameters
+title: Sampling & Output Contracts
+summary: The knobs that shape an answer, and the schema that makes it machine-readable.
+order: 2
+tasks:
+  - llm-sampling-config
+  - llm-structured-output-schema

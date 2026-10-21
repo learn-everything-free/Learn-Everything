@@ -1,0 +1,53 @@
+slug: ir-postmortem
+title: Write the Postmortem
+type: project
+difficulty: advanced
+description: The service is back. The part everyone skips is the write-up. Produce a postmortem with
+  impact, root cause and action items - the three sections every blameless review requires.
+requirements:
+  - File ~/incident/postmortem.md exists
+  - The postmortem states the impact
+  - The postmortem states the root cause
+  - The postmortem lists action items
+  - The postmortem names the root cause of the api outage
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/incident/postmortem.md
+    label: ~/incident/postmortem.md
+  - validator: file_contains
+    path: /home/learner/incident/postmortem.md
+    value: Impact
+    label: impact section present
+  - validator: file_contains
+    path: /home/learner/incident/postmortem.md
+    value: Root cause
+    label: root cause section present
+  - validator: file_contains
+    path: /home/learner/incident/postmortem.md
+    value: Action items
+    label: action items section present
+  - validator: file_contains
+    path: /home/learner/incident/postmortem.md
+    value: DB_HOST
+    label: postmortem names the root cause
+steps:
+  - title: Create the incident folder
+    detail: The postmortem lives next to the evidence it is based on.
+    command: mkdir ~/incident
+  - title: Write the impact
+    detail: "Start with the user-visible effect and the duration. Numbers beat adjectives."
+    command: "echo 'Impact: api was unavailable for 42 minutes after the 09:12 deploy' > ~/incident/postmortem.md"
+  - title: Add the root cause
+    detail: "Name the technical cause, not the person who shipped it. Blameless means the system allowed
+      the mistake, not that nobody made one."
+    command: "echo 'Root cause: the api Deployment was missing the DB_HOST environment variable' >> ~/incident/postmortem.md"
+  - title: Add the action items
+    detail: "Every action item needs an owner and a deadline. 'Someone should add a health check' is
+      a wish, not an action item."
+    command: "echo 'Action items: fail fast when DB_HOST is missing - owner platform, due Friday' >> ~/incident/postmortem.md"
+  - title: Read it back
+    detail: cat prints the whole postmortem. Read it as if you were the person asking why.
+    command: cat ~/incident/postmortem.md
+  - title: Submit for validation
+    detail: The validator checks the three required sections and the root cause.

@@ -1,0 +1,66 @@
+slug: git-conventional-commits
+title: Use Conventional Commit Messages
+type: guided
+difficulty: beginner
+description: Commit messages are read by humans and by release tooling. Learn the type prefix
+  convention - feat for features, fix for bugs, chore for everything else.
+requirements:
+  - ~/project is a Git repository
+  - "A commit with message 'feat: add health endpoint' exists"
+  - "A commit with message 'fix: handle empty payload' exists"
+environment: ubuntu:24.04 + git
+validation:
+  - validator: git_repo
+    path: /home/learner/project
+    label: ~/project is a Git repository
+  - validator: git_commit
+    path: /home/learner/project
+    message: "feat: add health endpoint"
+    label: feature commit exists
+  - validator: git_commit
+    path: /home/learner/project
+    message: "fix: handle empty payload"
+    label: fix commit exists
+steps:
+  - title: Create the project folder
+    detail: Every lab starts from a fresh shell, so the folder does not exist yet.
+    command: mkdir ~/project
+  - title: Enter the repository
+    detail: Commits only exist inside a repository - move into the folder first.
+    command: cd ~/project
+  - title: Initialize the repository
+    detail: An empty repository has nothing to commit, so give it a file right after init.
+    command: git init
+  - title: Create the first file
+    detail: A README is enough - the point of this lab is the commit messages.
+    command: touch README.md
+  - title: Stage and commit
+    detail: "Stage everything, then record a chore commit. chore marks housekeeping that changes
+      nothing for users."
+    command: git add .
+  - title: Commit the chore
+    detail: "The type prefix comes first, a colon and a space, then the description in lower case."
+    command: 'git commit -m "chore: init repository"'
+  - title: Add the feature
+    detail: "Create the file the feature will live in, stage it and commit it as a feature."
+    command: touch health.py
+  - title: Stage and commit the feature
+    detail: "feat marks user-visible functionality - it is what release tooling turns into a
+      version bump."
+    command: git add .
+  - title: Commit the feature
+    detail: Keep the description short and in the imperative mood.
+    command: 'git commit -m "feat: add health endpoint"'
+  - title: Add the fix
+    detail: Create a second file and stage it the same way.
+    command: touch payload.py
+  - title: Commit the fix
+    detail: "fix marks a correction to shipped behaviour - it goes into the patch notes, not the
+      release headline."
+    command: git add .
+  - title: Commit the fix
+    detail: git log shows all three messages in one place.
+    command: 'git commit -m "fix: handle empty payload"'
+  - title: Verify and submit
+    detail: Review the history, then submit for validation.
+    command: git log

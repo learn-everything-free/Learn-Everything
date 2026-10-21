@@ -1,0 +1,57 @@
+slug: prompt-few-shot-examples
+title: Write Few-Shot Examples
+type: practice
+difficulty: intermediate
+description: Three good examples beat three paragraphs of instructions. Write a support prompt that
+  demonstrates the tone, the format and the edge case you care about.
+requirements:
+  - Directory ~/prompts exists
+  - File ~/prompts/support-fewshot.md exists
+  - The file contains three labelled examples
+  - Every example states the input and the expected output
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/prompts
+    label: ~/prompts
+  - validator: file_exists
+    path: /home/learner/prompts/support-fewshot.md
+    label: ~/prompts/support-fewshot.md
+  - validator: file_contains
+    path: /home/learner/prompts/support-fewshot.md
+    value: "Example 1"
+    label: first example present
+  - validator: file_contains
+    path: /home/learner/prompts/support-fewshot.md
+    value: "Example 3"
+    label: third example present
+  - validator: file_contains
+    path: /home/learner/prompts/support-fewshot.md
+    value: "Input:"
+    label: examples state their input
+  - validator: file_contains
+    path: /home/learner/prompts/support-fewshot.md
+    value: "Output:"
+    label: examples state their output
+steps:
+  - title: Create the prompts directory
+    detail: Prompts are code - they are versioned, reviewed and tested like code.
+    command: mkdir ~/prompts
+  - title: Write the instruction
+    detail: "One line of instruction, then examples. The instruction sets the job; the examples set
+      the style."
+    command: "echo 'Classify the support ticket and reply in one friendly sentence.' > ~/prompts/support-fewshot.md"
+  - title: Add the first example
+    detail: "Label every example so the model can tell data from instructions, and show the shape of
+      the answer you want."
+    command: "echo 'Example 1\\nInput: where is my order\\nOutput: Your order left the warehouse yesterday and arrives tomorrow.' >> ~/prompts/support-fewshot.md"
+  - title: Add the second example
+    detail: "The second example should cover a different case - a refund, a complaint, a technical
+      question."
+    command: "echo 'Example 2\\nInput: I want a refund\\nOutput: Refunds are processed within 5 business days of the item being received.' >> ~/prompts/support-fewshot.md"
+  - title: Add the third example
+    detail: "Make the third one the hard case - the one your first two examples do not cover."
+    command: "echo 'Example 3\\nInput: the app keeps logging me out\\nOutput: Clearing the session cookie should fix it, and our team can reset it if it returns.' >> ~/prompts/support-fewshot.md"
+  - title: Verify and submit
+    detail: cat the prompt, then submit for validation.
+    command: cat ~/prompts/support-fewshot.md

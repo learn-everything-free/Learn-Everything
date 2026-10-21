@@ -63,6 +63,7 @@ export default function PathsPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           {paths.map((p) => {
             const pathTaskCount = countTasks(p);
+            const pathTopicCount = p.skills.reduce((n, s) => n + s.topics.length, 0);
             return (
               <div
                 key={p.slug}
@@ -91,12 +92,13 @@ export default function PathsPage() {
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {p.skills.map((skill) => (
-                        <span
+                        <Link
                           key={skill.slug}
-                          className="rounded-lg border border-stone/60 bg-eggshell/90 px-2.5 py-1 font-mono text-[11px] text-graphite"
+                          href={`/paths/${p.slug}/${skill.slug}`}
+                          className="rounded-lg border border-stone/60 bg-eggshell/90 px-2.5 py-1 font-mono text-[11px] text-graphite transition-colors hover:border-ink/30 hover:text-ink"
                         >
                           {skill.title}
-                        </span>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -108,7 +110,7 @@ export default function PathsPage() {
                   />
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs text-smoke">
-                      {p.skills.length} skills · {pathTaskCount} tasks
+                      {p.skills.length} skills · {pathTopicCount} topics · {pathTaskCount} tasks
                     </span>
                     <Link
                       href={`/paths/${p.slug}`}

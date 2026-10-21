@@ -1,0 +1,46 @@
+slug: mcp-client-config
+title: Connect a Client to a Server
+type: practice
+difficulty: intermediate
+description: Clients find servers through configuration. Write the client config that starts the
+  documentation server and registers it under a stable alias.
+requirements:
+  - Directory ~/.config/mcp exists
+  - File ~/.config/mcp/clients.json exists
+  - The config lists the server under servers
+  - The config states how to start the server
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.config/mcp
+    label: ~/.config/mcp
+  - validator: file_exists
+    path: /home/learner/.config/mcp/clients.json
+    label: ~/.config/mcp/clients.json
+  - validator: file_contains
+    path: /home/learner/.config/mcp/clients.json
+    value: servers
+    label: config lists servers
+  - validator: file_contains
+    path: /home/learner/.config/mcp/clients.json
+    value: docs-server
+    label: docs server registered
+  - validator: file_contains
+    path: /home/learner/.config/mcp/clients.json
+    value: command
+    label: config states how to start the server
+steps:
+  - title: Create the client config directory
+    detail: "Clients keep their configuration under ~/.config, one directory per tool - the same
+      convention every other CLI on Linux uses."
+    command: mkdir -p ~/.config/mcp
+  - title: Write the client configuration
+    detail: "Each entry under servers has an alias and the command that starts the server. The alias
+      is what the model sees, so make it readable."
+    command: >-
+      echo '{"servers": {"docs": {"command": "python", "args": ["-m", "docs_server"], "description": "docs-server - internal documentation search"}}}' > ~/.config/mcp/clients.json
+  - title: Verify the configuration
+    detail: cat prints the client config. Every key here is something you will debug at 2am.
+    command: cat ~/.config/mcp/clients.json
+  - title: Submit for validation
+    detail: The validator checks the servers block, the alias and the start command.

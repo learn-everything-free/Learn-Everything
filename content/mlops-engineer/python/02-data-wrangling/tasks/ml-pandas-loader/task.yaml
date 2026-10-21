@@ -1,0 +1,50 @@
+slug: ml-pandas-loader
+title: Write a Reproducible Loader
+type: guided
+difficulty: beginner
+description: The loader is the boundary between raw data and your model. Write it so the path, the
+  columns and the row count are all recorded.
+requirements:
+  - Directory ~/ml/data exists
+  - File ~/ml/data/load.py exists
+  - The loader reads the dataset with pandas
+  - The loader records the path and the row count
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ml/data
+    label: ~/ml/data
+  - validator: file_exists
+    path: /home/learner/ml/data/load.py
+    label: ~/ml/data/load.py
+  - validator: file_contains
+    path: /home/learner/ml/data/load.py
+    value: "import pandas"
+    label: pandas imported
+  - validator: file_contains
+    path: /home/learner/ml/data/load.py
+    value: read_csv
+    label: dataset is read
+  - validator: file_contains
+    path: /home/learner/ml/data/load.py
+    value: shape
+    label: row count recorded
+steps:
+  - title: Create the data directory
+    detail: Data loading code deserves its own directory - it is the part you rerun most.
+    command: mkdir -p ~/ml/data
+  - title: Write the loader
+    detail: "DATA_PATH is a constant so the dataset location lives in exactly one place. Never
+      paste a path into three functions."
+    command: >-
+      echo 'import pandas as pd\n\nDATA_PATH = "s3://acme-raw/orders.parquet"\n\ndef load_orders():\n    return pd.read_csv(DATA_PATH)' > ~/ml/data/load.py
+  - title: Record what you loaded
+    detail: "Print the shape as well as the head - a silent row loss is the failure mode you are
+      guarding against."
+    command: >-
+      echo '\ndef describe(df):\n    print("rows", df.shape[0])\n    return df.shape' >> ~/ml/data/load.py
+  - title: Verify the loader
+    detail: cat prints the module. A loader you cannot read is a loader you cannot trust.
+    command: cat ~/ml/data/load.py
+  - title: Submit for validation
+    detail: The validator checks the import, the read and the shape call.

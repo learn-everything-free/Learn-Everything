@@ -1,0 +1,65 @@
+slug: obs-burn-rate-rule
+title: Alert on Error Budget Burn
+type: challenge
+difficulty: advanced
+description: Paging on every error wastes attention. Burn-rate alerting pages when the error budget
+  is being consumed far too fast - write the rule that does it.
+requirements:
+  - Directory ~/alerts exists
+  - File ~/alerts/burn-rate.yml exists
+  - The rule evaluates burn_rate against the error budget
+  - The rule waits an hour before firing and pages on call
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/alerts
+    label: ~/alerts
+  - validator: file_exists
+    path: /home/learner/alerts/burn-rate.yml
+    label: ~/alerts/burn-rate.yml
+  - validator: file_contains
+    path: /home/learner/alerts/burn-rate.yml
+    value: burn_rate
+    label: rule evaluates the burn rate
+  - validator: file_contains
+    path: /home/learner/alerts/burn-rate.yml
+    value: error_budget
+    label: rule references the error budget
+  - validator: file_contains
+    path: /home/learner/alerts/burn-rate.yml
+    value: "for: 1h"
+    label: rule waits an hour before firing
+  - validator: file_contains
+    path: /home/learner/alerts/burn-rate.yml
+    value: "severity: page"
+    label: rule pages the on-call engineer
+steps:
+  - title: Create the alerts directory
+    detail: Prometheus loads rule files from configured paths - one folder keeps them tidy.
+    command: mkdir ~/alerts
+  - title: Open the group
+    detail: "groups wrap rules, and every group has a name. The name shows up in the alert list."
+    command: "echo 'groups:' > ~/alerts/burn-rate.yml"
+  - title: Name the group
+    detail: The group name says what the rules are about.
+    command: "echo '- name: slo-burn' >> ~/alerts/burn-rate.yml"
+  - title: Open the rules list
+    detail: "rules is a list; each entry is one alert."
+    command: "echo '  rules:' >> ~/alerts/burn-rate.yml"
+  - title: Name the alert
+    detail: "Alert names are the first thing you read at 3am - make them say what is burning."
+    command: "echo '  - alert: ErrorBudgetBurn' >> ~/alerts/burn-rate.yml"
+  - title: Write the expression
+    detail: "burn_rate compares how fast the error budget is being spent against the budget itself.
+      Keep the comparison tight, with no spaces around it."
+    command: "echo '    expr: burn_rate(error_budget_ratio)>14.4' >> ~/alerts/burn-rate.yml"
+  - title: Add the duration
+    detail: "The for clause stops a short spike from paging anyone. An hour is the standard
+      fast-burn window."
+    command: "echo '    for: 1h' >> ~/alerts/burn-rate.yml"
+  - title: Add the label
+    detail: "severity decides who is woken up. page is for humans, ticket is for the morning."
+    command: "echo '    labels:\\n      severity: page' >> ~/alerts/burn-rate.yml"
+  - title: Verify and submit
+    detail: cat prints the rule, then submit for validation.
+    command: cat ~/alerts/burn-rate.yml

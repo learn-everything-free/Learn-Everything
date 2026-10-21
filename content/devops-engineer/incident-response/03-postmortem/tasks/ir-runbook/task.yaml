@@ -1,0 +1,45 @@
+slug: ir-runbook
+title: Publish a Rollback Runbook
+type: practice
+difficulty: intermediate
+description: The next incident starts at 3am and the person on call will not be you. Write the
+  rollback runbook while you still remember the commands.
+requirements:
+  - Directory ~/runbooks exists
+  - File ~/runbooks/rollback.md exists
+  - The runbook documents how to roll back a deployment
+  - The runbook documents how to check pod status
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/runbooks
+    label: ~/runbooks
+  - validator: file_exists
+    path: /home/learner/runbooks/rollback.md
+    label: ~/runbooks/rollback.md
+  - validator: file_contains
+    path: /home/learner/runbooks/rollback.md
+    value: "kubectl rollout undo"
+    label: runbook documents the rollback command
+  - validator: file_contains
+    path: /home/learner/runbooks/rollback.md
+    value: "kubectl get pods"
+    label: runbook documents the status check
+steps:
+  - title: Create the runbooks directory
+    detail: Runbooks are a collection - one folder, one file per procedure.
+    command: mkdir ~/runbooks
+  - title: Write the rollback step
+    detail: "kubectl rollout undo reverts the Deployment to its previous revision - the fastest way
+      back to a known-good state."
+    command: "echo 'kubectl rollout undo deployment/api' > ~/runbooks/rollback.md"
+  - title: Add the verification step
+    detail: "Never roll back and walk away. Check the pods actually came back before you close the
+      incident."
+    command: "echo 'kubectl get pods' >> ~/runbooks/rollback.md"
+  - title: Add the escalation step
+    detail: "If the rollback does not help, say so out loud: who to page and after how long."
+    command: "echo 'page the platform on-call if pods are still not Running after 5 minutes' >> ~/runbooks/rollback.md"
+  - title: Verify and submit
+    detail: cat the runbook, then submit for validation.
+    command: cat ~/runbooks/rollback.md

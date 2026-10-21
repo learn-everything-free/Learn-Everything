@@ -1,0 +1,54 @@
+slug: pipe-model-artifact
+title: Publish the Model Artifact
+type: challenge
+difficulty: advanced
+description: A trained model is not a deliverable until it is stored, signed and checked. Write the
+  publish stage that does all three.
+requirements:
+  - File ~/pipeline/stages/publish.yaml exists
+  - The stage uploads the model artifact
+  - The stage records the data and code versions
+  - The stage runs a validation step before publishing
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/pipeline/stages/publish.yaml
+    label: ~/pipeline/stages/publish.yaml
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/publish.yaml
+    value: artifact
+    label: stage publishes an artifact
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/publish.yaml
+    value: upload
+    label: artifact is uploaded
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/publish.yaml
+    value: data_version
+    label: data version recorded
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/publish.yaml
+    value: validation
+    label: validation step present
+steps:
+  - title: Create the stages directory
+    detail: The publish stage lives next to the training stage it follows.
+    command: mkdir -p ~/pipeline/stages
+  - title: Write the publish stage
+    detail: "artifact says what is being published and upload says where it goes. The destination
+      is versioned - never overwrite a model in place."
+    command: >-
+      echo 'name: publish\nimage: acme/pipeline-tools:1.4\nartifact:\n  name: orders-model\n  path: s3://acme-models/orders/v12/model.pkl\n  upload: true' > ~/pipeline/stages/publish.yaml
+  - title: Record the lineage
+    detail: "data_version and code_version are what let you rebuild the exact model six months
+      later."
+    command: >-
+      echo 'lineage:\n  data_version: features-v12\n  code_version: git-9f2b7c4' >> ~/pipeline/stages/publish.yaml
+  - title: Add the validation step
+    detail: "The stage validates the artifact before it publishes it - a broken model should never
+      reach the registry."
+    command: >-
+      echo 'steps:\n  - name: validation\n    command: python validate.py --artifact model.pkl\n  - name: publish\n    command: pipeline publish --artifact model.pkl' >> ~/pipeline/stages/publish.yaml
+  - title: Verify and submit
+    detail: cat the stage, then submit for validation.
+    command: cat ~/pipeline/stages/publish.yaml

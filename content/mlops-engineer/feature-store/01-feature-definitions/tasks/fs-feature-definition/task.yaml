@@ -1,0 +1,63 @@
+slug: fs-feature-definition
+title: Define a Feature View
+type: guided
+difficulty: beginner
+description: A feature view names the entity, the features and where the data comes from. Write
+  the definition for a user activity feature set.
+requirements:
+  - Directory ~/feast exists
+  - File ~/feast/feature_repo.yaml exists
+  - The config declares the project and the provider
+  - The config defines a feature view with an entity and features
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/feast
+    label: ~/feast
+  - validator: file_exists
+    path: /home/learner/feast/feature_repo.yaml
+    label: ~/feast/feature_repo.yaml
+  - validator: file_contains
+    path: /home/learner/feast/feature_repo.yaml
+    value: project
+    label: project declared
+  - validator: file_contains
+    path: /home/learner/feast/feature_repo.yaml
+    value: provider
+    label: provider declared
+  - validator: file_contains
+    path: /home/learner/feast/feature_repo.yaml
+    value: entity
+    label: feature view declares its entity
+  - validator: file_contains
+    path: /home/learner/feast/feature_repo.yaml
+    value: feature_view
+    label: feature view declared
+  - validator: file_contains
+    path: /home/learner/feast/feature_repo.yaml
+    value: schema
+    label: feature view declares its schema
+steps:
+  - title: Create the feast directory
+    detail: The feature repository is a project of its own - keep it out of the serving code.
+    command: mkdir ~/feast
+  - title: Write the repository config
+    detail: "project names the repository, provider says where the data lives and online_store
+      says where the fresh values are served from."
+    command: >-
+      echo 'project: acme-orders\nprovider: local\nregistry: data/registry.db\nonline_store:\n  type: sqlite\n  path: data/online_store.db\nentity_key_serialization_version: 2' > ~/feast/feature_repo.yaml
+  - title: Add the entity
+    detail: "The entity is the thing every row is about - the user, the order, the device. Get it
+      wrong and every join is wrong."
+    command: >-
+      echo 'entity:\n  name: user\n  join_keys:\n    - user_id\n  value_type: INT64' >> ~/feast/feature_repo.yaml
+  - title: Add the feature view
+    detail: "A feature view is a named, versioned set of features. The schema of the view is the
+      contract between training and serving."
+    command: >-
+      echo 'feature_view:\n  name: user_activity\n  entity: user\n  schema:\n    - name: sessions_7d\n      type: INT64\n    - name: spend_30d\n      type: FLOAT\n    - name: last_seen\n      type: DATETIME' >> ~/feast/feature_repo.yaml
+  - title: Verify the definition
+    detail: cat prints the repository config. Every feature here needs an owner.
+    command: cat ~/feast/feature_repo.yaml
+  - title: Submit for validation
+    detail: The validator checks the project, the provider, the entity and the features.

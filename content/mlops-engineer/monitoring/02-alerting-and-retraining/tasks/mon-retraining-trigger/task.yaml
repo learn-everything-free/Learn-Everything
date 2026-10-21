@@ -1,0 +1,49 @@
+slug: mon-retraining-trigger
+title: Trigger Retraining on Drift
+type: challenge
+difficulty: advanced
+description: When the data moves, the model has to move with it. Write the trigger that opens a
+  retraining run once the drift score crosses a threshold.
+requirements:
+  - File ~/monitoring/retrain.yaml exists
+  - The trigger watches the drift score
+  - The trigger states the threshold that fires it
+  - The trigger names the pipeline it starts and how often it may run
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/monitoring/retrain.yaml
+    label: ~/monitoring/retrain.yaml
+  - validator: file_contains
+    path: /home/learner/monitoring/retrain.yaml
+    value: drift
+    label: trigger watches the drift score
+  - validator: file_contains
+    path: /home/learner/monitoring/retrain.yaml
+    value: threshold
+    label: threshold stated
+  - validator: file_contains
+    path: /home/learner/monitoring/retrain.yaml
+    value: pipeline
+    label: pipeline named
+  - validator: file_contains
+    path: /home/learner/monitoring/retrain.yaml
+    value: cooldown
+    label: cooldown stated
+steps:
+  - title: Create the monitoring directory
+    detail: The retraining trigger lives with the alert rules it belongs to.
+    command: mkdir -p ~/monitoring
+  - title: Write the trigger
+    detail: "threshold is the drift score that matters - a change big enough to move the model's
+      accuracy, not every wobble in the data."
+    command: >-
+      echo 'trigger:\n  metric: feature_drift_score\n  threshold: 0.25\n  comparison: above' > ~/monitoring/retrain.yaml
+  - title: Name the pipeline and the cooldown
+    detail: "The pipeline is what actually runs. The cooldown stops a drifting feature from
+      starting forty training runs in one afternoon."
+    command: >-
+      echo '  pipeline: orders-training\n  cooldown: 24h\n  notify: ml-platform' >> ~/monitoring/retrain.yaml
+  - title: Verify and submit
+    detail: cat prints the trigger, then submit for validation.
+    command: cat ~/monitoring/retrain.yaml

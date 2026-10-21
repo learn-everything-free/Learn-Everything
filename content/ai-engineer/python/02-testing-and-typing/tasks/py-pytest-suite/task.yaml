@@ -1,0 +1,48 @@
+slug: py-pytest-suite
+title: Write a Pytest Suite
+type: practice
+difficulty: intermediate
+description: The part of your AI code that is not a model call is ordinary code, and ordinary code
+  deserves ordinary tests. Write a test for the prompt builder and a pytest configuration.
+requirements:
+  - Directory ~/ai-lab/tests exists
+  - File ~/ai-lab/tests/test_prompts.py exists with a test function
+  - File ~/ai-lab/pytest.ini configures the test paths
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ai-lab/tests
+    label: ~/ai-lab/tests
+  - validator: file_exists
+    path: /home/learner/ai-lab/tests/test_prompts.py
+    label: ~/ai-lab/tests/test_prompts.py
+  - validator: file_contains
+    path: /home/learner/ai-lab/tests/test_prompts.py
+    value: "def test_"
+    label: test file contains a test function
+  - validator: file_contains
+    path: /home/learner/ai-lab/tests/test_prompts.py
+    value: assert
+    label: test file asserts something
+  - validator: file_exists
+    path: /home/learner/ai-lab/pytest.ini
+    label: ~/ai-lab/pytest.ini
+  - validator: file_contains
+    path: /home/learner/ai-lab/pytest.ini
+    value: testpaths
+    label: pytest.ini configures the test paths
+steps:
+  - title: Create the tests directory
+    detail: pytest collects every file called test_*.py below the configured paths.
+    command: mkdir -p ~/ai-lab/tests
+  - title: Write the test file
+    detail: "A test function starts with test_ and ends with an assert. Assert the shape of the
+      request you send, not the answer the model gives."
+    command: "echo 'def test_builds_user_message():\\n    assert \"user\" in build_messages(\"hi\")' > ~/ai-lab/tests/test_prompts.py"
+  - title: Write the pytest configuration
+    detail: "testpaths tells pytest where to look. Without it pytest walks the whole tree and
+      collects whatever it finds."
+    command: "echo '[pytest]\\ntestpaths = tests' > ~/ai-lab/pytest.ini"
+  - title: Verify and submit
+    detail: cat both files, then submit for validation.
+    command: cat ~/ai-lab/tests/test_prompts.py

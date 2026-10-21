@@ -1,0 +1,45 @@
+slug: dq-quality-report
+title: Report the Quality of a Run
+type: practice
+difficulty: intermediate
+description: A contract produces a verdict. Write the report that says how many rows were
+  scanned, how many broke the contract and whether the run may continue.
+requirements:
+  - Directory ~/data/reports exists
+  - File ~/data/reports/quality.json exists
+  - The report states the number of rows scanned and the violations
+  - The report states the verdict
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/data/reports
+    label: ~/data/reports
+  - validator: file_exists
+    path: /home/learner/data/reports/quality.json
+    label: ~/data/reports/quality.json
+  - validator: file_contains
+    path: /home/learner/data/reports/quality.json
+    value: rows_scanned
+    label: rows scanned reported
+  - validator: file_contains
+    path: /home/learner/data/reports/quality.json
+    value: violations
+    label: violations reported
+  - validator: file_contains
+    path: /home/learner/data/reports/quality.json
+    value: verdict
+    label: verdict stated
+steps:
+  - title: Create the reports directory
+    detail: Every run writes its own report - the history is the point.
+    command: mkdir -p ~/data/reports
+  - title: Write the quality report
+    detail: "rows_scanned says how much data was checked, violations says how many rows broke the
+      contract, and verdict says whether the pipeline may continue."
+    command: >-
+      echo '{"dataset": "users", "rows_scanned": 10432, "violations": 7, "worst_offender": "country_not_known", "verdict": "fail"}' > ~/data/reports/quality.json
+  - title: Verify the report
+    detail: cat prints the report. Seven bad rows in ten thousand is a data bug, not a model bug.
+    command: cat ~/data/reports/quality.json
+  - title: Submit for validation
+    detail: The validator checks the row count, the violations and the verdict.

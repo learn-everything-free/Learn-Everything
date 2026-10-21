@@ -1,0 +1,57 @@
+slug: pipe-training-stage
+title: Define the Training Stage
+type: practice
+difficulty: intermediate
+description: The training stage is where the DAG stops being a plan and starts doing work. Write
+  its definition with the image, the command and the artifacts it consumes and produces.
+requirements:
+  - Directory ~/pipeline/stages exists
+  - File ~/pipeline/stages/train.yaml exists
+  - The stage declares its image and its command
+  - The stage declares its inputs and its outputs
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/pipeline/stages
+    label: ~/pipeline/stages
+  - validator: file_exists
+    path: /home/learner/pipeline/stages/train.yaml
+    label: ~/pipeline/stages/train.yaml
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/train.yaml
+    value: image
+    label: stage declares its image
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/train.yaml
+    value: command
+    label: stage declares its command
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/train.yaml
+    value: inputs
+    label: stage declares its inputs
+  - validator: file_contains
+    path: /home/learner/pipeline/stages/train.yaml
+    value: outputs
+    label: stage declares its outputs
+steps:
+  - title: Create the stages directory
+    detail: One file per stage keeps the pipeline inspectable without reading code.
+    command: mkdir -p ~/pipeline/stages
+  - title: Write the training stage
+    detail: "image is the environment the stage runs in, command is what it executes. Both are
+      pinned so a rerun uses the same versions."
+    command: >-
+      echo 'name: train\nimage: python:3.12-slim\ncommand: python train.py --config config.yaml' > ~/pipeline/stages/train.yaml
+  - title: Declare the inputs
+    detail: "inputs are the artifacts the stage needs. Without them the scheduler cannot order the
+      DAG correctly."
+    command: >-
+      echo 'inputs:\n  - name: dataset\n    path: s3://acme-features/orders/v12\n  - name: config\n    path: s3://acme-configs/train.yaml' >> ~/pipeline/stages/train.yaml
+  - title: Declare the outputs
+    detail: "outputs are what the next stage consumes. Name them once and let the orchestrator
+      wire the graph."
+    command: >-
+      echo 'outputs:\n  - name: model\n    path: s3://acme-models/orders/v12\n  - name: metrics\n    path: s3://acme-metrics/orders/v12.json' >> ~/pipeline/stages/train.yaml
+  - title: Verify and submit
+    detail: cat prints the stage, then submit for validation.
+    command: cat ~/pipeline/stages/train.yaml

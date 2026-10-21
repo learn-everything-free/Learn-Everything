@@ -1,0 +1,7 @@
+slug: 05-load-balancing
+title: Reverse Proxies & Load Balancing
+summary: Put a proxy in front of your services so traffic is balanced and failures are noticed.
+order: 5
+tasks:
+  - net-lb-config
+  - net-lb-healthcheck

@@ -1,0 +1,38 @@
+slug: mcp-resource-catalog
+title: Publish a Resource Catalog
+type: challenge
+difficulty: advanced
+description: Resources are read-only context - policies, schemas, runbooks. Publish a catalog so the
+  model knows what it may read, and how each item is typed.
+requirements:
+  - File ~/mcp/resources.json exists
+  - The catalog lists resources with a uri
+  - Every resource declares a name and a mimeType
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/mcp/resources.json
+    label: ~/mcp/resources.json
+  - validator: file_contains
+    path: /home/learner/mcp/resources.json
+    value: resources
+    label: catalog declares resources
+  - validator: file_contains
+    path: /home/learner/mcp/resources.json
+    value: uri
+    label: resources carry a uri
+  - validator: file_contains
+    path: /home/learner/mcp/resources.json
+    value: mimeType
+    label: resources declare a mimeType
+steps:
+  - title: Write the resource catalog
+    detail: "uri is the address the client reads from, name is the human label, mimeType tells the
+      client how to interpret the bytes."
+    command: >-
+      echo '{"resources": [{"uri": "docs://policy/support", "name": "Support policy", "mimeType": "text/markdown"}, {"uri": "docs://schema/ticket", "name": "Ticket schema", "mimeType": "application/json"}]}' > ~/mcp/resources.json
+  - title: Verify the catalog
+    detail: cat prints the catalog. Every uri must be something the server can actually serve.
+    command: cat ~/mcp/resources.json
+  - title: Submit for validation
+    detail: The validator checks the catalog, the uris and the mime types.

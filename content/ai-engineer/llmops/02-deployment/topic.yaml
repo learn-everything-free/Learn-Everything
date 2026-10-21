@@ -1,0 +1,7 @@
+slug: 02-deployment
+title: Deploying & Rolling Out Models
+summary: The endpoint that serves the model, and the rollout that replaces it without downtime.
+order: 2
+tasks:
+  - llmops-endpoint-config
+  - llmops-canary-config

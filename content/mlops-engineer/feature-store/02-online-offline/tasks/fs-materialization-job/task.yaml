@@ -1,0 +1,48 @@
+slug: fs-materialization-job
+title: Materialise Features Incrementally
+type: challenge
+difficulty: advanced
+description: Fresh values have to travel from the offline store into the online one. Write the job
+  that does it, with the window it covers.
+requirements:
+  - File ~/feast/materialize.py exists
+  - The job calls materialize_incremental
+  - The job states the window it materialises
+  - The job runs on a schedule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/feast/materialize.py
+    label: ~/feast/materialize.py
+  - validator: file_contains
+    path: /home/learner/feast/materialize.py
+    value: materialize_incremental
+    label: job materialises features
+  - validator: file_contains
+    path: /home/learner/feast/materialize.py
+    value: start_date
+    label: materialisation window start stated
+  - validator: file_contains
+    path: /home/learner/feast/materialize.py
+    value: end_date
+    label: materialisation window end stated
+  - validator: file_contains
+    path: /home/learner/feast/materialize.py
+    value: schedule
+    label: job runs on a schedule
+steps:
+  - title: Write the materialisation job
+    detail: "materialize_incremental copies the features that changed in the window. Give it a
+      start and an end - an open window means re-processing everything."
+    command: >-
+      echo 'from feast import materialize_incremental\n\ndef materialize(start_date, end_date):\n    materialize_incremental(end_date=end_date, feature_views=["user_activity"])\n    return start_date, end_date' > ~/feast/materialize.py
+  - title: Add the schedule
+    detail: "Every fifteen minutes is usually enough for online features - the slower the data
+      moves, the cheaper the store."
+    command: >-
+      echo '\nschedule:\n  cron: "*/15 * * * *"' >> ~/feast/materialize.py
+  - title: Verify the job
+    detail: cat prints the job. Read it as the cron entry that will run it.
+    command: cat ~/feast/materialize.py
+  - title: Submit for validation
+    detail: The validator checks the materialise call, the window and the schedule.

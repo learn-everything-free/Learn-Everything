@@ -1,0 +1,8 @@
+slug: 05-state-management
+title: State, Backends & Guardrails
+summary: Where the state lives, and what happens to your infrastructure when you press the wrong
+  button.
+order: 5
+tasks:
+  - tf-backend-config
+  - tf-lifecycle-guard

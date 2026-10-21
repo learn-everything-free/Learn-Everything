@@ -1,0 +1,5 @@
+slug: security
+title: Security & Hardening
+summary: Least privilege, secret hygiene and hardened defaults for every machine you touch.
+path: devops-engineer
+order: 11

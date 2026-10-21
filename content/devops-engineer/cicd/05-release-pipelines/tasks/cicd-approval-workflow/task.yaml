@@ -1,0 +1,52 @@
+slug: cicd-approval-workflow
+title: Add an Approval Gate to a Deployment
+type: practice
+difficulty: intermediate
+description: Production deployments should need a human. Extend a pipeline with a manual trigger and
+  an environment that requires approval before anything ships.
+requirements:
+  - Directory ~/ci exists
+  - File ~/ci/deploy.yml exists
+  - The workflow can be started manually
+  - The deploy job waits for the build job and targets the production environment
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ci
+    label: ~/ci
+  - validator: file_exists
+    path: /home/learner/ci/deploy.yml
+    label: ~/ci/deploy.yml
+  - validator: file_contains
+    path: /home/learner/ci/deploy.yml
+    value: workflow_dispatch
+    label: workflow can be started manually
+  - validator: file_contains
+    path: /home/learner/ci/deploy.yml
+    value: "needs:"
+    label: deploy job depends on the build job
+  - validator: file_contains
+    path: /home/learner/ci/deploy.yml
+    value: "environment: production"
+    label: deploy job targets the production environment
+steps:
+  - title: Create the ci directory
+    detail: Pipeline files live in the repository; in this lab they live in their own folder.
+    command: mkdir ~/ci
+  - title: Name the workflow
+    detail: "name is what shows up in the Actions tab - say what the pipeline does."
+    command: "echo 'name: deploy' > ~/ci/deploy.yml"
+  - title: Add the manual trigger
+    detail: "workflow_dispatch adds a Run workflow button, so a release is started by a person
+      instead of by a push."
+    command: "echo 'on:\\n  workflow_dispatch:' >> ~/ci/deploy.yml"
+  - title: Open the jobs block
+    detail: jobs group the steps; every job runs on its own fresh runner.
+    command: "echo 'jobs:' >> ~/ci/deploy.yml"
+  - title: Name the deploy job
+    detail: "environment: production attaches the job to an environment. Environments can require a
+      reviewer, which is the approval gate."
+    command: "echo '  deploy:\\n    needs: [build]\\n    environment: production\\n    runs-on: ubuntu-latest' >> ~/ci/deploy.yml"
+  - title: Verify and submit
+    detail: cat prints the workflow, then submit for validation.
+    command: cat ~/ci/deploy.yml

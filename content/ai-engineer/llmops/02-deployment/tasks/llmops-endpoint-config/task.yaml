@@ -1,0 +1,49 @@
+slug: llmops-endpoint-config
+title: Configure the Inference Endpoint
+type: practice
+difficulty: intermediate
+description: Everything the serving layer needs is configuration - which model, where it listens,
+  how long it may think and what happens when it fails. Write it.
+requirements:
+  - Directory ~/llmops exists
+  - File ~/llmops/endpoint.yaml exists
+  - The config names the model and the port
+  - The config sets a timeout and a retry count
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/llmops
+    label: ~/llmops
+  - validator: file_exists
+    path: /home/learner/llmops/endpoint.yaml
+    label: ~/llmops/endpoint.yaml
+  - validator: file_contains
+    path: /home/learner/llmops/endpoint.yaml
+    value: model
+    label: model configured
+  - validator: file_contains
+    path: /home/learner/llmops/endpoint.yaml
+    value: port
+    label: port configured
+  - validator: file_contains
+    path: /home/learner/llmops/endpoint.yaml
+    value: timeout_seconds
+    label: timeout configured
+  - validator: file_contains
+    path: /home/learner/llmops/endpoint.yaml
+    value: max_retries
+    label: retry count configured
+steps:
+  - title: Create the llmops directory
+    detail: Deployment configuration belongs next to the tracking and evaluation configuration.
+    command: mkdir ~/llmops
+  - title: Write the endpoint configuration
+    detail: "timeout_seconds is the deadline for one request, max_retries is how often the gateway
+      tries again before giving up."
+    command: >-
+      echo 'model: gpt-4o-mini\nhost: 0.0.0.0\nport: 8000\ntimeout_seconds: 30\nmax_retries: 2\nhealth_path: /health' > ~/llmops/endpoint.yaml
+  - title: Verify the configuration
+    detail: cat prints the endpoint. The timeout is the number your users feel.
+    command: cat ~/llmops/endpoint.yaml
+  - title: Submit for validation
+    detail: The validator checks the model, the port, the timeout and the retries.

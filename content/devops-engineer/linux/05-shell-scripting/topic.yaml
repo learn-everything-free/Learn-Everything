@@ -1,0 +1,7 @@
+slug: 05-shell-scripting
+title: Shell Scripting Basics
+summary: Turn the one-liners you keep typing into scripts that run the same way every time.
+order: 5
+tasks:
+  - linux-backup-script
+  - linux-healthcheck-script

@@ -1,5 +1,5 @@
 slug: agents
-title: Agents & MCP
-summary: Tool use, agent loops and the Model Context Protocol.
+title: Agent Engineering
+summary: Tool calling, agent loops and the guardrails that keep them in check.
 path: ai-engineer
 order: 5

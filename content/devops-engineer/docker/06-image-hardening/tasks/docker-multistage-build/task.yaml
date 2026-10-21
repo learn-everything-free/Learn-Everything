@@ -1,0 +1,63 @@
+slug: docker-multistage-build
+title: Build a Multi-Stage Image
+type: challenge
+difficulty: advanced
+description: Build tools do not belong in a runtime image. Use two stages - one to compile, one to
+  ship - so the final image only carries what the application needs to run.
+requirements:
+  - File ~/app/Dockerfile declares two build stages
+  - The runtime stage copies artifacts from the build stage
+  - A container from app:multistage is running and mapped to port 8082
+environment: docker:24
+validation:
+  - validator: file_exists
+    path: /home/learner/app/Dockerfile
+    label: ~/app/Dockerfile
+  - validator: file_contains
+    path: /home/learner/app/Dockerfile
+    value: "AS builder"
+    label: first stage is named builder
+  - validator: file_contains
+    path: /home/learner/app/Dockerfile
+    value: "COPY --from=builder"
+    label: runtime stage copies from the builder
+  - validator: container_running
+    image: app:multistage
+    label: container from app:multistage running
+  - validator: port_mapped
+    port: 8082
+    label: port 8082 mapped
+steps:
+  - title: Create the app directory
+    detail: The Dockerfile lives next to the code it packages.
+    command: mkdir ~/app
+  - title: Write the build stage
+    detail: "The first FROM starts the build stage. Give it a name with AS so the second stage can
+      copy from it."
+    command: "echo 'FROM node:22 AS builder' > ~/app/Dockerfile"
+  - title: Copy the sources
+    detail: "WORKDIR sets the directory the following commands run in - here the source folder."
+    command: "echo 'WORKDIR /src' >> ~/app/Dockerfile"
+  - title: Install the dependencies
+    detail: "npm ci installs exactly the versions in the lockfile - the difference between npm install
+      and npm ci is reproducibility."
+    command: "echo 'COPY package.json .\\nRUN npm ci --omit=dev' >> ~/app/Dockerfile"
+  - title: Start the runtime stage
+    detail: "A second FROM starts a clean base - this one is what actually ships."
+    command: "echo 'FROM node:22-slim' >> ~/app/Dockerfile"
+  - title: Copy the artifacts
+    detail: "COPY --from=builder takes the installed dependencies out of the first stage and drops
+      them into the second."
+    command: "echo 'COPY --from=builder /src /app' >> ~/app/Dockerfile"
+  - title: Run as a numeric user
+    detail: "A numeric id needs no passwd entry in the image - a common pattern for distroless
+      runtime stages."
+    command: "echo 'USER 10001' >> ~/app/Dockerfile"
+  - title: Build and run
+    detail: "Build the two-stage image, then publish it on port 8082."
+    command: docker build -t app:multistage ~/app
+  - title: Start the container
+    detail: docker ps shows the running container and its port mapping.
+    command: docker run -d -p 8082:80 app:multistage
+  - title: Submit for validation
+    detail: The validator checks both stages in the Dockerfile and the running container.

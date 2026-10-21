@@ -1,0 +1,46 @@
+slug: agent-memory-store
+title: Define an Agent Memory Store
+type: practice
+difficulty: intermediate
+description: Short-term memory is the current task, long-term memory is what the agent learned.
+  Define both, plus the rule that decides what is worth keeping.
+requirements:
+  - File ~/agents/memory.json exists
+  - The store defines a short-term and a long-term section
+  - The store states what gets written to long-term memory
+  - The store caps the number of remembered items
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/agents/memory.json
+    label: ~/agents/memory.json
+  - validator: file_contains
+    path: /home/learner/agents/memory.json
+    value: short_term
+    label: short-term memory defined
+  - validator: file_contains
+    path: /home/learner/agents/memory.json
+    value: long_term
+    label: long-term memory defined
+  - validator: file_contains
+    path: /home/learner/agents/memory.json
+    value: write_policy
+    label: write policy defined
+  - validator: file_contains
+    path: /home/learner/agents/memory.json
+    value: max_items
+    label: memory size capped
+steps:
+  - title: Create the agents directory
+    detail: One folder per agent holds its loop, its tools and its memory schema.
+    command: mkdir ~/agents
+  - title: Write the memory store
+    detail: "short_term holds the current task, long_term holds what is worth remembering. The
+      write_policy decides what crosses over - and max_items stops it growing forever."
+    command: >-
+      echo '{"short_term": {"scope": "current_task", "ttl_turns": 10}, "long_term": {"scope": "user_preferences"}, "write_policy": "store only confirmed preferences", "max_items": 200}' > ~/agents/memory.json
+  - title: Verify the store
+    detail: cat prints the memory configuration. Ask what happens when it fills up.
+    command: cat ~/agents/memory.json
+  - title: Submit for validation
+    detail: The validator checks both scopes, the write policy and the cap.

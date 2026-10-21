@@ -1,0 +1,7 @@
+slug: 02-client-and-resources
+title: Clients, Resources & Discovery
+summary: Wiring a client to a server, and exposing documents as resources instead of tools.
+order: 2
+tasks:
+  - mcp-client-config
+  - mcp-resource-catalog

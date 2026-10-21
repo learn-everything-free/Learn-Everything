@@ -1,0 +1,7 @@
+slug: 05-ignore-rules
+title: Ignore Rules & Commit Discipline
+summary: Keep the wrong files out of the repository and make every commit message say something useful.
+order: 5
+tasks:
+  - git-ignore-patterns
+  - git-conventional-commits

@@ -1,0 +1,44 @@
+slug: ml-pandas-cleaning
+title: Clean a Frame Before Training
+type: practice
+difficulty: intermediate
+description: Nulls, duplicates and wrong dtypes quietly destroy a model. Write the cleaning step
+  that handles all three.
+requirements:
+  - File ~/ml/data/clean.py exists
+  - The script drops rows with missing values
+  - The script fills the remaining gaps with a sensible default
+  - The script removes duplicate rows
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/ml/data/clean.py
+    label: ~/ml/data/clean.py
+  - validator: file_contains
+    path: /home/learner/ml/data/clean.py
+    value: dropna
+    label: rows with missing values dropped
+  - validator: file_contains
+    path: /home/learner/ml/data/clean.py
+    value: fillna
+    label: remaining gaps filled
+  - validator: file_contains
+    path: /home/learner/ml/data/clean.py
+    value: drop_duplicates
+    label: duplicate rows handled
+steps:
+  - title: Write the cleaning step
+    detail: "dropna removes the rows that are missing something essential. Fill the gaps only after
+      you know which ones matter."
+    command: >-
+      echo 'import pandas as pd\n\ndef clean(df):\n    df = df.dropna(subset=["user_id", "event_time"])\n    df = df.fillna({"country": "unknown"})' > ~/ml/data/clean.py
+  - title: Remove the duplicates
+    detail: "duplicated tells you which rows are copies. Dropping them keeps the training set from
+      over-representing busy users."
+    command: >-
+      echo '    df = df.drop_duplicates(subset=["user_id", "event_time"])\n    return df' >> ~/ml/data/clean.py
+  - title: Verify the cleaning step
+    detail: cat prints the script. Every transformation should be justified by a bug you have seen.
+    command: cat ~/ml/data/clean.py
+  - title: Submit for validation
+    detail: The validator checks the three cleaning operations.

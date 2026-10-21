@@ -1,0 +1,7 @@
+slug: 06-image-hardening
+title: Image Hardening
+summary: Smaller images, fewer privileges, fewer things for an attacker to hold on to.
+order: 6
+tasks:
+  - docker-nonroot-image
+  - docker-multistage-build

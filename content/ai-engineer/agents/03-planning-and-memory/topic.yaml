@@ -1,0 +1,7 @@
+slug: 03-planning-and-memory
+title: Planning & Memory
+summary: How an agent decides what to do next, and what it remembers between the steps.
+order: 3
+tasks:
+  - agent-planner-loop
+  - agent-memory-store

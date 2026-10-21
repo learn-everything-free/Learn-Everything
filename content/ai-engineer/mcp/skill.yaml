@@ -1,0 +1,5 @@
+slug: mcp
+title: Model Context Protocol
+summary: One protocol for exposing tools, resources and prompts to any model client.
+path: ai-engineer
+order: 7

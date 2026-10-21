@@ -1,0 +1,44 @@
+slug: mcp-tool-definitions
+title: Describe the Tools a Server Exposes
+type: practice
+difficulty: intermediate
+description: A tool description is the model's only documentation. Write a search tool with a clear
+  description and a JSON Schema for its arguments.
+requirements:
+  - File ~/mcp/tools.json exists
+  - The tool is named search_docs
+  - The tool has a description and an inputSchema
+  - The schema marks the query argument as required
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/mcp/tools.json
+    label: ~/mcp/tools.json
+  - validator: file_contains
+    path: /home/learner/mcp/tools.json
+    value: search_docs
+    label: tool is named search_docs
+  - validator: file_contains
+    path: /home/learner/mcp/tools.json
+    value: description
+    label: tool has a description
+  - validator: file_contains
+    path: /home/learner/mcp/tools.json
+    value: inputSchema
+    label: tool declares an input schema
+  - validator: file_contains
+    path: /home/learner/mcp/tools.json
+    value: required
+    label: schema marks required arguments
+steps:
+  - title: Write the tool manifest
+    detail: "A tool has a name, a description and an inputSchema. The description is what the model
+      reads when it decides whether to call the tool - vague wording means wrong calls."
+    command: >-
+      echo '{"tools": [{"name": "search_docs", "description": "Search the internal documentation for a keyword and return the three best matching sections", "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}}]}' > ~/mcp/tools.json
+  - title: Verify the tool definition
+    detail: cat prints the manifest. Read the description out loud - would you call this tool from
+      that sentence?
+    command: cat ~/mcp/tools.json
+  - title: Submit for validation
+    detail: The validator checks the tool name, its description and its schema.

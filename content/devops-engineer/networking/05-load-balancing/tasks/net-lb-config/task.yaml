@@ -1,0 +1,62 @@
+slug: net-lb-config
+title: Configure a Reverse Proxy
+type: practice
+difficulty: intermediate
+description: A reverse proxy terminates client connections and forwards them to your upstreams.
+  Write an nginx configuration with an upstream block, a failure threshold and a proxy_pass rule.
+requirements:
+  - Directory ~/nginx exists
+  - File ~/nginx/nginx.conf exists
+  - The config declares an upstream with a failure threshold
+  - The config forwards traffic to the upstream
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/nginx
+    label: ~/nginx
+  - validator: file_exists
+    path: /home/learner/nginx/nginx.conf
+    label: ~/nginx/nginx.conf
+  - validator: file_contains
+    path: /home/learner/nginx/nginx.conf
+    value: "upstream backend"
+    label: config declares an upstream block
+  - validator: file_contains
+    path: /home/learner/nginx/nginx.conf
+    value: max_fails
+    label: upstream has a failure threshold
+  - validator: file_contains
+    path: /home/learner/nginx/nginx.conf
+    value: proxy_pass
+    label: config forwards traffic to the upstream
+steps:
+  - title: Create the nginx directory
+    detail: Proxy configuration is code - it belongs in a folder you can review.
+    command: mkdir ~/nginx
+  - title: Open the upstream block
+    detail: "An upstream groups the servers the proxy may forward to. The block is closed with a
+      curly brace on its own line."
+    command: "echo 'upstream backend {' > ~/nginx/nginx.conf"
+  - title: Add the upstream server
+    detail: "max_fails=3 tells nginx to stop sending requests to a server after three failures,
+      fail_timeout says how long before it is tried again."
+    command: "echo 'server 127.0.0.1:8080 max_fails=3 fail_timeout=30s;' >> ~/nginx/nginx.conf"
+  - title: Close the upstream block
+    detail: One closing brace ends the upstream group.
+    command: "echo '}' >> ~/nginx/nginx.conf"
+  - title: Open the server block
+    detail: "The server block holds the rules for incoming requests - one per virtual host."
+    command: "echo 'server {' >> ~/nginx/nginx.conf"
+  - title: Add the location rule
+    detail: "location / catches every path that is not handled by a more specific rule."
+    command: "echo 'location / {' >> ~/nginx/nginx.conf"
+  - title: Forward to the upstream
+    detail: "proxy_pass points at the upstream name, not at an IP - the name is what makes the
+      balancing work."
+    command: "echo 'proxy_pass http://backend;' >> ~/nginx/nginx.conf"
+  - title: Close the location rule
+    detail: Two closing braces end the location and the server block.
+    command: "echo '}' >> ~/nginx/nginx.conf"
+  - title: Verify and submit
+    detail: cat prints the whole configuration. Then submit for validation.
+    command: cat ~/nginx/nginx.conf

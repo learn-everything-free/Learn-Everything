@@ -1,0 +1,45 @@
+slug: mon-alert-thresholds
+title: Set the Alert Thresholds
+type: practice
+difficulty: intermediate
+description: Two numbers decide whether a model is healthy - how accurate it is and how fast it
+  answers. Write the alert rules that watch both.
+requirements:
+  - Directory ~/monitoring exists
+  - File ~/monitoring/alerts.yaml exists
+  - The rules cover the accuracy and the latency
+  - Each rule states how long it must hold before firing
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/monitoring
+    label: ~/monitoring
+  - validator: file_exists
+    path: /home/learner/monitoring/alerts.yaml
+    label: ~/monitoring/alerts.yaml
+  - validator: file_contains
+    path: /home/learner/monitoring/alerts.yaml
+    value: accuracy
+    label: accuracy rule present
+  - validator: file_contains
+    path: /home/learner/monitoring/alerts.yaml
+    value: latency
+    label: latency rule present
+  - validator: file_contains
+    path: /home/learner/monitoring/alerts.yaml
+    value: "for:"
+    label: rules state a duration
+steps:
+  - title: Create the monitoring directory
+    detail: Alert rules are configuration - one folder per model keeps them reviewable.
+    command: mkdir -p ~/monitoring
+  - title: Write the alert rules
+    detail: "The for clause is what keeps a blip from paging anyone - the condition has to hold for
+      that long."
+    command: >-
+      echo 'groups:\n  - name: model-alerts\n    rules:\n      - alert: ModelAccuracyDrop\n        expr: model_accuracy<0.85\n        for: 30m\n        severity: page\n      - alert: ModelLatencyHigh\n        expr: model_p95_latency_ms>1200\n        for: 10m\n        severity: ticket' > ~/monitoring/alerts.yaml
+  - title: Verify the rules
+    detail: cat prints the rules. Ask whether every page would wake somebody up for a reason.
+    command: cat ~/monitoring/alerts.yaml
+  - title: Submit for validation
+    detail: The validator checks both metrics and the duration clause.

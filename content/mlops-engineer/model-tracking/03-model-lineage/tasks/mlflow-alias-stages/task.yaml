@@ -1,0 +1,54 @@
+slug: mlflow-alias-stages
+title: Promote Models with Aliases
+type: challenge
+difficulty: advanced
+description: Stages move models through the registry, aliases point at them. Write the promotion
+  rules that decide which version serves traffic.
+requirements:
+  - File ~/mlflow/aliases.yaml exists
+  - The file maps the champion and challenger aliases to versions
+  - The file states the rule for promoting a challenger
+  - The file states the rule for rolling back
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/mlflow/aliases.yaml
+    label: ~/mlflow/aliases.yaml
+  - validator: file_contains
+    path: /home/learner/mlflow/aliases.yaml
+    value: champion
+    label: champion alias mapped
+  - validator: file_contains
+    path: /home/learner/mlflow/aliases.yaml
+    value: challenger
+    label: challenger alias mapped
+  - validator: file_contains
+    path: /home/learner/mlflow/aliases.yaml
+    value: promote
+    label: promotion rule stated
+  - validator: file_contains
+    path: /home/learner/mlflow/aliases.yaml
+    value: rollback
+    label: rollback rule stated
+steps:
+  - title: Create the mlflow directory
+    detail: Promotion rules live with the rest of the registry configuration.
+    command: mkdir ~/mlflow
+  - title: Map the aliases
+    detail: "champion serves production traffic, challenger gets the evaluation slice. Aliases
+      point at versions - moving the alias is the promotion."
+    command: >-
+      echo 'aliases:\n  champion: orders-model/12\n  challenger: orders-model/13' > ~/mlflow/aliases.yaml
+  - title: State the promotion rule
+    detail: "Promote only after the challenger beats the champion on the holdout and for the whole
+      observation window."
+    command: >-
+      echo 'promote:\n  when: challenger_f1_exceeds_champion_f1\n  observation_window_hours: 24\n  action: set_champion_to_challenger' >> ~/mlflow/aliases.yaml
+  - title: State the rollback rule
+    detail: "Roll back the moment the champion's live metric drops - the alias moves back, and
+      the rollback is instant."
+    command: >-
+      echo 'rollback:\n  when: live_f1_below_baseline\n  action: set_champion_to_previous_version' >> ~/mlflow/aliases.yaml
+  - title: Verify and submit
+    detail: cat prints the rules, then submit for validation.
+    command: cat ~/mlflow/aliases.yaml

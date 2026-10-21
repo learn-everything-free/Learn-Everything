@@ -1,0 +1,7 @@
+slug: 05-iam
+title: IAM & Least Privilege
+summary: Give every identity exactly the permissions it needs - and rotate the keys it holds.
+order: 5
+tasks:
+  - aws-iam-policy
+  - aws-rotate-access-key

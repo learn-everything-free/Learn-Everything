@@ -1,0 +1,5 @@
+slug: evaluation
+title: LLM Evaluation
+summary: Measure what your prompts and models actually do, before your users tell you.
+path: ai-engineer
+order: 8

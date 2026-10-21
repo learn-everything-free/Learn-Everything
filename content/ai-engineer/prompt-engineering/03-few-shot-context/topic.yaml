@@ -1,0 +1,7 @@
+slug: 03-few-shot-context
+title: Few-Shot Examples & Context Budget
+summary: Show the model what good looks like, and decide what still fits in the window.
+order: 3
+tasks:
+  - prompt-few-shot-examples
+  - prompt-context-budget

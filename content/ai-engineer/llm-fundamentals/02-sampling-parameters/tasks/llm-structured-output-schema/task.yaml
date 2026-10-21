@@ -1,0 +1,39 @@
+slug: llm-structured-output-schema
+title: Define a Structured Output Schema
+type: practice
+difficulty: intermediate
+description: Free text has to be parsed. A JSON Schema makes the model answer with a shape your code
+  can rely on - write one for a ticket classifier.
+requirements:
+  - File ~/llm-lab/schema.json exists
+  - The schema describes an object with properties
+  - The schema marks its fields as required
+  - The schema restricts the severity field to a fixed set of values
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/llm-lab/schema.json
+    label: ~/llm-lab/schema.json
+  - validator: file_contains
+    path: /home/learner/llm-lab/schema.json
+    value: properties
+    label: schema declares properties
+  - validator: file_contains
+    path: /home/learner/llm-lab/schema.json
+    value: required
+    label: schema marks required fields
+  - validator: file_contains
+    path: /home/learner/llm-lab/schema.json
+    value: enum
+    label: severity is an enum
+steps:
+  - title: Write the schema
+    detail: "type says the shape, properties names the fields, required lists the ones that must be
+      there, and enum keeps a field inside a fixed set of values."
+    command: >-
+      echo '{"type": "object", "properties": {"severity": {"type": "string", "enum": ["P1", "P2", "P3"]}, "summary": {"type": "string"}}, "required": ["severity", "summary"]}' > ~/llm-lab/schema.json
+  - title: Verify the schema
+    detail: cat prints the schema. Read it as if you were the parser that has to survive it.
+    command: cat ~/llm-lab/schema.json
+  - title: Submit for validation
+    detail: The validator checks the properties, the required list and the enum.

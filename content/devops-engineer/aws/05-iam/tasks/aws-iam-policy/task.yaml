@@ -1,0 +1,45 @@
+slug: aws-iam-policy
+title: Write a Least-Privilege IAM Policy
+type: practice
+difficulty: intermediate
+description: AdministratorAccess is not a starting point. Write a policy that grants exactly two S3
+  read actions on one bucket and nothing else.
+requirements:
+  - Directory ~/aws exists
+  - File ~/aws/iam-policy.json exists
+  - The policy allows s3:GetObject and s3:ListBucket
+  - The policy scopes the access to the lab-artifacts bucket
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/aws
+    label: ~/aws
+  - validator: file_exists
+    path: /home/learner/aws/iam-policy.json
+    label: ~/aws/iam-policy.json
+  - validator: file_contains
+    path: /home/learner/aws/iam-policy.json
+    value: s3:GetObject
+    label: policy allows reading objects
+  - validator: file_contains
+    path: /home/learner/aws/iam-policy.json
+    value: s3:ListBucket
+    label: policy allows listing the bucket
+  - validator: file_contains
+    path: /home/learner/aws/iam-policy.json
+    value: lab-artifacts
+    label: policy is scoped to one bucket
+steps:
+  - title: Create the aws directory
+    detail: IAM documents are configuration - they belong in a folder you can review.
+    command: mkdir ~/aws
+  - title: Write the policy document
+    detail: "A policy has a Version, a list of Statements, and each statement has an Effect, an
+      Action list and a Resource list. One echo writes the whole document."
+    command: >-
+      echo '{"Version": "2012-10-17", "Statement": [{"Effect": "Allow", "Action": ["s3:GetObject", "s3:ListBucket"], "Resource": ["arn:aws:s3:::lab-artifacts", "arn:aws:s3:::lab-artifacts/*"]}]}' > ~/aws/iam-policy.json
+  - title: Verify the document
+    detail: cat prints the policy. Read the Resource list twice - it is the part people get wrong.
+    command: cat ~/aws/iam-policy.json
+  - title: Submit for validation
+    detail: The validator checks the actions and the scope of the policy.
