@@ -18,6 +18,9 @@ import {
 import { useRecent } from "@/lib/recent";
 import { evaluateAchievements, levelForXp } from "@/lib/achievements";
 import { ActivityHeatmap } from "@/components/activity-heatmap";
+import { WeeklyGoal } from "@/components/weekly-goal";
+import { NextUpPanel } from "@/components/next-up-panel";
+import { FirstRun } from "@/components/first-run";
 import type { CurriculumIndex, TaskIndexEntry } from "@/lib/curriculum-index";
 
 const TYPE_GLYPHS: Record<string, string> = {
@@ -202,6 +205,15 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
             Browse all paths →
           </Link>
         </div>
+      </section>
+
+      {/* First-run checklist for a brand new learner */}
+      <FirstRun />
+
+      {/* This week + what to do next */}
+      <section className="grid gap-6 lg:grid-cols-2">
+        <WeeklyGoal />
+        <NextUpPanel index={index} />
       </section>
 
       {/* Activity heatmap */}

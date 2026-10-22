@@ -17,6 +17,7 @@ export function buildSearchIndex(): SearchItem[] {
   const items: SearchItem[] = [
     { title: "Home", subtitle: "Start here", kind: "Page", href: "/" },
     { title: "Learning Paths", subtitle: "Role-based curriculum tracks", kind: "Page", href: "/paths" },
+    { title: "All Labs", subtitle: "Every lab, searchable and filterable", kind: "Page", href: "/labs" },
     { title: "Tools", subtitle: "Tool hubs, cheatsheets & pitfalls", kind: "Page", href: "/tools" },
     { title: "Dashboard", subtitle: "Your progress, streak & achievements", kind: "Page", href: "/dashboard" },
   ];

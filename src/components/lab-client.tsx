@@ -7,6 +7,7 @@ import { LabTerminal, type CommandRunner } from "@/components/terminal";
 import { Badge } from "@/components/ui";
 import { CompletedBadge } from "@/components/progress";
 import { LabNotes } from "@/components/lab-notes";
+import { LabHints } from "@/components/lab-hints";
 import { recordVisit } from "@/lib/recent";
 import { formatMs, saveRecord, useRecord } from "@/lib/records";
 import { markCompleted, useProgress, XP_PER_TASK } from "@/lib/progress";
@@ -405,11 +406,14 @@ export function LabClient({
               </ol>
             </section>
 
-            {/* 03 — AI Tutor */}
+            {/* 03 — Hints */}
+            <LabHints task={task} results={results} liveChecks={liveChecks} />
+
+            {/* 04 — AI Tutor */}
             <section className="mt-12">
               <div className="flex items-baseline justify-between gap-4">
                 <h2 className="text-label text-ash">
-                  <span className="mr-2 text-stone">03</span>AI Tutor
+                  <span className="mr-2 text-stone">04</span>AI Tutor
                 </h2>
                 <span className="font-mono text-caption uppercase text-ash">guides, never solves</span>
               </div>

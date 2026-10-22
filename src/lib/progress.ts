@@ -23,6 +23,8 @@ export interface ProgressState {
   /** task slug -> ISO timestamp of when it was bookmarked */
   bookmarks?: Record<string, string>;
   streak?: StreakState;
+  /** the learner's own weekly lab target (undefined = no goal set) */
+  weeklyGoal?: number;
 }
 
 const EMPTY: ProgressState = { completed: {} };
@@ -99,6 +101,23 @@ export function toggleBookmark(slug: string): void {
   scheduleCloudSync();
 }
 
+/** Set (or clear, with 0) the learner's weekly lab target. */
+export function setWeeklyGoal(goal: number): void {
+  const state = load();
+  const weeklyGoal = goal > 0 ? Math.min(goal, 100) : undefined;
+  persist({ ...state, weeklyGoal });
+  scheduleCloudSync();
+}
+
+/** Completions in the last seven days, newest first. */
+export function weekCompletions(state: ProgressState): { slug: string; ts: string }[] {
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  return Object.entries(state.completed)
+    .filter(([, ts]) => new Date(ts).getTime() >= cutoff)
+    .map(([slug, ts]) => ({ slug, ts }))
+    .sort((a, b) => (a.ts < b.ts ? 1 : -1));
+}
+
 // ---- cloud sync ----------------------------------------------------------
 // Progress lives in localStorage first (instant, offline); a signed-in
 // learner's state is mirrored to /api/progress. On login the two states are
@@ -123,7 +142,9 @@ function mergeStates(a: ProgressState, b: ProgressState): ProgressState {
       lastDate: a.streak.lastDate >= b.streak.lastDate ? a.streak.lastDate : b.streak.lastDate,
     };
   }
-  return { completed, bookmarks, streak };
+  // The weekly goal is a personal setting, not a score: the local one wins.
+  const weeklyGoal = a.weeklyGoal ?? b.weeklyGoal;
+  return { completed, bookmarks, streak, weeklyGoal };
 }
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
@@ -250,8 +271,12 @@ export function importProgress(json: string): "ok" | "invalid" {
     typeof raw.streak === "object" && raw.streak !== null
       ? (raw.streak as ProgressState["streak"])
       : undefined;
+  const weeklyGoal =
+    typeof raw.weeklyGoal === "number" && Number.isFinite(raw.weeklyGoal)
+      ? Math.max(0, Math.min(100, Math.round(raw.weeklyGoal)))
+      : undefined;
 
-  persist(mergeStates(load(), { completed, bookmarks, streak }));
+  persist(mergeStates(load(), { completed, bookmarks, streak, weeklyGoal }));
   scheduleCloudSync();
   return "ok";
 }

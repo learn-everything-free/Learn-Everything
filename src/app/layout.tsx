@@ -4,6 +4,7 @@ import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
 import { AchievementToaster } from "@/components/achievement-toast";
+import { ShortcutsDialog } from "@/components/shortcuts-dialog";
 import { buildSearchIndex } from "@/lib/search-index";
 import { buildAchievementIndex } from "@/lib/curriculum-index";
 import "./globals.css";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <main className="flex-1">{children}</main>
           <Footer />
           <AchievementToaster index={achievementIndex} />
+          <ShortcutsDialog />
         </Providers>
       </body>
     </html>

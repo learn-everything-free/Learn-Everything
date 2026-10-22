@@ -15,6 +15,7 @@ const TOOL_LINKS = [
 
 const PRODUCT_LINKS = [
   { href: "/paths", label: "All tracks" },
+  { href: "/labs", label: "All labs" },
   { href: "/lab/linux-create-project", label: "Interactive labs" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/certificates/devops-engineer", label: "Certificates" },

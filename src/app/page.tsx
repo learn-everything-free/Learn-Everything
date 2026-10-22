@@ -68,9 +68,14 @@ export default function Home() {
                 lab drops every midnight.
               </p>
             </div>
-            <Link href="/dashboard" className="le-outline self-start md:self-auto">
-              Open your dashboard
-            </Link>
+            <div className="flex flex-wrap gap-3 self-start md:self-auto">
+              <Link href="/dashboard" className="le-outline">
+                Open your dashboard
+              </Link>
+              <Link href="/labs" className="le-outline">
+                Browse all labs
+              </Link>
+            </div>
           </div>
 
           <div className="mt-14">
