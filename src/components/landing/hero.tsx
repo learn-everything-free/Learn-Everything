@@ -1,21 +1,33 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-export interface LabTile {
-  slug: string;
-  title: string;
-  skillTitle: string;
+export interface PlatformStats {
+  tracks: number;
+  labs: number;
+  skills: number;
+  tools: number;
 }
 
 // DESIGN.md hero: a tracked-out eyebrow, a monumental display word, one filled
-// action and one outlined pill. Everything sits on the canvas — no gradient,
-// no shadow, no floating card.
+// action and one outlined pill. The index row underneath is the map of the
+// whole platform — tracks, labs, tool hubs, the tutor and the record — instead
+// of a teaser for a single course.
 
-export function Hero({ tiles }: { tiles: LabTile[] }) {
+export function Hero({ stats }: { stats: PlatformStats }) {
+  const index = [
+    { name: "Tracks", meta: `${stats.tracks} career paths`, href: "/paths" },
+    { name: "Labs", meta: `${stats.labs} labs · ${stats.skills} skills`, href: "/labs" },
+    { name: "Tool hubs", meta: `${stats.tools} references`, href: "/tools" },
+    { name: "AI chat", meta: "4 model sources", href: "/chat" },
+    { name: "Progress", meta: "XP · streaks · certificates", href: "/dashboard" },
+  ];
+
   return (
     <section className="border-b border-ink/70">
       <div className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-8 lg:pt-28">
-        <p className="le-label text-smoke">Nine career tracks · 240 hands-on labs</p>
+        <p className="le-label text-smoke">
+          {stats.tracks} career tracks · {stats.labs} validated labs · {stats.tools} tool hubs
+        </p>
 
         <h1 className="mt-8 text-[52px] font-medium uppercase leading-[1.02] tracking-[-0.056em] text-ink sm:text-[84px] lg:text-[120px]">
           Learn by
@@ -25,42 +37,54 @@ export function Hero({ tiles }: { tiles: LabTile[] }) {
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
           <p className="max-w-[52ch] text-body text-graphite leading-[1.5]">
-            Nine structured tracks for students and career switchers. Every task opens a real
-            Linux sandbox in your browser, and an automated validator checks the machine — not
-            your answers. No install, no cloud bill, no sign-up.
+            From the Linux shell to Kubernetes, Python pipelines, RAG and frontend work: every lab
+            is a real task in a sandbox in your browser, graded on the machine, not on multiple
+            choice. A reference hub for each tool, an AI tutor that can run offline, and a
+            certificate at the end of the track.
           </p>
 
           <div className="flex flex-col items-start gap-4 lg:items-end">
-            <Link href="/lab/linux-create-project" className="le-action">
-              Start your first lab
+            <Link href="/paths" className="le-action">
+              Pick a track
             </Link>
-            <Link href="/paths" className="le-outline">
-              Browse the tracks
+            <Link href="/labs" className="le-outline">
+              Browse all {stats.labs} labs
             </Link>
           </div>
         </div>
 
-        {/* Hero thumbnail strip — the quick-nav into the first labs */}
-        {tiles.length > 0 && (
-          <div className="mt-16 flex justify-end lg:mt-20">
-            <div className="flex flex-wrap gap-5">
-              {tiles.slice(0, 4).map((tile, i) => (
-                <Link
-                  key={tile.slug}
-                  href={`/lab/${tile.slug}`}
-                  className={`group block w-[150px] border p-4 transition-colors ${
-                    i === 0 ? "border-ink" : "border-ink/25 hover:border-ink/60"
-                  }`}
+        {/* Platform index — the five surfaces, one hairline cell each */}
+        <div className="mt-16 grid grid-cols-2 gap-px border-t border-ink/70 bg-ink/15 lg:mt-20 lg:grid-cols-5">
+          {index.map((entry, i) => (
+            <Link
+              key={entry.href}
+              href={entry.href}
+              className={`group flex flex-col justify-between gap-6 bg-eggshell py-5 pr-4 transition-colors hover:bg-warm-taupe even:pl-3 sm:py-6 lg:px-6 lg:even:pl-6 lg:first:pl-0 ${
+                i === index.length - 1 ? "col-span-2 lg:col-span-1" : ""
+              }`}
+            >
+              <span className="flex items-center justify-between gap-3">
+                <span className="le-label text-smoke">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className="text-body-sm text-smoke transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden
                 >
-                  <span className="le-label block text-smoke">{tile.skillTitle}</span>
-                  <span className="mt-2 block text-body-sm leading-[1.35] text-ink">
-                    {tile.title}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
+                  →
+                </span>
+              </span>
+              <span>
+                <span className="block text-[20px] font-medium leading-none tracking-tight text-ink">
+                  {entry.name}
+                </span>
+                <span className="mt-2 block text-label uppercase tracking-[1px] text-smoke">
+                  {entry.meta}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

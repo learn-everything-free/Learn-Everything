@@ -1,24 +1,15 @@
 import Link from "next/link";
 import { paths, countTasks } from "@/lib/data";
 import { DisplayHeading } from "./hero";
-import { TerminalGif, type GifLine } from "@/components/terminal-gif";
+import { LabTour } from "./lab-tour";
 
-const DEMO_LINES: GifLine[] = [
-  { kind: "out", text: "1. deploy the app as a container", tone: "dim" },
-  { kind: "cmd", text: "docker run -d -p 8080:80 app:latest" },
-  { kind: "out", text: "9a4f21e018ab   app:latest   Up 4 minutes   0.0.0.0:8080->80" },
-  { kind: "out", text: "2. the validator checks real state", tone: "dim" },
-  { kind: "cmd", text: "submit" },
-  { kind: "out", text: "✓ Port 8080 mapped to container port 80", tone: "ok" },
-  { kind: "out", text: "✓ HTTP 200 returned from the endpoint", tone: "ok" },
-  { kind: "out", text: "PASSED — +50 XP earned", tone: "ok" },
-];
+const TOTAL_LABS = paths.reduce((n, p) => n + countTasks(p), 0);
 
 const STEPS = [
   {
     n: "01",
     title: "Pick a track",
-    body: "Choose the job you are aiming at — DevOps, Data, Backend, Frontend or one of the AI coding agents.",
+    body: "Nine of them — DevOps, AI engineering, MLOps, data, backend, frontend, and the Codex, Claude and Copilot tracks for AI coding agents.",
   },
   {
     n: "02",
@@ -28,19 +19,47 @@ const STEPS = [
   {
     n: "03",
     title: "Build the streak",
-    body: "One lab a day beats a weekend binge. The streak and the XP ladder make the habit visible.",
+    body: "One lab a day beats a weekend binge. The streak, the XP ladder and the achievements make the habit visible.",
   },
   {
     n: "04",
     title: "Finish with proof",
-    body: "Work through every lab in the track and the certificate unlocks — evidence of the work.",
+    body: "Clear every lab in a track and the certificate unlocks — a printable record of the work you actually did.",
+  },
+];
+
+const SURFACES = [
+  {
+    label: "Tool hubs · 15",
+    title: "A reference for every tool",
+    body: "Docker, Kubernetes, Terraform, AWS, Git, CI/CD, Prometheus, ArgoCD, networking, RAG, agents, prompt engineering, vLLM, MLflow. Each hub carries the architecture, a cheat sheet, the failure modes people actually hit, and the labs that use it.",
+    href: "/tools",
+    cta: "Open the tool hubs",
+  },
+  {
+    label: "AI chat · 4 sources",
+    title: "A tutor you can run offline",
+    body: "Stuck at midnight? Ask about the lab. Download a model once and it answers in your browser on your own GPU, or point the chat at a local Ollama server, the hosted model, or your own key.",
+    href: "/chat",
+    cta: "Open the chat",
+  },
+  {
+    label: "Progress · XP & certificates",
+    title: "Work that leaves a trace",
+    body: "Every validated lab earns XP and feeds a streak, a level and an achievement. The dashboard tracks the track you are on; clearing it unlocks a printable certificate.",
+    href: "/dashboard",
+    cta: "See the dashboard",
   },
 ];
 
 const FAQ = [
   {
+    q: "Is this only about Linux and DevOps?",
+    a: "No. Linux is one hub among fifteen. The curriculum runs from DevOps and data engineering to AI engineering, MLOps, backend, frontend and three AI coding-agent tracks, and the tool hubs cover Docker, Kubernetes, Terraform, AWS, Git, CI/CD, Prometheus, ArgoCD, networking, RAG, agents, prompt engineering, vLLM and MLflow.",
+  },
+  {
     q: "Do I need my own machine, a cloud account or a credit card?",
-    a: "None of them. Every lab runs in a sandbox inside your browser — a real Linux shell with docker, kubectl, terraform and git available. There is nothing to install and nothing to pay for.",
+    a: "None of them. Every lab runs in a sandbox inside your browser — a real shell with docker, kubectl, terraform, git and Python available. There is nothing to install and nothing to pay for.",
   },
   {
     q: "I have never opened a terminal. Will I be lost?",
@@ -48,11 +67,15 @@ const FAQ = [
   },
   {
     q: "How do I know whether I actually learned it?",
-    a: "The validator checks the state of the sandbox, not your answers. If a container is not running with the right port mapped, the task is not passed however confident you feel.",
+    a: "The validator checks the state of the sandbox, not your answers. If a container is not running with the right port mapped, or the pod is not Running, the task is not passed however confident you feel.",
+  },
+  {
+    q: "Do I need a GPU or an API key for the AI chat?",
+    a: "No. Download a small model once and it answers in your browser on your own GPU, connect a local Ollama server, use the hosted model, or bring your own OpenAI-compatible key. The labs themselves never call a model.",
   },
   {
     q: "How long before I am ready for a job?",
-    a: "It depends on the track and on what you already know. A focused track is roughly 16 to 72 labs — at one or two labs a day, that is a couple of months of steady work.",
+    a: "It depends on the track and on what you already know. A focused track is roughly 27 to 72 labs — at one or two labs a day, that is a couple of months of steady work.",
   },
   {
     q: "Can my team or my class use this?",
@@ -60,7 +83,7 @@ const FAQ = [
   },
   {
     q: "Is it really free, or is there a catch?",
-    a: "There is no catch and no trial countdown. The platform is open source and free to use, including all 240 labs.",
+    a: "There is no catch and no trial countdown. The platform is open source and free to use, including every lab in every track.",
   },
 ];
 
@@ -74,23 +97,29 @@ export function TrackGrid() {
           one curriculum
         </DisplayHeading>
 
-        <div className="mt-16 grid grid-cols-2 gap-5 lg:grid-cols-4">
+        <p className="mt-8 max-w-[52ch] text-body text-graphite leading-[1.5]">
+          DevOps, AI engineering, MLOps, data, backend and frontend — plus the Codex, Claude and
+          Copilot tracks for people who build with AI coding agents. Each track is a sequence of
+          validated labs that ends in a certificate.
+        </p>
+
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {paths.map((p) => (
             <Link
               key={p.slug}
               href={`/paths/${p.slug}`}
-              className="group flex min-h-[200px] flex-col justify-between border border-ink/70 p-6 transition-colors hover:border-ink"
+              className="group flex flex-col justify-between border border-ink/70 p-5 transition-colors hover:border-ink sm:min-h-[200px] sm:p-6"
             >
               <div>
                 <p className="le-label text-smoke">{p.role}</p>
-                <h3 className="mt-4 text-body-sm font-medium tracking-tight text-ink">
+                <h3 className="mt-3 text-body-sm font-medium tracking-tight text-ink sm:mt-4">
                   {p.title}
                 </h3>
-                <p className="mt-3 line-clamp-3 text-body-sm leading-[1.45] text-graphite">
+                <p className="mt-3 hidden text-body-sm leading-[1.45] text-graphite sm:line-clamp-4">
                   {p.tagline}
                 </p>
               </div>
-              <div className="mt-8 flex items-end justify-between border-t border-ink/25 pt-4">
+              <div className="mt-5 flex items-end justify-between border-t border-ink/25 pt-3 sm:mt-8 sm:pt-4">
                 <span className="text-label uppercase tracking-[1px] text-smoke">
                   {p.skills.length} skills · {countTasks(p)} labs
                 </span>
@@ -106,7 +135,7 @@ export function TrackGrid() {
   );
 }
 
-export function SplitSection() {
+export function Method() {
   return (
     <section className="border-b border-ink/70">
       <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:py-28">
@@ -115,9 +144,7 @@ export function SplitSection() {
           <br />
           A real validator.
           <br />
-          A certificate when
-          <br />
-          you finish.
+          A certificate at the end.
         </DisplayHeading>
 
         {/* Asymmetric split: label left, body right */}
@@ -129,20 +156,64 @@ export function SplitSection() {
           </p>
           <div className="max-w-[52ch] space-y-6 text-body-sm text-graphite leading-[1.5]">
             <p>
-              Every lab is a real command in a disposable sandbox. You deploy a container, apply
-              a manifest, run a pipeline, break a configuration — and read the actual error.
+              Every lab is a real command in a disposable sandbox — a shell, a Kubernetes cluster,
+              a Terraform state, a Git repository, a Python environment. You deploy the container,
+              apply the manifest, break the config, and read the actual error.
             </p>
             <p>
-              When the work is done, an automated validator inspects the machine: the port is
-              mapped, the pod is running, the state file is applied. It grades the system, not
-              the answer key.
+              Then an automated validator inspects the machine: the port is mapped, the pod is
+              Running, the metric is scraped, the file holds the right data. It grades the system,
+              not the answer key. Three of those labs, from three different tracks:
             </p>
           </div>
         </div>
 
         {/* The demonstration block — the product's own photograph */}
-        <div className="mt-16 border border-ink">
-          <TerminalGif lines={DEMO_LINES} title="learner@lab:~" badge="Validator active" className="border-0" />
+        <div className="mt-16">
+          <LabTour />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function Platform() {
+  return (
+    <section className="border-b border-ink/70">
+      <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:py-28">
+        <DisplayHeading eyebrow="Beyond the labs">
+          The rest of
+          <br />
+          the platform
+        </DisplayHeading>
+
+        <p className="mt-8 max-w-[52ch] text-body text-graphite leading-[1.5]">
+          The labs are the core. Around them sit the references, the tutor and the record — the
+          parts that keep you moving when a lab fights back.
+        </p>
+
+        <div className="mt-16 grid gap-px border-t border-ink/70 bg-ink/15 lg:grid-cols-3">
+          {SURFACES.map((surface) => (
+            <div
+              key={surface.href}
+              className="flex flex-col bg-eggshell py-8 lg:px-8 lg:py-10 lg:first:pl-0"
+            >
+              <p className="le-label text-smoke">{surface.label}</p>
+              <h3 className="mt-6 text-[34px] font-medium uppercase leading-[1.08] tracking-[-0.04em] text-ink">
+                {surface.title}
+              </h3>
+              <p className="mt-5 max-w-[42ch] text-body-sm leading-[1.5] text-graphite">
+                {surface.body}
+              </p>
+              <Link
+                href={surface.href}
+                className="mt-auto inline-flex min-h-8 items-center gap-2 self-start border-b border-ink/40 pb-1 pt-8 text-label uppercase tracking-[1px] text-ink transition-colors hover:border-ink"
+              >
+                {surface.cta}
+                <span aria-hidden>→</span>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -164,7 +235,7 @@ export function CurriculumTable({ bars, totals }: { bars: Bar[]; totals: { label
           <div>
             <p className="le-label text-smoke">By the numbers</p>
             <h3 className="mt-6 text-[30px] font-medium uppercase leading-[1.15] tracking-[-0.056em] text-ink sm:text-[40px]">
-              What 240 labs
+              What {TOTAL_LABS} labs
               <br />
               actually looks like
             </h3>
@@ -294,14 +365,15 @@ export function FinalCta() {
           Start shipping.
         </h2>
         <p className="mt-8 max-w-[52ch] text-body text-graphite leading-[1.5]">
-          Open your first lab in a real terminal. Free, no sign-up, two minutes from now.
+          Pick a track and open the first lab in a real sandbox. Free, no sign-up, two minutes from
+          now.
         </p>
         <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          <Link href="/lab/linux-create-project" className="le-action">
-            Start learning free
+          <Link href="/paths" className="le-action">
+            Choose your track
           </Link>
-          <Link href="/paths" className="le-outline">
-            Browse the tracks
+          <Link href="/labs" className="le-outline">
+            Browse all {TOTAL_LABS} labs
           </Link>
         </div>
       </div>

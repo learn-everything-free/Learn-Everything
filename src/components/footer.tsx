@@ -17,9 +17,7 @@ const PRODUCT_LINKS = [
   { href: "/paths", label: "All tracks" },
   { href: "/labs", label: "All labs" },
   { href: "/chat", label: "AI chat" },
-  { href: "/lab/linux-create-project", label: "Interactive labs" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/certificates/devops-engineer", label: "Certificates" },
   { href: "/tools", label: "Tool hubs" },
 ];
 
@@ -36,7 +34,7 @@ export function Footer() {
               </p>
             </div>
             <p className="mt-5 max-w-sm text-body-sm leading-relaxed text-graphite">
-              Nine career tracks, 240 hands-on labs and a real terminal in every browser tab. Free,
+              Nine career tracks, 324 hands-on labs and a real terminal in every browser tab. Free,
               open source, and built for people who are starting out.
             </p>
             <a

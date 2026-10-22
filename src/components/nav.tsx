@@ -106,7 +106,7 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
           {/* The one filled control in the bar — on the landing page the hero
               owns the filled button, so the bar offers an outlined pill. */}
           <Link
-            href="/lab/linux-create-project"
+            href="/paths"
             className={
               pathname === "/"
                 ? "le-outline hidden lg:inline-flex"
@@ -183,7 +183,7 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
               </Link>
             )}
             <Link
-              href="/lab/linux-create-project"
+              href="/paths"
               className="flex-1 whitespace-nowrap border border-ink bg-ink px-4 py-2.5 text-center text-caption font-medium uppercase tracking-[0.083em] text-eggshell"
             >
               Get started

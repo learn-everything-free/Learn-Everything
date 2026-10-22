@@ -115,15 +115,15 @@ export function TerminalGif({
       className={`overflow-hidden rounded-none border border-ink/90 bg-[#121417] p-6 text-[#edece0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${className}`}
     >
       {/* Window chrome */}
-      <div className="flex items-center justify-between gap-3 border-b border-ink/20 pb-4">
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
         <div className="flex items-center gap-2">
           <span className="size-3 rounded-full bg-rose-500/80" />
           <span className="size-3 rounded-full bg-amber-500/80" />
           <span className="size-3 rounded-full bg-emerald-500/80" />
         </div>
-        <span className="hidden truncate font-mono text-label text-ash sm:block">{title}</span>
+        <span className="hidden truncate font-mono text-label text-[#a8a096] sm:block">{title}</span>
         {paused ? (
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-ink/40 bg-stone/10 px-2 py-0.5 font-mono text-label uppercase text-ash">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-label uppercase text-[#b8b2a8]">
             ❙❙ Paused
           </span>
         ) : (
@@ -135,10 +135,10 @@ export function TerminalGif({
       </div>
 
       {/* Animated body — min-height keeps multi-card grids visually aligned */}
-      <div className="mt-5 min-h-[13.5rem] space-y-2.5 font-mono text-label leading-relaxed" aria-hidden>
+      <div className="mt-5 min-h-[10rem] space-y-2.5 font-mono text-label leading-relaxed" aria-hidden>
         {rows.map(({ key, line, text, partial }) =>
           line.kind === "cmd" ? (
-            <p key={key} className="break-all text-stone">
+            <p key={key} className="break-all text-[#e8e3d8]">
               <span className="text-emerald-400">$ </span>
               {text}
               {partial && !atEnd && <span className="le-caret ml-0.5 text-emerald-400">▌</span>}
@@ -152,8 +152,8 @@ export function TerminalGif({
                   : line.tone === "warn"
                     ? "text-amber-400"
                     : line.tone === "dim"
-                      ? "text-ash"
-                      : "text-stone/90"
+                      ? "text-[#9a938a]"
+                      : "text-[#cdc8bd]"
               }`}
             >
               {line.tone === "dim" ? `# ${text}` : text}
@@ -161,7 +161,7 @@ export function TerminalGif({
           ),
         )}
         {atEnd && (
-          <p className="text-stone">
+          <p key="cursor" className="text-[#e8e3d8]">
             <span className="text-emerald-400">$ </span>
             <span className="le-caret text-emerald-400">▌</span>
           </p>
@@ -169,7 +169,7 @@ export function TerminalGif({
       </div>
 
       {footer && (
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-ink/20 pt-4">
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
           {footer}
         </div>
       )}

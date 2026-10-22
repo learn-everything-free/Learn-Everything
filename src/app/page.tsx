@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { paths, countTasks } from "@/lib/data";
+import { tools } from "@/lib/tools";
 import { buildCurriculumIndex } from "@/lib/curriculum-index";
 import { Hero } from "@/components/landing/hero";
 import {
   TrackGrid,
-  SplitSection,
+  Method,
+  Platform,
   CurriculumTable,
   Process,
   Faq,
@@ -23,11 +25,12 @@ export default function Home() {
     0,
   );
 
-  // The opening labs of the first track — the hero thumbnail strip.
-  const tiles = curriculum.tasks
-    .filter((t) => t.pathSlug === "devops-engineer")
-    .slice(0, 4)
-    .map((t) => ({ slug: t.slug, title: t.title, skillTitle: t.skillTitle }));
+  const stats = {
+    tracks: paths.length,
+    labs: totalTasks,
+    skills: totalSkills,
+    tools: tools.length,
+  };
 
   const bars = paths
     .map((p) => ({ label: p.title, value: countTasks(p) }))
@@ -42,11 +45,13 @@ export default function Home() {
 
   return (
     <div className="bg-eggshell">
-      <Hero tiles={tiles} />
+      <Hero stats={stats} />
 
       <TrackGrid />
 
-      <SplitSection />
+      <Method />
+
+      <Platform />
 
       <CurriculumTable bars={bars} totals={totals} />
 
