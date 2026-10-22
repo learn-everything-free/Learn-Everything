@@ -27,7 +27,7 @@ export function MessageBubble({
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 rows={4}
-                className="w-full resize-y border border-ink/40 bg-eggshell p-2 text-body-sm text-ink focus:outline-none"
+                className="w-full resize-y border border-ink/40 bg-eggshell p-2 text-[16px] text-ink focus:outline-none sm:text-body-sm"
               />
               <div className="mt-2 flex gap-2">
                 <button
@@ -55,7 +55,7 @@ export function MessageBubble({
               <p className="whitespace-pre-wrap text-body-sm leading-relaxed text-ink">
                 {message.content}
               </p>
-              <div className="mt-2 flex justify-end gap-3 opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="mt-2 flex justify-end gap-3 transition-opacity lg:opacity-0 lg:group-hover:opacity-100">
                 <button
                   onClick={() => {
                     setDraft(message.content);
@@ -96,7 +96,7 @@ export function MessageBubble({
       </div>
       <div className="mt-2 pl-8">
         <Markdown content={message.content} />
-        <div className="mt-3 flex gap-4 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="mt-3 flex gap-4 transition-opacity lg:opacity-0 lg:group-hover:opacity-100">
           <CopyButton text={message.content} label="Copy answer" />
           {onRegenerate && (
             <button

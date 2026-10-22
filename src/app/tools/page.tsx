@@ -22,10 +22,10 @@ export default function ToolsPage() {
   const totalLabs = Object.values(taskCounts).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-14 lg:px-16 lg:py-20">
+    <div className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 sm:py-14 lg:px-16 lg:py-20">
       {/* Header */}
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <p className="font-mono text-caption uppercase text-ash tracking-wider">
             Directory & Reference
           </p>
@@ -35,7 +35,7 @@ export default function ToolsPage() {
           </Badge>
         </div>
 
-        <h1 className="text-heading-lg font-medium uppercase tracking-[-3.36px] text-ink max-w-4xl">
+        <h1 className="max-w-4xl text-[40px] font-medium uppercase leading-[1.1] tracking-[-2.24px] text-ink sm:text-heading-lg sm:leading-[1.2] sm:tracking-[-3.36px]">
           Separate, in-depth hubs for every critical tool.
         </h1>
         <p className="max-w-2xl text-body text-smoke leading-relaxed">

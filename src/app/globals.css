@@ -296,72 +296,83 @@ body * {
    DESIGN.md components — the only surface treatments the system allows.
    ------------------------------------------------------------------ */
 
-/* Eyebrow label: the museum-label tone used above every section opener */
-.le-label {
-  font-size: 10px;
-  line-height: 1.3;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-weight: 500;
+/* These live in the components layer on purpose: Tailwind utilities must be
+   able to override them. An unlayered `display: inline-flex` here silently
+   defeats `hidden`, which is how the header CTA ended up on phones. */
+@layer components {
+  /* Eyebrow label: the museum-label tone used above every section opener */
+  .le-label {
+    font-size: 10px;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Outlined button: 1px walnut border, square, inverts on hover.
+     Pill radius is reserved for tags and status dots. */
+  .le-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--color-ink);
+    border-radius: 0;
+    padding: 12px 24px;
+    font-size: 12px;
+    line-height: 1.3;
+    letter-spacing: 0.083em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-ink);
+    background: transparent;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+  .le-outline:hover {
+    background: var(--color-ink);
+    color: var(--color-eggshell);
+  }
+
+  /* Filled action button: square, walnut, linen — one per viewport */
+  .le-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--color-ink);
+    border-radius: 0;
+    padding: 12px 24px;
+    font-size: 12px;
+    line-height: 1.3;
+    letter-spacing: 0.083em;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: var(--color-ink);
+    color: var(--color-eggshell);
+    transition: opacity 150ms ease;
+  }
+  .le-action:hover {
+    opacity: 0.85;
+  }
+
+  /* Full-bleed hairline divider — the only separator the system uses */
+  .le-rule {
+    border: 0;
+    border-top: 1px solid var(--color-ink);
+  }
+
+  /* Square content block: hairline border, no radius, no shadow */
+  .le-block {
+    border: 1px solid var(--color-ink);
+    border-radius: 0;
+    background: var(--color-eggshell);
+  }
 }
 
-/* Outlined button: 1px walnut border, square, inverts on hover.
-   Pill radius is reserved for tags and status dots. */
-.le-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px solid var(--color-ink);
-  border-radius: 0;
-  padding: 12px 24px;
-  font-size: 12px;
-  line-height: 1.3;
-  letter-spacing: 0.083em;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: var(--color-ink);
-  background: transparent;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease;
-}
-.le-outline:hover {
-  background: var(--color-ink);
-  color: var(--color-eggshell);
-}
-
-/* Filled action button: square, walnut, linen — one per viewport */
-.le-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px solid var(--color-ink);
-  border-radius: 0;
-  padding: 12px 24px;
-  font-size: 12px;
-  line-height: 1.3;
-  letter-spacing: 0.083em;
-  text-transform: uppercase;
-  font-weight: 500;
-  background: var(--color-ink);
-  color: var(--color-eggshell);
-  transition: opacity 150ms ease;
-}
-.le-action:hover {
-  opacity: 0.85;
-}
-
-/* Full-bleed hairline divider — the only separator the system uses */
-.le-rule {
-  border: 0;
-  border-top: 1px solid var(--color-ink);
-}
-
-/* Square content block: hairline border, no radius, no shadow */
-.le-block {
-  border: 1px solid var(--color-ink);
-  border-radius: 0;
-  background: var(--color-eggshell);
+/* Safety net: a single stray wide child must never make the whole page pan
+   sideways on a phone. `clip` (not `hidden`) keeps position: sticky working. */
+html {
+  overflow-x: clip;
 }

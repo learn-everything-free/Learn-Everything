@@ -94,7 +94,7 @@ export function CertificateClient({
       });
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-16">
+    <div className="mx-auto max-w-[1280px] px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
       <div className="no-print mx-auto mb-8 flex max-w-3xl flex-wrap items-center justify-between gap-4">
         <p className="text-label text-ash">
           🏅 Path complete — this certificate is yours
@@ -125,13 +125,13 @@ export function CertificateClient({
         </div>
       </div>
 
-      <div className="certificate-sheet mx-auto max-w-3xl rounded-none border-2 border-ink bg-eggshell p-10 text-center lg:p-16">
+      <div className="certificate-sheet mx-auto max-w-3xl rounded-none border-2 border-ink bg-eggshell p-5 text-center sm:p-10 lg:p-16">
         <p className="font-mono text-caption uppercase tracking-[0.3em] text-ash">
           Certificate of Completion
         </p>
         <div className="mx-auto mt-8 h-px w-24 bg-ink" />
         <p className="mt-10 text-body text-smoke">This certifies that</p>
-        <p className="mt-4 text-heading font-light tracking-[-0.02em] text-ink lg:text-heading-lg">
+        <p className="mt-4 break-words text-[34px] font-light leading-[1.15] tracking-[-0.02em] text-ink sm:text-heading sm:leading-[1.24] lg:text-heading-lg">
           {displayName.trim() || "________________"}
         </p>
         <p className="mt-8 text-body text-smoke">
@@ -141,7 +141,7 @@ export function CertificateClient({
           <br />
           <span className="font-mono text-caption uppercase text-ash">{role} path</span>
         </p>
-        <div className="mx-auto mt-10 grid max-w-md grid-cols-3 divide-x divide-stone rounded-none border border-ink bg-eggshell py-4">
+        <div className="mx-auto mt-10 grid w-full max-w-md grid-cols-3 divide-x divide-stone rounded-none border border-ink bg-eggshell py-4">
           <div>
             <p className="text-xl font-light text-ink">{taskSlugs.length}</p>
             <p className="mt-1 font-mono text-caption uppercase text-ash">labs validated</p>

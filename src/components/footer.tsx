@@ -26,16 +26,16 @@ const PRODUCT_LINKS = [
 export function Footer() {
   return (
     <footer className="border-t border-ink/70 bg-eggshell">
-      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
-        <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr_1fr_1fr]">
-          <div>
+      <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-8 sm:py-16">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-12 lg:grid-cols-[1.7fr_1fr_1fr_1fr]">
+          <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 text-ink">
               <LogoMark className="size-[26px] shrink-0" />
               <p className="text-[18px] font-medium tracking-[-0.01em] underline decoration-ink/30 underline-offset-[6px]">
                 Learn Everything
               </p>
             </div>
-            <p className="mt-5 max-w-sm text-body-sm text-graphite leading-relaxed">
+            <p className="mt-5 max-w-sm text-body-sm leading-relaxed text-graphite">
               Nine career tracks, 240 hands-on labs and a real terminal in every browser tab. Free,
               open source, and built for people who are starting out.
             </p>
@@ -51,12 +51,12 @@ export function Footer() {
 
           <div>
             <p className="le-label text-smoke">Tracks</p>
-            <ul className="mt-5 space-y-3 text-caption">
+            <ul className="mt-4 space-y-1 text-caption sm:mt-5 sm:space-y-3">
               {paths.slice(0, 6).map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/paths/${p.slug}`}
-                    className="text-graphite transition-opacity hover:opacity-60"
+                    className="inline-flex min-h-6 items-center py-1 text-graphite transition-opacity hover:opacity-60"
                   >
                     {p.title}
                   </Link>
@@ -65,7 +65,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/paths"
-                  className="text-ink transition-opacity hover:opacity-60"
+                  className="inline-flex min-h-6 items-center py-1 text-ink transition-opacity hover:opacity-60"
                 >
                   All nine tracks →
                 </Link>
@@ -75,12 +75,12 @@ export function Footer() {
 
           <div>
             <p className="le-label text-smoke">Product</p>
-            <ul className="mt-5 space-y-3 text-caption">
+            <ul className="mt-4 space-y-1 text-caption sm:mt-5 sm:space-y-3">
               {PRODUCT_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-graphite transition-opacity hover:opacity-60"
+                    className="inline-flex min-h-6 items-center py-1 text-graphite transition-opacity hover:opacity-60"
                   >
                     {l.label}
                   </Link>
@@ -89,14 +89,14 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <p className="le-label text-smoke">Resources</p>
-            <ul className="mt-5 space-y-3 text-caption">
+            <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1 text-caption sm:mt-5 lg:block lg:space-y-3">
               {TOOL_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-graphite transition-opacity hover:opacity-60"
+                    className="inline-flex min-h-6 items-center py-1 text-graphite transition-opacity hover:opacity-60"
                   >
                     {l.label}
                   </Link>
@@ -107,7 +107,7 @@ export function Footer() {
                   href="https://github.com/NotHarshhaa/Learn-Everything/blob/main/LICENSE"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-graphite transition-opacity hover:opacity-60"
+                  className="inline-flex min-h-6 items-center py-1 text-graphite transition-opacity hover:opacity-60"
                 >
                   MIT License
                 </a>
@@ -116,7 +116,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-ink/30 pt-6 sm:flex-row sm:items-center">
+        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-ink/30 pt-6 sm:flex-row sm:items-center">
           <p className="text-label uppercase tracking-[1px] text-smoke">
             Built for students, career switchers and curious minds.
           </p>

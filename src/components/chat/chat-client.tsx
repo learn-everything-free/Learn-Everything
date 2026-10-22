@@ -409,7 +409,7 @@ export function ChatClient({ labContext }: { labContext?: LabContext }) {
         <div className="flex flex-wrap items-center gap-3 border-b border-ink/20 px-4 py-3">
           <button
             onClick={() => setShowModels((v) => !v)}
-            className="flex items-center gap-2 border border-ink px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-graphite transition-colors hover:bg-ink hover:text-eggshell"
+            className="flex items-center gap-2 border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-graphite transition-colors hover:bg-ink hover:text-eggshell"
           >
             {model || sourceLabel(source)}
             <span aria-hidden>▾</span>
@@ -419,7 +419,7 @@ export function ChatClient({ labContext }: { labContext?: LabContext }) {
             value={preset}
             onChange={(e) => setPreset(e.target.value)}
             aria-label="Assistant behaviour"
-            className="border border-ink/50 bg-eggshell px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider text-graphite focus:outline-none"
+            className="border border-ink/50 bg-eggshell px-2.5 py-2 font-mono text-[16px] uppercase tracking-wider text-graphite focus:outline-none sm:text-[10px]"
           >
             {[
               ["general", "General"],
@@ -437,7 +437,7 @@ export function ChatClient({ labContext }: { labContext?: LabContext }) {
             {active && (
               <button
                 onClick={exportCurrent}
-                className="font-mono text-[10px] uppercase tracking-wider text-smoke transition-colors hover:text-ink"
+                className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-wider text-smoke transition-colors hover:text-ink"
               >
                 Export
               </button>
@@ -445,7 +445,7 @@ export function ChatClient({ labContext }: { labContext?: LabContext }) {
             {source === "browser" && (
               <button
                 onClick={() => unloadBrowserModel()}
-                className="font-mono text-[10px] uppercase tracking-wider text-smoke transition-colors hover:text-ink"
+                className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-wider text-smoke transition-colors hover:text-ink"
                 title="Free the GPU memory the model is holding"
               >
                 Unload
@@ -488,7 +488,7 @@ export function ChatClient({ labContext }: { labContext?: LabContext }) {
           <div className="mx-auto max-w-3xl space-y-7">
             {messages.length === 0 && !pending && (
               <div className="border border-dashed border-ink px-6 py-14 text-center">
-                <h1 className="text-heading-sm font-light tracking-[-0.03em] text-ink">
+                <h1 className="text-[34px] font-light leading-[1.12] tracking-[-0.03em] text-ink sm:text-heading-sm sm:leading-[1.2]">
                   What do you want to understand?
                 </h1>
                 <p className="mx-auto mt-3 max-w-lg text-body-sm text-smoke">

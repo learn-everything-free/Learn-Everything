@@ -39,7 +39,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
       : "taupe";
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-16 lg:py-20">
+    <div className="mx-auto max-w-[1280px] px-4 py-10 sm:px-6 sm:py-12 lg:px-16 lg:py-20">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 font-mono text-caption uppercase text-ash tracking-wider">
         <Link href="/" className="hover:text-ink transition-colors">
@@ -54,7 +54,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
       </nav>
 
       {/* Tool Hero Header */}
-      <header className="mt-8 grid gap-8 rounded-none border border-ink/80 bg-eggshell p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
+      <header className="mt-8 grid gap-6 rounded-none border border-ink/80 bg-eggshell p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:p-12">
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <div
@@ -146,10 +146,10 @@ export default async function ToolDetailPage({ params }: PageProps) {
                 return (
                   <div
                     key={task.slug}
-                    className="flex flex-col justify-between rounded-none border border-ink/80 bg-eggshell p-6 transition-all duration-200 hover:border-ink/25 hover:bg-eggshell hover:"
+                    className="flex min-w-0 flex-col justify-between rounded-none border border-ink/80 bg-eggshell p-4 transition-all duration-200 hover:border-ink/25 hover:bg-eggshell sm:p-6"
                   >
                     <div>
-                      <div className="flex items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-mono text-caption text-ash font-medium">
                           LAB {String(index + 1).padStart(2, "0")}
                         </span>
@@ -177,10 +177,10 @@ export default async function ToolDetailPage({ params }: PageProps) {
                           {task.requirements.slice(0, 2).map((req, i) => (
                             <li
                               key={i}
-                              className="font-mono text-label text-graphite truncate flex items-center gap-1.5"
+                              className="flex min-w-0 items-start gap-1.5 font-mono text-label leading-relaxed text-graphite"
                             >
-                              <span className="size-1 rounded-full bg-ink/40" />
-                              {req}
+                              <span className="mt-1 size-1 shrink-0 rounded-full bg-ink/40" />
+                              <span className="min-w-0 break-words">{req}</span>
                             </li>
                           ))}
                         </ul>
@@ -203,7 +203,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
               })}
             </div>
           ) : (
-            <div className="mt-8 rounded-none border border-dashed border-ink bg-eggshell p-8 text-center">
+            <div className="mt-8 rounded-none border border-dashed border-ink bg-eggshell p-6 text-center sm:p-8">
               <p className="text-body font-medium text-graphite">
                 Additional sandbox scenarios in active development
               </p>
@@ -223,7 +223,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
             {tool.architecture.title}
           </SectionHeader>
 
-          <div className="mt-8 grid gap-8 rounded-none border border-ink/80 bg-eggshell p-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
+          <div className="mt-8 grid gap-6 rounded-none border border-ink/80 bg-eggshell p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
             <div>
               <p className="font-mono text-caption uppercase text-ash tracking-wider">
                 Internal Mechanics
@@ -401,7 +401,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
         </section>
 
         {/* Section 7: Associated Path Banner */}
-        <section className="rounded-none border border-ink bg-ink p-8 text-eggshell lg:p-12">
+        <section className="rounded-none border border-ink bg-ink p-5 text-eggshell sm:p-8 lg:p-12">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
             <div className="max-w-2xl space-y-3">
               <p className="font-mono text-caption uppercase text-ash tracking-wider">

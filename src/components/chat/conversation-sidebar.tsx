@@ -28,13 +28,13 @@ export function ConversationSidebar({
         <p className="text-label text-ash">Conversations</p>
         <button
           onClick={onNew}
-          className="border border-ink px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-graphite transition-colors hover:bg-ink hover:text-eggshell"
+          className="border border-ink px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-graphite transition-colors hover:bg-ink hover:text-eggshell"
         >
           New
         </button>
       </div>
 
-      <div className="max-h-56 flex-1 overflow-y-auto lg:max-h-none">
+      <div className="max-h-36 flex-1 overflow-y-auto lg:max-h-none">
         {conversations.length === 0 ? (
           <p className="px-4 py-6 text-caption leading-relaxed text-smoke">
             No conversations yet. Ask something to start one — the history stays in this browser.
@@ -58,11 +58,11 @@ export function ConversationSidebar({
                         autoFocus
                         value={draft}
                         onChange={(e) => setDraft(e.target.value)}
-                        className="w-full border border-ink bg-eggshell px-2 py-1 text-caption text-ink focus:outline-none"
+                        className="w-full border border-ink bg-eggshell px-2 py-1.5 text-[16px] text-ink focus:outline-none sm:text-caption"
                       />
                       <button
                         type="submit"
-                        className="font-mono text-[10px] uppercase text-smoke hover:text-ink"
+                        className="px-2 py-1.5 font-mono text-[10px] uppercase text-smoke hover:text-ink"
                       >
                         Save
                       </button>
@@ -84,14 +84,14 @@ export function ConversationSidebar({
                           setDraft(conversation.title);
                         }}
                         aria-label="Rename conversation"
-                        className="font-mono text-[10px] text-ash opacity-0 transition-opacity hover:text-ink group-hover:opacity-100"
+                        className="shrink-0 px-1.5 py-1 font-mono text-[11px] text-ash transition-opacity hover:text-ink lg:opacity-0 lg:group-hover:opacity-100"
                       >
                         ✎
                       </button>
                       <button
                         onClick={() => onDelete(conversation.id)}
                         aria-label="Delete conversation"
-                        className="font-mono text-[10px] text-ash opacity-0 transition-opacity hover:text-ink group-hover:opacity-100"
+                        className="shrink-0 px-1.5 py-1 font-mono text-[11px] text-ash transition-opacity hover:text-ink lg:opacity-0 lg:group-hover:opacity-100"
                       >
                         ✕
                       </button>
@@ -107,7 +107,7 @@ export function ConversationSidebar({
       <div className="border-t border-ink/20 px-4 py-3">
         <Link
           href="/paths"
-          className="font-mono text-[10px] uppercase tracking-wider text-smoke transition-colors hover:text-ink"
+          className="inline-flex min-h-6 items-center py-1 font-mono text-[10px] uppercase tracking-wider text-smoke transition-colors hover:text-ink"
         >
           ← Back to the curriculum
         </Link>

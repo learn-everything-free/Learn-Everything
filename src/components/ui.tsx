@@ -81,7 +81,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`border border-ink/70 p-7 transition-colors ${
+      className={`border border-ink/70 p-5 transition-colors sm:p-7 ${
         hover ? "hover:border-ink" : ""
       } ${className}`}
     >
@@ -100,8 +100,10 @@ export function StatCard({
   sub?: string;
 }) {
   return (
-    <div className="border border-ink/70 p-6 transition-colors hover:border-ink">
-      <p className="text-heading-sm font-medium tracking-[-2.24px] text-ink">{value}</p>
+    <div className="border border-ink/70 p-4 transition-colors hover:border-ink sm:p-6">
+      <p className="text-[34px] font-medium leading-none tracking-[-2px] text-ink sm:text-heading-sm sm:leading-[1.25] sm:tracking-[-2.24px]">
+        {value}
+      </p>
       <p className="mt-3 text-body-sm text-ink">{label}</p>
       {sub && <p className="mt-1 text-label uppercase tracking-[1px] text-smoke">{sub}</p>}
     </div>
@@ -118,7 +120,7 @@ export function ToolCard({
   return (
     <Link
       href={`/tools/${tool.slug}`}
-      className="group flex flex-col justify-between border border-ink/70 p-7 transition-colors hover:border-ink"
+      className="group flex min-w-0 flex-col justify-between border border-ink/70 p-5 transition-colors hover:border-ink sm:p-7"
     >
       <div>
         <div className="flex items-start justify-between gap-4">

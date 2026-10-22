@@ -10,13 +10,13 @@ export default function PathsPage() {
   const totalTasks = paths.reduce((n, p) => n + countTasks(p), 0);
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-14 lg:px-16 lg:py-20 space-y-16">
+    <div className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 sm:py-14 lg:px-16 lg:py-20 space-y-16">
       {/* Header */}
       <div className="max-w-3xl space-y-4">
         <p className="font-mono text-caption uppercase text-ash tracking-wider">
           Curriculum Index
         </p>
-        <h1 className="text-heading-lg font-medium uppercase tracking-[-3.36px] text-ink">
+        <h1 className="text-[40px] font-medium uppercase leading-[1.1] tracking-[-2.24px] text-ink sm:text-heading-lg sm:leading-[1.2] sm:tracking-[-3.36px]">
           Structured paths, real environments.
         </h1>
         <p className="text-body text-smoke leading-relaxed">

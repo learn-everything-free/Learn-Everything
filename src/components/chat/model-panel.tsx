@@ -110,13 +110,15 @@ export function ModelPanel({
   return (
     <div className="border border-ink/70 bg-eggshell">
       {/* Source tabs */}
-      <div className="flex flex-wrap border-b border-ink/20">
+      <div className="grid grid-cols-2 gap-px border-b border-ink/20 bg-ink/15 sm:flex sm:flex-wrap sm:gap-0 sm:bg-transparent">
         {SOURCES.map((s) => (
           <button
             key={s.id}
             onClick={() => onSourceChange(s.id)}
-            className={`flex-1 border-r border-ink/15 px-4 py-3 text-left transition-colors last:border-r-0 ${
-              source === s.id ? "bg-ink text-eggshell" : "text-graphite hover:bg-warm-taupe"
+            className={`flex-1 px-3 py-3 text-left transition-colors sm:border-r sm:border-ink/15 sm:px-4 sm:last:border-r-0 ${
+              source === s.id
+                ? "bg-ink text-eggshell"
+                : "bg-eggshell text-graphite hover:bg-warm-taupe"
             }`}
           >
             <span className="block text-[11px] font-medium uppercase tracking-[0.08em]">
@@ -193,7 +195,7 @@ export function ModelPanel({
                     {isCached ? (
                       <button
                         onClick={() => onDeleteBrowser(m.id)}
-                        className="shrink-0 border border-ink/50 px-2.5 py-1 font-mono text-[10px] uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+                        className="shrink-0 border border-ink/50 px-3 py-1.5 font-mono text-[10px] uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
                         disabled={busy}
                       >
                         Remove
@@ -201,7 +203,7 @@ export function ModelPanel({
                     ) : (
                       <button
                         onClick={() => onDownloadBrowser(m.id)}
-                        className="shrink-0 border border-ink bg-ink px-2.5 py-1 font-mono text-[10px] uppercase text-eggshell transition-opacity hover:opacity-85"
+                        className="shrink-0 border border-ink bg-ink px-3 py-1.5 font-mono text-[10px] uppercase text-eggshell transition-opacity hover:opacity-85"
                         disabled={busy || !gpu}
                       >
                         Download
@@ -246,7 +248,7 @@ export function ModelPanel({
                       )}
                       <button
                         onClick={() => onDeleteOllama(m.name)}
-                        className="shrink-0 border border-ink/50 px-2.5 py-1 font-mono text-[10px] uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+                        className="shrink-0 border border-ink/50 px-3 py-1.5 font-mono text-[10px] uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
                         disabled={busy}
                       >
                         Remove
@@ -271,7 +273,7 @@ export function ModelPanel({
                   </span>
                   <button
                     onClick={() => onPullOllama(m.name)}
-                    className="shrink-0 border border-ink bg-ink px-2.5 py-1 font-mono text-[10px] uppercase text-eggshell transition-opacity hover:opacity-85"
+                    className="shrink-0 border border-ink bg-ink px-3 py-1.5 font-mono text-[10px] uppercase text-eggshell transition-opacity hover:opacity-85"
                     disabled={busy || ollamaStatus === "offline"}
                   >
                     Pull
@@ -310,7 +312,7 @@ export function ModelPanel({
                 value={byok.apiKey}
                 onChange={(e) => onByokChange({ ...byok, apiKey: e.target.value })}
                 placeholder="sk-…"
-                className="mt-1.5 w-full border border-ink bg-eggshell px-3 py-2 font-mono text-[12px] text-ink focus:outline-none"
+                className="mt-1.5 w-full border border-ink bg-eggshell px-3 py-2 font-mono text-[16px] text-ink focus:outline-none sm:text-[12px]"
               />
             </label>
             <label className="block">
@@ -319,7 +321,7 @@ export function ModelPanel({
                 value={byok.baseUrl}
                 onChange={(e) => onByokChange({ ...byok, baseUrl: e.target.value })}
                 placeholder="https://api.openai.com/v1"
-                className="mt-1.5 w-full border border-ink bg-eggshell px-3 py-2 font-mono text-[12px] text-ink focus:outline-none"
+                className="mt-1.5 w-full border border-ink bg-eggshell px-3 py-2 font-mono text-[16px] text-ink focus:outline-none sm:text-[12px]"
               />
             </label>
             <label className="block">
@@ -328,7 +330,7 @@ export function ModelPanel({
                 value={byok.model}
                 onChange={(e) => onByokChange({ ...byok, model: e.target.value })}
                 placeholder="gpt-4o-mini"
-                className="mt-1.5 w-full border border-ink bg-eggshell px-3 py-2 font-mono text-[12px] text-ink focus:outline-none"
+                className="mt-1.5 w-full border border-ink bg-eggshell px-3 py-2 font-mono text-[16px] text-ink focus:outline-none sm:text-[12px]"
               />
             </label>
             <p className="text-[11px] leading-relaxed text-smoke">

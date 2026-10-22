@@ -5,7 +5,7 @@ import { tools } from "@/lib/tools";
 export default function NotFound() {
   const { tasks } = buildCurriculumIndex();
   return (
-    <div className="mx-auto flex max-w-[1280px] flex-col items-center px-6 py-28 text-center lg:px-16">
+    <div className="mx-auto flex max-w-[1280px] flex-col items-center px-4 py-20 text-center sm:px-6 sm:py-28 lg:px-16">
       <div className="w-full max-w-md rounded-none border border-ink bg-[#121417] p-6 text-left font-mono text-label text-stone">
         <p>
           <span className="text-ink">learner@lab:~$</span> cd /the-page-you-wanted
@@ -18,7 +18,7 @@ export default function NotFound() {
         </p>
       </div>
 
-      <h1 className="mt-10 text-heading font-medium uppercase tracking-[-2.8px] text-ink sm:text-heading-lg">
+      <h1 className="mt-10 text-[38px] font-medium uppercase leading-[1.1] tracking-[-2.24px] text-ink sm:text-heading sm:leading-[1.2] sm:tracking-[-2.8px] lg:text-heading-lg">
         Lost in the shell.
       </h1>
       <p className="mt-4 max-w-md text-body leading-relaxed text-smoke">

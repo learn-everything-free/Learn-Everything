@@ -63,13 +63,13 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
   const levelPct = lvl.next ? Math.min(100, Math.round((lvl.into / lvl.span) * 100)) : 100;
 
   return (
-    <div className="mx-auto max-w-[1280px] space-y-14 px-6 pb-24 pt-12 lg:px-16 lg:pt-16">
+    <div className="mx-auto max-w-[1280px] space-y-12 px-4 pb-24 pt-10 sm:space-y-14 sm:px-6 sm:pt-12 lg:px-16 lg:pt-16">
       {/* Heading */}
       <section className="space-y-3">
         <p className="text-label text-ash">
           Progress Dashboard
         </p>
-        <h1 className="text-heading font-light tracking-[-0.03em] text-ink sm:text-heading-lg">
+        <h1 className="text-[38px] font-light leading-[1.12] tracking-[-0.03em] text-ink sm:text-heading-lg sm:leading-[1.2]">
           {completedSlugs.length === 0
             ? "Your journey starts here."
             : `${lvl.name}, level ${lvl.level}.`}
@@ -83,42 +83,42 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
 
       {/* Stat row */}
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-none border border-ink/80 bg-eggshell p-6">
+        <div className="rounded-none border border-ink/80 bg-eggshell p-4 sm:p-6">
           <p className="text-heading-sm font-light tracking-[-0.03em] text-ink">{lvl.level}</p>
-          <p className="mt-2 text-body-sm font-medium text-graphite">{lvl.name}</p>
+          <p className="mt-2 text-caption font-medium text-graphite sm:text-body-sm">{lvl.name}</p>
           <p className="mt-1 font-mono text-caption text-smoke">current level</p>
         </div>
-        <div className="rounded-none border border-ink/80 bg-eggshell p-6">
+        <div className="rounded-none border border-ink/80 bg-eggshell p-4 sm:p-6">
           <p className="text-heading-sm font-light tracking-[-0.03em] text-ink">{xp}</p>
-          <p className="mt-2 text-body-sm font-medium text-graphite">XP earned</p>
+          <p className="mt-2 text-caption font-medium text-graphite sm:text-body-sm">XP earned</p>
           <p className="mt-1 font-mono text-caption text-smoke">{XP_PER_TASK} per lab</p>
         </div>
-        <div className="rounded-none border border-ink/80 bg-eggshell p-6">
+        <div className="rounded-none border border-ink/80 bg-eggshell p-4 sm:p-6">
           <p className="text-heading-sm font-light tracking-[-0.03em] text-ink">
             {streak?.count ?? 0}
             <span className="text-body-sm text-ink"> d</span>
           </p>
-          <p className="mt-2 text-body-sm font-medium text-graphite">Current streak</p>
+          <p className="mt-2 text-caption font-medium text-graphite sm:text-body-sm">Current streak</p>
           <p className="mt-1 font-mono text-caption text-smoke">best {streakBest}d</p>
         </div>
-        <div className="rounded-none border border-ink/80 bg-eggshell p-6">
+        <div className="rounded-none border border-ink/80 bg-eggshell p-4 sm:p-6">
           <p className="text-heading-sm font-light tracking-[-0.03em] text-ink">
             {unlockedAchievements}
             <span className="text-body-sm text-ash"> / {achievements.length}</span>
           </p>
-          <p className="mt-2 text-body-sm font-medium text-graphite">Achievements</p>
+          <p className="mt-2 text-caption font-medium text-graphite sm:text-body-sm">Achievements</p>
           <p className="mt-1 font-mono text-caption text-smoke">unlocked</p>
         </div>
       </section>
 
       {/* Level progress */}
-      <section className="rounded-none border border-ink/80 bg-eggshell p-8">
+      <section className="rounded-none border border-ink/80 bg-eggshell p-5 sm:p-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-label text-ash">
               Level progress
             </p>
-            <h2 className="mt-2 text-2xl font-light tracking-tight text-ink">
+            <h2 className="mt-2 text-subheading font-light tracking-tight text-ink">
               {lvl.next
                 ? `${lvl.into} / ${lvl.span} XP toward ${lvl.next.name}`
                 : "Top level reached — Architect"}
@@ -138,7 +138,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
 
       {/* Paths + continue learning */}
       <section className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        <div className="rounded-none border border-ink/80 bg-eggshell p-8">
+        <div className="min-w-0 rounded-none border border-ink/80 bg-eggshell p-5 sm:p-8">
           <p className="text-label text-ash">
             Path progress
           </p>
@@ -185,7 +185,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
           </p>
         </div>
 
-        <div className="rounded-none border border-ink/80 bg-eggshell p-8">
+        <div className="min-w-0 rounded-none border border-ink/80 bg-eggshell p-5 sm:p-8">
           <p className="text-label text-ash">
             Continue learning
           </p>
@@ -337,7 +337,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
           Recent activity
         </p>
         {recent.length === 0 ? (
-          <div className="rounded-none border border-ink/80 bg-eggshell p-8 text-center">
+          <div className="rounded-none border border-ink/80 bg-eggshell p-5 sm:p-8 text-center">
             <p className="text-body text-smoke">No completions yet.</p>
             {index.tasks[0] && (
               <Link
@@ -428,11 +428,11 @@ function DataSection() {
   };
 
   return (
-    <div className="rounded-none border border-ink/80 bg-eggshell p-8">
+    <div className="min-w-0 rounded-none border border-ink/80 bg-eggshell p-5 sm:p-8">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-xl">
           <p className="text-label text-ash">Your data</p>
-          <h2 className="mt-2 text-2xl font-light tracking-tight text-ink">
+          <h2 className="mt-2 text-subheading font-light tracking-tight text-ink">
             Take your progress with you
           </h2>
           <p className="mt-2 text-body-sm leading-relaxed text-smoke">

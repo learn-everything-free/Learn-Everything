@@ -22,9 +22,9 @@ export default async function PathPage({ params }: PageProps) {
   const totalTasks = countTasks(path);
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-14 lg:px-16 lg:py-20 space-y-16">
+    <div className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 sm:py-14 lg:px-16 lg:py-20 space-y-16">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 font-mono text-caption uppercase text-ash tracking-wider">
+      <nav className="flex flex-wrap items-center gap-2 font-mono text-caption uppercase text-ash tracking-wider">
         <Link href="/" className="hover:text-ink transition-colors">
           Home
         </Link>
@@ -41,7 +41,7 @@ export default async function PathPage({ params }: PageProps) {
         <p className="font-mono text-caption uppercase text-ash tracking-wider">
           Learning Path Curriculum
         </p>
-        <h1 className="text-heading-lg font-medium uppercase tracking-[-3.36px] text-ink max-w-4xl">
+        <h1 className="max-w-4xl text-[40px] font-medium uppercase leading-[1.1] tracking-[-2.24px] text-ink sm:text-heading-lg sm:leading-[1.2] sm:tracking-[-3.36px]">
           {path.title}
         </h1>
         <p className="text-subheading text-smoke max-w-3xl leading-relaxed">
@@ -77,29 +77,29 @@ export default async function PathPage({ params }: PageProps) {
             return (
               <div
                 key={skill.slug}
-                className="flex flex-col justify-between rounded-none border border-ink/80 bg-eggshell p-7 transition-all duration-200 hover:border-ink/25 hover:bg-eggshell hover:"
+                className="flex min-w-0 flex-col justify-between rounded-none border border-ink/80 bg-eggshell p-5 transition-all duration-200 hover:border-ink/25 hover:bg-eggshell sm:p-7"
               >
                 <div>
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-11 items-center justify-center rounded-none border border-ink/80 bg-eggshell">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="hidden size-11 shrink-0 items-center justify-center rounded-none border border-ink/80 bg-eggshell sm:flex">
                         <ToolIcon
                           name={tool?.iconName ?? skill.slug}
                           className="size-5"
                           color={tool?.color ?? "currentColor"}
                         />
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <span className="font-mono text-label uppercase text-ash tracking-wider">
                           SKILL {String(i + 1).padStart(2, "0")}
                         </span>
-                        <h2 className="text-heading-sm font-medium text-ink tracking-tight">
+                        <h2 className="text-[34px] font-medium leading-[1.15] tracking-tight text-ink sm:text-heading-sm sm:leading-[1.25]">
                           {skill.title}
                         </h2>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex shrink-0 items-center gap-1.5">
                       <Badge variant="ink" className="font-mono text-label">
                         {taskCount} {taskCount === 1 ? "Task" : "Tasks"}
                       </Badge>
@@ -127,12 +127,12 @@ export default async function PathPage({ params }: PageProps) {
                         {skill.topics.map((t) => (
                           <div
                             key={t.slug}
-                            className="flex items-center justify-between text-label py-1"
+                            className="flex items-center justify-between gap-3 py-1 text-label"
                           >
-                            <span className="text-graphite font-medium">
+                            <span className="min-w-0 truncate font-medium text-graphite">
                               • {t.title}
                             </span>
-                            <span className="font-mono text-label text-smoke">
+                            <span className="shrink-0 font-mono text-label text-smoke">
                               {t.tasks.length} {t.tasks.length === 1 ? "task" : "tasks"}
                             </span>
                           </div>

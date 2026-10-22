@@ -39,7 +39,7 @@ export default async function LabPage({ params }: PageProps<"/lab/[taskId]">) {
         nextTask={next ? { slug: next.slug, title: next.title } : null}
       />
       {(prev || next) && (
-        <div className="mx-auto max-w-[1280px] px-6 pb-20 lg:px-16">
+        <div className="mx-auto max-w-[1280px] px-4 pb-20 sm:px-6 lg:px-16">
           <div className="grid gap-4 border-t border-ink pt-8 sm:grid-cols-2">
             {prev ? (
               <Link

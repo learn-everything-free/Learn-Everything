@@ -35,6 +35,7 @@ export function LabsBrowser({ labs }: { labs: LabEntry[] }) {
   const [difficulty, setDifficulty] = useState("all");
   const [type, setType] = useState("all");
   const [hideDone, setHideDone] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const paths = useMemo(() => {
     const map = new Map<string, string>();
@@ -72,13 +73,21 @@ export function LabsBrowser({ labs }: { labs: LabEntry[] }) {
   }, [labs, query, pathSlug, skillSlug, difficulty, type, hideDone, completed]);
 
   const selectClass =
-    "w-full appearance-none border border-ink bg-eggshell px-3 py-2 text-caption text-graphite focus:border-ink focus:outline-none";
+    "w-full appearance-none border border-ink bg-eggshell px-3 py-2 text-[16px] text-graphite focus:border-ink focus:outline-none sm:text-caption";
+
+  const activeFilters = [
+    pathSlug !== "all",
+    skillSlug !== "all",
+    difficulty !== "all",
+    type !== "all",
+    hideDone,
+  ].filter(Boolean).length;
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 pb-24 pt-12 lg:px-16 lg:pt-16">
+    <div className="mx-auto max-w-[1280px] px-4 pb-24 pt-10 sm:px-6 sm:pt-12 lg:px-16 lg:pt-16">
       <section className="space-y-3">
         <p className="text-label text-ash">Lab catalogue</p>
-        <h1 className="text-heading font-light tracking-[-0.03em] text-ink sm:text-heading-lg">
+        <h1 className="text-[38px] font-light leading-[1.1] tracking-[-0.03em] text-ink sm:text-heading-lg sm:leading-[1.2]">
           Every lab, on one page.
         </h1>
         <p className="max-w-2xl text-body text-smoke">
@@ -100,7 +109,26 @@ export function LabsBrowser({ labs }: { labs: LabEntry[] }) {
             />
           </label>
 
-          <label className="block">
+          {/* On phones the four selects sit behind a disclosure so the results
+              are reachable without scrolling past a wall of dropdowns. */}
+          <button
+            type="button"
+            onClick={() => setShowFilters((v) => !v)}
+            aria-expanded={showFilters}
+            aria-controls="lab-filters"
+            className="flex items-center justify-between border border-ink bg-eggshell px-3 py-2.5 text-label uppercase tracking-[1px] text-graphite sm:hidden"
+          >
+            {showFilters ? "Hide filters" : activeFilters > 0 ? `Filters · ${activeFilters}` : "Filters"}
+            <span aria-hidden className="font-mono text-body-sm">
+              {showFilters ? "−" : "+"}
+            </span>
+          </button>
+
+          <div
+            id="lab-filters"
+            className={`${showFilters ? "grid" : "hidden"} gap-4 sm:contents`}
+          >
+            <label className="block">
             <span className="text-label text-ash">Track</span>
             <select
               value={pathSlug}
@@ -172,6 +200,7 @@ export function LabsBrowser({ labs }: { labs: LabEntry[] }) {
             />
             <span className="text-caption text-graphite">Hide completed</span>
           </label>
+          </div>
         </div>
 
         <p className="mt-5 font-mono text-caption text-smoke">
@@ -193,7 +222,7 @@ export function LabsBrowser({ labs }: { labs: LabEntry[] }) {
               <Link
                 key={lab.slug}
                 href={`/lab/${lab.slug}`}
-                className="group flex flex-col justify-between border border-ink/70 bg-eggshell p-5 transition-colors hover:border-ink"
+                className="group flex min-w-0 flex-col justify-between border border-ink/70 bg-eggshell p-4 transition-colors hover:border-ink sm:p-5"
               >
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -208,8 +237,8 @@ export function LabsBrowser({ labs }: { labs: LabEntry[] }) {
                     {lab.description}
                   </p>
                 </div>
-                <div className="mt-5 flex items-center justify-between border-t border-ink/20 pt-3">
-                  <span className="truncate font-mono text-[10px] uppercase tracking-wider text-ash">
+                <div className="mt-5 flex items-center justify-between gap-3 border-t border-ink/20 pt-3">
+                  <span className="min-w-0 truncate font-mono text-[10px] uppercase tracking-wider text-ash">
                     {lab.pathTitle} · {lab.topicTitle}
                   </span>
                   <span className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-ink">

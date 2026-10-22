@@ -45,17 +45,17 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/70 bg-eggshell/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-[68px] max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-8">
+      <div className="mx-auto flex h-[68px] max-w-[1400px] items-center justify-between gap-3 px-4 sm:gap-4 sm:px-8">
         {/* Wordmark */}
-        <Link href="/" className="group flex shrink-0 items-center gap-3 text-ink">
+        <Link href="/" className="group flex shrink-0 items-center gap-2.5 text-ink sm:gap-3">
           <LogoMark className="size-[26px] shrink-0" />
-          <span className="text-[18px] font-medium tracking-[-0.01em] underline decoration-ink/30 underline-offset-[6px] group-hover:decoration-ink">
+          <span className="text-[16px] font-medium tracking-[-0.01em] underline decoration-ink/30 underline-offset-[6px] group-hover:decoration-ink sm:text-[18px]">
             Learn Everything
           </span>
         </Link>
 
         {/* Centre label */}
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           <Link
             href="/paths"
             className="le-label flex items-center gap-2 text-ink transition-opacity hover:opacity-60"
@@ -68,8 +68,8 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
         </div>
 
         {/* Right cluster */}
-        <div className="flex shrink-0 items-center gap-5 sm:gap-7">
-          <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
+        <div className="flex shrink-0 items-center gap-2.5 sm:gap-5 lg:gap-7">
+          <nav aria-label="Primary" className="hidden items-center gap-7 xl:flex">
             {links.slice(1).map((l) => {
               const active = isActive(pathname, l.href);
               return (
@@ -109,19 +109,19 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
             href="/lab/linux-create-project"
             className={
               pathname === "/"
-                ? "le-outline hidden sm:inline-flex"
-                : "hidden whitespace-nowrap border border-ink bg-ink px-4 py-2 text-caption font-medium uppercase tracking-[0.083em] text-eggshell transition-opacity hover:opacity-85 sm:block"
+                ? "le-outline hidden lg:inline-flex"
+                : "hidden whitespace-nowrap border border-ink bg-ink px-4 py-2 text-caption font-medium uppercase tracking-[0.083em] text-eggshell transition-opacity hover:opacity-85 lg:block"
             }
           >
             Get started
           </Link>
 
-          {/* Mobile menu toggle */}
+          {/* Mobile / tablet menu toggle — everything below the wide bar */}
           <button
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="flex size-9 flex-col items-center justify-center gap-[5px] border border-ink/70 md:hidden"
+            className="flex size-9 flex-col items-center justify-center gap-[5px] border border-ink/70 xl:hidden"
           >
             <span
               className={`h-px w-4 bg-ink transition-transform duration-200 ${
@@ -139,8 +139,8 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
 
       {/* Mobile menu panel */}
       {menuOpen && (
-        <div className="le-menu-in border-t border-ink/70 bg-eggshell px-5 pb-6 pt-2 md:hidden">
-          <nav aria-label="Mobile" className="flex flex-col">
+        <div className="le-menu-in max-h-[calc(100dvh-68px)] overflow-y-auto border-t border-ink/70 bg-eggshell px-4 pb-6 pt-2 sm:px-5 xl:hidden">
+          <nav aria-label="Mobile" className="mx-auto flex w-full max-w-2xl flex-col">
             {links.map((l) => {
               const active = isActive(pathname, l.href);
               return (
@@ -166,7 +166,7 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
             })}
           </nav>
 
-          <div className="mt-5 flex items-center gap-3">
+          <div className="mx-auto mt-5 flex w-full max-w-2xl items-center gap-3">
             {session ? (
               <button
                 onClick={() => void signOut()}

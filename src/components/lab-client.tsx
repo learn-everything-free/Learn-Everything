@@ -217,8 +217,8 @@ export function LabClient({
   const showQuickAsks = !tutorBusy && tutor.length <= 2;
 
   return (
-    <div className="min-h-[calc(100vh-60px)] bg-gradient-to-b from-warm-taupe/70 via-eggshell to-eggshell">
-      <div className="mx-auto max-w-[1280px] px-6 py-8 lg:px-16 lg:py-10">
+    <div className="min-h-[calc(100vh-60px)] bg-eggshell">
+      <div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-6 sm:py-8 lg:px-16 lg:py-10">
         {/* Breadcrumb */}
         <p className="font-mono text-caption uppercase text-ash">
           <Link href="/paths" className="transition-colors hover:text-ink">Paths</Link>
@@ -245,7 +245,7 @@ export function LabClient({
                 Ask AI
               </Link>
             </div>
-            <h1 className="mt-4 text-heading font-light tracking-[-0.02em] text-ink">
+            <h1 className="mt-4 text-[34px] font-light leading-[1.15] tracking-[-0.02em] text-ink sm:text-heading sm:leading-[1.24]">
               {task.title}
             </h1>
             <p className="mt-3 max-w-2xl text-body text-smoke">{task.description}</p>
@@ -404,7 +404,7 @@ export function LabClient({
                     </span>
                     <button
                       onClick={() => setRevealedSteps((n) => Math.min(n + 1, task.steps.length))}
-                      className="rounded-none border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+                      className="rounded-none border border-ink bg-eggshell px-3.5 py-2 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
                     >
                       Reveal next step
                     </button>
@@ -455,7 +455,7 @@ export function LabClient({
                     <button
                       key={ask}
                       onClick={() => askTutor(ask)}
-                      className="rounded-none border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption text-graphite transition-colors hover:border-ink hover:text-ink"
+                      className="rounded-none border border-ink bg-eggshell px-3.5 py-2 font-mono text-caption text-graphite transition-colors hover:border-ink hover:text-ink"
                     >
                       {ask}
                     </button>
@@ -539,7 +539,7 @@ export function LabClient({
               <div className="flex items-center justify-between border-t border-white/10 px-5 py-3">
                 <button
                   onClick={reset}
-                  className="rounded-none border border-white/20 px-4 py-1.5 font-mono text-caption uppercase text-ash transition-colors hover:border-[#ebe8e4] hover:text-[#ebe8e4]"
+                  className="rounded-none border border-white/20 px-4 py-2 font-mono text-caption uppercase text-ash transition-colors hover:border-[#ebe8e4] hover:text-[#ebe8e4]"
                 >
                   Reset Lab
                 </button>
@@ -549,7 +549,7 @@ export function LabClient({
                 <button
                   onClick={submit}
                   disabled={!hasRuntimeChecks}
-                  className={`rounded-none px-5 py-1.5 font-mono text-caption uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-40 ${
+                  className={`rounded-none px-5 py-2 font-mono text-caption uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-40 ${
                     passed
                       ? "bg-emerald-400 text-[#191918] hover:opacity-85"
                       : liveAllPass
