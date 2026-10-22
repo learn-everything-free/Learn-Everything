@@ -19,7 +19,7 @@ export function Hero({ stats }: { stats: PlatformStats }) {
     { name: "Labs", meta: `${stats.labs} labs · ${stats.skills} skills`, href: "/labs" },
     { name: "Tool hubs", meta: `${stats.tools} references`, href: "/tools" },
     { name: "AI chat", meta: "4 model sources", href: "/chat" },
-    { name: "Progress", meta: "XP · streaks · certificates", href: "/dashboard" },
+    { name: "Progress", meta: "XP & certificates", href: "/dashboard" },
   ];
 
   return (

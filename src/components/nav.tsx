@@ -103,15 +103,10 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
 
           <UserMenu />
 
-          {/* The one filled control in the bar — on the landing page the hero
-              owns the filled button, so the bar offers an outlined pill. */}
+          {/* The one filled control in the bar — identical on every route. */}
           <Link
             href="/paths"
-            className={
-              pathname === "/"
-                ? "le-outline hidden lg:inline-flex"
-                : "hidden whitespace-nowrap border border-ink bg-ink px-4 py-2 text-caption font-medium uppercase tracking-[0.083em] text-eggshell transition-opacity hover:opacity-85 lg:block"
-            }
+            className="hidden whitespace-nowrap border border-ink bg-ink px-4 py-2 text-caption font-medium uppercase tracking-[0.083em] text-eggshell transition-opacity hover:opacity-85 lg:block"
           >
             Get started
           </Link>
