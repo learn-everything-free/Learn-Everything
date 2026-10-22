@@ -18,6 +18,7 @@ export function buildSearchIndex(): SearchItem[] {
     { title: "Home", subtitle: "Start here", kind: "Page", href: "/" },
     { title: "Learning Paths", subtitle: "Role-based curriculum tracks", kind: "Page", href: "/paths" },
     { title: "All Labs", subtitle: "Every lab, searchable and filterable", kind: "Page", href: "/labs" },
+    { title: "AI Chat", subtitle: "Download a model or bring your own key", kind: "Page", href: "/chat" },
     { title: "Tools", subtitle: "Tool hubs, cheatsheets & pitfalls", kind: "Page", href: "/tools" },
     { title: "Dashboard", subtitle: "Your progress, streak & achievements", kind: "Page", href: "/dashboard" },
   ];

@@ -17,7 +17,7 @@ import type { SearchItem } from "@/lib/search-index";
 const links = [
   { href: "/paths", label: "Tracks", hint: "9 career paths" },
   { href: "/labs", label: "Labs", hint: "Every lab, searchable" },
-  { href: "/lab/linux-create-project", label: "Practice", hint: "Start a lab now" },
+  { href: "/chat", label: "AI Chat", hint: "Bring or download a model" },
   { href: "/tools", label: "Tools", hint: "15+ tool hubs" },
   { href: "/dashboard", label: "Dashboard", hint: "Progress & achievements" },
 ];

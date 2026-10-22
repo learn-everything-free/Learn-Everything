@@ -237,6 +237,13 @@ export function LabClient({
               <Badge variant="outline">{task.env}</Badge>
               {doneAt && <CompletedBadge slug={task.slug} />}
               <BookmarkButton slug={task.slug} />
+              <Link
+                href={`/chat?task=${task.slug}`}
+                title="Open the AI chat with this lab in context"
+                className="rounded-none border border-ink/50 bg-eggshell px-2.5 py-0.5 text-label font-medium uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+              >
+                Ask AI
+              </Link>
             </div>
             <h1 className="mt-4 text-heading font-light tracking-[-0.02em] text-ink">
               {task.title}
