@@ -1,0 +1,7 @@
+slug: 02-context-window
+title: Context Window
+summary: What earns its place in the context, and how to work on a change that is too big.
+order: 2
+tasks:
+  - ai-ide-context-rules
+  - ai-ide-large-refactor

@@ -1,0 +1,43 @@
+slug: codex-ci-workflow
+title: Run a Review in CI
+type: practice
+difficulty: intermediate
+description: An automated review is a second pair of eyes, not a gatekeeper. Write the workflow
+  that posts the findings on every pull request.
+requirements:
+  - Directory ~/ci exists
+  - File ~/ci/codex-review.yml exists
+  - The workflow triggers on pull requests
+  - The workflow runs the review with the minimum permissions it needs
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ci
+    label: ~/ci
+  - validator: file_exists
+    path: /home/learner/ci/codex-review.yml
+    label: ~/ci/codex-review.yml
+  - validator: file_contains
+    path: /home/learner/ci/codex-review.yml
+    value: "pull_request"
+    label: workflow triggers on pull requests
+  - validator: file_contains
+    path: /home/learner/ci/codex-review.yml
+    value: permissions
+    label: permissions declared
+  - validator: file_contains
+    path: /home/learner/ci/codex-review.yml
+    value: "codex review"
+    label: review command runs
+steps:
+  - title: Create the ci directory
+    detail: Pipeline files live in their own folder, ready to be copied into the repository.
+    command: mkdir -p ~/ci
+  - title: Write the workflow
+    detail: "The trigger is a pull request, and the permissions block says what the job may
+      touch - keep it as small as possible."
+    command: >-
+      echo 'name: codex-review\non:\n  pull_request:\npermissions:\n  contents: read\n  pull-requests: write\njobs:\n  review:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: review\n        run: codex review --base origin/main --output-file review-notes.md' > ~/ci/codex-review.yml
+  - title: Verify and submit
+    detail: cat the workflow, then submit for validation.
+    command: cat ~/ci/codex-review.yml

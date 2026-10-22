@@ -1,0 +1,7 @@
+slug: 01-headless-automation
+title: In the Pipeline
+summary: Reviews and scheduled runs, wired into the workflow that already exists.
+order: 1
+tasks:
+  - codex-ci-workflow
+  - codex-automation-policy

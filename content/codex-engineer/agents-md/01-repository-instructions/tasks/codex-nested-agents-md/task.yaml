@@ -1,0 +1,47 @@
+slug: codex-nested-agents-md
+title: Scope the Rules to a Directory
+type: practice
+difficulty: intermediate
+description: The root file applies everywhere, but a service has its own rules. Write the nested
+  instruction file that adds them without repeating the root.
+requirements:
+  - Directory ~/project/services/api exists
+  - File ~/project/services/api/AGENTS.md exists
+  - The file states the rules specific to that service
+  - The file says how it relates to the root instructions
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project/services/api
+    label: ~/project/services/api
+  - validator: file_exists
+    path: /home/learner/project/services/api/AGENTS.md
+    label: ~/project/services/api/AGENTS.md
+  - validator: file_contains
+    path: /home/learner/project/services/api/AGENTS.md
+    value: "Scope"
+    label: scope stated
+  - validator: file_contains
+    path: /home/learner/project/services/api/AGENTS.md
+    value: "inherit"
+    label: inheritance explained
+  - validator: file_contains
+    path: /home/learner/project/services/api/AGENTS.md
+    value: "routes"
+    label: service specific rules present
+steps:
+  - title: Create the service directory
+    detail: Nested instruction files apply to the directory they sit in and everything below it.
+    command: mkdir -p ~/project/services/api
+  - title: Write the scoped file
+    detail: "Say what the file covers, and that it adds to the root file instead of replacing
+      it."
+    command: >-
+      echo '# API service\n\nScope: the services/api directory.\nThese rules inherit from the root AGENTS.md and add to it.' > ~/project/services/api/AGENTS.md
+  - title: Add the service rules
+    detail: "Only the rules that are different here. The root file already covers the rest."
+    command: >-
+      echo '\n## Rules\n\n- routes live in src/routes, one file per resource\n- every response needs a schema\n- no direct database calls from a route handler' >> ~/project/services/api/AGENTS.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/project/services/api/AGENTS.md

@@ -1,0 +1,51 @@
+slug: ai-team-guidelines
+title: Write the Ground Rules
+type: guided
+difficulty: beginner
+description: The assistant writes faster than anyone reads. Write the rules the team runs on so
+  the speed does not become the risk.
+requirements:
+  - Directory ~/adoption exists
+  - File ~/adoption/guidelines.md exists
+  - The rules state that a human reviews everything
+  - The rules cover the tests and the secrets
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/adoption
+    label: ~/adoption
+  - validator: file_exists
+    path: /home/learner/adoption/guidelines.md
+    label: ~/adoption/guidelines.md
+  - validator: file_contains
+    path: /home/learner/adoption/guidelines.md
+    value: "reviews"
+    label: human review rule present
+  - validator: file_contains
+    path: /home/learner/adoption/guidelines.md
+    value: test
+    label: test rule present
+  - validator: file_contains
+    path: /home/learner/adoption/guidelines.md
+    value: secret
+    label: secret rule present
+  - validator: file_contains
+    path: /home/learner/adoption/guidelines.md
+    value: "own"
+    label: ownership rule present
+steps:
+  - title: Create the adoption directory
+    detail: The rules live together, where everyone can find them.
+    command: mkdir -p ~/adoption
+  - title: Write the review and the test rules
+    detail: "Everything the assistant produces is reviewed by a person, and the change comes
+      with a test that fails without it."
+    command: >-
+      echo '# Team guidelines for AI assisted work\n\n## The rules\n\n- a human reviews every change before it merges\n- every change comes with a test that fails without it\n- the person who merges it owns it, exactly as before' > ~/adoption/guidelines.md
+  - title: Write the secret rule
+    detail: "One rule, no exceptions, and no discussion needed when it is violated."
+    command: >-
+      echo '\n## Secrets\n\nNo secret value is ever pasted into a prompt or into a file the assistant reads. If it would show up in the context, it does not go in.' >> ~/adoption/guidelines.md
+  - title: Verify and submit
+    detail: cat the guidelines, then submit for validation.
+    command: cat ~/adoption/guidelines.md

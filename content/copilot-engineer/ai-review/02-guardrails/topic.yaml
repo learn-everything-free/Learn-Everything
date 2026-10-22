@@ -1,0 +1,7 @@
+slug: 02-guardrails
+title: Guardrails
+summary: The scan that runs on every change, and the data rules that never bend.
+order: 2
+tasks:
+  - ai-secret-scan
+  - ai-data-policy

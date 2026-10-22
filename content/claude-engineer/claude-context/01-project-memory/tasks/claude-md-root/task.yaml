@@ -1,0 +1,52 @@
+slug: claude-md-root
+title: Write the Root Memory File
+type: guided
+difficulty: beginner
+description: The memory file is loaded into every session in the repository. Write one with the
+  commands, the layout and the conventions.
+requirements:
+  - Directory ~/project exists
+  - File ~/project/CLAUDE.md exists
+  - The file states the build and the test commands
+  - The file states the conventions and the layout
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project
+    label: ~/project
+  - validator: file_exists
+    path: /home/learner/project/CLAUDE.md
+    label: ~/project/CLAUDE.md
+  - validator: file_contains
+    path: /home/learner/project/CLAUDE.md
+    value: build
+    label: build command documented
+  - validator: file_contains
+    path: /home/learner/project/CLAUDE.md
+    value: test
+    label: test command documented
+  - validator: file_contains
+    path: /home/learner/project/CLAUDE.md
+    value: Conventions
+    label: conventions documented
+  - validator: file_contains
+    path: /home/learner/project/CLAUDE.md
+    value: Layout
+    label: layout documented
+steps:
+  - title: Create the project directory
+    detail: The memory file lives at the root of the repository, next to the code.
+    command: mkdir -p ~/project
+  - title: Write the commands
+    detail: "The two commands Claude will run most often. If they are wrong, everything the
+      agent does afterwards is wrong too."
+    command: >-
+      echo '# CLAUDE.md\n\n## Commands\n\n- build: pnpm build\n- test: pnpm test -- --run\n- lint: pnpm lint' > ~/project/CLAUDE.md
+  - title: Add the layout and the conventions
+    detail: "Say where things live and how the code should look. Keep it under a page - it is
+      loaded every turn."
+    command: >-
+      echo '\n## Layout\n\n- src/components - the UI, one component per file\n- src/server - the API and the database access\n\n## Conventions\n\n- TypeScript strict mode\n- no default exports\n- every change comes with a test' >> ~/project/CLAUDE.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/project/CLAUDE.md

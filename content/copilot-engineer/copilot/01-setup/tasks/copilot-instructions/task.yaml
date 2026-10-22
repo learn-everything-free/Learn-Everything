@@ -1,0 +1,52 @@
+slug: copilot-instructions
+title: Write the Repository Instructions
+type: guided
+difficulty: beginner
+description: Copilot reads one instruction file for the whole repository. Write it with the
+  commands, the conventions and the things the assistant must never do.
+requirements:
+  - Directory ~/project/.github exists
+  - File ~/project/.github/copilot-instructions.md exists
+  - The file states the build and the test commands
+  - The file states the conventions and the rules
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project/.github
+    label: ~/project/.github
+  - validator: file_exists
+    path: /home/learner/project/.github/copilot-instructions.md
+    label: ~/project/.github/copilot-instructions.md
+  - validator: file_contains
+    path: /home/learner/project/.github/copilot-instructions.md
+    value: build
+    label: build command documented
+  - validator: file_contains
+    path: /home/learner/project/.github/copilot-instructions.md
+    value: test
+    label: test command documented
+  - validator: file_contains
+    path: /home/learner/project/.github/copilot-instructions.md
+    value: Conventions
+    label: conventions documented
+  - validator: file_contains
+    path: /home/learner/project/.github/copilot-instructions.md
+    value: "never"
+    label: prohibition stated
+steps:
+  - title: Create the github directory
+    detail: The instructions file lives in the hidden .github directory at the repository root.
+    command: mkdir -p ~/project/.github
+  - title: Write the commands
+    detail: "The two commands the assistant will suggest. Get them wrong and it will suggest
+      the wrong things all day."
+    command: >-
+      echo '# Copilot instructions\n\n## Commands\n\n- build: pnpm build\n- test: pnpm test' > ~/project/.github/copilot-instructions.md
+  - title: Add the conventions and the rules
+    detail: "Say how the code should look and what the assistant must never produce. Short,
+      concrete sentences work best."
+    command: >-
+      echo '\n## Conventions\n\n- TypeScript strict mode\n- named exports only\n- every function gets a test\n\n## Never\n\n- never invent a dependency that is not already in the package manifest' >> ~/project/.github/copilot-instructions.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/project/.github/copilot-instructions.md

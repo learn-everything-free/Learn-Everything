@@ -1,0 +1,7 @@
+slug: 02-cli
+title: The Command Line Client
+summary: The same assistant in your terminal and in the pipeline.
+order: 2
+tasks:
+  - copilot-cli-script
+  - copilot-suggestion-review

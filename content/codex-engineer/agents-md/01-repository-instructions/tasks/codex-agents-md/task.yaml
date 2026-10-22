@@ -1,0 +1,48 @@
+slug: codex-agents-md
+title: Write the Repository Instruction File
+type: guided
+difficulty: beginner
+description: The agent reads the instruction file before it plans. Write one that says how to
+  build, how to test and what the conventions are.
+requirements:
+  - Directory ~/project exists
+  - File ~/project/AGENTS.md exists
+  - The file states the build and the test commands
+  - The file states the conventions the agent must follow
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project
+    label: ~/project
+  - validator: file_exists
+    path: /home/learner/project/AGENTS.md
+    label: ~/project/AGENTS.md
+  - validator: file_contains
+    path: /home/learner/project/AGENTS.md
+    value: "build"
+    label: build command documented
+  - validator: file_contains
+    path: /home/learner/project/AGENTS.md
+    value: "test"
+    label: test command documented
+  - validator: file_contains
+    path: /home/learner/project/AGENTS.md
+    value: "Conventions"
+    label: conventions documented
+steps:
+  - title: Create the project directory
+    detail: The instruction file lives at the root of the repository, next to the code.
+    command: mkdir -p ~/project
+  - title: Write the heading and the commands
+    detail: "Start with the two commands that matter - the agent will run them, so they have
+      to be exact."
+    command: >-
+      echo '# AGENTS.md\n\n## Commands\n\n- build: pnpm build\n- test: pnpm test' > ~/project/AGENTS.md
+  - title: Add the conventions
+    detail: "Keep it short and concrete. Every line you add is a token the agent spends on
+      every single run."
+    command: >-
+      echo '\n## Conventions\n\n- TypeScript strict mode, no any\n- one component per file\n- every bug fix needs a regression test' >> ~/project/AGENTS.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/project/AGENTS.md

@@ -1,0 +1,7 @@
+slug: 01-project-memory
+title: Project Memory
+summary: One file at the root, one at the service, and the rule that keeps them short.
+order: 1
+tasks:
+  - claude-md-root
+  - claude-md-scoped

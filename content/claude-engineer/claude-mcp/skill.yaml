@@ -1,0 +1,5 @@
+slug: claude-mcp
+title: MCP & Hooks
+summary: Connect Claude to your tools, and let a hook enforce the rules you keep repeating.
+path: claude-engineer
+order: 3

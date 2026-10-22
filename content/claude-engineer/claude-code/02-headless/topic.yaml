@@ -1,0 +1,7 @@
+slug: 02-headless
+title: Headless Runs
+summary: Drive Claude from a script, from a pipeline, or from another agent.
+order: 2
+tasks:
+  - claude-headless-script
+  - claude-session-notes

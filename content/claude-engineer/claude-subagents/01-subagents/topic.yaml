@@ -1,0 +1,7 @@
+slug: 01-subagents
+title: Subagents
+summary: One agent, one job, one set of tools.
+order: 1
+tasks:
+  - claude-subagent-definition
+  - claude-subagent-tools

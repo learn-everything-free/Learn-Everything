@@ -1,0 +1,7 @@
+slug: 01-guidelines
+title: Ground Rules
+summary: What the team agrees on before the first suggestion is accepted.
+order: 1
+tasks:
+  - ai-team-guidelines
+  - ai-pairing-roles

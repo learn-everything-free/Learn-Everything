@@ -1,0 +1,44 @@
+slug: claude-shared-rules
+title: Keep the Shared Rules Short
+type: challenge
+difficulty: advanced
+description: A shared rules file that grows to fifty lines is a shared rules file nobody reads.
+  Write one that states the few things that really are universal.
+requirements:
+  - File ~/.claude/shared-rules.md exists
+  - The file states the universal rules
+  - The file states what does not belong in it
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/shared-rules.md
+    label: ~/.claude/shared-rules.md
+  - validator: file_contains
+    path: /home/learner/.claude/shared-rules.md
+    value: "commit"
+    label: commit rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/shared-rules.md
+    value: "branch"
+    label: branch rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/shared-rules.md
+    value: "does not belong"
+    label: exclusion rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/shared-rules.md
+    value: "never commit generated files"
+    label: absolute rule stated
+steps:
+  - title: Write the universal rules
+    detail: "Three or four rules, the ones that are true in every repository on the planet."
+    command: >-
+      echo '# Shared rules\n\n- commit messages in the conventional commit style\n- one branch per ticket, named after the ticket\n- never commit generated files' > ~/.claude/shared-rules.md
+  - title: Say what does not belong
+    detail: "The list of things a team keeps adding here and should not - project specific
+      commands, architecture, anything with a path in it."
+    command: >-
+      echo '\n## What does not belong here\n\nProject specific commands, folder layouts and library choices - those belong in the repository memory file.' >> ~/.claude/shared-rules.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/.claude/shared-rules.md

@@ -1,0 +1,49 @@
+slug: codex-automation-policy
+title: Bound What Automation May Touch
+type: challenge
+difficulty: advanced
+description: An unattended agent needs hard limits. Write the configuration that says when it may
+  run, where it may work and who approves it.
+requirements:
+  - File ~/ci/codex-automation.yaml exists
+  - The config states the schedule
+  - The config lists the allowed paths
+  - The config states the approval rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/ci/codex-automation.yaml
+    label: ~/ci/codex-automation.yaml
+  - validator: file_contains
+    path: /home/learner/ci/codex-automation.yaml
+    value: schedule
+    label: schedule stated
+  - validator: file_contains
+    path: /home/learner/ci/codex-automation.yaml
+    value: allowed_paths
+    label: allowed paths listed
+  - validator: file_contains
+    path: /home/learner/ci/codex-automation.yaml
+    value: approval
+    label: approval rule stated
+  - validator: file_contains
+    path: /home/learner/ci/codex-automation.yaml
+    value: "max_runtime_minutes"
+    label: runtime cap stated
+steps:
+  - title: Create the ci directory
+    detail: The automation configuration sits next to the workflow it configures.
+    command: mkdir -p ~/ci
+  - title: Write the schedule and the paths
+    detail: "The schedule says when the agent runs, and the allowed paths say where it may
+      write. Everything else is read-only."
+    command: >-
+      echo 'automation:\n  schedule: "0 3 * * 1-5"\n  allowed_paths:\n    - src/**\n    - test/**\n  forbidden_paths:\n    - .github/workflows/**\n    - infra/**' > ~/ci/codex-automation.yaml
+  - title: Add the approval and the runtime cap
+    detail: "Approval decides who signs off on the result, and the runtime cap stops a runaway
+      loop from eating the budget."
+    command: >-
+      echo '\n  approval: required_from_team_lead\n  max_runtime_minutes: 30\n  on_failure: open_issue_with_findings' >> ~/ci/codex-automation.yaml
+  - title: Verify and submit
+    detail: cat the config, then submit for validation.
+    command: cat ~/ci/codex-automation.yaml

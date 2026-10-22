@@ -1,0 +1,48 @@
+slug: ai-review-format
+title: Write the Review Output Format
+type: challenge
+difficulty: advanced
+description: A review that reads like a wall of text gets ignored. Write the format that makes
+  the findings impossible to skim past.
+requirements:
+  - File ~/review/diff-review.md exists
+  - The format states the verdict
+  - The format states how a finding is written
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/review/diff-review.md
+    label: ~/review/diff-review.md
+  - validator: file_contains
+    path: /home/learner/review/diff-review.md
+    value: verdict
+    label: verdict stated
+  - validator: file_contains
+    path: /home/learner/review/diff-review.md
+    value: finding
+    label: finding format stated
+  - validator: file_contains
+    path: /home/learner/review/diff-review.md
+    value: "file"
+    label: findings name the file
+  - validator: file_contains
+    path: /home/learner/review/diff-review.md
+    value: "block"
+    label: blocking findings marked
+steps:
+  - title: Create the review directory
+    detail: The format lives with the checklist.
+    command: mkdir -p ~/review
+  - title: Write the finding format
+    detail: "Every finding names the file, the line and the problem in one sentence. A finding
+      without a line number is a complaint."
+    command: >-
+      echo '# Diff review format\n\n## Finding format\n\nEach finding is one line: the file, the line, the problem and the fix in one sentence.\n\n- file:line - the problem - the fix' > ~/review/diff-review.md
+  - title: Write the verdict and the blocking rule
+    detail: "The verdict goes first, so the reader knows the outcome before the details. And
+      some findings block the merge - those are marked."
+    command: >-
+      echo '\n## Verdict\n\nThe verdict comes first: approve, approve with changes, or request changes.\n\n## Blocking findings\n\nA finding is marked as block when it breaks correctness, security or a test. Everything else is a suggestion.' >> ~/review/diff-review.md
+  - title: Verify and submit
+    detail: cat the format, then submit for validation.
+    command: cat ~/review/diff-review.md

@@ -1,0 +1,7 @@
+slug: 02-non-interactive
+title: Non-Interactive Runs
+summary: Drive the agent from a script and from a review command, not from the prompt box.
+order: 2
+tasks:
+  - codex-exec-script
+  - codex-review-command

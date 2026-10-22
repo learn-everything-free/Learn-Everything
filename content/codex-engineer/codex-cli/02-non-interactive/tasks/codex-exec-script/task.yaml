@@ -1,0 +1,46 @@
+slug: codex-exec-script
+title: Run the Agent From a Script
+type: practice
+difficulty: intermediate
+description: The same agent, the same result, every time - that is what a script buys you. Write
+  the wrapper that runs the agent non-interactively in a fixed directory.
+requirements:
+  - Directory ~/scripts exists
+  - File ~/scripts/codex-task.sh exists
+  - The script runs the agent in its non-interactive mode
+  - The script pins the working directory and the sandbox
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/scripts
+    label: ~/scripts
+  - validator: file_exists
+    path: /home/learner/scripts/codex-task.sh
+    label: ~/scripts/codex-task.sh
+  - validator: file_contains
+    path: /home/learner/scripts/codex-task.sh
+    value: "codex exec"
+    label: non-interactive mode used
+  - validator: file_contains
+    path: /home/learner/scripts/codex-task.sh
+    value: "--cd"
+    label: working directory pinned
+  - validator: file_contains
+    path: /home/learner/scripts/codex-task.sh
+    value: "--sandbox"
+    label: sandbox pinned
+steps:
+  - title: Create the scripts directory
+    detail: Automation scripts live together so they can be reviewed like code.
+    command: mkdir -p ~/scripts
+  - title: Write the wrapper
+    detail: "codex exec is the non-interactive mode. --cd pins the directory and --sandbox pins
+      the blast radius."
+    command: >-
+      echo '#!/usr/bin/env bash\nset -euo pipefail\ncodex exec --cd "$REPO" --sandbox workspace-write "implement the task described in TASK.md and run the tests"' > ~/scripts/codex-task.sh
+  - title: Make it executable
+    detail: chmod 700 keeps the script owner-only and executable.
+    command: chmod 700 ~/scripts/codex-task.sh
+  - title: Verify and submit
+    detail: cat the script, then submit for validation.
+    command: cat ~/scripts/codex-task.sh

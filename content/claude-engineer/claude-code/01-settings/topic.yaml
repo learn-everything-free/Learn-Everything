@@ -1,0 +1,7 @@
+slug: 01-settings
+title: Settings & Permissions
+summary: What Claude may run on its own, and what it has to ask about first.
+order: 1
+tasks:
+  - claude-settings-json
+  - claude-permission-policy

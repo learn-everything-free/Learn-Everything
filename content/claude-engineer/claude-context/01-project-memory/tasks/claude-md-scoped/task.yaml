@@ -1,0 +1,48 @@
+slug: claude-md-scoped
+title: Scope the Memory to a Service
+type: practice
+difficulty: intermediate
+description: A service with its own rules gets its own memory file. Write it so the nested file
+  adds to the root instead of repeating it.
+requirements:
+  - Directory ~/project/services/api exists
+  - File ~/project/services/api/CLAUDE.md exists
+  - The file states the rules for that service
+  - The file explains how it relates to the root file
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project/services/api
+    label: ~/project/services/api
+  - validator: file_exists
+    path: /home/learner/project/services/api/CLAUDE.md
+    label: ~/project/services/api/CLAUDE.md
+  - validator: file_contains
+    path: /home/learner/project/services/api/CLAUDE.md
+    value: routes
+    label: service rules present
+  - validator: file_contains
+    path: /home/learner/project/services/api/CLAUDE.md
+    value: "root"
+    label: relation to the root file explained
+  - validator: file_contains
+    path: /home/learner/project/services/api/CLAUDE.md
+    value: "add to"
+    label: inheritance explained
+steps:
+  - title: Create the service directory
+    detail: Nested memory files apply to their directory and everything below it.
+    command: mkdir -p ~/project/services/api
+  - title: Explain the relationship
+    detail: "Say that this file adds to the root file. Without that sentence, the model treats
+      the two as competing."
+    command: >-
+      echo '# API service\n\nThese rules add to the root CLAUDE.md and override it only where they say so.' > ~/project/services/api/CLAUDE.md
+  - title: Add the service rules
+    detail: "Only what is different here. Repeating the root file wastes context that the
+      agent needs for the actual task."
+    command: >-
+      echo '\n## Rules\n\n- routes live in src/routes, one file per resource\n- every response has a schema\n- no database access from a route handler' >> ~/project/services/api/CLAUDE.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/project/services/api/CLAUDE.md

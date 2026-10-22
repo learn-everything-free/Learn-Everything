@@ -1,0 +1,8 @@
+slug: 01-setup
+title: Repository Setup
+summary: The instructions every suggestion is measured against, and the modes you add for your
+  team.
+order: 1
+tasks:
+  - copilot-instructions
+  - copilot-chat-mode

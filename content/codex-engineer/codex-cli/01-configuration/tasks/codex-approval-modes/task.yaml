@@ -1,0 +1,50 @@
+slug: codex-approval-modes
+title: Choose an Approval Policy
+type: practice
+difficulty: intermediate
+description: Three approval policies decide how often the agent interrupts you. Write down what
+  each one means and when it is the right choice.
+requirements:
+  - File ~/.codex/approval-policies.md exists
+  - The document explains all three approval policies
+  - The document states which policy fits an unattended run
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.codex/approval-policies.md
+    label: ~/.codex/approval-policies.md
+  - validator: file_contains
+    path: /home/learner/.codex/approval-policies.md
+    value: untrusted
+    label: untrusted policy explained
+  - validator: file_contains
+    path: /home/learner/.codex/approval-policies.md
+    value: on-request
+    label: on-request policy explained
+  - validator: file_contains
+    path: /home/learner/.codex/approval-policies.md
+    value: never
+    label: never policy explained
+  - validator: file_contains
+    path: /home/learner/.codex/approval-policies.md
+    value: unattended
+    label: unattended run covered
+steps:
+  - title: Write the heading
+    detail: "Start with the question the policy answers - it is not about trust in the model, it
+      is about trust in the command."
+    command: >-
+      echo '# Approval policies\n\nThe policy decides when the agent pauses and asks before it runs a command.' > ~/.codex/approval-policies.md
+  - title: Explain the three policies
+    detail: "untrusted asks for everything, on-request asks only for the risky commands, never
+      runs unattended."
+    command: >-
+      echo '\n## The policies\n\n- untrusted - every command needs approval\n- on-request - only commands outside the sandbox need approval\n- never - the agent never asks, so the run is unattended' >> ~/.codex/approval-policies.md
+  - title: State the choice for unattended runs
+    detail: "An unattended run has nobody to approve, so the policy has to be never and the
+      sandbox has to be the tight one that fits."
+    command: >-
+      echo '\n## Unattended runs\n\nAn unattended run uses the never policy, and only with a sandbox that limits the damage on its own.' >> ~/.codex/approval-policies.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/.codex/approval-policies.md

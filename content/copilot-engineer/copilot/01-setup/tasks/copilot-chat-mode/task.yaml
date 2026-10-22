@@ -1,0 +1,48 @@
+slug: copilot-chat-mode
+title: Add a Custom Chat Mode
+type: practice
+difficulty: intermediate
+description: A custom mode gives the assistant a role and a toolset for one job. Write the mode
+  your team uses for reviews.
+requirements:
+  - Directory ~/project/.github/chatmodes exists
+  - File ~/project/.github/chatmodes/review.chatmode.md exists
+  - The mode declares its description and its tools
+  - The mode states the output format it produces
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project/.github/chatmodes
+    label: ~/project/.github/chatmodes
+  - validator: file_exists
+    path: /home/learner/project/.github/chatmodes/review.chatmode.md
+    label: ~/project/.github/chatmodes/review.chatmode.md
+  - validator: file_contains
+    path: /home/learner/project/.github/chatmodes/review.chatmode.md
+    value: description
+    label: description declared
+  - validator: file_contains
+    path: /home/learner/project/.github/chatmodes/review.chatmode.md
+    value: tools
+    label: tools declared
+  - validator: file_contains
+    path: /home/learner/project/.github/chatmodes/review.chatmode.md
+    value: "Output"
+    label: output format stated
+steps:
+  - title: Create the chatmodes directory
+    detail: Custom modes live next to the instructions file, in the chatmodes folder.
+    command: mkdir -p ~/project/.github/chatmodes
+  - title: Write the mode definition
+    detail: "The front matter gives the mode its description and its tools. The description is
+      what the assistant uses to decide when to use it."
+    command: >-
+      echo '---\ndescription: Reviews a change for correctness, security and missing tests\ntools: ["codebase", "search", "editFiles", "terminal"]\n---' > ~/project/.github/chatmodes/review.chatmode.md
+  - title: Write the instructions
+    detail: "Say what to look for and what the answer should look like. A mode without an output
+      format produces a wall of text."
+    command: >-
+      echo '\n# Review mode\n\nRead the diff, then report the findings.\n\n## Output\n\n- one line per finding: the file, the line and the problem\n- a verdict at the end: approve, approve with changes, or request changes' >> ~/project/.github/chatmodes/review.chatmode.md
+  - title: Verify and submit
+    detail: cat the mode, then submit for validation.
+    command: cat ~/project/.github/chatmodes/review.chatmode.md

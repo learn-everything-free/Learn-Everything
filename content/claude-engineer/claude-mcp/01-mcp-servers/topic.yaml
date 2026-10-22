@@ -1,0 +1,7 @@
+slug: 01-mcp-servers
+title: MCP Servers
+summary: The servers Claude can call, and the scopes they live in.
+order: 1
+tasks:
+  - claude-mcp-config
+  - claude-mcp-scopes

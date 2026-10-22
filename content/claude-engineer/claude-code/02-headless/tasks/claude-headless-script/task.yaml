@@ -1,0 +1,46 @@
+slug: claude-headless-script
+title: Run Claude Without a Terminal
+type: practice
+difficulty: intermediate
+description: The print mode takes a prompt and gives you an answer you can pipe into another
+  tool. Write the script that runs it with a fixed output format.
+requirements:
+  - Directory ~/scripts exists
+  - File ~/scripts/claude-task.sh exists
+  - The script uses the print mode
+  - The script asks for a machine readable output format
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/scripts
+    label: ~/scripts
+  - validator: file_exists
+    path: /home/learner/scripts/claude-task.sh
+    label: ~/scripts/claude-task.sh
+  - validator: file_contains
+    path: /home/learner/scripts/claude-task.sh
+    value: "claude -p"
+    label: print mode used
+  - validator: file_contains
+    path: /home/learner/scripts/claude-task.sh
+    value: "--output-format"
+    label: output format pinned
+  - validator: file_contains
+    path: /home/learner/scripts/claude-task.sh
+    value: "--allowedTools"
+    label: tools restricted
+steps:
+  - title: Create the scripts directory
+    detail: Batch scripts live together so they can be reviewed like the rest of the code.
+    command: mkdir -p ~/scripts
+  - title: Write the headless call
+    detail: "claude -p takes the prompt as an argument. --output-format json makes the answer
+      parseable, and --allowedTools keeps the blast radius small."
+    command: >-
+      echo '#!/usr/bin/env bash\nset -euo pipefail\nclaude -p "summarise the failing test output in the file test-report.txt" --output-format json --allowedTools "Read"' > ~/scripts/claude-task.sh
+  - title: Make it executable
+    detail: chmod 700 keeps it owner-only and executable.
+    command: chmod 700 ~/scripts/claude-task.sh
+  - title: Verify and submit
+    detail: cat the script, then submit for validation.
+    command: cat ~/scripts/claude-task.sh

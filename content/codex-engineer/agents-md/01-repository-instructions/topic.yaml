@@ -1,0 +1,7 @@
+slug: 01-repository-instructions
+title: Repository Instructions
+summary: One instruction file, inherited down the tree, short enough to be read.
+order: 1
+tasks:
+  - codex-agents-md
+  - codex-nested-agents-md

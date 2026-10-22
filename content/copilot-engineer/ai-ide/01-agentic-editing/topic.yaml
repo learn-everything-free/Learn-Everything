@@ -1,0 +1,7 @@
+slug: 01-agentic-editing
+title: Agentic Editing
+summary: The task file, the plan and the point where a human takes the wheel back.
+order: 1
+tasks:
+  - ai-ide-task-file
+  - ai-ide-plan-review

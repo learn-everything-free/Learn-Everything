@@ -1,0 +1,54 @@
+slug: ai-data-policy
+title: Write the Data Rules
+type: challenge
+difficulty: advanced
+description: The context window is a payload. Write the policy that says what may go into it and
+  what may never.
+requirements:
+  - File ~/review/ai-use-policy.md exists
+  - The policy lists what may be sent
+  - The policy lists what may never be sent
+  - The policy states who to ask when it is unclear
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/review/ai-use-policy.md
+    label: ~/review/ai-use-policy.md
+  - validator: file_contains
+    path: /home/learner/review/ai-use-policy.md
+    value: "may be sent"
+    label: allowed list present
+  - validator: file_contains
+    path: /home/learner/review/ai-use-policy.md
+    value: "may never"
+    label: forbidden list present
+  - validator: file_contains
+    path: /home/learner/review/ai-use-policy.md
+    value: "customer data"
+    label: customer data covered
+  - validator: file_contains
+    path: /home/learner/review/ai-use-policy.md
+    value: "Ask"
+    label: escalation rule stated
+steps:
+  - title: Create the review directory
+    detail: The policy lives with the other guardrails.
+    command: mkdir -p ~/review
+  - title: Write the allowed list
+    detail: "Source code that is already in the repository, public documentation, and your own
+      questions about that code."
+    command: >-
+      echo '# What may go into the assistant\n\n## What may be sent\n\n- source code that is already in the repository\n- public documentation and public issue text\n- stack traces with the internal host names removed' > ~/review/ai-use-policy.md
+  - title: Write the forbidden list
+    detail: "Secrets, customer data, anything that identifies a person, and anything under an
+      NDA. Never, not even for a quick question."
+    command: >-
+      echo '\n## What may never be sent\n\n- secret values of any kind, including a token in a log line\n- customer data and anything that identifies a person\n- material covered by an agreement we have not cleared' >> ~/review/ai-use-policy.md
+  - title: Write the escalation rule
+    detail: "When the answer is not on the list, ask the platform team. The cost of asking is
+      minutes."
+    command: >-
+      echo '\n## When it is unclear\n\nAsk the platform team before you paste it. The answer takes minutes, the incident takes a week.' >> ~/review/ai-use-policy.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/review/ai-use-policy.md

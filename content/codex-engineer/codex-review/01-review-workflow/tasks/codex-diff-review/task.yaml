@@ -1,0 +1,49 @@
+slug: codex-diff-review
+title: Review a Diff Like a Reviewer
+type: challenge
+difficulty: advanced
+description: A review is a structured argument, not a feeling. Write the format your review notes
+  follow so the findings are actionable.
+requirements:
+  - File ~/codex/review-notes.md exists
+  - The notes state what changed
+  - The notes state the risk and what has to be tested
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/review-notes.md
+    label: ~/codex/review-notes.md
+  - validator: file_contains
+    path: /home/learner/codex/review-notes.md
+    value: "What changed"
+    label: change summary present
+  - validator: file_contains
+    path: /home/learner/codex/review-notes.md
+    value: Risk
+    label: risk stated
+  - validator: file_contains
+    path: /home/learner/codex/review-notes.md
+    value: "to test"
+    label: test plan stated
+  - validator: file_contains
+    path: /home/learner/codex/review-notes.md
+    value: Verdict
+    label: verdict stated
+steps:
+  - title: Write the change summary
+    detail: "One paragraph. If you cannot write it, the diff is doing too much."
+    command: >-
+      echo '# Review notes\n\n## What changed\n\nThe payment retry is scheduled by a new worker that polls the failed payments table every minute.' > ~/codex/review-notes.md
+  - title: State the risk
+    detail: "Name the risk you are least comfortable with - that is where the review time
+      belongs."
+    command: >-
+      echo '\n## Risk\n\nA worker that polls every minute can pick the same payment twice if two workers run at once, so the claim has to be idempotent.' >> ~/codex/review-notes.md
+  - title: Add the test plan and the verdict
+    detail: "List what has to be tested, then give the verdict - approve, approve with changes,
+      or request changes."
+    command: >-
+      echo '\n## What still needs to test\n\n- two workers racing on the same failed payment\n- the retry firing exactly once\n\n## Verdict\n\nRequest changes until the claim is idempotent.' >> ~/codex/review-notes.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/codex/review-notes.md

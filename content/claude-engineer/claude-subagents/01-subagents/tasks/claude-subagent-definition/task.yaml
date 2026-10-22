@@ -1,0 +1,48 @@
+slug: claude-subagent-definition
+title: Define a Subagent
+type: guided
+difficulty: beginner
+description: A subagent is a small, specialised prompt with its own tools. Write the definition
+  for a reviewer that only reads.
+requirements:
+  - Directory ~/project/.claude/agents exists
+  - File ~/project/.claude/agents/reviewer.md exists
+  - The definition names the agent and describes when to use it
+  - The definition lists the tools the agent may use
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project/.claude/agents
+    label: ~/project/.claude/agents
+  - validator: file_exists
+    path: /home/learner/project/.claude/agents/reviewer.md
+    label: ~/project/.claude/agents/reviewer.md
+  - validator: file_contains
+    path: /home/learner/project/.claude/agents/reviewer.md
+    value: "name:"
+    label: name declared
+  - validator: file_contains
+    path: /home/learner/project/.claude/agents/reviewer.md
+    value: "description:"
+    label: description declared
+  - validator: file_contains
+    path: /home/learner/project/.claude/agents/reviewer.md
+    value: "tools:"
+    label: tools declared
+steps:
+  - title: Create the agents directory
+    detail: Subagents live in the repository, so the whole team gets the same specialists.
+    command: mkdir -p ~/project/.claude/agents
+  - title: Write the front matter
+    detail: "name identifies the agent, description says when the main agent should hand over
+      to it, tools lists what it may use."
+    command: >-
+      echo 'name: reviewer\ndescription: reviews a diff for correctness, security and missing tests. Use it before opening a pull request.\ntools: Read, Grep, Bash' > ~/project/.claude/agents/reviewer.md
+  - title: Write the instructions
+    detail: "The body is the job. Say what a good review looks like and what the output should
+      contain."
+    command: >-
+      echo '\n## Job\n\nRead the diff, list the findings with a file and a line, and give a verdict: approve, approve with changes, or request changes. Never change a file yourself.' >> ~/project/.claude/agents/reviewer.md
+  - title: Verify and submit
+    detail: cat the definition, then submit for validation.
+    command: cat ~/project/.claude/agents/reviewer.md

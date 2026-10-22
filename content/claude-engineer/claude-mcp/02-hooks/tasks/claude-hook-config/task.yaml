@@ -1,0 +1,45 @@
+slug: claude-hook-config
+title: Hook the Tool Calls
+type: practice
+difficulty: intermediate
+description: A hook runs on a matching event and can act on the result. Write one that formats
+  the code after every edit.
+requirements:
+  - File ~/claude/hooks.json exists
+  - The file declares the hook event
+  - The file states the matcher and the command the hook runs
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/claude/hooks.json
+    label: ~/claude/hooks.json
+  - validator: file_contains
+    path: /home/learner/claude/hooks.json
+    value: PreToolUse
+    label: hook event declared
+  - validator: file_contains
+    path: /home/learner/claude/hooks.json
+    value: matcher
+    label: matcher stated
+  - validator: file_contains
+    path: /home/learner/claude/hooks.json
+    value: command
+    label: hook command stated
+  - validator: file_contains
+    path: /home/learner/claude/hooks.json
+    value: timeout
+    label: timeout stated
+steps:
+  - title: Create the claude directory
+    detail: Hook configurations live with the rest of your setup.
+    command: mkdir -p ~/claude
+  - title: Write the hook
+    detail: "PreToolUse runs before a matching tool call. The matcher decides which calls it
+      sees, and the command is what runs."
+    command: >-
+      echo '{\n  "hooks": {\n    "PreToolUse": [\n      {\n        "matcher": "Edit",\n        "hooks": [\n          {"type": "command", "command": "pnpm format --check", "timeout": 30}\n        ]\n      }\n    ]\n  }\n}' > ~/claude/hooks.json
+  - title: Verify the configuration
+    detail: cat prints the file. The timeout matters - a hook that hangs blocks every session.
+    command: cat ~/claude/hooks.json
+  - title: Submit for validation
+    detail: The validator checks the event, the matcher, the command and the timeout.

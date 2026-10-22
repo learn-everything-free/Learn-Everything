@@ -1,0 +1,7 @@
+slug: 02-automation
+title: Automation
+summary: The loop that makes assistant work repeatable - branch, change, review, learn.
+order: 2
+tasks:
+  - claude-git-workflow
+  - claude-automation-script

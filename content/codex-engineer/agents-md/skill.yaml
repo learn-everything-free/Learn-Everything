@@ -1,0 +1,5 @@
+slug: agents-md
+title: Instructions & Context
+summary: The file that tells the agent how this repository works before it touches anything.
+path: codex-engineer
+order: 2

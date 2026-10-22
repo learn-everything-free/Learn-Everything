@@ -1,0 +1,48 @@
+slug: codex-context-rules
+title: Decide What Goes Into the Context
+type: practice
+difficulty: intermediate
+description: Context is the scarcest resource in an agent run. Write the rules for what to include
+  and what to keep out of it.
+requirements:
+  - Directory ~/codex exists
+  - File ~/codex/context.md exists
+  - The document lists what to include
+  - The document lists what to exclude and why
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/codex
+    label: ~/codex
+  - validator: file_exists
+    path: /home/learner/codex/context.md
+    label: ~/codex/context.md
+  - validator: file_contains
+    path: /home/learner/codex/context.md
+    value: Include
+    label: include list present
+  - validator: file_contains
+    path: /home/learner/codex/context.md
+    value: Exclude
+    label: exclude list present
+  - validator: file_contains
+    path: /home/learner/codex/context.md
+    value: "secret"
+    label: secrets excluded
+steps:
+  - title: Create the codex directory
+    detail: Your runbooks, specs and context rules live together.
+    command: mkdir -p ~/codex
+  - title: Write the include list
+    detail: "The instruction file, the task spec and the files the task touches - nothing else
+      to start with."
+    command: >-
+      echo '# Context rules\n\n## Include\n\n- the AGENTS.md instruction file\n- the task spec for the current ticket\n- the files the task is expected to touch\n- the failing test output' > ~/codex/context.md
+  - title: Write the exclude list
+    detail: "No secrets, no vendored code, no the whole repository. Context that is too large
+      gets summarised, and the summary is where the bugs come from."
+    command: >-
+      echo '\n## Exclude\n\n- secret values of any kind\n- vendored dependencies\n- generated code\n- unrelated services' >> ~/codex/context.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/codex/context.md

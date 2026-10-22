@@ -1,0 +1,50 @@
+slug: claude-hook-policy
+title: Write the Safety Rules for Hooks
+type: challenge
+difficulty: advanced
+description: A hook that blocks without saying why is the fastest way to lose a team's trust.
+  Write the rules that keep hooks predictable.
+requirements:
+  - File ~/claude/hook-policy.md exists
+  - The policy states how a blocking hook must behave
+  - The policy states the timeout rule and the failure rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/claude/hook-policy.md
+    label: ~/claude/hook-policy.md
+  - validator: file_contains
+    path: /home/learner/claude/hook-policy.md
+    value: "explain"
+    label: blocking hook must explain
+  - validator: file_contains
+    path: /home/learner/claude/hook-policy.md
+    value: timeout
+    label: timeout rule stated
+  - validator: file_contains
+    path: /home/learner/claude/hook-policy.md
+    value: "log"
+    label: logging rule stated
+  - validator: file_contains
+    path: /home/learner/claude/hook-policy.md
+    value: "fails open"
+    label: failure behaviour stated
+steps:
+  - title: Write the policy heading
+    detail: "A hook is code that runs on every step of every session - it needs a contract
+      like any other."
+    command: >-
+      echo '# Hook policy\n\nHooks run on every step, so they have to be predictable and quiet.' > ~/claude/hook-policy.md
+  - title: Write the blocking rule
+    detail: "A hook that blocks has to explain why in the message the model sees - otherwise the
+      model retries blindly."
+    command: >-
+      echo '\n## Blocking\n\nA hook that blocks must explain what it found and what to do about it, in one sentence.' >> ~/claude/hook-policy.md
+  - title: Write the timeout and the failure rule
+    detail: "Every hook needs a timeout. And when a hook itself crashes, the session continues -
+      a broken hook must not take the work down with it."
+    command: >-
+      echo '\n## Limits\n\nEvery hook has a timeout of at most 30 seconds. A hook that fails open - the session continues and the failure is logged.' >> ~/claude/hook-policy.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/claude/hook-policy.md

@@ -1,0 +1,45 @@
+slug: codex-config-profile
+title: Write a Codex Profile
+type: guided
+difficulty: beginner
+description: Every agent run starts from a profile. Write the configuration that picks the
+  model, the approval policy and the sandbox the agent works in.
+requirements:
+  - Directory ~/.codex exists
+  - File ~/.codex/config.toml exists
+  - The config names the model
+  - The config sets an approval policy and a sandbox mode
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.codex
+    label: ~/.codex
+  - validator: file_exists
+    path: /home/learner/.codex/config.toml
+    label: ~/.codex/config.toml
+  - validator: file_contains
+    path: /home/learner/.codex/config.toml
+    value: model
+    label: model configured
+  - validator: file_contains
+    path: /home/learner/.codex/config.toml
+    value: approval_policy
+    label: approval policy configured
+  - validator: file_contains
+    path: /home/learner/.codex/config.toml
+    value: sandbox_mode
+    label: sandbox mode configured
+steps:
+  - title: Create the codex directory
+    detail: The profile lives in your home directory, so every project inherits the same rules.
+    command: mkdir -p ~/.codex
+  - title: Write the profile
+    detail: "model picks the engine, approval_policy decides when the agent stops and asks,
+      sandbox_mode decides what it may touch."
+    command: >-
+      echo 'model = "gpt-5-codex"\napproval_policy = "on-request"\nsandbox_mode = "workspace-write"\nmax_output_tokens = 12000' > ~/.codex/config.toml
+  - title: Verify the profile
+    detail: cat prints the profile. Read it as the rules the agent will follow, because it is.
+    command: cat ~/.codex/config.toml
+  - title: Submit for validation
+    detail: The validator checks the model, the approval policy and the sandbox mode.

@@ -1,0 +1,56 @@
+slug: codex-team-guidelines
+title: Write the Team Ground Rules
+type: practice
+difficulty: intermediate
+description: A team that shares the agent shares the rules. Write them down so the tenth
+  contributor does not have to guess.
+requirements:
+  - File ~/codex/team-guidelines.md exists
+  - The guidelines say when to use the agent
+  - The guidelines state what always goes through a human review
+  - The guidelines cover what may never be sent to the model
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/team-guidelines.md
+    label: ~/codex/team-guidelines.md
+  - validator: file_contains
+    path: /home/learner/codex/team-guidelines.md
+    value: "When to use"
+    label: usage rule present
+  - validator: file_contains
+    path: /home/learner/codex/team-guidelines.md
+    value: "human review"
+    label: human review rule present
+  - validator: file_contains
+    path: /home/learner/codex/team-guidelines.md
+    value: "secret"
+    label: secret rule present
+  - validator: file_contains
+    path: /home/learner/codex/team-guidelines.md
+    value: "data"
+    label: data rule present
+steps:
+  - title: Write the heading
+    detail: "Start with the goal - the agent is there to move the boring work, not to make
+      decisions."
+    command: >-
+      echo '# Team guidelines for AI assisted work' > ~/codex/team-guidelines.md
+  - title: Say when to use it
+    detail: "Good candidates are mechanical, well specified work. Bad candidates are decisions
+      with a stakeholder attached."
+    command: >-
+      echo '\n## When to use the agent\n\n- mechanical changes with a clear acceptance criteria\n- test writing, migrations with a spec, documentation refreshes' >> ~/codex/team-guidelines.md
+  - title: Say what goes to a human
+    detail: "Nothing merges without a human who understands the change - the agent writes the
+      code, the team owns it."
+    command: >-
+      echo '\n## Always human review\n\n- schema changes, authentication, payments and anything that touches production' >> ~/codex/team-guidelines.md
+  - title: Cover data and secrets
+    detail: "No secret values and no customer data in a prompt. The context is the payload, and
+      it leaves your machine."
+    command: >-
+      echo '\n## Data rules\n\n- no secret value is ever pasted into a prompt\n- no customer data leaves the repository\n- data handling questions go to the platform team first' >> ~/codex/team-guidelines.md
+  - title: Verify and submit
+    detail: cat the guidelines, then submit for validation.
+    command: cat ~/codex/team-guidelines.md

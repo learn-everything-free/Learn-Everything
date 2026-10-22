@@ -1,0 +1,50 @@
+slug: claude-settings-json
+title: Write the Settings File
+type: guided
+difficulty: beginner
+description: The settings file decides the model, the tools and the rules for every session.
+  Write one for a project that builds with pnpm.
+requirements:
+  - Directory ~/.claude exists
+  - File ~/.claude/settings.json exists
+  - The settings name the model
+  - The settings list allowed and denied commands
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.claude
+    label: ~/.claude
+  - validator: file_exists
+    path: /home/learner/.claude/settings.json
+    label: ~/.claude/settings.json
+  - validator: file_contains
+    path: /home/learner/.claude/settings.json
+    value: model
+    label: model configured
+  - validator: file_contains
+    path: /home/learner/.claude/settings.json
+    value: permissions
+    label: permissions block present
+  - validator: file_contains
+    path: /home/learner/.claude/settings.json
+    value: allow
+    label: allow list present
+  - validator: file_contains
+    path: /home/learner/.claude/settings.json
+    value: deny
+    label: deny list present
+steps:
+  - title: Create the claude directory
+    detail: The user settings live in your home directory, so every project inherits them.
+    command: mkdir -p ~/.claude
+  - title: Write the settings
+    detail: "model picks the engine, permissions decides what runs without a prompt. The allow
+      list is short on purpose."
+    command: >-
+      echo '{\n  "model": "claude-sonnet-4",\n  "permissions": {\n    "allow": ["Bash(pnpm test:*)", "Bash(pnpm build:*)", "Read", "Edit"],\n    "deny": ["Bash(rm -rf:*)", "Bash(git push:*)", "Read(./.env)"]\n  }\n}' > ~/.claude/settings.json
+  - title: Verify the settings
+    detail: cat prints the file. Every allowed command is a command you no longer approve one
+      by one.
+    command: cat ~/.claude/settings.json
+  - title: Submit for validation
+    detail: The validator checks the model and both permission lists.

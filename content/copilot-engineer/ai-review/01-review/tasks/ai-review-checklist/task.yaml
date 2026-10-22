@@ -1,0 +1,52 @@
+slug: ai-review-checklist
+title: Write the AI Code Checklist
+type: practice
+difficulty: intermediate
+description: Generated code is confident, well formatted and quietly wrong. Write the checklist
+  that catches the quiet part.
+requirements:
+  - Directory ~/review exists
+  - File ~/review/ai-code-checklist.md exists
+  - The checklist covers the edge cases and the tests
+  - The checklist covers the security checks
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/review
+    label: ~/review
+  - validator: file_exists
+    path: /home/learner/review/ai-code-checklist.md
+    label: ~/review/ai-code-checklist.md
+  - validator: file_contains
+    path: /home/learner/review/ai-code-checklist.md
+    value: "edge case"
+    label: edge cases covered
+  - validator: file_contains
+    path: /home/learner/review/ai-code-checklist.md
+    value: test
+    label: tests covered
+  - validator: file_contains
+    path: /home/learner/review/ai-code-checklist.md
+    value: Security
+    label: security covered
+  - validator: file_contains
+    path: /home/learner/review/ai-code-checklist.md
+    value: "assumption"
+    label: hidden assumptions covered
+steps:
+  - title: Create the review directory
+    detail: The checklists live together, next to the diffs they apply to.
+    command: mkdir -p ~/review
+  - title: Write the first checks
+    detail: "The edge cases first - empty input, missing field, concurrent call. Then the
+      question every suggestion has to answer: what did the author assume?"
+    command: >-
+      echo '# Checklist for AI assisted code\n\n## Checks\n\n- edge case - empty input, missing field, two calls at once\n- test - a test that fails without the change\n- assumption - what did the author take for granted' > ~/review/ai-code-checklist.md
+  - title: Add the security check
+    detail: "The generated code often handles the happy path beautifully and the untrusted
+      input badly."
+    command: >-
+      echo '\n## Security\n\n- is the input validated before it is used\n- is anything logged that should not be\n- does the change add a dependency or a network call' >> ~/review/ai-code-checklist.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/review/ai-code-checklist.md

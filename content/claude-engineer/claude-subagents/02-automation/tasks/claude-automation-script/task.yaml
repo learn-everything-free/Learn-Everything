@@ -1,0 +1,51 @@
+slug: claude-automation-script
+title: Automate the Review Hand-off
+type: challenge
+difficulty: advanced
+description: The review agent is the part that pays for itself. Write the script that runs it
+  over a diff and stores the findings where a human will read them.
+requirements:
+  - Directory ~/scripts exists
+  - File ~/scripts/claude-review.sh exists
+  - The script runs the print mode with a review prompt
+  - The script stores the findings in a report file
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/scripts
+    label: ~/scripts
+  - validator: file_exists
+    path: /home/learner/scripts/claude-review.sh
+    label: ~/scripts/claude-review.sh
+  - validator: file_contains
+    path: /home/learner/scripts/claude-review.sh
+    value: "claude -p"
+    label: print mode used
+  - validator: file_contains
+    path: /home/learner/scripts/claude-review.sh
+    value: review
+    label: review prompt present
+  - validator: file_contains
+    path: /home/learner/scripts/claude-review.sh
+    value: "review-notes.md"
+    label: findings stored in a report
+steps:
+  - title: Create the scripts directory
+    detail: Automation scripts live together and are reviewed like code.
+    command: mkdir -p ~/scripts
+  - title: Write the review call
+    detail: "The prompt asks for the three things a review needs - what changed, what is risky
+      and what still needs a test."
+    command: >-
+      echo '#!/usr/bin/env bash\nset -euo pipefail\nclaude -p "review the staged diff, list the findings with a file and a line, and finish with a verdict" --output-format text --allowedTools "Read,Bash(git diff:*)"' > ~/scripts/claude-review.sh
+  - title: Store the findings
+    detail: "The findings belong next to the change, so the reviewer finds them without asking.
+      The comment names the file the script writes."
+    command: >-
+      echo '\n# the findings are written to review-notes.md next to the change' >> ~/scripts/claude-review.sh
+  - title: Make it executable
+    detail: chmod 700 and it is ready for a pre-push hook.
+    command: chmod 700 ~/scripts/claude-review.sh
+  - title: Verify and submit
+    detail: cat the script, then submit for validation.
+    command: cat ~/scripts/claude-review.sh

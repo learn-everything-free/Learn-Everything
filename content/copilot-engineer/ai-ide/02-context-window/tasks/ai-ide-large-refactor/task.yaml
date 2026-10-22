@@ -1,0 +1,48 @@
+slug: ai-ide-large-refactor
+title: Plan a Refactor That Spans Many Files
+type: challenge
+difficulty: advanced
+description: A refactor across thirty files does not fit in one agent session. Write the plan
+  that breaks it into steps that each leave the repository working.
+requirements:
+  - File ~/ide/refactor-plan.md exists
+  - The plan states the order of the phases
+  - The plan states the checkpoint between the phases
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/ide/refactor-plan.md
+    label: ~/ide/refactor-plan.md
+  - validator: file_contains
+    path: /home/learner/ide/refactor-plan.md
+    value: Phase
+    label: phases stated
+  - validator: file_contains
+    path: /home/learner/ide/refactor-plan.md
+    value: order
+    label: order stated
+  - validator: file_contains
+    path: /home/learner/ide/refactor-plan.md
+    value: checkpoint
+    label: checkpoint stated
+  - validator: file_contains
+    path: /home/learner/ide/refactor-plan.md
+    value: "test"
+    label: test gate stated
+steps:
+  - title: Create the ide directory
+    detail: The plan lives with the other notes about agent work.
+    command: mkdir -p ~/ide
+  - title: Write the phases
+    detail: "Three phases - move the code, switch the callers, delete the old path. Each phase
+      is a session, not a step."
+    command: >-
+      echo '# Refactor plan\n\n## Phase 1 - extract the shared module\n\nMove the shared logic into its own file with the old implementation still in place.\n\n## Phase 2 - switch the callers\n\nOne caller at a time, in the order the dependency graph allows.' > ~/ide/refactor-plan.md
+  - title: Write the checkpoints
+    detail: "After every phase the repository has to build and the tests have to pass. That
+      checkpoint is what makes the plan safe."
+    command: >-
+      echo '\n## Checkpoints\n\nAfter every phase the repository builds and the full test suite passes. The checkpoint is the gate - no phase starts before the last one passes it.\n\n## Test gate\n\nA phase is done when the new module has its own test and the old implementation is unused.' >> ~/ide/refactor-plan.md
+  - title: Verify and submit
+    detail: cat the plan, then submit for validation.
+    command: cat ~/ide/refactor-plan.md

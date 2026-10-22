@@ -1,0 +1,53 @@
+slug: copilot-suggestion-review
+title: Review Before You Accept
+type: challenge
+difficulty: advanced
+description: Accepting a suggestion is a review, and the rules for that review are the same as for
+  any code. Write them down.
+requirements:
+  - File ~/copilot/suggestion-review.md exists
+  - The document states the checks before accepting
+  - The document states what to do with a suggestion that is almost right
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/suggestion-review.md
+    label: ~/copilot/suggestion-review.md
+  - validator: file_contains
+    path: /home/learner/copilot/suggestion-review.md
+    value: "before accepting"
+    label: checks stated
+  - validator: file_contains
+    path: /home/learner/copilot/suggestion-review.md
+    value: "dependency"
+    label: dependency check present
+  - validator: file_contains
+    path: /home/learner/copilot/suggestion-review.md
+    value: unused
+    label: placeholder check present
+  - validator: file_contains
+    path: /home/learner/copilot/suggestion-review.md
+    value: "almost"
+    label: partial suggestion rule present
+steps:
+  - title: Create the copilot directory
+    detail: Your rules for reviewing suggestions live in one place.
+    command: mkdir -p ~/copilot
+  - title: Write the checks
+    detail: "Does it use a dependency that exists, does it handle the edge cases, does it match
+      the conventions in the instruction file."
+    command: >-
+      echo '# Reviewing suggestions\n\n## Checks before accepting\n\n- every dependency is already in the package manifest\n- the edge cases in the file are handled\n- the style matches the repository instructions' > ~/copilot/suggestion-review.md
+  - title: Add the placeholder check
+    detail: "Assistants leave placeholders - a TODO, a dummy value, a comment that says to
+      implement this. Those never pass review."
+    command: >-
+      echo '\n- no unused placeholder, no TODO and no stub left in the suggestion' >> ~/copilot/suggestion-review.md
+  - title: Write the partial rule
+    detail: "Most suggestions are almost right. Say what to do with them - edit them, do not
+      paste them and walk away."
+    command: >-
+      echo '\n## When a suggestion is almost right\n\nEdit it until it matches the code around it - a suggestion that is 90 percent right still needs the other 10 percent written by you.' >> ~/copilot/suggestion-review.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/suggestion-review.md

@@ -1,0 +1,48 @@
+slug: ai-ide-context-rules
+title: Decide What Goes Into the Context
+type: practice
+difficulty: intermediate
+description: Too much context makes the assistant lose the thread. Write the rules for what earns
+  a place in it.
+requirements:
+  - File ~/ide/context-rules.md exists
+  - The rules state what to include
+  - The rules state what to exclude and why
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/ide/context-rules.md
+    label: ~/ide/context-rules.md
+  - validator: file_contains
+    path: /home/learner/ide/context-rules.md
+    value: Include
+    label: include list present
+  - validator: file_contains
+    path: /home/learner/ide/context-rules.md
+    value: Exclude
+    label: exclude list present
+  - validator: file_contains
+    path: /home/learner/ide/context-rules.md
+    value: "instructions"
+    label: instructions included
+  - validator: file_contains
+    path: /home/learner/ide/context-rules.md
+    value: "secret"
+    label: secrets excluded
+steps:
+  - title: Create the ide directory
+    detail: The rules live with the other notes.
+    command: mkdir -p ~/ide
+  - title: Write the include list
+    detail: "The instructions file, the task spec and the files the task touches. That is
+      usually enough."
+    command: >-
+      echo '# Context rules\n\n## Include\n\n- the repository instructions\n- the task spec for the current ticket\n- the files the task is expected to touch\n- the output of the failing test' > ~/ide/context-rules.md
+  - title: Write the exclude list
+    detail: "Never the secrets, never the generated code, never the whole repository. A summary
+      of a summary is where the subtle bugs live."
+    command: >-
+      echo '\n## Exclude\n\n- secret values of any kind\n- generated code and vendored dependencies\n- unrelated services and their history' >> ~/ide/context-rules.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/ide/context-rules.md

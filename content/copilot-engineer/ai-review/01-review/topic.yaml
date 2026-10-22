@@ -1,0 +1,7 @@
+slug: 01-review
+title: The Review Pass
+summary: What to look for, and how to write the findings so they get fixed.
+order: 1
+tasks:
+  - ai-review-checklist
+  - ai-review-format

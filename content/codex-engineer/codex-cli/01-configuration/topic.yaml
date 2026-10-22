@@ -1,0 +1,7 @@
+slug: 01-configuration
+title: Configuration & Approvals
+summary: What the agent may do without asking, and how you tell it before it starts.
+order: 1
+tasks:
+  - codex-config-profile
+  - codex-approval-modes

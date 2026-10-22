@@ -1,0 +1,48 @@
+slug: claude-permission-policy
+title: Define the Permission Policy
+type: practice
+difficulty: intermediate
+description: Every team has its own idea of what an agent may do unattended. Write the policy
+  and the reasons behind it.
+requirements:
+  - Directory ~/claude exists
+  - File ~/claude/permission-policy.md exists
+  - The policy states what may run without approval
+  - The policy states what always needs a human
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/claude
+    label: ~/claude
+  - validator: file_exists
+    path: /home/learner/claude/permission-policy.md
+    label: ~/claude/permission-policy.md
+  - validator: file_contains
+    path: /home/learner/claude/permission-policy.md
+    value: "without approval"
+    label: unattended list present
+  - validator: file_contains
+    path: /home/learner/claude/permission-policy.md
+    value: "Always needs approval"
+    label: approval list present
+  - validator: file_contains
+    path: /home/learner/claude/permission-policy.md
+    value: "reason"
+    label: reasons given
+steps:
+  - title: Create the claude directory
+    detail: Policies and configuration belong together - one folder per setup.
+    command: mkdir -p ~/claude
+  - title: Write the unattended list
+    detail: "Read only commands, the test suite and the formatter. Nothing that changes state
+      outside the repository."
+    command: >-
+      echo '# Permission policy\n\n## Runs without approval\n\n- read only shell commands\n- the test suite and the type checker\n- the formatter' > ~/claude/permission-policy.md
+  - title: Write the approval list
+    detail: "Anything that reaches outside the working copy, and anything that publishes. Give
+      the reason, so the next person does not have to guess."
+    command: >-
+      echo '\n## Always needs approval\n\n- anything that installs a dependency\n- anything that writes outside the repository\n- git push and every deploy\n\n## Reason\n\nThe agent is fast and confident, and neither is a reason to publish on its own.' >> ~/claude/permission-policy.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/claude/permission-policy.md

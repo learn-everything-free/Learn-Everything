@@ -1,0 +1,50 @@
+slug: claude-session-notes
+title: Hand Over a Session
+type: challenge
+difficulty: advanced
+description: Context is per session, so a handoff needs a written note. Write the template that
+  carries the work to the next person.
+requirements:
+  - File ~/claude/session-note.md exists
+  - The note states what changed and what is still open
+  - The note states the next concrete step
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/claude/session-note.md
+    label: ~/claude/session-note.md
+  - validator: file_contains
+    path: /home/learner/claude/session-note.md
+    value: "What changed"
+    label: change summary present
+  - validator: file_contains
+    path: /home/learner/claude/session-note.md
+    value: "Open questions"
+    label: open questions present
+  - validator: file_contains
+    path: /home/learner/claude/session-note.md
+    value: "Next step"
+    label: next step present
+  - validator: file_contains
+    path: /home/learner/claude/session-note.md
+    value: "Verification"
+    label: verification state present
+steps:
+  - title: Write the heading
+    detail: "A handoff note answers three questions - what is done, what is uncertain and what
+      happens next."
+    command: >-
+      echo '# Session handoff' > ~/claude/session-note.md
+  - title: Write the change and the questions
+    detail: "Only the changes that are not in the diff yet - the diff already says what the code
+      does."
+    command: >-
+      echo '\n## What changed\n\nThe retry worker is written but not wired into the scheduler.\n\n## Open questions\n\n- should the worker poll or subscribe to the events\n- the claim on the payment row is not idempotent yet' >> ~/claude/session-note.md
+  - title: Write the next step and the state
+    detail: "One concrete next step, and what has been verified so far. If nothing was verified,
+      say that too."
+    command: >-
+      echo '\n## Next step\n\nMake the claim idempotent, then wire the worker into the scheduler.\n\n## Verification\n\nNothing is verified yet - the test for the double claim is still missing.' >> ~/claude/session-note.md
+  - title: Verify and submit
+    detail: cat the note, then submit for validation.
+    command: cat ~/claude/session-note.md

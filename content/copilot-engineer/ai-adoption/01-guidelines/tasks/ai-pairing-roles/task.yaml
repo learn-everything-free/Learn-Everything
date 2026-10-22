@@ -1,0 +1,48 @@
+slug: ai-pairing-roles
+title: Name the Roles in a Pairing Session
+type: practice
+difficulty: intermediate
+description: Two people and an assistant behave very differently from one person and an
+  assistant. Write down who does what.
+requirements:
+  - File ~/adoption/pairing.md exists
+  - The document names the driver and the navigator
+  - The document names the reviewer and their job
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/adoption/pairing.md
+    label: ~/adoption/pairing.md
+  - validator: file_contains
+    path: /home/learner/adoption/pairing.md
+    value: driver
+    label: driver role present
+  - validator: file_contains
+    path: /home/learner/adoption/pairing.md
+    value: navigator
+    label: navigator role present
+  - validator: file_contains
+    path: /home/learner/adoption/pairing.md
+    value: reviewer
+    label: reviewer role present
+  - validator: file_contains
+    path: /home/learner/adoption/pairing.md
+    value: "swap"
+    label: role swap rule stated
+steps:
+  - title: Create the adoption directory
+    detail: The session notes live with the guidelines.
+    command: mkdir -p ~/adoption
+  - title: Name the driver and the navigator
+    detail: "The driver types and the navigator thinks. With an assistant the navigator is the
+      one who decides what to ask for."
+    command: >-
+      echo '# Pairing with an assistant\n\n## The roles\n\n- driver - types what the assistant proposes, line by line\n- navigator - decides what to ask for, questions the approach and keeps the intent in mind' > ~/adoption/pairing.md
+  - title: Name the reviewer and the swap rule
+    detail: "The reviewer is the one who understands the change. And the roles swap every half
+      hour, so nobody only types."
+    command: >-
+      echo '\n## The reviewer\n\nThe reviewer understands the change well enough to explain it to the team - that is the bar.\n\n## Swap\n\nThe driver and the navigator swap every half hour so the session stays about the code and not about the typing.' >> ~/adoption/pairing.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/adoption/pairing.md

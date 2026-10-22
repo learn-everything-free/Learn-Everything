@@ -1,0 +1,50 @@
+slug: codex-review-checklist
+title: Write the Review Checklist
+type: practice
+difficulty: intermediate
+description: AI-written code needs a different checklist - the bugs are the plausible ones, not
+  the silly ones. Write the list your reviewers use.
+requirements:
+  - File ~/codex/review-checklist.md exists
+  - The checklist covers correctness, tests and security
+  - The checklist states what must never be merged unreviewed
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/review-checklist.md
+    label: ~/codex/review-checklist.md
+  - validator: file_contains
+    path: /home/learner/codex/review-checklist.md
+    value: correctness
+    label: correctness covered
+  - validator: file_contains
+    path: /home/learner/codex/review-checklist.md
+    value: tests
+    label: tests covered
+  - validator: file_contains
+    path: /home/learner/codex/review-checklist.md
+    value: security
+    label: security covered
+  - validator: file_contains
+    path: /home/learner/codex/review-checklist.md
+    value: "Never merged unreviewed"
+    label: never merge rule stated
+steps:
+  - title: Write the heading
+    detail: "Start with what the checklist is for - reviewing generated code, which fails in
+      different ways than human code."
+    command: >-
+      echo '# Review checklist for AI generated changes' > ~/codex/review-checklist.md
+  - title: Write the first three checks
+    detail: "Correctness against the spec, tests that fail before the change, and security - the
+      three that matter most."
+    command: >-
+      echo '\n## Checks\n\n- correctness - does the change do what the acceptance criteria say\n- tests - is there a test that fails without the change\n- security - no secrets, no new dependencies without a reason' >> ~/codex/review-checklist.md
+  - title: Add the never rule
+    detail: "Some changes are never merged on an agent's say-so. Write that list down while
+      everyone is calm."
+    command: >-
+      echo '\n## Never merged unreviewed\n\n- changes to authentication or payments\n- changes to the database schema\n- anything that touches the deploy pipeline' >> ~/codex/review-checklist.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/codex/review-checklist.md

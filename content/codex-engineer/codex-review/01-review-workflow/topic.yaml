@@ -1,0 +1,7 @@
+slug: 01-review-workflow
+title: The Review Pass
+summary: A checklist, a diff read, and a verdict a human can act on.
+order: 1
+tasks:
+  - codex-review-checklist
+  - codex-diff-review

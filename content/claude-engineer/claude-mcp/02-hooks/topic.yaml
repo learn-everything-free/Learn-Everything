@@ -1,0 +1,7 @@
+slug: 02-hooks
+title: Hooks
+summary: The rules that run every time - and the ones that must never run silently.
+order: 2
+tasks:
+  - claude-hook-config
+  - claude-hook-policy

@@ -1,0 +1,48 @@
+slug: ai-ide-plan-review
+title: Review the Plan Before the Edits
+type: practice
+difficulty: intermediate
+description: The plan is the last cheap moment to change the outcome. Write the checklist you run
+  it through.
+requirements:
+  - File ~/ide/plan-review.md exists
+  - The checklist covers the scope and the order of the changes
+  - The checklist states what happens when the plan is wrong
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/ide/plan-review.md
+    label: ~/ide/plan-review.md
+  - validator: file_contains
+    path: /home/learner/ide/plan-review.md
+    value: scope
+    label: scope checked
+  - validator: file_contains
+    path: /home/learner/ide/plan-review.md
+    value: order
+    label: order checked
+  - validator: file_contains
+    path: /home/learner/ide/plan-review.md
+    value: rollback
+    label: rollback stated
+  - validator: file_contains
+    path: /home/learner/ide/plan-review.md
+    value: "stop"
+    label: stop rule stated
+steps:
+  - title: Create the ide directory
+    detail: The checklist lives with the task briefs.
+    command: mkdir -p ~/ide
+  - title: Write the first two checks
+    detail: "Does the plan stay inside the files in scope, and is the order safe - does the
+      code still compile between the steps."
+    command: >-
+      echo '# Reviewing the plan\n\n## Checks\n\n- scope - every file in the plan is in the files in scope\n- order - the repository still builds after every step of the plan' > ~/ide/plan-review.md
+  - title: Write the stop rule
+    detail: "A plan that needs a decision you do not understand is a plan to stop on. And know
+      how you would roll the work back."
+    command: >-
+      echo '\n## When to stop\n\nStop and ask when the plan touches a file outside the scope, or when a step needs a decision you cannot explain.\n\n## Rollback\n\nThe work is on a branch, so the rollback is to drop the branch and start again.' >> ~/ide/plan-review.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/ide/plan-review.md

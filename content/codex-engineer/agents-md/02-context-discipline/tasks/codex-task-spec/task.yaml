@@ -1,0 +1,51 @@
+slug: codex-task-spec
+title: Write a Task Spec an Agent Can Follow
+type: challenge
+difficulty: advanced
+description: The spec is the contract. Write one with a goal, acceptance criteria, what is out of
+  scope and how the work is verified.
+requirements:
+  - Directory ~/codex/tasks exists
+  - File ~/codex/tasks/TICKET-42.md exists
+  - The spec states the acceptance criteria and the out of scope list
+  - The spec states how the work is verified
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/codex/tasks
+    label: ~/codex/tasks
+  - validator: file_exists
+    path: /home/learner/codex/tasks/TICKET-42.md
+    label: ~/codex/tasks/TICKET-42.md
+  - validator: file_contains
+    path: /home/learner/codex/tasks/TICKET-42.md
+    value: "Acceptance criteria"
+    label: acceptance criteria present
+  - validator: file_contains
+    path: /home/learner/codex/tasks/TICKET-42.md
+    value: "Out of scope"
+    label: out of scope present
+  - validator: file_contains
+    path: /home/learner/codex/tasks/TICKET-42.md
+    value: "Verification"
+    label: verification stated
+steps:
+  - title: Create the tasks directory
+    detail: One file per ticket - the spec is part of the ticket, not a message you sent.
+    command: mkdir -p ~/codex/tasks
+  - title: Write the goal and the scope
+    detail: "The goal is one sentence, and the out of scope list is what stops the agent from
+      refactoring the world."
+    command: >-
+      echo '# TICKET-42 - retry failed payments once\n\n## Goal\n\nA failed payment is retried exactly once, five minutes later.\n\n## Out of scope\n\n- changing the payment provider\n- any change to the ledger' > ~/codex/tasks/TICKET-42.md
+  - title: Add the acceptance criteria
+    detail: "Each criterion is checkable - a test can fail it or pass it."
+    command: >-
+      echo '\n## Acceptance criteria\n\n- a failed payment schedules exactly one retry\n- the retry happens five minutes after the failure\n- a successful payment schedules nothing' >> ~/codex/tasks/TICKET-42.md
+  - title: Add the verification
+    detail: "Say which test proves it. An agent that cannot verify its own work will guess."
+    command: >-
+      echo '\n## Verification\n\nRun the payments test suite and add a test that fails before the change and passes after it.' >> ~/codex/tasks/TICKET-42.md
+  - title: Verify and submit
+    detail: cat the spec, then submit for validation.
+    command: cat ~/codex/tasks/TICKET-42.md

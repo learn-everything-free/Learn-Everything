@@ -1,0 +1,7 @@
+slug: 02-guardrails
+title: Sandbox & Secrets
+summary: The limits that keep a fast agent from becoming an incident.
+order: 2
+tasks:
+  - codex-sandbox-policy
+  - codex-secret-scanner

@@ -1,0 +1,45 @@
+slug: claude-memory-imports
+title: Import Shared Instructions
+type: practice
+difficulty: intermediate
+description: The rules that apply everywhere do not belong in every repository. Write the user
+  level memory file that imports them.
+requirements:
+  - Directory ~/.claude exists
+  - File ~/.claude/CLAUDE.md exists
+  - The file imports the shared rules
+  - The file states what the shared rules cover
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.claude
+    label: ~/.claude
+  - validator: file_exists
+    path: /home/learner/.claude/CLAUDE.md
+    label: ~/.claude/CLAUDE.md
+  - validator: file_contains
+    path: /home/learner/.claude/CLAUDE.md
+    value: "@"
+    label: import statement present
+  - validator: file_contains
+    path: /home/learner/.claude/CLAUDE.md
+    value: "shared-rules"
+    label: shared rules imported
+  - validator: file_contains
+    path: /home/learner/.claude/CLAUDE.md
+    value: covers
+    label: scope of the import explained
+steps:
+  - title: Write the import
+    detail: "The import syntax pulls another memory file into this one. The path is relative to
+      the file that holds the import."
+    command: >-
+      echo '# User rules\n\n@~/.claude/shared-rules.md' > ~/.claude/CLAUDE.md
+  - title: Explain the scope
+    detail: "Say what the shared file covers - otherwise nobody knows whether a rule was
+      forgotten or never written."
+    command: >-
+      echo '\nThis covers the rules that apply to every repository: commit style, branch naming and how work is handed over.' >> ~/.claude/CLAUDE.md
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/.claude/CLAUDE.md

@@ -1,0 +1,52 @@
+slug: ai-ide-task-file
+title: Write the Task File
+type: guided
+difficulty: beginner
+description: A long agentic task needs a written brief. Write one with the goal, the files, the
+  constraints and the acceptance criteria.
+requirements:
+  - Directory ~/ide exists
+  - File ~/ide/task-spec.md exists
+  - The spec states the goal and the files in scope
+  - The spec states the constraints and the acceptance criteria
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/ide
+    label: ~/ide
+  - validator: file_exists
+    path: /home/learner/ide/task-spec.md
+    label: ~/ide/task-spec.md
+  - validator: file_contains
+    path: /home/learner/ide/task-spec.md
+    value: Goal
+    label: goal stated
+  - validator: file_contains
+    path: /home/learner/ide/task-spec.md
+    value: "Files"
+    label: files in scope stated
+  - validator: file_contains
+    path: /home/learner/ide/task-spec.md
+    value: Constraints
+    label: constraints stated
+  - validator: file_contains
+    path: /home/learner/ide/task-spec.md
+    value: "Acceptance criteria"
+    label: acceptance criteria stated
+steps:
+  - title: Create the ide directory
+    detail: Task briefs live in one folder, next to the notes about them.
+    command: mkdir -p ~/ide
+  - title: Write the goal and the scope
+    detail: "The goal is one sentence. The files list is the fence - everything outside it is
+      out of bounds."
+    command: >-
+      echo '# Task spec\n\n## Goal\n\nExtract the payment retry logic into its own module and call it from the worker.\n\n## Files in scope\n\n- src/server/payments/retry.ts\n- src/server/payments/worker.ts\n- src/server/payments/retry.test.ts' > ~/ide/task-spec.md
+  - title: Add the constraints and the criteria
+    detail: "The constraints stop the agent from being clever. The criteria tell it - and you -
+      when it is finished."
+    command: >-
+      echo '\n## Constraints\n\n- no new dependency\n- the public signature of the worker does not change\n\n## Acceptance criteria\n\n- the retry module has its own test\n- the worker imports it instead of inlining the logic' >> ~/ide/task-spec.md
+  - title: Verify and submit
+    detail: cat the spec, then submit for validation.
+    command: cat ~/ide/task-spec.md

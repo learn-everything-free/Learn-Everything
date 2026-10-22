@@ -1,0 +1,48 @@
+slug: ai-metrics
+title: Pick the Metrics That Matter
+type: practice
+difficulty: intermediate
+description: Counting the suggestions is easy and says nothing. Write the metrics that measure
+  whether the work actually got better.
+requirements:
+  - File ~/adoption/metrics.md exists
+  - The metrics cover the acceptance rate
+  - The metrics cover the lead time and the review comments
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/adoption/metrics.md
+    label: ~/adoption/metrics.md
+  - validator: file_contains
+    path: /home/learner/adoption/metrics.md
+    value: "acceptance rate"
+    label: acceptance rate defined
+  - validator: file_contains
+    path: /home/learner/adoption/metrics.md
+    value: "lead time"
+    label: lead time tracked
+  - validator: file_contains
+    path: /home/learner/adoption/metrics.md
+    value: "review comments"
+    label: review comments tracked
+  - validator: file_contains
+    path: /home/learner/adoption/metrics.md
+    value: "month"
+    label: reporting cadence stated
+steps:
+  - title: Create the adoption directory
+    detail: The metrics live with the guidelines.
+    command: mkdir -p ~/adoption
+  - title: Write the metrics
+    detail: "Acceptance rate, lead time and the number of review comments - the last one is the
+      honest measure of how much the code still needs a human."
+    command: >-
+      echo '# Metrics for AI assisted work\n\n## Metrics\n\n- acceptance rate - the share of suggestions merged with little or no change\n- lead time - the median time from the first commit to production\n- review comments - the average number of comments a change still needs' > ~/adoption/metrics.md
+  - title: State the cadence
+    detail: "Look at the numbers every month, on the same week. A metric that is only read when
+      it is good is decoration."
+    command: >-
+      echo '\n## Cadence\n\nThe numbers are read once a month, in the same week every time, next to the same numbers from before the tool was introduced.' >> ~/adoption/metrics.md
+  - title: Verify and submit
+    detail: cat the metrics, then submit for validation.
+    command: cat ~/adoption/metrics.md

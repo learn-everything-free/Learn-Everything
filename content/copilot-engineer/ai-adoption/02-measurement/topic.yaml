@@ -1,0 +1,7 @@
+slug: 02-measurement
+title: Measuring Adoption
+summary: The metrics that say whether it works, and the rollout that keeps it safe.
+order: 2
+tasks:
+  - ai-metrics
+  - ai-rollout-plan

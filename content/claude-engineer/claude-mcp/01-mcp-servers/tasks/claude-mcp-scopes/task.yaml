@@ -1,0 +1,48 @@
+slug: claude-mcp-scopes
+title: Decide Which Scope a Server Lives In
+type: practice
+difficulty: intermediate
+description: A server can belong to one developer, to one project or to the whole machine.
+  Write the rules for where each kind of server goes.
+requirements:
+  - File ~/claude/mcp-scopes.md exists
+  - The document describes the local, the project and the user scope
+  - The document gives a rule for choosing a scope
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/claude/mcp-scopes.md
+    label: ~/claude/mcp-scopes.md
+  - validator: file_contains
+    path: /home/learner/claude/mcp-scopes.md
+    value: local
+    label: local scope described
+  - validator: file_contains
+    path: /home/learner/claude/mcp-scopes.md
+    value: project
+    label: project scope described
+  - validator: file_contains
+    path: /home/learner/claude/mcp-scopes.md
+    value: user
+    label: user scope described
+  - validator: file_contains
+    path: /home/learner/claude/mcp-scopes.md
+    value: "Rule"
+    label: decision rule stated
+steps:
+  - title: Create the claude directory
+    detail: The scope notes live with the rest of your Claude setup.
+    command: mkdir -p ~/claude
+  - title: Describe the three scopes
+    detail: "local is only for you, project is shared through the repository, user applies to
+      everything you open."
+    command: >-
+      echo '# MCP server scopes\n\n## The scopes\n\n- local - your machine only, never committed\n- project - the repository, committed so the whole team gets it\n- user - every project on your machine' > ~/claude/mcp-scopes.md
+  - title: Write the decision rule
+    detail: "The rule is simple - if the team needs it, it is a project server. If it holds
+      your own credentials, it is a local server."
+    command: >-
+      echo '\n## Rule\n\nIf the team needs the server, it belongs to the project scope. If it carries your personal credentials, it stays local.' >> ~/claude/mcp-scopes.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/claude/mcp-scopes.md

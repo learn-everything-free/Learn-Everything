@@ -1,0 +1,46 @@
+slug: copilot-cli-script
+title: Use the CLI From a Script
+type: practice
+difficulty: intermediate
+description: The command line client takes the same prompts as the editor. Write the script that
+  asks for a suggestion and explains a piece of code.
+requirements:
+  - Directory ~/scripts exists
+  - File ~/scripts/copilot-task.sh exists
+  - The script asks for a suggestion
+  - The script also explains an existing file
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/scripts
+    label: ~/scripts
+  - validator: file_exists
+    path: /home/learner/scripts/copilot-task.sh
+    label: ~/scripts/copilot-task.sh
+  - validator: file_contains
+    path: /home/learner/scripts/copilot-task.sh
+    value: "gh copilot"
+    label: command line client used
+  - validator: file_contains
+    path: /home/learner/scripts/copilot-task.sh
+    value: suggest
+    label: suggestion command used
+  - validator: file_contains
+    path: /home/learner/scripts/copilot-task.sh
+    value: explain
+    label: explain command used
+steps:
+  - title: Create the scripts directory
+    detail: Automation scripts live together so they can be reviewed.
+    command: mkdir -p ~/scripts
+  - title: Write the script
+    detail: "suggest asks for code, explain asks what existing code does. The second one is the
+      underrated command - it is how you onboard a strange file."
+    command: >-
+      echo '#!/usr/bin/env bash\nset -euo pipefail\ngh copilot suggest "write a bash function that retries a command three times" --shell bash\ngh copilot explain src/server/payments.ts' > ~/scripts/copilot-task.sh
+  - title: Make it executable
+    detail: chmod 700 keeps it owner-only and executable.
+    command: chmod 700 ~/scripts/copilot-task.sh
+  - title: Verify and submit
+    detail: cat the script, then submit for validation.
+    command: cat ~/scripts/copilot-task.sh

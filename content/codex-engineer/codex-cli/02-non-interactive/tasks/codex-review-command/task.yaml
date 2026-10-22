@@ -1,0 +1,44 @@
+slug: codex-review-command
+title: Automate a Review Pass
+type: challenge
+difficulty: advanced
+description: A review agent is cheap and tireless, but it is not a human. Write the script that
+  reviews a diff against a base branch and writes its findings to a file.
+requirements:
+  - File ~/scripts/codex-review.sh exists
+  - The script runs the review command against a base reference
+  - The script writes the findings to a report file
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/scripts/codex-review.sh
+    label: ~/scripts/codex-review.sh
+  - validator: file_contains
+    path: /home/learner/scripts/codex-review.sh
+    value: "codex review"
+    label: review command used
+  - validator: file_contains
+    path: /home/learner/scripts/codex-review.sh
+    value: "--base"
+    label: base reference given
+  - validator: file_contains
+    path: /home/learner/scripts/codex-review.sh
+    value: "review-notes.md"
+    label: findings written to a report
+steps:
+  - title: Write the review script
+    detail: "The base reference is what the agent compares against - without it the agent
+      reviews the whole repository."
+    command: >-
+      echo '#!/usr/bin/env bash\nset -euo pipefail\ncodex review --base origin/main --sandbox read-only "review the diff for correctness, security and missing tests"' > ~/scripts/codex-review.sh
+  - title: Save the findings
+    detail: "The report is the artifact a human reads first - keep it in the repository next to
+      the change."
+    command: >-
+      echo '\ncodex review --base origin/main --output-file review-notes.md' >> ~/scripts/codex-review.sh
+  - title: Make it executable
+    detail: chmod 700 and the script is ready for a pipeline.
+    command: chmod 700 ~/scripts/codex-review.sh
+  - title: Verify and submit
+    detail: cat the script, then submit for validation.
+    command: cat ~/scripts/codex-review.sh

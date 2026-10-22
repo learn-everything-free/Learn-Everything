@@ -1,0 +1,48 @@
+slug: ai-rollout-plan
+title: Roll It Out in Phases
+type: challenge
+difficulty: advanced
+description: A tool that helps one team can ruin another. Write the phased rollout with the exit
+  criteria for each phase.
+requirements:
+  - File ~/adoption/rollout.md exists
+  - The plan has a pilot, a team and an organisation phase
+  - The plan states the exit criteria for every phase
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/adoption/rollout.md
+    label: ~/adoption/rollout.md
+  - validator: file_contains
+    path: /home/learner/adoption/rollout.md
+    value: pilot
+    label: pilot phase present
+  - validator: file_contains
+    path: /home/learner/adoption/rollout.md
+    value: team
+    label: team phase present
+  - validator: file_contains
+    path: /home/learner/adoption/rollout.md
+    value: organisation
+    label: organisation phase present
+  - validator: file_contains
+    path: /home/learner/adoption/rollout.md
+    value: "exit criteria"
+    label: exit criteria stated
+steps:
+  - title: Create the adoption directory
+    detail: The rollout plan lives with the guidelines it implements.
+    command: mkdir -p ~/adoption
+  - title: Write the three phases
+    detail: "A pilot with two people, then a whole team, then the organisation. Each phase is
+      bigger than the last and slower to start."
+    command: >-
+      echo '# Rollout plan\n\n## Phase 1 - pilot\n\nTwo engineers, four weeks, one repository.\n\n## Phase 2 - team\n\nOne whole team, with the instructions file written and reviewed.' > ~/adoption/rollout.md
+  - title: Write the organisation phase and the exit criteria
+    detail: "The exit criteria say when the phase is done - a number, a date and a person who
+      decides."
+    command: >-
+      echo '\n## Phase 3 - organisation\n\nEvery team, with the training material and a named owner per team.\n\n## Exit criteria\n\nEach phase has its own exit criteria: the pilot exits when the acceptance rate is above 70 percent and the review comments per change are not rising. The team phase exits when the team agrees the tool saves time. The phase owner decides, not the tool vendor.' >> ~/adoption/rollout.md
+  - title: Verify and submit
+    detail: cat the plan, then submit for validation.
+    command: cat ~/adoption/rollout.md

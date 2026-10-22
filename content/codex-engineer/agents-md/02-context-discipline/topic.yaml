@@ -1,0 +1,7 @@
+slug: 02-context-discipline
+title: Context Discipline
+summary: What to put in front of the agent, what to leave out, and how to hand over a task.
+order: 2
+tasks:
+  - codex-context-rules
+  - codex-task-spec

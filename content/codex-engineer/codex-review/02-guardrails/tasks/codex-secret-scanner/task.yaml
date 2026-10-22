@@ -1,0 +1,47 @@
+slug: codex-secret-scanner
+title: Scan a Diff for Secrets
+type: challenge
+difficulty: advanced
+description: A generated diff can contain a credential that was in the context. Write the scan
+  that catches it before the commit leaves the machine.
+requirements:
+  - File ~/codex/secret-scanner.sh exists
+  - The script inspects the diff
+  - The script looks for access keys and private keys
+  - The script exits non-zero when it finds one
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/secret-scanner.sh
+    label: ~/codex/secret-scanner.sh
+  - validator: file_contains
+    path: /home/learner/codex/secret-scanner.sh
+    value: "git diff"
+    label: diff is inspected
+  - validator: file_contains
+    path: /home/learner/codex/secret-scanner.sh
+    value: AKIA
+    label: access key pattern checked
+  - validator: file_contains
+    path: /home/learner/codex/secret-scanner.sh
+    value: "PRIVATE KEY"
+    label: private key pattern checked
+  - validator: file_contains
+    path: /home/learner/codex/secret-scanner.sh
+    value: "exit 1"
+    label: fails the run when it finds one
+steps:
+  - title: Create the codex directory
+    detail: The scanner lives with the policies it enforces.
+    command: mkdir -p ~/codex
+  - title: Write the scan
+    detail: "Look at the diff, not at the whole repository - the diff is what you are about to
+      commit."
+    command: >-
+      echo '#!/usr/bin/env bash\nset -euo pipefail\ngit diff --cached --name-only\nif grep -rqE "AKIA[0-9A-Z]{16}" . ; then\n  echo "access key found in the change"\n  exit 1\nfi\nif grep -rq "PRIVATE KEY" . ; then\n  echo "private key found in the change"\n  exit 1\nfi\necho "no secrets found"' > ~/codex/secret-scanner.sh
+  - title: Make it executable
+    detail: chmod 700 and it is ready to run in a pre-commit hook.
+    command: chmod 700 ~/codex/secret-scanner.sh
+  - title: Verify and submit
+    detail: cat the script, then submit for validation.
+    command: cat ~/codex/secret-scanner.sh

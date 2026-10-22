@@ -1,0 +1,7 @@
+slug: 02-team-adoption
+title: Team Adoption
+summary: The rules the team agrees on, and the numbers that show whether it works.
+order: 2
+tasks:
+  - codex-team-guidelines
+  - codex-metrics

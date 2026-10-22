@@ -1,0 +1,48 @@
+slug: claude-git-workflow
+title: Set the Assisted Git Loop
+type: practice
+difficulty: intermediate
+description: Branch, let the assistant work, review the diff, then open the pull request. Write
+  the loop down so everyone runs it the same way.
+requirements:
+  - File ~/claude/git-workflow.md exists
+  - The loop states the branch and the commit rules
+  - The loop states where the human review happens
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/claude/git-workflow.md
+    label: ~/claude/git-workflow.md
+  - validator: file_contains
+    path: /home/learner/claude/git-workflow.md
+    value: branch
+    label: branch rule stated
+  - validator: file_contains
+    path: /home/learner/claude/git-workflow.md
+    value: commit
+    label: commit rule stated
+  - validator: file_contains
+    path: /home/learner/claude/git-workflow.md
+    value: "review"
+    label: review step stated
+  - validator: file_contains
+    path: /home/learner/claude/git-workflow.md
+    value: "pull request"
+    label: pull request step stated
+steps:
+  - title: Create the claude directory
+    detail: The workflow notes live with the rest of your setup.
+    command: mkdir -p ~/claude
+  - title: Write the branch and commit rules
+    detail: "One branch per ticket, conventional commit messages, and no commit that mixes a
+      refactor with a fix."
+    command: >-
+      echo '# Assisted git workflow\n\n## Branch and commit\n\n- one branch per ticket, named after the ticket\n- conventional commit messages\n- a refactor never shares a commit with a bug fix' > ~/claude/git-workflow.md
+  - title: Write the review steps
+    detail: "The assistant writes the code, the assistant can also review it, and a human still
+      reads the diff before the pull request goes out."
+    command: >-
+      echo '\n## Review\n\nThe assistant runs its own review pass, then a human reads the diff before the pull request is opened.' >> ~/claude/git-workflow.md
+  - title: Verify and submit
+    detail: cat the loop, then submit for validation.
+    command: cat ~/claude/git-workflow.md

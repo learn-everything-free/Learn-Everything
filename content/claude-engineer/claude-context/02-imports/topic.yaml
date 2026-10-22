@@ -1,0 +1,7 @@
+slug: 02-imports
+title: Imports & Shared Memory
+summary: One set of shared rules, imported wherever they apply.
+order: 2
+tasks:
+  - claude-memory-imports
+  - claude-shared-rules

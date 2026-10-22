@@ -1,0 +1,51 @@
+slug: codex-metrics
+title: Measure Whether It Helps
+type: challenge
+difficulty: advanced
+description: The interesting question is not how much the agent wrote, but how much of it survived
+  review. Write the metrics that answer it.
+requirements:
+  - File ~/codex/metrics.md exists
+  - The document defines the acceptance rate
+  - The document tracks the rework rate and the cycle time
+  - The document states the target for the quarter
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/metrics.md
+    label: ~/codex/metrics.md
+  - validator: file_contains
+    path: /home/learner/codex/metrics.md
+    value: "acceptance rate"
+    label: acceptance rate defined
+  - validator: file_contains
+    path: /home/learner/codex/metrics.md
+    value: "rework rate"
+    label: rework rate tracked
+  - validator: file_contains
+    path: /home/learner/codex/metrics.md
+    value: "cycle time"
+    label: cycle time tracked
+  - validator: file_contains
+    path: /home/learner/codex/metrics.md
+    value: target
+    label: target stated
+steps:
+  - title: Write the metrics heading
+    detail: "Volume metrics are flattering and useless. Start with the ones that measure
+      whether the work got better."
+    command: >-
+      echo '# Measuring AI assisted work' > ~/codex/metrics.md
+  - title: Define the three metrics
+    detail: "Acceptance rate is the share of suggestions merged without changes. Rework rate is
+      the share of merged changes that came back. Cycle time is how long a ticket really
+      takes."
+    command: >-
+      echo '\n## Metrics\n\n- acceptance rate - the share of agent changes merged without a rewrite\n- rework rate - the share of merged changes that are reverted or fixed later\n- cycle time - the median time from first commit to production' >> ~/codex/metrics.md
+  - title: State the target
+    detail: "Pick a number and a date. Without a target the dashboard is decoration."
+    command: >-
+      echo '\n## Target\n\nThe acceptance rate target is 70 percent by the end of the quarter, and the rework rate must stay under 10 percent.' >> ~/codex/metrics.md
+  - title: Verify and submit
+    detail: cat the metrics, then submit for validation.
+    command: cat ~/codex/metrics.md

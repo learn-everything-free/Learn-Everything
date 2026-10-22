@@ -1,0 +1,50 @@
+slug: codex-sandbox-policy
+title: Write the Sandbox Policy
+type: practice
+difficulty: intermediate
+description: The sandbox decides what a mistake can break. Write the policy that maps the three
+  modes to the situations they fit.
+requirements:
+  - File ~/codex/sandbox-policy.md exists
+  - The policy describes the three sandbox modes
+  - The policy states the network rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/sandbox-policy.md
+    label: ~/codex/sandbox-policy.md
+  - validator: file_contains
+    path: /home/learner/codex/sandbox-policy.md
+    value: "read-only"
+    label: read-only mode described
+  - validator: file_contains
+    path: /home/learner/codex/sandbox-policy.md
+    value: "workspace-write"
+    label: workspace-write mode described
+  - validator: file_contains
+    path: /home/learner/codex/sandbox-policy.md
+    value: Network
+    label: network rule stated
+  - validator: file_contains
+    path: /home/learner/codex/sandbox-policy.md
+    value: "danger-full-access"
+    label: unrestricted mode named
+steps:
+  - title: Write the policy heading
+    detail: "The sandbox is not a security boundary on its own - it is a limit on the damage a
+      mistake can do."
+    command: >-
+      echo '# Sandbox policy\n\nThe sandbox decides how far a mistake can reach.' > ~/codex/sandbox-policy.md
+  - title: Describe the modes
+    detail: "read-only for review passes, workspace-write for implementation, and the
+      unrestricted mode only on a throwaway machine."
+    command: >-
+      echo '\n## Modes\n\n- read-only - the agent may read and run read only commands\n- workspace-write - the agent may edit inside the repository\n- danger-full-access - only on a disposable machine, never on a developer laptop' >> ~/codex/sandbox-policy.md
+  - title: State the network rule
+    detail: "Network access is a separate switch from the filesystem sandbox. Decide it on its
+      own, not by accident."
+    command: >-
+      echo '\n## Network\n\nNetwork access is disabled by default and enabled per task, because a fetch is how data leaves the sandbox.' >> ~/codex/sandbox-policy.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/codex/sandbox-policy.md

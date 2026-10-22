@@ -1,0 +1,48 @@
+slug: claude-subagent-tools
+title: Scope the Tools per Subagent
+type: practice
+difficulty: intermediate
+description: The tools are the risk. Write the policy that says which tools each kind of
+  subagent gets.
+requirements:
+  - File ~/claude/subagent-tools.md exists
+  - The policy names the read only agents
+  - The policy states what a write capable agent needs
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/claude/subagent-tools.md
+    label: ~/claude/subagent-tools.md
+  - validator: file_contains
+    path: /home/learner/claude/subagent-tools.md
+    value: "read only"
+    label: read only agents named
+  - validator: file_contains
+    path: /home/learner/claude/subagent-tools.md
+    value: "write"
+    label: write capable agents covered
+  - validator: file_contains
+    path: /home/learner/claude/subagent-tools.md
+    value: "scope"
+    label: scoping rule stated
+  - validator: file_contains
+    path: /home/learner/claude/subagent-tools.md
+    value: "least"
+    label: least privilege stated
+steps:
+  - title: Create the claude directory
+    detail: The policy sits with the rest of your Claude setup.
+    command: mkdir -p ~/claude
+  - title: Write the read only rule
+    detail: "Reviewers, explainers and search agents only read. If an agent cannot edit, it
+      cannot break anything."
+    command: >-
+      echo '# Subagent tool policy\n\n## Read only agents\n\nReviewers, explainers and search agents get the read only tools - Read, Grep and Glob.' > ~/claude/subagent-tools.md
+  - title: Write the write rule
+    detail: "An agent that writes needs a scope - the files it may touch - and it needs a
+      permission that is still there."
+    command: >-
+      echo '\n## Write capable agents\n\nAn agent that writes gets the edit tools, a path scope and a human review of the diff afterwards.\n\n## Rule\n\nEvery subagent gets the least privilege its job needs, and the scope is written into the definition.' >> ~/claude/subagent-tools.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/claude/subagent-tools.md

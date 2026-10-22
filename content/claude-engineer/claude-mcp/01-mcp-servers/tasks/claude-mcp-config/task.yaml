@@ -1,0 +1,46 @@
+slug: claude-mcp-config
+title: Add a Server to the Project
+type: guided
+difficulty: beginner
+description: A project level server configuration is checked into the repository, so everyone
+  gets the same tools. Write one.
+requirements:
+  - Directory ~/project exists
+  - File ~/project/.mcp.json exists
+  - The file declares the server block
+  - The file states how the server is started
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/project
+    label: ~/project
+  - validator: file_exists
+    path: /home/learner/project/.mcp.json
+    label: ~/project/.mcp.json
+  - validator: file_contains
+    path: /home/learner/project/.mcp.json
+    value: mcpServers
+    label: server block declared
+  - validator: file_contains
+    path: /home/learner/project/.mcp.json
+    value: command
+    label: start command stated
+  - validator: file_contains
+    path: /home/learner/project/.mcp.json
+    value: args
+    label: arguments stated
+steps:
+  - title: Create the project directory
+    detail: The configuration sits at the root of the repository.
+    command: mkdir -p ~/project
+  - title: Write the server configuration
+    detail: "command is how the server starts, args are the arguments it takes. Both are
+      checked into the repository, so they are reviewed like code."
+    command: >-
+      echo '{\n  "mcpServers": {\n    "issues": {\n      "command": "npx",\n      "args": ["-y", "@acme/issues-mcp"],\n      "env": {"ISSUES_PROJECT": "acme/orders"}\n    }\n  }\n}' > ~/project/.mcp.json
+  - title: Verify the configuration
+    detail: cat prints the file. Check the arguments - a wrong path is the most common reason a
+      server fails to start.
+    command: cat ~/project/.mcp.json
+  - title: Submit for validation
+    detail: The validator checks the server block, the command and the arguments.
