@@ -92,13 +92,13 @@ export function AchievementToaster({ index }: { index: AchievementIndex }) {
         <div
           key={t.id}
           role="status"
-          className="pointer-events-auto flex items-center gap-4 rounded-[18px] border border-stone bg-eggshell px-5 py-4 shadow-[var(--shadow-subtle)] le-toast-in"
+          className="pointer-events-auto flex items-center gap-4 rounded-none border border-ink bg-eggshell px-5 py-4 le-toast-in"
         >
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-stone/60 bg-warm-taupe text-xl">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-none border border-ink/60 bg-eggshell text-xl">
             {t.glyph}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-caption uppercase tracking-wider text-ash">
+            <p className="text-label text-ash">
               Achievement unlocked
             </p>
             <p className="truncate text-body-sm font-medium text-ink">{t.title}</p>

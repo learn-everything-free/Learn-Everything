@@ -1,135 +1,121 @@
 import Link from "next/link";
 import { paths } from "@/lib/data";
 
+// DESIGN.md — footer on the canvas, separated by a single hairline.
+// No fill, no shadow, uppercase column labels.
+
+const TOOL_LINKS = [
+  { href: "/tools/docker", label: "Docker" },
+  { href: "/tools/kubernetes", label: "Kubernetes" },
+  { href: "/tools/linux", label: "Linux & Bash" },
+  { href: "/tools/terraform", label: "Terraform" },
+  { href: "/tools/rag", label: "RAG & Vectors" },
+];
+
+const PRODUCT_LINKS = [
+  { href: "/paths", label: "All tracks" },
+  { href: "/lab/linux-create-project", label: "Interactive labs" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/certificates/devops-engineer", label: "Certificates" },
+  { href: "/tools", label: "Tool hubs" },
+];
+
 export function Footer() {
   return (
-    <footer className="border-t border-stone/80 bg-eggshell mt-20">
-      <div className="mx-auto max-w-[1280px] px-6 py-14 lg:px-16">
-        <div className="grid gap-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
+    <footer className="border-t border-ink/70 bg-eggshell">
+      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
+        <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr_1fr_1fr]">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="flex size-6 items-center justify-center rounded-lg bg-ink text-xs text-eggshell font-mono font-bold">
-                L
-              </span>
-              <p className="text-body-sm font-semibold text-ink">Learn Everything</p>
-            </div>
-            <p className="mt-3 max-w-sm text-body-sm text-smoke leading-relaxed">
-              Don’t just learn how technology works. Learn how to actually use it. Free,
-              interactive technical education with real Linux terminals, automated validators,
-              and in-depth production tool hubs.
+            <p className="text-[18px] font-medium tracking-[-0.01em] text-ink underline decoration-ink/30 underline-offset-[6px]">
+              Learn Everything
             </p>
-            <p className="mt-4 font-mono text-[11px] text-ash">
-              100% Free · Open Source Forever · MIT Licensed
+            <p className="mt-5 max-w-sm text-body-sm text-graphite leading-relaxed">
+              Nine career tracks, 240 hands-on labs and a real terminal in every browser tab. Free,
+              open source, and built for people who are starting out.
             </p>
+            <a
+              href="https://github.com/NotHarshhaa/Learn-Everything"
+              target="_blank"
+              rel="noreferrer"
+              className="le-pill mt-7"
+            >
+              Star on GitHub
+            </a>
           </div>
 
           <div>
-            <p className="font-mono text-caption uppercase text-ash tracking-wider">
-              Tool Hubs
-            </p>
-            <ul className="mt-3 space-y-2 text-body-sm">
-              <li>
-                <Link href="/tools/docker" className="text-graphite hover:text-ink transition-colors">
-                  Docker Hub
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/kubernetes" className="text-graphite hover:text-ink transition-colors">
-                  Kubernetes Hub
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/linux" className="text-graphite hover:text-ink transition-colors">
-                  Linux & Bash
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/terraform" className="text-graphite hover:text-ink transition-colors">
-                  Terraform IaC
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/rag" className="text-graphite hover:text-ink transition-colors">
-                  RAG & Vectors
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools" className="font-medium text-ink hover:underline">
-                  Browse All 15+ Tools →
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-mono text-caption uppercase text-ash tracking-wider">
-              Curriculum Paths
-            </p>
-            <ul className="mt-3 space-y-2 text-body-sm">
-              {paths.map((p) => (
+            <p className="le-label text-smoke">Tracks</p>
+            <ul className="mt-5 space-y-3 text-caption">
+              {paths.slice(0, 6).map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/paths/${p.slug}`}
-                    className="text-graphite hover:text-ink transition-colors"
+                    className="text-graphite transition-opacity hover:opacity-60"
                   >
                     {p.title}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/paths" className="text-graphite hover:text-ink transition-colors">
-                  Path Catalog
-                </Link>
-              </li>
-              <li>
-                <Link href="/lab/linux-create-project" className="text-graphite hover:text-ink transition-colors">
-                  Interactive Terminal Lab
+                <Link
+                  href="/paths"
+                  className="text-ink transition-opacity hover:opacity-60"
+                >
+                  All nine tracks →
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <p className="font-mono text-caption uppercase text-ash tracking-wider">
-              Open Source
-            </p>
-            <ul className="mt-3 space-y-2 text-body-sm">
-              <li>
-                <a
-                  href="https://github.com/NotHarshhaa/Learn-Everything"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-graphite hover:text-ink transition-colors"
-                >
-                  GitHub Repository ↗
-                </a>
-              </li>
+            <p className="le-label text-smoke">Product</p>
+            <ul className="mt-5 space-y-3 text-caption">
+              {PRODUCT_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-graphite transition-opacity hover:opacity-60"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="le-label text-smoke">Resources</p>
+            <ul className="mt-5 space-y-3 text-caption">
+              {TOOL_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-graphite transition-opacity hover:opacity-60"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <a
                   href="https://github.com/NotHarshhaa/Learn-Everything/blob/main/LICENSE"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-graphite hover:text-ink transition-colors"
+                  className="text-graphite transition-opacity hover:opacity-60"
                 >
-                  License (MIT)
+                  MIT License
                 </a>
-              </li>
-              <li>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-stone/70 px-2.5 py-0.5 font-mono text-[10px] text-smoke">
-                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Sandbox Ready
-                </span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-stone/80 pt-6">
-          <p className="font-mono text-caption uppercase text-ash">
-            Built for builders, engineers, and curious minds.
+        <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-ink/30 pt-6 sm:flex-row sm:items-center">
+          <p className="text-label uppercase tracking-[1px] text-smoke">
+            Built for students, career switchers and curious minds.
           </p>
-          <p className="font-mono text-caption text-ash">
-            © {new Date().getFullYear()} Learn Everything.
+          <p className="text-label uppercase tracking-[1px] text-smoke">
+            © {new Date().getFullYear()} Learn Everything · MIT Licensed
           </p>
         </div>
       </div>

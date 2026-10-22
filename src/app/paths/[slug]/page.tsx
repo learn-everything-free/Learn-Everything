@@ -41,7 +41,7 @@ export default async function PathPage({ params }: PageProps) {
         <p className="font-mono text-caption uppercase text-ash tracking-wider">
           Learning Path Curriculum
         </p>
-        <h1 className="text-display font-light tracking-[-0.02em] text-ink max-w-4xl">
+        <h1 className="text-heading-lg font-medium uppercase tracking-[-3.36px] text-ink max-w-4xl">
           {path.title}
         </h1>
         <p className="text-subheading text-smoke max-w-3xl leading-relaxed">
@@ -51,7 +51,7 @@ export default async function PathPage({ params }: PageProps) {
         <div className="flex flex-wrap items-center gap-2 pt-2">
           <Badge variant="ink">{path.skills.length} target skills</Badge>
           <Badge variant="taupe">{totalTasks} interactive tasks live</Badge>
-          <Badge variant="emerald">100% Free Sandbox</Badge>
+          <Badge variant="muted">100% Free Sandbox</Badge>
         </div>
 
         <div className="pt-4">
@@ -77,12 +77,12 @@ export default async function PathPage({ params }: PageProps) {
             return (
               <div
                 key={skill.slug}
-                className="flex flex-col justify-between rounded-[24px] border border-stone/80 bg-warm-taupe/70 p-7 transition-all duration-200 hover:-translate-y-1 hover:border-ink/25 hover:bg-warm-taupe hover:shadow-md"
+                className="flex flex-col justify-between rounded-none border border-ink/80 bg-eggshell p-7 transition-all duration-200 hover:border-ink/25 hover:bg-eggshell hover:"
               >
                 <div>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex size-11 items-center justify-center rounded-xl border border-stone/80 bg-eggshell shadow-2xs">
+                      <div className="flex size-11 items-center justify-center rounded-none border border-ink/80 bg-eggshell">
                         <ToolIcon
                           name={tool?.iconName ?? skill.slug}
                           className="size-5"
@@ -90,17 +90,17 @@ export default async function PathPage({ params }: PageProps) {
                         />
                       </div>
                       <div>
-                        <span className="font-mono text-[10px] uppercase text-ash tracking-wider">
+                        <span className="font-mono text-label uppercase text-ash tracking-wider">
                           SKILL {String(i + 1).padStart(2, "0")}
                         </span>
-                        <h2 className="text-xl font-medium text-ink tracking-tight">
+                        <h2 className="text-heading-sm font-medium text-ink tracking-tight">
                           {skill.title}
                         </h2>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                      <Badge variant="ink" className="font-mono text-[10px]">
+                      <Badge variant="ink" className="font-mono text-label">
                         {taskCount} {taskCount === 1 ? "Task" : "Tasks"}
                       </Badge>
                     </div>
@@ -119,20 +119,20 @@ export default async function PathPage({ params }: PageProps) {
 
                   {/* Topics breakdown */}
                   {topicCount > 0 ? (
-                    <div className="mt-5 space-y-2 border-t border-stone/60 pt-4">
-                      <p className="font-mono text-[10px] uppercase text-ash tracking-wider">
+                    <div className="mt-5 space-y-2 border-t border-ink/60 pt-4">
+                      <p className="font-mono text-label uppercase text-ash tracking-wider">
                         Topics Covered ({topicCount})
                       </p>
                       <div className="space-y-1.5">
                         {skill.topics.map((t) => (
                           <div
                             key={t.slug}
-                            className="flex items-center justify-between text-xs py-1"
+                            className="flex items-center justify-between text-label py-1"
                           >
                             <span className="text-graphite font-medium">
                               • {t.title}
                             </span>
-                            <span className="font-mono text-[10px] text-smoke">
+                            <span className="font-mono text-label text-smoke">
                               {t.tasks.length} {t.tasks.length === 1 ? "task" : "tasks"}
                             </span>
                           </div>
@@ -140,13 +140,13 @@ export default async function PathPage({ params }: PageProps) {
                       </div>
                     </div>
                   ) : (
-                    <p className="mt-5 border-t border-stone/60 pt-4 font-mono text-[10px] uppercase text-ash">
+                    <p className="mt-5 border-t border-ink/60 pt-4 font-mono text-label uppercase text-ash">
                       Foundation module · Interactive labs expanding
                     </p>
                   )}
                 </div>
 
-                <div className="mt-6 border-t border-stone/70 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div className="mt-6 border-t border-ink/70 pt-4 flex flex-wrap items-center justify-between gap-3 text-label">
                   {tool ? (
                     <Link
                       href={`/tools/${tool.slug}`}

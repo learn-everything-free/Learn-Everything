@@ -4,34 +4,38 @@
    before first paint (localStorage preference, falling back to system). */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Runtime theme variables. The palette is inverted as a whole: in dark mode
-   `eggshell` becomes the canvas, `ink` becomes the primary text/fill, and the
-   intermediate tones shift accordingly — so `bg-ink text-eggshell` and every
-   other token pairing keeps working without per-component overrides. */
+/* ---------------------------------------------------------------------------
+   DESIGN.md — Oakâme system.
+   A near-monochromatic warm-stone canvas carrying deep walnut-brown ink.
+   Deliberately quiet: no shadows, no gradients, no decorative colour. Depth is
+   communicated only through 1px walnut borders and 20px column gaps.
+   --------------------------------------------------------------------------- */
+
 :root {
-  --le-eggshell: #fdfcfc;
-  --le-taupe: #f5f3f1;
-  --le-stone: #ebe8e4;
-  --le-ink: #000000;
-  --le-graphite: #44403b;
-  --le-smoke: #777169;
-  --le-ash: #a59f97;
+  /* Surfaces & text */
+  --le-eggshell: #f6f1eb; /* Linen Canvas — page + card surface */
+  --le-taupe: #f6f1eb; /* same canvas: cards never float on a second fill */
+  --le-stone: rgb(64 58 52 / 0.14); /* hairline wash */
+  --le-ink: #403a34; /* Walnut Ink — headings, borders, filled controls */
+  --le-graphite: #333333; /* Charcoal Note — body copy */
+  --le-smoke: #555555; /* Slate Whisper — tertiary copy */
+  --le-ash: #555555;
   color-scheme: light;
 }
 
 .dark {
-  --le-eggshell: #141311;
-  --le-taupe: #1d1b18;
-  --le-stone: #2d2b26;
-  --le-ink: #f0eee6;
-  --le-graphite: #c9c4ba;
-  --le-smoke: #9c968b;
-  --le-ash: #6e6961;
+  --le-eggshell: #1b1815;
+  --le-taupe: #1b1815;
+  --le-stone: rgb(243 237 228 / 0.14);
+  --le-ink: #f3ede4;
+  --le-graphite: #ded7cc;
+  --le-smoke: #a8a096;
+  --le-ash: #a8a096;
   color-scheme: dark;
 }
 
 @theme inline {
-  /* Colors — ElevenLabs reference (DESIGN.md) */
+  /* Colors — DESIGN.md */
   --color-eggshell: var(--le-eggshell);
   --color-warm-taupe: var(--le-taupe);
   --color-stone: var(--le-stone);
@@ -39,65 +43,75 @@
   --color-graphite: var(--le-graphite);
   --color-smoke: var(--le-smoke);
   --color-ash: var(--le-ash);
-  --color-violet-spark: #0447ff;
-  --color-ember-orange: #ff4704;
 
-  /* Fonts */
+  /* Fonts — BwGradual substitute (Inter); mono is reserved for code only */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* Type scale */
-  --text-caption: 10px;
-  --text-caption--line-height: 1.6;
-  --text-body-sm: 14px;
+  /* Type scale — deliberately bimodal: 10–12px labels beside 40–250px display.
+     Nothing in between; 24–32px is deliberately skipped. */
+  --text-label: 10px;
+  --text-label--line-height: 1.3;
+  --text-label--letter-spacing: 1px;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.3;
+  --text-caption--letter-spacing: 0.83px;
+  --text-body-sm: 18px;
   --text-body-sm--line-height: 1.5;
-  --text-body-sm--letter-spacing: 0.14px;
-  --text-body: 16px;
-  --text-body--line-height: 1.5;
-  --text-body--letter-spacing: 0.16px;
-  --text-subheading: 18px;
-  --text-subheading--line-height: 1.6;
-  --text-body-lg: 20px;
-  --text-body-lg--line-height: 1.35;
-  --text-heading-sm: 32px;
-  --text-heading-sm--line-height: 1.13;
-  --text-heading-sm--letter-spacing: -0.64px;
-  --text-heading: 36px;
-  --text-heading--line-height: 1.17;
-  --text-heading--letter-spacing: -0.72px;
-  --text-display: 48px;
-  --text-display--line-height: 1.08;
-  --text-display--letter-spacing: -0.96px;
+  --text-body-sm--letter-spacing: -0.07px;
+  --text-body: 20px;
+  --text-body--line-height: 1.4;
+  --text-body--letter-spacing: -0.08px;
+  --text-subheading: 20px;
+  --text-subheading--line-height: 1.4;
+  --text-subheading--letter-spacing: -0.08px;
+  --text-heading-sm: 40px;
+  --text-heading-sm--line-height: 1.25;
+  --text-heading-sm--letter-spacing: -2.24px;
+  --text-heading: 50px;
+  --text-heading--line-height: 1.24;
+  --text-heading--letter-spacing: -2.8px;
+  --text-heading-lg: 60px;
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-lg--letter-spacing: -3.36px;
+  --text-display: 120px;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -6.72px;
+  --text-display-xl: 180px;
+  --text-display-xl--line-height: 1.1;
+  --text-display-xl--letter-spacing: -10.08px;
+  --text-display-hero: 250px;
+  --text-display-hero--line-height: 1.1;
+  --text-display-hero--letter-spacing: -14px;
 
-  /* Mono scale */
+  /* Mono scale — code only */
   --text-mono-xs: 11px;
   --text-mono-xs--line-height: 1.5;
   --text-mono-sm: 13px;
   --text-mono-sm--line-height: 1.69;
 
-  /* Radii */
+  /* Radii — square everywhere; pill radius only for tags and pill buttons */
   --radius-full: 9999px;
-  --radius-input: 4px;
-  --radius-card: 20px;
-  --radius-large-card: 24px;
+  --radius-input: 0px;
+  --radius-card: 0px;
+  --radius-large-card: 0px;
 
-  /* Shadows — whisper elevation only */
-  --shadow-subtle:
-    rgba(0, 0, 0, 0.4) 0px 0px 1px 0px,
-    rgba(0, 0, 0, 0.04) 0px 1px 1px 0px,
-    rgba(0, 0, 0, 0.04) 0px 2px 4px 0px;
-  --shadow-inset-hairline: rgba(0, 0, 0, 0.075) 0px 0px 0px 0.5px inset;
+  /* Elevation — the system is deliberately shadowless */
+  --shadow-subtle: none;
+  --shadow-inset-hairline: none;
 }
 
 body {
   background: var(--color-eggshell);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-feature-settings: "ss01" on, "cv11" on, "tnum" on;
+  letter-spacing: -0.004em;
 }
 
 ::selection {
-  background: var(--color-stone);
-  color: var(--color-ink);
+  background: var(--le-ink);
+  color: var(--le-eggshell);
 }
 
 /* Smooth token swap when the theme toggles */
@@ -277,4 +291,75 @@ body * {
 }
 .le-menu-in {
   animation: le-menu-in 0.22s ease-out;
+}
+/* ------------------------------------------------------------------
+   DESIGN.md components — the only surface treatments the system allows.
+   ------------------------------------------------------------------ */
+
+/* Eyebrow label: the museum-label tone used above every section opener */
+.le-label {
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Outlined pill button: 1px walnut border, full radius, inverts on hover */
+.le-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-ink);
+  border-radius: 9999px;
+  padding: 8px 20px;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-ink);
+  background: transparent;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.le-pill:hover {
+  background: var(--color-ink);
+  color: var(--color-eggshell);
+}
+
+/* Filled action button: square, walnut, linen — one per viewport */
+.le-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  padding: 12px 24px;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: var(--color-ink);
+  color: var(--color-eggshell);
+  transition: opacity 150ms ease;
+}
+.le-action:hover {
+  opacity: 0.85;
+}
+
+/* Full-bleed hairline divider — the only separator the system uses */
+.le-rule {
+  border: 0;
+  border-top: 1px solid var(--color-ink);
+}
+
+/* Square content block: hairline border, no radius, no shadow */
+.le-block {
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  background: var(--color-eggshell);
 }

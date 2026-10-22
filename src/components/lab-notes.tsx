@@ -16,7 +16,7 @@ export function LabNotes({ slug }: { slug: string }) {
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="font-mono text-caption uppercase tracking-wider text-ash">
+        <h2 className="text-label text-ash">
           <span className="mr-2 text-stone">04</span>Notebook
         </h2>
         <span className="font-mono text-caption text-ash">
@@ -31,7 +31,7 @@ export function LabNotes({ slug }: { slug: string }) {
         }}
         rows={5}
         placeholder="What finally worked, gotchas hit, commands worth remembering…"
-        className="mt-4 w-full resize-y rounded-[16px] border border-stone bg-eggshell p-4 font-mono text-mono-sm leading-relaxed text-graphite outline-none transition-colors placeholder:text-ash focus:border-ink/40"
+        className="mt-4 w-full resize-y rounded-none border border-ink bg-eggshell p-4 font-mono text-mono-sm leading-relaxed text-graphite outline-none transition-colors placeholder:text-ash focus:border-ink/40"
       />
     </div>
   );

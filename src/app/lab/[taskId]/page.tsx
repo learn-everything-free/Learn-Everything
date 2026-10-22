@@ -40,13 +40,13 @@ export default async function LabPage({ params }: PageProps<"/lab/[taskId]">) {
       />
       {(prev || next) && (
         <div className="mx-auto max-w-[1280px] px-6 pb-20 lg:px-16">
-          <div className="grid gap-4 border-t border-stone pt-8 sm:grid-cols-2">
+          <div className="grid gap-4 border-t border-ink pt-8 sm:grid-cols-2">
             {prev ? (
               <Link
                 href={`/lab/${prev.slug}`}
-                className="group rounded-[18px] border border-stone/80 bg-warm-taupe/60 p-5 transition-colors hover:border-ink/25 hover:bg-warm-taupe"
+                className="group rounded-none border border-ink/80 bg-eggshell p-5 transition-colors hover:border-ink/25 hover:bg-eggshell"
               >
-                <p className="font-mono text-caption uppercase tracking-wider text-ash">
+                <p className="text-label text-ash">
                   ← Previous lab
                 </p>
                 <p className="mt-1.5 text-body-sm font-medium text-ink group-hover:underline">
@@ -60,9 +60,9 @@ export default async function LabPage({ params }: PageProps<"/lab/[taskId]">) {
             {next && (
               <Link
                 href={`/lab/${next.slug}`}
-                className="group rounded-[18px] border border-stone/80 bg-warm-taupe/60 p-5 text-right transition-colors hover:border-ink/25 hover:bg-warm-taupe"
+                className="group rounded-none border border-ink/80 bg-eggshell p-5 text-right transition-colors hover:border-ink/25 hover:bg-eggshell"
               >
-                <p className="font-mono text-caption uppercase tracking-wider text-ash">
+                <p className="text-label text-ash">
                   Next lab →
                 </p>
                 <p className="mt-1.5 text-body-sm font-medium text-ink group-hover:underline">

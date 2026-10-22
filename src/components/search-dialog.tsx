@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation";
 import type { SearchItem } from "@/lib/search-index";
 
 const KIND_STYLES: Record<SearchItem["kind"], string> = {
-  Path: "bg-purple-50 text-purple-700 border-purple-200/80 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/30",
-  Skill: "bg-amber-50 text-amber-800 border-amber-200/80 dark:bg-amber-500/10 dark:text-amber-300 dark:border-amber-500/30",
-  Lab: "bg-emerald-50 text-emerald-700 border-emerald-200/80 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30",
-  Tool: "bg-sky-50 text-sky-700 border-sky-200/80 dark:bg-sky-500/10 dark:text-sky-300 dark:border-sky-500/30",
-  Page: "bg-warm-taupe text-graphite border-stone/60",
+  Path: "bg-eggshell text-graphite border-ink/40 dark:bg-purple-500/10 dark:text-graphite dark:border-ink/40",
+  Skill: "bg-eggshell text-graphite border-ink/40 dark:bg-ink/10 dark:text-graphite dark:border-ink/40",
+  Lab: "bg-eggshell text-graphite border-ink/40 dark:bg-ink/10 dark:text-graphite dark:border-ink/40",
+  Tool: "bg-eggshell text-graphite border-ink/40 dark:bg-sky-500/10 dark:text-graphite dark:border-ink/40",
+  Page: "bg-eggshell text-graphite border-ink/60",
 };
 
 // Tie-breaker for equal title matches: a tool hub beats a path, which beats a
@@ -73,21 +73,21 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
       <button
         onClick={() => setOpen(true)}
         aria-label="Search the site"
-        className="hidden items-center gap-2 whitespace-nowrap rounded-full border border-stone/80 bg-warm-taupe/60 px-3.5 py-1.5 text-caption text-smoke transition-colors hover:bg-stone/60 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:flex"
+        className="hidden items-center gap-2 whitespace-nowrap rounded-full border border-ink/80 bg-eggshell px-3.5 py-1.5 text-caption text-smoke transition-colors hover:bg-stone/60 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:flex"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-3.5">
           <circle cx="11" cy="11" r="7" />
           <path d="m20 20-3.5-3.5" strokeLinecap="round" />
         </svg>
         Search
-        <kbd className="rounded-md border border-stone/70 bg-eggshell px-1.5 py-0.5 font-mono text-[10px] text-ash">
+        <kbd className="rounded-none border border-ink/70 bg-eggshell px-1.5 py-0.5 font-mono text-label text-ash">
           ⌘K
         </kbd>
       </button>
       <button
         onClick={() => setOpen(true)}
         aria-label="Search the site"
-        className="flex size-9 items-center justify-center rounded-full border border-stone/80 bg-eggshell text-graphite transition-colors hover:bg-warm-taupe md:hidden"
+        className="flex size-9 items-center justify-center rounded-full border border-ink/80 bg-eggshell text-graphite transition-colors hover:bg-eggshell md:hidden"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4">
           <circle cx="11" cy="11" r="7" />
@@ -102,8 +102,8 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
           }}
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/30 px-4 pt-[12vh] backdrop-blur-sm"
         >
-          <div className="w-full max-w-lg overflow-hidden rounded-[20px] border border-stone bg-eggshell shadow-xl">
-            <div className="flex items-center gap-3 border-b border-stone px-5 py-4">
+          <div className="w-full max-w-lg overflow-hidden rounded-none border border-ink bg-eggshell">
+            <div className="flex items-center gap-3 border-b border-ink px-5 py-4">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4 shrink-0 text-ash">
                 <circle cx="11" cy="11" r="7" />
                 <path d="m20 20-3.5-3.5" strokeLinecap="round" />
@@ -132,7 +132,7 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
                 placeholder="Search labs, tools, paths…"
                 className="w-full bg-transparent text-body-sm text-ink outline-none placeholder:text-ash"
               />
-              <kbd className="shrink-0 rounded-md border border-stone/70 bg-warm-taupe px-1.5 py-0.5 font-mono text-[10px] text-ash">
+              <kbd className="shrink-0 rounded-none border border-ink/70 bg-eggshell px-1.5 py-0.5 font-mono text-label text-ash">
                 esc
               </kbd>
             </div>
@@ -148,8 +148,8 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
                   <button
                     onMouseEnter={() => setActive(i)}
                     onClick={() => choose(item)}
-                    className={`flex w-full items-center justify-between gap-3 rounded-[12px] px-3.5 py-2.5 text-left transition-colors ${
-                      i === selected ? "bg-warm-taupe" : ""
+                    className={`flex w-full items-center justify-between gap-3 rounded-none px-3.5 py-2.5 text-left transition-colors ${
+                      i === selected ? "bg-eggshell" : ""
                     }`}
                   >
                     <span className="min-w-0">
@@ -161,7 +161,7 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
                       </span>
                     </span>
                     <span
-                      className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase ${KIND_STYLES[item.kind]}`}
+                      className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-label uppercase ${KIND_STYLES[item.kind]}`}
                     >
                       {item.kind}
                     </span>

@@ -228,7 +228,7 @@ export function LabClient({
         </p>
 
         {/* Task header + validator summary */}
-        <div className="mt-6 grid gap-8 border-b border-stone pb-10 lg:grid-cols-[1fr_auto] lg:items-start">
+        <div className="mt-6 grid gap-8 border-b border-ink pb-10 lg:grid-cols-[1fr_auto] lg:items-start">
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="ink">{taskTypeLabel[task.type]}</Badge>
@@ -244,9 +244,9 @@ export function LabClient({
           </div>
 
           {hasRuntimeChecks ? (
-            <div className="w-full shrink-0 rounded-[20px] border border-stone bg-eggshell p-5 shadow-[var(--shadow-subtle)] lg:w-72">
+            <div className="w-full shrink-0 rounded-none border border-ink bg-eggshell p-5 lg:w-72">
               <div className="flex items-center justify-between">
-                <p className="font-mono text-caption uppercase tracking-wider text-ash">Validator</p>
+                <p className="text-label text-ash">Validator</p>
                 <div className="flex items-center gap-2.5">
                   <span title={passed ? "Solve time" : "Timer"} className="font-mono text-mono-xs text-smoke">
                     ⏱ {formatMs((passedMs ?? elapsed) * 1000)}
@@ -275,7 +275,7 @@ export function LabClient({
                 </p>
               ) : passed ? (
                 <p className="mt-3 flex items-center gap-2 font-mono text-mono-xs">
-                  <span className="size-2 rounded-full bg-ember-orange" aria-hidden />
+                  <span className="size-2 rounded-full bg-ink" aria-hidden />
                   <span className="text-graphite">
                     PASS · +{XP_PER_TASK} XP
                     {doneAt && " · saved"}
@@ -284,7 +284,7 @@ export function LabClient({
               ) : liveAllPass ? (
                 <p className="mt-3 flex items-center gap-2 font-mono text-mono-xs">
                   <span className="size-2 animate-pulse rounded-full bg-emerald-500" aria-hidden />
-                  <span className="font-medium text-emerald-700 dark:text-emerald-300">
+                  <span className="font-medium text-graphite dark:text-graphite">
                     ALL GREEN — Submit (or Ctrl+Enter) to bank the XP
                   </span>
                 </p>
@@ -295,8 +295,8 @@ export function LabClient({
               )}
             </div>
           ) : (
-            <div className="w-full shrink-0 rounded-[20px] border border-dashed border-stone bg-warm-taupe/50 p-5 lg:w-72">
-              <p className="font-mono text-caption uppercase tracking-wider text-ash">Validator</p>
+            <div className="w-full shrink-0 rounded-none border border-dashed border-ink bg-eggshell p-5 lg:w-72">
+              <p className="text-label text-ash">Validator</p>
               <p className="mt-3 font-mono text-mono-xs text-smoke">
                 PENDING RUNTIME — this task needs the full container/Kubernetes lab runtime
               </p>
@@ -310,12 +310,12 @@ export function LabClient({
             {/* 01 — Requirements */}
             <section>
               <div className="flex items-baseline justify-between gap-4">
-                <h2 className="font-mono text-caption uppercase tracking-wider text-ash">
+                <h2 className="text-label text-ash">
                   <span className="mr-2 text-stone">01</span>Requirements
                 </h2>
                 <span className="font-mono text-caption uppercase text-ash">live checks</span>
               </div>
-              <ul className="mt-4 divide-y divide-stone rounded-[20px] border border-stone bg-eggshell shadow-[var(--shadow-subtle)]">
+              <ul className="mt-4 divide-y divide-stone rounded-none border border-ink bg-eggshell">
                 {shown
                   ? shown.map((r, i) => (
                       <li key={i} className="px-5 py-3.5 text-body-sm">
@@ -323,7 +323,7 @@ export function LabClient({
                           <span className="flex items-center gap-3">
                             <span
                               className={`flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-mono-xs ${
-                                r.pass ? "bg-ink text-eggshell" : "border border-stone text-smoke"
+                                r.pass ? "bg-ink text-eggshell" : "border border-ink text-smoke"
                               }`}
                               aria-hidden
                             >
@@ -351,7 +351,7 @@ export function LabClient({
             {/* 02 — Walkthrough */}
             <section className="mt-12">
               <div className="flex items-baseline justify-between gap-4">
-                <h2 className="font-mono text-caption uppercase tracking-wider text-ash">
+                <h2 className="text-label text-ash">
                   <span className="mr-2 text-stone">02</span>Walkthrough
                 </h2>
                 <span className="font-mono text-caption uppercase text-ash">
@@ -372,13 +372,13 @@ export function LabClient({
                         <p className="text-body-sm font-medium">{step.title}</p>
                         <p className="mt-1 text-body-sm text-smoke">{step.detail}</p>
                         {cmd ? (
-                          <div className="mt-3 flex items-center justify-between gap-4 rounded-[10px] border border-stone bg-warm-taupe py-2 pl-4 pr-2">
+                          <div className="mt-3 flex items-center justify-between gap-4 rounded-none border border-ink bg-eggshell py-2 pl-4 pr-2">
                             <code className="overflow-x-auto whitespace-nowrap font-mono text-mono-sm text-graphite">
                               {cmd}
                             </code>
                             <button
                               onClick={() => runner(cmd)}
-                              className="shrink-0 rounded-full border border-stone bg-ink px-3 py-1 font-mono text-caption uppercase text-eggshell transition-opacity hover:opacity-80"
+                              className="shrink-0 rounded-full border border-ink bg-ink px-3 py-1 font-mono text-caption uppercase text-eggshell transition-opacity hover:opacity-80"
                               title={`Runs "${cmd}" in the terminal`}
                             >
                               Run ↘
@@ -390,13 +390,13 @@ export function LabClient({
                   );
                 })}
                 {revealedSteps < task.steps.length && (
-                  <li className="flex flex-wrap items-center justify-between gap-4 rounded-[10px] border border-dashed border-stone bg-warm-taupe/50 px-4 py-3">
+                  <li className="flex flex-wrap items-center justify-between gap-4 rounded-none border border-dashed border-ink bg-eggshell px-4 py-3">
                     <span className="font-mono text-mono-xs uppercase text-smoke">
                       {task.steps.length - revealedSteps} locked · each failed submit reveals one
                     </span>
                     <button
                       onClick={() => setRevealedSteps((n) => Math.min(n + 1, task.steps.length))}
-                      className="rounded-full border border-stone bg-eggshell px-3.5 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+                      className="rounded-full border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
                     >
                       Reveal next step
                     </button>
@@ -408,7 +408,7 @@ export function LabClient({
             {/* 03 — AI Tutor */}
             <section className="mt-12">
               <div className="flex items-baseline justify-between gap-4">
-                <h2 className="font-mono text-caption uppercase tracking-wider text-ash">
+                <h2 className="text-label text-ash">
                   <span className="mr-2 text-stone">03</span>AI Tutor
                 </h2>
                 <span className="font-mono text-caption uppercase text-ash">guides, never solves</span>
@@ -419,7 +419,7 @@ export function LabClient({
                   <div key={i} className={`flex ${m.role === "you" ? "justify-end" : "justify-start"}`}>
                     {m.role === "tutor" && (
                       <span
-                        className="mr-2.5 mt-1 flex size-6 shrink-0 items-center justify-center rounded-full bg-ink font-mono text-[10px] font-bold text-eggshell"
+                        className="mr-2.5 mt-1 flex size-6 shrink-0 items-center justify-center rounded-full bg-ink font-mono text-label font-bold text-eggshell"
                         aria-hidden
                       >
                         T
@@ -428,8 +428,8 @@ export function LabClient({
                     <p
                       className={`max-w-[85%] px-4 py-2.5 text-body-sm ${
                         m.role === "you"
-                          ? "rounded-[14px] rounded-br-[4px] bg-stone/60 text-graphite"
-                          : "rounded-[14px] rounded-bl-[4px] bg-warm-taupe text-ink"
+                          ? "rounded-none rounded-br-[4px] bg-stone/60 text-graphite"
+                          : "rounded-none rounded-bl-[4px] bg-eggshell text-ink"
                       }`}
                     >
                       {m.text || "…"}
@@ -444,7 +444,7 @@ export function LabClient({
                     <button
                       key={ask}
                       onClick={() => askTutor(ask)}
-                      className="rounded-full border border-stone bg-eggshell px-3.5 py-1.5 font-mono text-caption text-graphite transition-colors hover:border-ink hover:text-ink"
+                      className="rounded-full border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption text-graphite transition-colors hover:border-ink hover:text-ink"
                     >
                       {ask}
                     </button>
@@ -459,12 +459,12 @@ export function LabClient({
                   onKeyDown={(e) => e.key === "Enter" && askTutor()}
                   placeholder="Describe what you tried…"
                   disabled={tutorBusy}
-                  className="w-full rounded-full border border-stone bg-eggshell px-4 py-2.5 text-body-sm outline-none placeholder:text-ash focus:border-ink disabled:opacity-60"
+                  className="w-full rounded-full border border-ink bg-eggshell px-4 py-2.5 text-body-sm outline-none placeholder:text-ash focus:border-ink disabled:opacity-60"
                 />
                 <button
                   onClick={() => askTutor()}
                   disabled={tutorBusy}
-                  className="shrink-0 rounded-full border border-stone bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="shrink-0 rounded-full border border-ink bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {tutorBusy ? "…" : "Ask"}
                 </button>
@@ -480,8 +480,8 @@ export function LabClient({
           {/* Terminal */}
           <div className="lg:sticky lg:top-[84px] lg:self-start">
             <div
-              className={`overflow-hidden rounded-[20px] border bg-[#191918] shadow-[var(--shadow-subtle)] transition-shadow ${
-                passed ? "border-emerald-400/40" : "border-stone"
+              className={`overflow-hidden rounded-none border bg-[#191918] transition-shadow ${
+                passed ? "border-emerald-400/40" : "border-ink"
               }`}
             >
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">

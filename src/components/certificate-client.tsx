@@ -49,11 +49,11 @@ export function CertificateClient({
   if (!complete) {
     return (
       <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-16">
-        <div className="mx-auto max-w-xl rounded-[24px] border border-stone/80 bg-warm-taupe/70 p-10 text-center">
-          <p className="font-mono text-caption uppercase tracking-wider text-ash">
+        <div className="mx-auto max-w-xl rounded-none border border-ink/80 bg-eggshell p-10 text-center">
+          <p className="text-label text-ash">
             Certificate locked
           </p>
-          <h1 className="mt-3 text-3xl font-light tracking-[-0.02em] text-ink">{pathTitle}</h1>
+          <h1 className="mt-3 text-heading-sm font-light tracking-[-0.02em] text-ink">{pathTitle}</h1>
           <p className="mt-4 text-body text-smoke">
             Finish every lab in this path to unlock its certificate —{" "}
             <span className="font-medium text-ink">
@@ -95,7 +95,7 @@ export function CertificateClient({
   return (
     <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-16">
       <div className="no-print mx-auto mb-8 flex max-w-3xl flex-wrap items-center justify-between gap-4">
-        <p className="font-mono text-caption uppercase tracking-wider text-ash">
+        <p className="text-label text-ash">
           🏅 Path complete — this certificate is yours
         </p>
         <div className="flex gap-3">
@@ -112,7 +112,7 @@ export function CertificateClient({
               }}
               placeholder="Your name"
               maxLength={60}
-              className="w-48 rounded-full border border-stone bg-eggshell px-4 py-2 text-body-sm text-ink outline-none placeholder:text-ash focus:border-ink/40"
+              className="w-48 rounded-full border border-ink bg-eggshell px-4 py-2 text-body-sm text-ink outline-none placeholder:text-ash focus:border-ink/40"
             />
           )}
           <button
@@ -124,13 +124,13 @@ export function CertificateClient({
         </div>
       </div>
 
-      <div className="certificate-sheet mx-auto max-w-3xl rounded-[28px] border-2 border-ink bg-eggshell p-10 text-center shadow-md lg:p-16">
+      <div className="certificate-sheet mx-auto max-w-3xl rounded-none border-2 border-ink bg-eggshell p-10 text-center lg:p-16">
         <p className="font-mono text-caption uppercase tracking-[0.3em] text-ash">
           Certificate of Completion
         </p>
         <div className="mx-auto mt-8 h-px w-24 bg-ink" />
         <p className="mt-10 text-body text-smoke">This certifies that</p>
-        <p className="mt-4 text-4xl font-light tracking-[-0.02em] text-ink lg:text-5xl">
+        <p className="mt-4 text-heading font-light tracking-[-0.02em] text-ink lg:text-heading-lg">
           {displayName.trim() || "________________"}
         </p>
         <p className="mt-8 text-body text-smoke">
@@ -140,7 +140,7 @@ export function CertificateClient({
           <br />
           <span className="font-mono text-caption uppercase text-ash">{role} path</span>
         </p>
-        <div className="mx-auto mt-10 grid max-w-md grid-cols-3 divide-x divide-stone rounded-[18px] border border-stone bg-warm-taupe/70 py-4">
+        <div className="mx-auto mt-10 grid max-w-md grid-cols-3 divide-x divide-stone rounded-none border border-ink bg-eggshell py-4">
           <div>
             <p className="text-xl font-light text-ink">{taskSlugs.length}</p>
             <p className="mt-1 font-mono text-caption uppercase text-ash">labs validated</p>

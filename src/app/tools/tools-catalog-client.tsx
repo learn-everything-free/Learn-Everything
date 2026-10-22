@@ -31,7 +31,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
   return (
     <div className="space-y-10">
       {/* Search & Category Filter Toolbar */}
-      <div className="flex flex-col gap-6 rounded-[24px] border border-stone/80 bg-warm-taupe/60 p-6 md:p-8">
+      <div className="flex flex-col gap-6 rounded-none border border-ink/80 bg-eggshell p-6 md:p-8">
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-smoke">
             <svg
@@ -53,7 +53,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
             placeholder="Search tools by name, technology, or concept (e.g., Docker, K8s, RAG, Terraform)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-full border border-stone bg-eggshell py-3.5 pl-12 pr-6 text-body-sm text-ink placeholder:text-ash focus:border-ink focus:outline-hidden focus:ring-1 focus:ring-ink"
+            className="w-full rounded-full border border-ink bg-eggshell py-3.5 pl-12 pr-6 text-body-sm text-ink placeholder:text-ash focus:border-ink focus:outline-hidden focus:ring-1 focus:ring-ink"
           />
           {searchQuery && (
             <button
@@ -69,10 +69,10 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setSelectedCategory("All")}
-            className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+            className={`rounded-full px-4 py-1.5 text-label font-medium transition-all ${
               selectedCategory === "All"
-                ? "bg-ink text-eggshell shadow-xs"
-                : "border border-stone bg-eggshell text-graphite hover:bg-stone/60"
+                ? "bg-ink text-eggshell"
+                : "border border-ink bg-eggshell text-graphite hover:bg-stone/60"
             }`}
           >
             All Tools ({tools.length})
@@ -84,10 +84,10 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                className={`rounded-full px-4 py-1.5 text-label font-medium transition-all ${
                   isSelected
-                    ? "bg-ink text-eggshell shadow-xs"
-                    : "border border-stone bg-eggshell text-graphite hover:bg-stone/60"
+                    ? "bg-ink text-eggshell"
+                    : "border border-ink bg-eggshell text-graphite hover:bg-stone/60"
                 }`}
               >
                 {cat} ({count})
@@ -109,7 +109,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
           ))}
         </div>
       ) : (
-        <div className="rounded-[24px] border border-dashed border-stone bg-warm-taupe/40 p-12 text-center">
+        <div className="rounded-none border border-dashed border-ink bg-eggshell p-12 text-center">
           <p className="text-body font-medium text-graphite">No tools found</p>
           <p className="mt-2 text-body-sm text-smoke">
             No production tools matched &ldquo;{searchQuery}&rdquo;. Try another search term or reset filters.
@@ -119,7 +119,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
               setSearchQuery("");
               setSelectedCategory("All");
             }}
-            className="mt-6 rounded-full border border-stone bg-eggshell px-4 py-2 text-body-sm font-medium text-ink hover:bg-stone"
+            className="mt-6 rounded-full border border-ink bg-eggshell px-4 py-2 text-body-sm font-medium text-ink hover:bg-stone"
           >
             Reset Filters
           </button>

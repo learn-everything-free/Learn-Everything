@@ -6,9 +6,9 @@ export default function NotFound() {
   const { tasks } = buildCurriculumIndex();
   return (
     <div className="mx-auto flex max-w-[1280px] flex-col items-center px-6 py-28 text-center lg:px-16">
-      <div className="w-full max-w-md rounded-[22px] border border-stone bg-[#121417] p-6 text-left font-mono text-xs text-stone shadow-xl">
+      <div className="w-full max-w-md rounded-none border border-ink bg-[#121417] p-6 text-left font-mono text-label text-stone">
         <p>
-          <span className="text-emerald-400">learner@lab:~$</span> cd /the-page-you-wanted
+          <span className="text-ink">learner@lab:~$</span> cd /the-page-you-wanted
         </p>
         <p className="mt-2 text-rose-400">
           bash: cd: /the-page-you-wanted: No such file or directory
@@ -18,7 +18,7 @@ export default function NotFound() {
         </p>
       </div>
 
-      <h1 className="mt-10 text-4xl font-light tracking-[-0.02em] text-ink sm:text-5xl">
+      <h1 className="mt-10 text-heading font-medium uppercase tracking-[-2.8px] text-ink sm:text-heading-lg">
         Lost in the shell.
       </h1>
       <p className="mt-4 max-w-md text-body leading-relaxed text-smoke">
@@ -35,13 +35,13 @@ export default function NotFound() {
         </Link>
         <Link
           href="/paths"
-          className="rounded-full border border-stone bg-warm-taupe/80 px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone/80 hover:text-ink"
+          className="rounded-full border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone/80 hover:text-ink"
         >
           Learning Paths
         </Link>
         <Link
           href="/tools"
-          className="rounded-full border border-stone bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-warm-taupe hover:text-ink"
+          className="rounded-full border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-eggshell hover:text-ink"
         >
           Tool Hubs
         </Link>

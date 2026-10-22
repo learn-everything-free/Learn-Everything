@@ -61,15 +61,15 @@ export function ActivityHeatmap() {
 
   const levelClass = (count: number): string => {
     if (count === 0) return "bg-stone/50 dark:bg-stone/20";
-    if (count === 1) return "bg-emerald-200 dark:bg-emerald-500/30";
-    if (count === 2) return "bg-emerald-400 dark:bg-emerald-500/60";
-    return "bg-emerald-600 dark:bg-emerald-400";
+    if (count === 1) return "bg-ink/20 dark:bg-ink/30";
+    if (count === 2) return "bg-ink/40 dark:bg-ink/50";
+    return "bg-ink dark:bg-ink/80";
   };
 
   return (
-    <div className="rounded-[24px] border border-stone/80 bg-warm-taupe/70 p-8">
+    <div className="rounded-none border border-ink/80 bg-eggshell p-8">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <p className="font-mono text-caption uppercase tracking-wider text-ash">
+        <p className="text-label text-ash">
           Activity — last {WEEKS} weeks
         </p>
         <span className="font-mono text-caption text-smoke">
@@ -88,7 +88,7 @@ export function ActivityHeatmap() {
                       ? ""
                       : `${cell.count} ${cell.count === 1 ? "lab" : "labs"} — ${cell.date.toLocaleDateString()}`
                   }
-                  className={`size-3 rounded-[3px] ${cell.inFuture ? "invisible" : levelClass(cell.count)}`}
+                  className={`size-3 rounded-none ${cell.inFuture ? "invisible" : levelClass(cell.count)}`}
                 />
               ))}
             </div>
@@ -98,7 +98,7 @@ export function ActivityHeatmap() {
       <div className="mt-4 flex items-center gap-2">
         <span className="font-mono text-caption text-ash">less</span>
         {[0, 1, 2, 3].map((level) => (
-          <span key={level} className={`size-3 rounded-[3px] ${levelClass(level)}`} />
+          <span key={level} className={`size-3 rounded-none ${levelClass(level)}`} />
         ))}
         <span className="font-mono text-caption text-ash">more</span>
       </div>

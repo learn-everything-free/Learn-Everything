@@ -59,30 +59,30 @@ export function UserMenu() {
         <button
           onClick={() => setOpen((o) => !o)}
           aria-label="Account menu"
-          className="flex size-9 items-center justify-center overflow-hidden rounded-full border border-stone/80 bg-eggshell transition-colors hover:bg-warm-taupe"
+          className="flex size-9 items-center justify-center overflow-hidden rounded-full border border-ink/80 bg-eggshell transition-colors hover:bg-eggshell"
         >
           {session.user.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={session.user.image} alt="" className="size-full object-cover" referrerPolicy="no-referrer" />
           ) : (
-            <span className="font-mono text-xs font-bold text-graphite">{initial}</span>
+            <span className="font-mono text-label font-bold text-graphite">{initial}</span>
           )}
         </button>
         {open && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-60 rounded-[14px] border border-stone bg-eggshell p-2 shadow-[var(--shadow-subtle)]">
+          <div className="absolute right-0 top-full z-50 mt-2 w-60 rounded-none border border-ink bg-eggshell p-2">
             <p className="truncate px-3 py-2 text-body-sm font-medium text-ink">
               {session.user.name ?? "Learner"}
             </p>
             {session.user.email && (
               <p className="truncate px-3 pb-2 font-mono text-caption text-ash">{session.user.email}</p>
             )}
-            <p className="border-t border-stone px-3 pb-2 pt-2 font-mono text-caption uppercase text-ash">
+            <p className="border-t border-ink px-3 pb-2 pt-2 font-mono text-caption uppercase text-ash">
               Progress syncs to your account
             </p>
             <Link
               href="/dashboard"
               onClick={() => setOpen(false)}
-              className="block w-full rounded-[10px] px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-warm-taupe hover:text-ink"
+              className="block w-full rounded-none px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-eggshell hover:text-ink"
             >
               Your dashboard
             </Link>
@@ -91,7 +91,7 @@ export function UserMenu() {
                 setOpen(false);
                 void signOut();
               }}
-              className="w-full rounded-[10px] px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-warm-taupe hover:text-ink"
+              className="w-full rounded-none px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-eggshell hover:text-ink"
             >
               Sign out
             </button>
@@ -108,12 +108,12 @@ export function UserMenu() {
           setOpen((o) => !o);
           void loadProviders();
         }}
-        className="hidden whitespace-nowrap rounded-full bg-ink px-4 py-2 text-xs font-medium text-eggshell transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-eggshell sm:block"
+        className="hidden whitespace-nowrap rounded-full bg-ink px-4 py-2 text-label font-medium text-eggshell transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-eggshell sm:block"
       >
         Sign in
       </button>
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-[14px] border border-stone bg-eggshell p-2 shadow-[var(--shadow-subtle)]">
+        <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-none border border-ink bg-eggshell p-2">
           <p className="px-3 pb-1.5 pt-2 font-mono text-caption uppercase text-ash">
             Save your progress
           </p>
@@ -131,13 +131,13 @@ export function UserMenu() {
                   setOpen(false);
                   void signIn(p.id, { callbackUrl: window.location.pathname });
                 }}
-                className="w-full rounded-[10px] px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-warm-taupe hover:text-ink"
+                className="w-full rounded-none px-3 py-2 text-left text-body-sm text-graphite transition-colors hover:bg-eggshell hover:text-ink"
               >
                 Continue with {p.name}
               </button>
             ))
           )}
-          <p className="border-t border-stone px-3 pb-1.5 pt-2 font-mono text-caption leading-relaxed text-ash">
+          <p className="border-t border-ink px-3 pb-1.5 pt-2 font-mono text-caption leading-relaxed text-ash">
             Free · your labs stay saved across devices
           </p>
         </div>

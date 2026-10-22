@@ -22,37 +22,34 @@ export function LabOfTheDay({ tasks }: { tasks: TaskIndexEntry[] }) {
   const done = pick.slug in completed;
 
   return (
-    <div className="rounded-[24px] border border-stone/80 bg-eggshell p-8 shadow-[var(--shadow-subtle)]">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0">
-          <p className="flex flex-wrap items-center gap-3 font-mono text-caption uppercase tracking-wider text-ash">
-            Lab of the Day
-            <span className="rounded-full border border-stone/70 bg-warm-taupe px-2.5 py-0.5 text-graphite">
-              {pick.skillTitle}
-            </span>
-            {done && (
-              <span className="rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-0.5 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">
-                ✓ already validated
-              </span>
-            )}
-          </p>
-          <h3 className="mt-3 text-2xl font-light tracking-[-0.02em] text-ink">{pick.title}</h3>
-          <p className="mt-2 max-w-2xl text-body-sm leading-relaxed text-smoke">
-            {pick.description}
-          </p>
-        </div>
-        <div className="flex shrink-0 flex-col items-start gap-2 lg:items-end">
-          <span className="font-mono text-caption uppercase text-ash">
-            {pick.type} · {pick.difficulty} · {pick.env}
+    <div className="flex flex-col gap-8 border border-ink/70 p-7 lg:flex-row lg:items-center lg:justify-between lg:p-9">
+      <div className="min-w-0">
+        <p className="flex flex-wrap items-center gap-3">
+          <span className="le-label text-smoke">Lab of the day</span>
+          <span className="rounded-full border border-ink/40 px-3 py-1 text-label uppercase tracking-[1px] text-graphite">
+            {pick.skillTitle}
           </span>
-          <Link
-            href={`/lab/${pick.slug}`}
-            className="rounded-full bg-ink px-6 py-3 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
-          >
-            {done ? "Revisit today's lab ↗" : "Take today's lab ⚡"}
-          </Link>
-          <span className="font-mono text-caption text-ash">a new one drops every midnight</span>
-        </div>
+          {done && (
+            <span className="rounded-full border border-ink/40 px-3 py-1 text-label uppercase tracking-[1px] text-graphite">
+              ✓ Validated
+            </span>
+          )}
+        </p>
+        <h3 className="mt-5 text-body font-medium tracking-[-0.08px] text-ink">{pick.title}</h3>
+        <p className="mt-3 max-w-2xl text-body-sm leading-[1.5] text-graphite">
+          {pick.description}
+        </p>
+      </div>
+      <div className="flex shrink-0 flex-col items-start gap-3 lg:items-end">
+        <span className="text-label uppercase tracking-[1px] text-smoke">
+          {pick.type} · {pick.difficulty} · {pick.env}
+        </span>
+        <Link href={`/lab/${pick.slug}`} className="le-action">
+          {done ? "Revisit today's lab" : "Take today's lab"}
+        </Link>
+        <span className="text-label uppercase tracking-[1px] text-smoke">
+          a new one drops every midnight
+        </span>
       </div>
     </div>
   );

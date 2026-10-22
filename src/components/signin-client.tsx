@@ -82,11 +82,11 @@ export function SignInClient() {
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-60px)] max-w-[1280px] items-center justify-center px-6 py-16 lg:px-16">
-      <div className="w-full max-w-md rounded-[26px] border border-stone/80 bg-warm-taupe/70 p-10 text-center">
-        <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-ink font-mono text-lg font-bold text-eggshell">
+      <div className="w-full max-w-md rounded-none border border-ink/80 bg-eggshell p-10 text-center">
+        <span className="mx-auto flex size-12 items-center justify-center rounded-none bg-ink font-mono text-body-sm font-bold text-eggshell">
           L
         </span>
-        <h1 className="mt-6 text-3xl font-light tracking-[-0.02em] text-ink">
+        <h1 className="mt-6 text-heading-sm font-light tracking-[-0.02em] text-ink">
           {status === "authenticated" ? "You're signed in" : "Sign in to save your progress"}
         </h1>
         <p className="mt-3 text-body-sm leading-relaxed text-smoke">
@@ -105,7 +105,7 @@ export function SignInClient() {
             </button>
             <button
               onClick={() => void signOut()}
-              className="w-full rounded-full border border-stone bg-eggshell px-5 py-3 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
+              className="w-full rounded-full border border-ink bg-eggshell px-5 py-3 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
             >
               Sign out
             </button>
@@ -113,7 +113,7 @@ export function SignInClient() {
         ) : providers === null ? (
           <p className="mt-8 font-mono text-mono-xs text-smoke">Loading sign-in options…</p>
         ) : providers.length === 0 ? (
-          <div className="mt-8 rounded-[16px] border border-dashed border-stone bg-eggshell p-6">
+          <div className="mt-8 rounded-none border border-dashed border-ink bg-eggshell p-6">
             <p className="text-body-sm font-medium text-ink">No sign-in providers configured yet</p>
             <p className="mt-2 font-mono text-caption leading-relaxed text-smoke">
               This instance runs without OAuth. Add AUTH_GOOGLE_ID / AUTH_GOOGLE_SECRET (see
@@ -128,7 +128,7 @@ export function SignInClient() {
                 key={p.id}
                 onClick={() => void choose(p.id)}
                 disabled={busy !== null}
-                className="flex w-full items-center justify-center gap-3 rounded-full border border-stone bg-eggshell px-5 py-3 text-body-sm font-medium text-ink transition-colors hover:bg-stone/60 disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-3 rounded-full border border-ink bg-eggshell px-5 py-3 text-body-sm font-medium text-ink transition-colors hover:bg-stone/60 disabled:opacity-60"
               >
                 {PROVIDER_ICONS[p.id]}
                 {busy === p.id ? "Redirecting…" : `Continue with ${p.name}`}
@@ -137,7 +137,7 @@ export function SignInClient() {
           </div>
         )}
 
-        <p className="mt-8 border-t border-stone pt-6 font-mono text-caption leading-relaxed text-ash">
+        <p className="mt-8 border-t border-ink pt-6 font-mono text-caption leading-relaxed text-ash">
           No account needed to practice —{" "}
           <Link href="/paths" className="underline transition-colors hover:text-ink">
             jump into a lab

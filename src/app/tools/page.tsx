@@ -30,12 +30,12 @@ export default function ToolsPage() {
             Directory & Reference
           </p>
           <span className="size-1 rounded-full bg-ash" />
-          <Badge variant="ink" className="font-mono text-[11px]">
+          <Badge variant="ink" className="font-mono text-label">
             {tools.length} Production Tools
           </Badge>
         </div>
 
-        <h1 className="text-display font-light tracking-[-0.02em] text-ink max-w-4xl">
+        <h1 className="text-heading-lg font-medium uppercase tracking-[-3.36px] text-ink max-w-4xl">
           Separate, in-depth hubs for every critical tool.
         </h1>
         <p className="max-w-2xl text-body text-smoke leading-relaxed">

@@ -112,22 +112,22 @@ export function TerminalGif({
       onBlur={() => setPaused(false)}
       tabIndex={0}
       aria-label={`Looping terminal demo: ${title}`}
-      className={`overflow-hidden rounded-[26px] border border-stone/90 bg-[#121417] p-6 text-[#edece0] shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${className}`}
+      className={`overflow-hidden rounded-none border border-ink/90 bg-[#121417] p-6 text-[#edece0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${className}`}
     >
       {/* Window chrome */}
-      <div className="flex items-center justify-between gap-3 border-b border-stone/20 pb-4">
+      <div className="flex items-center justify-between gap-3 border-b border-ink/20 pb-4">
         <div className="flex items-center gap-2">
           <span className="size-3 rounded-full bg-rose-500/80" />
           <span className="size-3 rounded-full bg-amber-500/80" />
           <span className="size-3 rounded-full bg-emerald-500/80" />
         </div>
-        <span className="hidden truncate font-mono text-[11px] text-ash sm:block">{title}</span>
+        <span className="hidden truncate font-mono text-label text-ash sm:block">{title}</span>
         {paused ? (
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-stone/40 bg-stone/10 px-2 py-0.5 font-mono text-[10px] uppercase text-ash">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-ink/40 bg-stone/10 px-2 py-0.5 font-mono text-label uppercase text-ash">
             ❙❙ Paused
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-800/40 bg-emerald-950 px-2 py-0.5 font-mono text-[10px] uppercase text-emerald-400">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-800/40 bg-emerald-950 px-2 py-0.5 font-mono text-label uppercase text-emerald-400">
             <span className={`size-1.5 rounded-full bg-emerald-400 ${reduceMotion ? "" : "animate-pulse"}`} />
             {badge ?? "Live"}
           </span>
@@ -135,7 +135,7 @@ export function TerminalGif({
       </div>
 
       {/* Animated body — min-height keeps multi-card grids visually aligned */}
-      <div className="mt-5 min-h-[13.5rem] space-y-2.5 font-mono text-xs leading-relaxed" aria-hidden>
+      <div className="mt-5 min-h-[13.5rem] space-y-2.5 font-mono text-label leading-relaxed" aria-hidden>
         {rows.map(({ key, line, text, partial }) =>
           line.kind === "cmd" ? (
             <p key={key} className="break-all text-stone">
@@ -146,7 +146,7 @@ export function TerminalGif({
           ) : (
             <p
               key={key}
-              className={`break-all rounded-lg ${
+              className={`break-all rounded-none ${
                 line.tone === "ok"
                   ? "text-emerald-400"
                   : line.tone === "warn"
@@ -169,7 +169,7 @@ export function TerminalGif({
       </div>
 
       {footer && (
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-stone/20 pt-4">
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-ink/20 pt-4">
           {footer}
         </div>
       )}
