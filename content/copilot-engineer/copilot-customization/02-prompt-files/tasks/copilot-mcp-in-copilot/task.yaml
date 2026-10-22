@@ -1,0 +1,48 @@
+slug: copilot-mcp-in-copilot
+title: Wire In a Tool for the Job
+type: challenge
+difficulty: advanced
+description: The assistant cannot open your issue tracker, and guessing is worse than not knowing.
+  Write the case for connecting a tool - and the rules for connecting it safely.
+requirements:
+  - File ~/copilot/custom/tools.md exists
+  - The document states when a tool is worth connecting
+  - The document states the permissions and the review rules
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/custom/tools.md
+    label: ~/copilot/custom/tools.md
+  - validator: file_contains
+    path: /home/learner/copilot/custom/tools.md
+    value: "mcp"
+    label: mcp mentioned
+  - validator: file_contains
+    path: /home/learner/copilot/custom/tools.md
+    value: "read"
+    label: read only rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/tools.md
+    value: "review"
+    label: review rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/tools.md
+    value: "never"
+    label: prohibition stated
+steps:
+  - title: Create the custom directory
+    detail: The tool policy lives with the instruction material.
+    command: mkdir -p ~/copilot/custom
+  - title: Write when a tool is worth connecting
+    detail: "A tool is an mcp server that exposes a narrow set of capabilities. It is worth connecting when the assistant needs facts it cannot infer - the
+      issue, the deploy status, the schema."
+    command: >-
+      echo '# Connecting tools\n\n## When a tool is worth it\n\nA tool is an mcp server that exposes a narrow set of capabilities. It is worth connecting when the assistant needs facts it cannot infer from the repository - the issue text, the deploy status, the schema in the database. A tool for something it can already read is a tool that only adds risk.' > ~/copilot/custom/tools.md
+  - title: Write the permission and the review rules
+    detail: "Read only to start with, and every tool listed in the instructions file so the team
+      knows what is connected."
+    command: >-
+      echo '\n## The rules\n\n- every tool starts read only, and a write scope is added only when the team asks for it\n- the assistant never gets a write scope by default, and never a credential it does not need\n- the connected tools are listed in the instruction file, so nobody is surprised by what can be read\n- the tool configuration is committed and reviewed like any other change' >> ~/copilot/custom/tools.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/copilot/custom/tools.md

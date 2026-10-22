@@ -1,0 +1,7 @@
+slug: 02-commits
+title: Commits & Branches
+summary: The history you leave behind is the part the next person reads.
+order: 2
+tasks:
+  - claude-commit-message
+  - claude-branch-discipline

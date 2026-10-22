@@ -1,0 +1,7 @@
+slug: 02-verify-the-change
+title: Verify the Change
+summary: The agent says it is done. The build, the tests and the diff say whether it is.
+order: 2
+tasks:
+  - claude-verify-loop
+  - claude-review-your-own-diff

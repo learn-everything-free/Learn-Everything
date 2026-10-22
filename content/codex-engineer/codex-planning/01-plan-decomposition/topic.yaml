@@ -1,0 +1,7 @@
+slug: 01-plan-decomposition
+title: Plan Decomposition
+summary: A request becomes a list of steps, and a list of steps becomes a reviewable plan.
+order: 1
+tasks:
+  - codex-plan-breakdown
+  - codex-plan-review

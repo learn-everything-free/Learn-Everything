@@ -1,0 +1,7 @@
+slug: 02-terminal-use
+title: Terminal Use
+summary: The commands an agent may run, and the ones that always need you.
+order: 2
+tasks:
+  - copilot-agent-terminal
+  - copilot-agent-changes

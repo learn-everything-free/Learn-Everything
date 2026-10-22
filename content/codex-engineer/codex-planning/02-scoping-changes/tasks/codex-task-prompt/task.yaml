@@ -1,0 +1,52 @@
+slug: codex-task-prompt
+title: Write the Task Prompt
+type: challenge
+difficulty: advanced
+description: The prompt is the whole specification the agent works from. Write the template that
+  leaves nothing to guess.
+requirements:
+  - File ~/codex/prompts/task.md exists
+  - The template states the goal, the context and the constraints
+  - The template states the acceptance criteria and what to do when blocked
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/prompts/task.md
+    label: ~/codex/prompts/task.md
+  - validator: file_contains
+    path: /home/learner/codex/prompts/task.md
+    value: Goal
+    label: goal section present
+  - validator: file_contains
+    path: /home/learner/codex/prompts/task.md
+    value: Context
+    label: context section present
+  - validator: file_contains
+    path: /home/learner/codex/prompts/task.md
+    value: Acceptance
+    label: acceptance section present
+  - validator: file_contains
+    path: /home/learner/codex/prompts/task.md
+    value: blocked
+    label: blocked behaviour stated
+steps:
+  - title: Create the prompts directory
+    detail: The template is a file, so it can be improved like anything else.
+    command: mkdir -p ~/codex/prompts
+  - title: Write the goal and the context
+    detail: "The goal is one sentence. The context says where to look and what the code already
+      does, so the agent does not guess."
+    command: >-
+      echo '# Task template\n\n## Goal\n\nOne sentence. What the change does, from the outside.\n\n## Context\n\n- the files that matter and what they do today\n- the existing helper to reuse\n- the build and test commands' > ~/codex/prompts/task.md
+  - title: Write the constraints and the acceptance criteria
+    detail: "The constraints are the boundaries. The acceptance criteria are how the agent knows
+      it is finished."
+    command: >-
+      echo '\n## Constraints\n\n- no new dependency\n- do not change the public signature\n- keep the diff under five files\n\n## Acceptance criteria\n\n- a test that fails before the change and passes after it\n- the lint and the type check pass' >> ~/codex/prompts/task.md
+  - title: Write the blocked behaviour
+    detail: "Tell it what to do when it cannot finish, so it stops instead of improvising."
+    command: >-
+      echo '\n## When you are blocked\n\nIf something in this task needs a decision you were not told about, stop and report it. Do not guess, and do not widen the scope.' >> ~/codex/prompts/task.md
+  - title: Verify and submit
+    detail: cat the template, then submit for validation.
+    command: cat ~/codex/prompts/task.md

@@ -1,0 +1,7 @@
+slug: 02-data-handling
+title: Data Handling
+summary: What the assistant may read, and what must never leave the repository.
+order: 2
+tasks:
+  - copilot-data-indexing
+  - copilot-sensitive-data

@@ -1,0 +1,7 @@
+slug: 01-permissions
+title: Permissions & Secrets
+summary: What runs without asking, and what must never reach the model at all.
+order: 1
+tasks:
+  - claude-permission-set
+  - claude-secret-handling

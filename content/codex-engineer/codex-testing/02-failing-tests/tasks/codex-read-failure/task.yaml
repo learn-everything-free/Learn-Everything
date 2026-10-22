@@ -1,0 +1,48 @@
+slug: codex-read-failure
+title: Read a Failure Before You Fix It
+type: practice
+difficulty: intermediate
+description: Half the generated fixes are wrong because nobody read the error. Write the routine
+  that turns a red test into a correct change.
+requirements:
+  - File ~/codex/tests/reading-failures.md exists
+  - The document states the order of reading a failure
+  - The document states what to do when the failure is not the expected one
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/tests/reading-failures.md
+    label: ~/codex/tests/reading-failures.md
+  - validator: file_contains
+    path: /home/learner/codex/tests/reading-failures.md
+    value: "assertion"
+    label: assertion first rule stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/reading-failures.md
+    value: "expected"
+    label: expected value rule stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/reading-failures.md
+    value: "reproduce"
+    label: reproduce rule stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/reading-failures.md
+    value: "wrong"
+    label: wrong failure rule stated
+steps:
+  - title: Create the tests directory
+    detail: The routine lives with the other testing material.
+    command: mkdir -p ~/codex/tests
+  - title: Write the reading order
+    detail: "Read the assertion first - it names the behaviour. Then the expected value, then the
+      actual one, then the stack trace."
+    command: >-
+      echo '# Reading a failure\n\n## The order\n\n1. the assertion that failed - it names the behaviour\n2. the expected value and the actual value\n3. the stack trace, to see how far it got\n4. reproduce it on your own, in isolation' > ~/codex/tests/reading-failures.md
+  - title: Write the rule for a wrong failure
+    detail: "A failure you did not expect is information. Fix the test only when the test was
+      wrong, and say why in the commit."
+    command: >-
+      echo '\n## When the failure is the wrong one\n\nIf the failure is not the behaviour you expected, the test or the environment is wrong - not the implementation. Reproduce it by hand before changing anything, and if the test was wrong, fix it in its own commit with the reason.' >> ~/codex/tests/reading-failures.md
+  - title: Verify and submit
+    detail: cat the routine, then submit for validation.
+    command: cat ~/codex/tests/reading-failures.md

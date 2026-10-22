@@ -1,0 +1,48 @@
+slug: claude-worktree-isolation
+title: Work in an Isolated Worktree
+type: practice
+difficulty: intermediate
+description: Two sessions in the same working tree fight each other. Write the isolation rule
+  that keeps them apart.
+requirements:
+  - File ~/.claude/git/worktrees.md exists
+  - The document states when a worktree is used
+  - The document states how the worktree is created and cleaned up
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/git/worktrees.md
+    label: ~/.claude/git/worktrees.md
+  - validator: file_contains
+    path: /home/learner/.claude/git/worktrees.md
+    value: worktree
+    label: worktree rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/worktrees.md
+    value: branch
+    label: branch rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/worktrees.md
+    value: "clean up"
+    label: cleanup rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/worktrees.md
+    value: "never"
+    label: prohibition stated
+steps:
+  - title: Create the git directory
+    detail: The isolation rules live with the checkpoint rules.
+    command: mkdir -p ~/.claude/git
+  - title: Write when a worktree is used
+    detail: "One worktree per session when two run at once, and one per feature branch that is
+      open for more than a day."
+    command: >-
+      echo '# Worktrees\n\n## When a worktree is used\n\nOne worktree per session when two run at the same time, and one per feature branch that stays open for more than a day. Two sessions in one working tree overwrite each other.' > ~/.claude/git/worktrees.md
+  - title: Write the creation and the cleanup rules
+    detail: "Create it from a branch, never from a dirty working tree, and remove it when the
+      branch is merged."
+    command: >-
+      echo '\n## Creating and cleaning up\n\n- create the worktree from a clean branch, never from a dirty working tree\n- one worktree per branch, named after it\n- clean up when the branch is merged, and never leave a worktree with uncommitted work in it' >> ~/.claude/git/worktrees.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/git/worktrees.md

@@ -1,0 +1,48 @@
+slug: codex-scope-boundaries
+title: Set the Boundaries of a Change
+type: practice
+difficulty: intermediate
+description: The smaller the change, the shorter the review and the fewer the regressions. Write
+  the scoping rules your team applies to every agent task.
+requirements:
+  - File ~/codex/scoping.md exists
+  - The document states the size limit for one task
+  - The document states the boundaries the agent may not cross
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/scoping.md
+    label: ~/codex/scoping.md
+  - validator: file_contains
+    path: /home/learner/codex/scoping.md
+    value: "files"
+    label: file limit stated
+  - validator: file_contains
+    path: /home/learner/codex/scoping.md
+    value: "may not"
+    label: boundaries stated
+  - validator: file_contains
+    path: /home/learner/codex/scoping.md
+    value: "split"
+    label: split rule stated
+  - validator: file_contains
+    path: /home/learner/codex/scoping.md
+    value: "diff"
+    label: review rule stated
+steps:
+  - title: Create the codex directory
+    detail: The scoping rules apply to every task, so they are written once.
+    command: mkdir -p ~/codex
+  - title: State the size limit and the split rule
+    detail: "If a task touches more than a handful of files, it is two tasks. Splitting keeps each
+      diff reviewable."
+    command: >-
+      echo '# Scoping an agent task\n\n## The size limit\n\nOne task touches at most five files and changes one behaviour. Anything bigger is split into tasks that each leave the repository working.\n\n## Split when\n\n- the change touches two independent features\n- a refactor is bundled with a behaviour change' > ~/codex/scoping.md
+  - title: State the boundaries and the review rule
+    detail: "The agent may not install a dependency, rewrite working code or touch the pipeline.
+      And the diff is read before the change is run."
+    command: >-
+      echo '\n## The agent may not\n\n- add or upgrade a dependency\n- rewrite code that already works\n- touch the deployment pipeline or the migration folder\n- leave a placeholder or a todo\n\n## Review\n\nThe diff is read line by line before the change is run. The agent wrote the code; a person owns it.' >> ~/codex/scoping.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/codex/scoping.md

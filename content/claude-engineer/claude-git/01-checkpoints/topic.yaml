@@ -1,0 +1,7 @@
+slug: 01-checkpoints
+title: Checkpoints & Isolation
+summary: A way back, and a place to work that nobody else is touching.
+order: 1
+tasks:
+  - claude-checkpoints
+  - claude-worktree-isolation

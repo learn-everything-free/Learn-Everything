@@ -1,0 +1,52 @@
+slug: copilot-agent-plan
+title: Read the Agent Plan Before the Edits
+type: guided
+difficulty: beginner
+description: Agent mode can touch twenty files before you see anything. Read the plan it shows
+  you first. Write the routine.
+requirements:
+  - Directory ~/copilot/agent exists
+  - File ~/copilot/agent/plan-review.md exists
+  - The document states the questions to ask of a plan
+  - The document states when to stop the run
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/copilot/agent
+    label: ~/copilot/agent
+  - validator: file_exists
+    path: /home/learner/copilot/agent/plan-review.md
+    label: ~/copilot/agent/plan-review.md
+  - validator: file_contains
+    path: /home/learner/copilot/agent/plan-review.md
+    value: "files"
+    label: file question stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/plan-review.md
+    value: "test"
+    label: test question stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/plan-review.md
+    value: "stop"
+    label: stop rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/plan-review.md
+    value: "dependency"
+    label: dependency question stated
+steps:
+  - title: Create the agent directory
+    detail: The plan review is a habit, so it is written down.
+    command: mkdir -p ~/copilot/agent
+  - title: Write the questions
+    detail: "Which files, does it add a test, does it add a dependency, and is the change bigger
+      than the task."
+    command: >-
+      echo '# Reviewing an agent plan\n\n## The questions\n\n- which files does it touch, and are they the ones you expected\n- does it add or change a test\n- does it add a dependency or change a lockfile\n- is the change bigger than the request' > ~/copilot/agent/plan-review.md
+  - title: Write the stop rule
+    detail: "A plan that adds a dependency, touches the pipeline or rewrites working code gets
+      stopped and re-planned."
+    command: >-
+      echo '\n## When to stop the run\n\nStop when the plan adds a dependency, touches the pipeline or the migration folder, or rewrites code that already works. Re-plan it in smaller pieces instead.' >> ~/copilot/agent/plan-review.md
+  - title: Verify and submit
+    detail: cat the routine, then submit for validation.
+    command: cat ~/copilot/agent/plan-review.md

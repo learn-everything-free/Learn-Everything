@@ -1,0 +1,7 @@
+slug: 01-anatomy
+title: The Anatomy of a Request
+summary: Goal, context, constraints - and the context you can leave out.
+order: 1
+tasks:
+  - codex-prompt-anatomy
+  - codex-prompt-context

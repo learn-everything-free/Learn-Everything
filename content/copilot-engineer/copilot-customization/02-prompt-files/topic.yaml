@@ -1,0 +1,7 @@
+slug: 02-prompt-files
+title: Prompt Files & Tools
+summary: The saved prompts, and the tools you wire in for the jobs the assistant cannot guess.
+order: 2
+tasks:
+  - copilot-prompt-files
+  - copilot-mcp-in-copilot

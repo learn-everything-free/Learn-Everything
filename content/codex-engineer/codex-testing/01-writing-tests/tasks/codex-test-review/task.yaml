@@ -1,0 +1,48 @@
+slug: codex-test-review
+title: Review the Generated Test
+type: practice
+difficulty: intermediate
+description: A generated test proves nothing if it cannot fail. Write the review that makes sure
+  it would.
+requirements:
+  - File ~/codex/tests/review.md exists
+  - The document states how to prove the test can fail
+  - The document states which assertions to reject
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/tests/review.md
+    label: ~/codex/tests/review.md
+  - validator: file_contains
+    path: /home/learner/codex/tests/review.md
+    value: "Break the implementation"
+    label: mutation check stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/review.md
+    value: "assert"
+    label: assertion rules stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/review.md
+    value: "mock"
+    label: mock rule stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/review.md
+    value: "sleep"
+    label: timing rule stated
+steps:
+  - title: Create the tests directory
+    detail: The review checklist is written once and used every time.
+    command: mkdir -p ~/codex/tests
+  - title: Write the mutation check
+    detail: "Break the implementation on purpose and watch the test fail. A test that survives a
+      broken implementation is not testing anything."
+    command: >-
+      echo '# Reviewing a generated test\n\n## Can it fail?\n\nBreak the implementation on purpose - invert a condition, return the wrong value - and watch the test fail. A test that survives a broken implementation is not testing anything.' > ~/codex/tests/review.md
+  - title: Write the assertion rules
+    detail: "Assert the behaviour, not the internals. And never assert against a mock - that
+      only proves the mock was called."
+    command: >-
+      echo '\n## The rules\n\n- assert the outcome, never the internal call sequence\n- never assert that a mock was called, assert what the caller received\n- no sleep and no timing assumptions\n- a test that needs a comment to explain it is a test to rewrite' >> ~/codex/tests/review.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/codex/tests/review.md

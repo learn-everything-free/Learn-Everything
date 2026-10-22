@@ -1,0 +1,48 @@
+slug: copilot-agent-scope
+title: Keep the Agent Inside the Scope
+type: practice
+difficulty: intermediate
+description: An agent that wanders outside the scope produces a diff nobody can review. Write the
+  boundary rules.
+requirements:
+  - File ~/copilot/agent/scope.md exists
+  - The document states the files an agent may touch
+  - The document states the changes an agent may not make
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/agent/scope.md
+    label: ~/copilot/agent/scope.md
+  - validator: file_contains
+    path: /home/learner/copilot/agent/scope.md
+    value: "may touch"
+    label: touch rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/scope.md
+    value: "may not"
+    label: prohibition stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/scope.md
+    value: "lockfile"
+    label: lockfile rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/scope.md
+    value: "generated"
+    label: generated code rule stated
+steps:
+  - title: Create the agent directory
+    detail: The boundary rules live with the plan review.
+    command: mkdir -p ~/copilot/agent
+  - title: Write the touch rule
+    detail: "An agent may touch the files the task names, the test file that goes with them, and
+      nothing else."
+    command: >-
+      echo '# Agent scope\n\n## What the agent may touch\n\n- the files the task names\n- the test file that belongs with each of them\n- the instruction file, if the conventions changed' > ~/copilot/agent/scope.md
+  - title: Write the prohibitions
+    detail: "No lockfiles, no generated code, no configuration nobody asked for. An agent that
+      needs one of those asks."
+    command: >-
+      echo '\n## What the agent may not do\n\n- change a lockfile or a dependency\n- edit generated code\n- change configuration the task never mentioned\n- reformat a file it was not asked to touch' >> ~/copilot/agent/scope.md
+  - title: Verify and submit
+    detail: cat the boundaries, then submit for validation.
+    command: cat ~/copilot/agent/scope.md

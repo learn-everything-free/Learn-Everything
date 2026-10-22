@@ -1,0 +1,7 @@
+slug: 01-write-the-test
+title: Write the Test
+summary: The test is the specification, and the agent should meet it rather than write it after.
+order: 1
+tasks:
+  - claude-test-first
+  - claude-test-scope

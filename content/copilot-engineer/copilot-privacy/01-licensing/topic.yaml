@@ -1,0 +1,7 @@
+slug: 01-licensing
+title: Licensing & Attribution
+summary: The rules about what a suggestion can become, and what the history has to say.
+order: 1
+tasks:
+  - copilot-license-compliance
+  - copilot-attribution

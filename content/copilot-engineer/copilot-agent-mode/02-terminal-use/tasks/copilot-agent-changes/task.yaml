@@ -1,0 +1,48 @@
+slug: copilot-agent-changes
+title: Review the Files It Changed
+type: challenge
+difficulty: advanced
+description: The agent worked in the background while you did something else. Write the review
+  that catches the drift.
+requirements:
+  - File ~/copilot/agent/review.md exists
+  - The document states how to find what changed
+  - The document states the checks to run on the change
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/agent/review.md
+    label: ~/copilot/agent/review.md
+  - validator: file_contains
+    path: /home/learner/copilot/agent/review.md
+    value: "git status"
+    label: status check stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/review.md
+    value: "git diff"
+    label: diff check stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/review.md
+    value: "unrelated"
+    label: unrelated change check stated
+  - validator: file_contains
+    path: /home/learner/copilot/agent/review.md
+    value: "run"
+    label: verification rule stated
+steps:
+  - title: Create the agent directory
+    detail: The review lives with the terminal rules.
+    command: mkdir -p ~/copilot/agent
+  - title: Write how to find what changed
+    detail: "Start with git status to see the file list, then read the diff for each one. The
+      list is where the surprise is."
+    command: >-
+      echo '# Reviewing what the agent changed\n\n## How to find it\n\n1. git status for the list of changed files\n2. git diff for each file, read it\n3. run the build and the tests yourself\n\nThe file list is where the surprise is - an unrelated file in that list is the first thing to look at.' > ~/copilot/agent/review.md
+  - title: Write the checks
+    detail: "Look for the changes nobody asked for, and run the tests rather than trusting the
+      summary."
+    command: >-
+      echo '\n## The checks\n\n- is there an unrelated change in the diff - a reformat, a rename, a config edit\n- does the change match the acceptance criteria, and only that\n- do the build and the tests pass when you run them yourself' >> ~/copilot/agent/review.md
+  - title: Verify and submit
+    detail: cat the review, then submit for validation.
+    command: cat ~/copilot/agent/review.md

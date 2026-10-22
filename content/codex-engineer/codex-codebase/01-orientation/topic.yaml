@@ -1,0 +1,7 @@
+slug: 01-orientation
+title: Orientation
+summary: Find the code that actually runs, instead of the code that looks like it.
+order: 1
+tasks:
+  - codex-read-first
+  - codex-search-strategy

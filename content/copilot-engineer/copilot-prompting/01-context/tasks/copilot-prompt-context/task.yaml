@@ -1,0 +1,52 @@
+slug: copilot-prompt-context
+title: Give the Right Context
+type: guided
+difficulty: beginner
+description: The assistant can see the files that are open, not the ones you are thinking about.
+  Write the context rules that close the gap.
+requirements:
+  - Directory ~/copilot/prompts exists
+  - File ~/copilot/prompts/context.md exists
+  - The document states what the assistant can already see
+  - The document states what you have to name
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/copilot/prompts
+    label: ~/copilot/prompts
+  - validator: file_exists
+    path: /home/learner/copilot/prompts/context.md
+    label: ~/copilot/prompts/context.md
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/context.md
+    value: "open"
+    label: open files stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/context.md
+    value: "repository"
+    label: repository context stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/context.md
+    value: "name the file"
+    label: explicit naming rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/context.md
+    value: "paste"
+    label: paste rule stated
+steps:
+  - title: Create the prompts directory
+    detail: The rules are shared, so they are written once.
+    command: mkdir -p ~/copilot/prompts
+  - title: Write what the assistant can see
+    detail: "The open files, the instructions file, the recent edits. Everything else it has to be
+      told about."
+    command: >-
+      echo '# Giving context\n\n## What the assistant can already see\n\n- the files you have open in the editor\n- the repository instructions file\n- the recent edits and the selection you highlighted' > ~/copilot/prompts/context.md
+  - title: Write what you have to name
+    detail: "Name the file, the function and the error. And paste the error rather than
+      describing it."
+    command: >-
+      echo '\n## What you have to name\n\n- name the file and the function you mean, by path\n- the behaviour you saw and what you expected instead\n- paste the error output, do not describe it from memory' >> ~/copilot/prompts/context.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/prompts/context.md

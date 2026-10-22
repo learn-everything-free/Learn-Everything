@@ -1,0 +1,52 @@
+slug: codex-read-first
+title: Read Before You Write
+type: guided
+difficulty: beginner
+description: An agent that edits before it reads produces code that duplicates what is already
+  there. Write the orientation routine that prevents it.
+requirements:
+  - Directory ~/codex/repo exists
+  - File ~/codex/repo/orientation.md exists
+  - The routine lists the files to read first
+  - The routine states what to look for in each of them
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/codex/repo
+    label: ~/codex/repo
+  - validator: file_exists
+    path: /home/learner/codex/repo/orientation.md
+    label: ~/codex/repo/orientation.md
+  - validator: file_contains
+    path: /home/learner/codex/repo/orientation.md
+    value: AGENTS.md
+    label: instruction file named
+  - validator: file_contains
+    path: /home/learner/codex/repo/orientation.md
+    value: "package.json"
+    label: manifest named
+  - validator: file_contains
+    path: /home/learner/codex/repo/orientation.md
+    value: "test"
+    label: test location named
+  - validator: file_contains
+    path: /home/learner/codex/repo/orientation.md
+    value: "entry point"
+    label: entry point named
+steps:
+  - title: Create the repo directory
+    detail: The orientation notes are per repository, so they live with the repository.
+    command: mkdir -p ~/codex/repo
+  - title: Write the reading order
+    detail: "Four files, in this order: the instruction file, the manifest, the entry point and the
+      tests. That is ten minutes and it saves an hour."
+    command: >-
+      echo '# Orienting in a repository\n\n## Read these, in this order\n\n1. AGENTS.md - the rules the repository already states\n2. package.json - the scripts, the dependencies and the entry point\n3. the entry point - where the request comes in\n4. the test directory - the behaviour that is already promised' > ~/codex/repo/orientation.md
+  - title: Write what to look for
+    detail: "In each file, look for one thing: the conventions, the commands, the wiring, the
+      contract."
+    command: >-
+      echo '\n## What to look for\n\n- in AGENTS.md, the commands and the conventions\n- in the manifest, the scripts that build and test\n- in the entry point, the route or the handler\n- in the tests, the behaviour that already exists, so the change extends it' >> ~/codex/repo/orientation.md
+  - title: Verify and submit
+    detail: cat the routine, then submit for validation.
+    command: cat ~/codex/repo/orientation.md

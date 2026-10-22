@@ -1,0 +1,7 @@
+slug: 02-scoping-changes
+title: Scoping the Change
+summary: How small a task should be, and how to write the prompt that says so.
+order: 2
+tasks:
+  - codex-scope-boundaries
+  - codex-task-prompt

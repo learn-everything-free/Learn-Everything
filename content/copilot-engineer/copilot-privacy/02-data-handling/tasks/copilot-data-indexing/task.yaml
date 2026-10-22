@@ -1,0 +1,48 @@
+slug: copilot-data-indexing
+title: Know What Gets Indexed
+type: practice
+difficulty: intermediate
+description: An assistant that knows your repository also knows your secrets, if they are in it.
+  Write the rule for what the repository may contain.
+requirements:
+  - File ~/copilot/legal/data-handling.md exists
+  - The document states what the repository may contain
+  - The document states what happens to a secret found in the repository
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/legal/data-handling.md
+    label: ~/copilot/legal/data-handling.md
+  - validator: file_contains
+    path: /home/learner/copilot/legal/data-handling.md
+    value: "secret"
+    label: secret rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/data-handling.md
+    value: "ignore"
+    label: ignore rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/data-handling.md
+    value: "rotate"
+    label: rotation rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/data-handling.md
+    value: "customer data"
+    label: customer data rule stated
+steps:
+  - title: Create the legal directory
+    detail: The data rules live with the licensing rules.
+    command: mkdir -p ~/copilot/legal
+  - title: Write what the repository may contain
+    detail: "Code, tests, documentation and configuration. Not secrets, and not data that
+      identifies a person."
+    command: >-
+      echo '# Data handling\n\n## What the repository may contain\n\nCode, tests, documentation and configuration. Nothing else - a secret value never lives in the repository, and customer data never does either.' > ~/copilot/legal/data-handling.md
+  - title: Write the secret and the rotation rules
+    detail: "If a secret ever lands in the repository, rotating it is the fix - removing the
+      line is not."
+    command: >-
+      echo '\n## If a secret is found\n\n- treat it as compromised and rotate it first, the history still has it\n- remove it from the working tree in a follow up commit\n- add the ignore rule so it is not committed again\n- never paste the value into a chat, a pull request or an issue' >> ~/copilot/legal/data-handling.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/legal/data-handling.md

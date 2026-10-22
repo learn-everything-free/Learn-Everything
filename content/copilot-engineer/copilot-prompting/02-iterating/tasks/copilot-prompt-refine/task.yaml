@@ -1,0 +1,48 @@
+slug: copilot-prompt-refine
+title: Refine a Request Instead of Restarting
+type: practice
+difficulty: intermediate
+description: When the answer is wrong, the fix is usually one more sentence, not a new chat. Write
+  the iteration rules.
+requirements:
+  - File ~/copilot/prompts/iterating.md exists
+  - The document states how to correct a request
+  - The document states the cost of restarting
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/prompts/iterating.md
+    label: ~/copilot/prompts/iterating.md
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/iterating.md
+    value: correct
+    label: correction rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/iterating.md
+    value: "context"
+    label: context rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/iterating.md
+    value: "restart"
+    label: restart rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/iterating.md
+    value: "one file"
+    label: one file rule stated
+steps:
+  - title: Create the prompts directory
+    detail: The iteration rules are shared.
+    command: mkdir -p ~/copilot/prompts
+  - title: Write the correction rule
+    detail: "Correct the request, do not restart it. The conversation already holds the context
+      you paid for."
+    command: >-
+      echo '# Iterating a request\n\n## Correct, do not restart\n\nWhen the answer is wrong, correct it in the same conversation - say which part is wrong and what it should do instead. The context you already built is the expensive part, and a new chat throws it away.' > ~/copilot/prompts/iterating.md
+  - title: Write the restart rule
+    detail: "Start over when the context itself is wrong, and keep each request to one file at a
+      time when you are correcting."
+    command: >-
+      echo '\n## When to restart\n\nStart over when the context is wrong - the wrong repository, the wrong branch, the wrong assumption about the architecture. When you are correcting, keep the request to one file at a time so the change is reviewable.' >> ~/copilot/prompts/iterating.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/prompts/iterating.md

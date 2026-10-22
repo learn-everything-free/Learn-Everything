@@ -1,0 +1,48 @@
+slug: codex-prompt-failure
+title: Read a Failed Run
+type: challenge
+difficulty: advanced
+description: A run that failed still produced information. Write the postmortem for the run
+  itself, not just for the code.
+requirements:
+  - File ~/codex/prompts/failed-run.md exists
+  - The document states what to capture from a failed run
+  - The document states how the failure gets turned into a better request
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/prompts/failed-run.md
+    label: ~/codex/prompts/failed-run.md
+  - validator: file_contains
+    path: /home/learner/codex/prompts/failed-run.md
+    value: "capture"
+    label: capture rule stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/failed-run.md
+    value: "diff"
+    label: diff capture stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/failed-run.md
+    value: "output"
+    label: output capture stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/failed-run.md
+    value: "template"
+    label: template rule stated
+steps:
+  - title: Create the prompts directory
+    detail: The postmortem template lives with the other prompt material.
+    command: mkdir -p ~/codex/prompts
+  - title: Write what to capture
+    detail: "Keep the prompt, the diff it produced and the output. Without all three the failure
+      is a story you cannot learn from."
+    command: >-
+      echo '# Reading a failed run\n\n## What to capture\n\n- the prompt exactly as it was sent\n- the diff the run produced\n- the output, including the error and the exit code' > ~/codex/prompts/failed-run.md
+  - title: Write the template rule
+    detail: "Turn the failure into a template - the same request with the missing context added.
+      That is how the team gets faster."
+    command: >-
+      echo '\n## Turning it into a template\n\nWrite the corrected request as a reusable template, with the missing context added. The point is not to fix this one run - it is that the next person does not make the same mistake.' >> ~/codex/prompts/failed-run.md
+  - title: Verify and submit
+    detail: cat the template, then submit for validation.
+    command: cat ~/codex/prompts/failed-run.md

@@ -1,0 +1,7 @@
+slug: 02-iterating
+title: Iterating
+summary: The second prompt is usually better than the first - and sometimes you need the fourth.
+order: 2
+tasks:
+  - codex-prompt-iteration
+  - codex-prompt-failure

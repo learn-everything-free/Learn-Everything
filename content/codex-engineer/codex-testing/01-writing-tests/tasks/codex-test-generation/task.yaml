@@ -1,0 +1,52 @@
+slug: codex-test-generation
+title: Ask for the Test First
+type: guided
+difficulty: beginner
+description: A test written before the implementation is a specification you can read. Write the
+  brief that asks for one.
+requirements:
+  - Directory ~/codex/tests exists
+  - File ~/codex/tests/brief.md exists
+  - The brief states the behaviour and the case to cover
+  - The brief states the assertion and what must not be asserted
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/codex/tests
+    label: ~/codex/tests
+  - validator: file_exists
+    path: /home/learner/codex/tests/brief.md
+    label: ~/codex/tests/brief.md
+  - validator: file_contains
+    path: /home/learner/codex/tests/brief.md
+    value: behaviour
+    label: behaviour stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/brief.md
+    value: "watch it fail"
+    label: failing first rule stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/brief.md
+    value: "assert"
+    label: assertion rule stated
+  - validator: file_contains
+    path: /home/learner/codex/tests/brief.md
+    value: "implementation"
+    label: no implementation coupling stated
+steps:
+  - title: Create the tests directory
+    detail: The briefs for generated tests live with the repository.
+    command: mkdir -p ~/codex/tests
+  - title: Write the behaviour brief
+    detail: "Describe the behaviour in one sentence and name the case. The agent writes the test
+      from the behaviour, not from the code it will later change."
+    command: >-
+      echo '# Test brief\n\n## The behaviour\n\nThe cursor encoder round trips: encode a position, decode it, get the same position back.\n\n## The case to cover\n\nA position with a non-zero offset, and a position at the end of the list.' > ~/codex/tests/brief.md
+  - title: Write the assertion rules
+    detail: "The test must fail before the implementation exists, and it must assert the behaviour
+      rather than the shape of the code."
+    command: >-
+      echo '\n## The rules\n\n- write the test before the implementation, and run it to watch it fail\n- assert the behaviour, never the internal implementation\n- one behaviour per test, so a failure names the problem\n- no snapshot of the whole function' >> ~/codex/tests/brief.md
+  - title: Verify and submit
+    detail: cat the brief, then submit for validation.
+    command: cat ~/codex/tests/brief.md

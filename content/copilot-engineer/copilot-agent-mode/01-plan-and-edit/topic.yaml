@@ -1,0 +1,7 @@
+slug: 01-plan-and-edit
+title: Plan & Edit
+summary: Read the plan before the edits happen, and keep the agent inside the scope.
+order: 1
+tasks:
+  - copilot-agent-plan
+  - copilot-agent-scope

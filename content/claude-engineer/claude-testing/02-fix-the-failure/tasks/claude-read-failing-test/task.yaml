@@ -1,0 +1,48 @@
+slug: claude-read-failing-test
+title: Read a Failing Test Before Fixing It
+type: practice
+difficulty: intermediate
+description: Half the fixes an agent makes are wrong because nobody read the error. Write the
+  routine that prevents it.
+requirements:
+  - File ~/.claude/testing/failures.md exists
+  - The document states the order of reading a failure
+  - The document states what to do when the failure is not the expected one
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/testing/failures.md
+    label: ~/.claude/testing/failures.md
+  - validator: file_contains
+    path: /home/learner/.claude/testing/failures.md
+    value: assertion
+    label: assertion rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/failures.md
+    value: expected
+    label: expected value rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/failures.md
+    value: reproduce
+    label: reproduce rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/failures.md
+    value: "the test"
+    label: test fix rule stated
+steps:
+  - title: Create the testing directory
+    detail: The routine lives with the briefs.
+    command: mkdir -p ~/.claude/testing
+  - title: Write the reading order
+    detail: "The assertion names the behaviour. The expected value and the actual value say what
+      happened. The stack trace says how far it got."
+    command: >-
+      echo '# Reading a failure\n\n## The order\n\n1. the assertion that failed, it names the behaviour\n2. the expected value and the actual value\n3. the stack trace\n4. reproduce it by hand before changing any code' > ~/.claude/testing/failures.md
+  - title: Write the rule for an unexpected failure
+    detail: "A failure you did not expect means the test or the environment is wrong. Fix the
+      test only when the test was wrong, and say why."
+    command: >-
+      echo '\n## When the failure is the wrong one\n\nThe test or the environment is wrong, not the implementation. If the test was wrong, fix the test in its own commit with the reason - and never edit a test just to make the suite green.' >> ~/.claude/testing/failures.md
+  - title: Verify and submit
+    detail: cat the routine, then submit for validation.
+    command: cat ~/.claude/testing/failures.md

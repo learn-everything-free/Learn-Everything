@@ -1,0 +1,48 @@
+slug: copilot-agent-terminal
+title: Decide What the Agent May Run
+type: practice
+difficulty: intermediate
+description: Agent mode can run commands. Decide which ones, and write down the list so the
+  decision is reviewable.
+requirements:
+  - File ~/copilot/agent/terminal.md exists
+  - The document lists the commands allowed without approval
+  - The document lists the commands that need a human
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/agent/terminal.md
+    label: ~/copilot/agent/terminal.md
+  - validator: file_contains
+    path: /home/learner/copilot/agent/terminal.md
+    value: "read"
+    label: read commands listed
+  - validator: file_contains
+    path: /home/learner/copilot/agent/terminal.md
+    value: "test"
+    label: test command listed
+  - validator: file_contains
+    path: /home/learner/copilot/agent/terminal.md
+    value: "ask"
+    label: ask list present
+  - validator: file_contains
+    path: /home/learner/copilot/agent/terminal.md
+    value: "network"
+    label: network rule stated
+steps:
+  - title: Create the agent directory
+    detail: The terminal rules live with the plan review.
+    command: mkdir -p ~/copilot/agent
+  - title: Write the allowed list
+    detail: "Read only commands, the build, the test suite and the linter. That is enough for
+      almost every task."
+    command: >-
+      echo '# Terminal access\n\n## Allowed without approval\n\n- read only commands - cat, ls, grep, git status, git log, git diff\n- the build, the type check, the linter and the test suite\n- the formatter, applied to the files the task touched' > ~/copilot/agent/terminal.md
+  - title: Write the ask list and the network rule
+    detail: "Anything that reaches the network or writes outside the working tree needs a human,
+      even when it looks harmless."
+    command: >-
+      echo '\n## Always ask\n\n- any command that installs something\n- any command that writes outside the working tree\n- git push, and every deploy\n\n## Network\n\nNo command that reaches the network runs without approval. A dependency install is the obvious case, and a curl to an unexpected host is the one that bites.' >> ~/copilot/agent/terminal.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/agent/terminal.md

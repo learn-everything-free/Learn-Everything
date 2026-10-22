@@ -1,0 +1,48 @@
+slug: claude-safe-output
+title: Review What the Agent Proposes
+type: practice
+difficulty: intermediate
+description: The agent will propose a command, a file or a patch. Write the review that catches
+  the dangerous ones before they run.
+requirements:
+  - File ~/.claude/security/review.md exists
+  - The document lists what to check in a proposed command
+  - The document states the rules for a proposed file or patch
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/security/review.md
+    label: ~/.claude/security/review.md
+  - validator: file_contains
+    path: /home/learner/.claude/security/review.md
+    value: "command"
+    label: command check stated
+  - validator: file_contains
+    path: /home/learner/.claude/security/review.md
+    value: "network"
+    label: network check stated
+  - validator: file_contains
+    path: /home/learner/.claude/security/review.md
+    value: "path"
+    label: path check stated
+  - validator: file_contains
+    path: /home/learner/.claude/security/review.md
+    value: "curly braces"
+    label: interpolation check stated
+steps:
+  - title: Create the security directory
+    detail: The review checklist lives with the permission set.
+    command: mkdir -p ~/.claude/security
+  - title: Write the command checks
+    detail: "Read the command as if a stranger wrote it. Curl to an unexpected host, a delete
+      with a wildcard, a pipe into a shell."
+    command: >-
+      echo '# Reviewing a proposal\n\n## A proposed command\n\n- does it reach the network, and to where\n- does it delete, and with what path\n- does it pipe one command into another, so the output of one becomes the code of the other\n- does it interpolate a value into a shell - the curly braces around a variable expand into a command' > ~/.claude/security/review.md
+  - title: Write the file and patch rules
+    detail: "A file outside the working tree, a binary, a lockfile change, an added
+      dependency - all of them are questions, not accidents."
+    command: >-
+      echo '\n## A proposed file or patch\n\n- is the path inside the working tree\n- does it add a dependency, or change a lockfile\n- does it change a file the task never mentioned\n- is it binary, or does it look generated' >> ~/.claude/security/review.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/.claude/security/review.md

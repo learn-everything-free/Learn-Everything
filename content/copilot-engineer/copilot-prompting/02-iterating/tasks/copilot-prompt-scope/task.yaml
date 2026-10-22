@@ -1,0 +1,48 @@
+slug: copilot-prompt-scope
+title: Keep the Scope of a Request Tight
+type: challenge
+difficulty: advanced
+description: A request that mentions four features produces four half-finished features. Write
+  the scoping rules the team applies.
+requirements:
+  - File ~/copilot/prompts/scope.md exists
+  - The document states the size limit for one request
+  - The document states what to do when a request grows
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/prompts/scope.md
+    label: ~/copilot/prompts/scope.md
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/scope.md
+    value: "one behaviour"
+    label: one behaviour rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/scope.md
+    value: "split"
+    label: split rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/scope.md
+    value: Review
+    label: review rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/scope.md
+    value: "ask"
+    label: escalation rule stated
+steps:
+  - title: Create the prompts directory
+    detail: The scoping rules are shared.
+    command: mkdir -p ~/copilot/prompts
+  - title: Write the size limit and the split rule
+    detail: "One request, one behaviour, one file at a time. A request that grows is two
+      requests."
+    command: >-
+      echo '# Scoping a request\n\n## The size limit\n\nOne request is one behaviour, in one file at a time. A request that mentions two features is split into two requests, because two half-finished features are worth less than one finished one.' > ~/copilot/prompts/scope.md
+  - title: Write the review and the escalation rules
+    detail: "The diff still gets read, and a request that needs a decision you did not give gets
+      asked about rather than guessed."
+    command: >-
+      echo '\n## Review and escalation\n\n- every diff is read before it is merged, the assistant wrote the code and a person owns it\n- if the request needs a decision that was not given, ask rather than widen the scope\n- a request that is ambiguous is split into a question and a task' >> ~/copilot/prompts/scope.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/prompts/scope.md

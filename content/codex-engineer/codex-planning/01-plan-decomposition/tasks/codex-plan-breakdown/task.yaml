@@ -1,0 +1,52 @@
+slug: codex-plan-breakdown
+title: Break a Request Into Steps
+type: guided
+difficulty: beginner
+description: A big request handed to an agent in one go produces a big diff nobody reviewed.
+  Write the plan that breaks it into steps you can check.
+requirements:
+  - Directory ~/codex/plans exists
+  - File ~/codex/plans/plan.yaml exists
+  - The plan states the goal and the steps
+  - The plan states how each step is verified
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/codex/plans
+    label: ~/codex/plans
+  - validator: file_exists
+    path: /home/learner/codex/plans/plan.yaml
+    label: ~/codex/plans/plan.yaml
+  - validator: file_contains
+    path: /home/learner/codex/plans/plan.yaml
+    value: goal
+    label: goal stated
+  - validator: file_contains
+    path: /home/learner/codex/plans/plan.yaml
+    value: steps
+    label: steps declared
+  - validator: file_contains
+    path: /home/learner/codex/plans/plan.yaml
+    value: verify
+    label: verification stated
+  - validator: file_contains
+    path: /home/learner/codex/plans/plan.yaml
+    value: "out_of_scope"
+    label: out of scope stated
+steps:
+  - title: Create the plans directory
+    detail: Every plan for a repository lives in the repository.
+    command: mkdir -p ~/codex/plans
+  - title: Write the goal and the scope
+    detail: "One sentence for the goal, and an explicit list of what the change does not touch.
+      The out of scope list is what stops the agent wandering."
+    command: >-
+      echo 'goal: add pagination to the orders list endpoint\nout_of_scope:\n  - the export endpoint\n  - the database schema' > ~/codex/plans/plan.yaml
+  - title: Write the steps and the verification
+    detail: "Each step names the files it touches and how you know it worked. A step nobody can
+      verify is a step nobody can review."
+    command: >-
+      echo '\nsteps:\n  - name: add the limit and cursor parameters\n    files: [src/server/orders/routes.ts]\n    verify: the request with a limit returns fewer rows\n  - name: add the cursor encoding\n    files: [src/server/orders/cursor.ts]\n    verify: a unit test round trips a cursor' >> ~/codex/plans/plan.yaml
+  - title: Verify and submit
+    detail: cat the plan, then submit for validation.
+    command: cat ~/codex/plans/plan.yaml

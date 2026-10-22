@@ -1,0 +1,49 @@
+slug: copilot-instructions-file
+title: Write the Instruction File
+type: guided
+difficulty: beginner
+description: The instruction file is read before every suggestion, so it should hold the few
+  things that are always true. Write yours.
+requirements:
+  - File ~/copilot/custom/instructions.md exists
+  - The document states the conventions to encode
+  - The document states the commands to encode
+  - The document states the rules the assistant must never break
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/custom/instructions.md
+    label: ~/copilot/custom/instructions.md
+  - validator: file_contains
+    path: /home/learner/copilot/custom/instructions.md
+    value: Conventions
+    label: conventions stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/instructions.md
+    value: Commands
+    label: commands stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/instructions.md
+    value: Never
+    label: prohibition stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/instructions.md
+    value: "short"
+    label: length rule stated
+steps:
+  - title: Create the custom directory
+    detail: The instruction material lives in one folder.
+    command: mkdir -p ~/copilot/custom
+  - title: Write the conventions and the commands
+    detail: "The conventions the repository already follows, and the three commands that build,
+      test and lint it."
+    command: >-
+      echo '# Instruction file\n\n## Conventions\n\n- TypeScript strict mode, no any\n- named exports only\n- one component per file, one behaviour per test\n\n## Commands\n\n- build: pnpm build\n- test: pnpm test\n- lint: pnpm lint' > ~/copilot/custom/instructions.md
+  - title: Write the prohibitions and the length rule
+    detail: "Say what is never allowed, and keep the file short. A long instruction file is
+      read less carefully than a short one."
+    command: >-
+      echo '\n## Never\n\n- never add a dependency that is not already in the manifest\n- never edit generated code\n- never widen the scope of a task\n\n## Length\n\nKeep it short - under a page. A file that is too long gets skimmed, and a rule that gets skimmed is not a rule.' >> ~/copilot/custom/instructions.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/copilot/custom/instructions.md

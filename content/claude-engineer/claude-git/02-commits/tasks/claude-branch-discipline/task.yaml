@@ -1,0 +1,48 @@
+slug: claude-branch-discipline
+title: Keep the Branch Discipline
+type: challenge
+difficulty: advanced
+description: Short branches, one purpose, and a merge that tells the truth. Write the rules for
+  the branches an agent session works on.
+requirements:
+  - File ~/.claude/git/branches.md exists
+  - The document states the branch rules
+  - The document states the rules for merging
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/git/branches.md
+    label: ~/.claude/git/branches.md
+  - validator: file_contains
+    path: /home/learner/.claude/git/branches.md
+    value: "one branch"
+    label: one branch rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/branches.md
+    value: "short"
+    label: short branch rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/branches.md
+    value: "squash"
+    label: squash rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/branches.md
+    value: "never"
+    label: prohibition stated
+steps:
+  - title: Create the git directory
+    detail: The branch rules live with the other git rules.
+    command: mkdir -p ~/.claude/git
+  - title: Write the branch rules
+    detail: "One branch, one purpose, kept short. A branch that lives for a week is a branch
+      nobody reviews properly."
+    command: >-
+      echo '# Branch discipline\n\n## The rules\n\n- one branch for one purpose, named after the ticket\n- a branch stays short - a day, not a week\n- the branch is rebased on the main line before it is reviewed\n- never mix a refactor with a behaviour change on the same branch' > ~/.claude/git/branches.md
+  - title: Write the merge rules
+    detail: "Squash the agent commits into one commit that a human wrote, and delete the branch
+      afterwards."
+    command: >-
+      echo '\n## Merging\n\n- squash the agent commits into one commit, and write that message by hand\n- the squashed commit is the one that explains the change\n- delete the branch after the merge, and never leave a merged branch behind' >> ~/.claude/git/branches.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/git/branches.md

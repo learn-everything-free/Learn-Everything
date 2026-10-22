@@ -1,0 +1,48 @@
+slug: copilot-prompt-files
+title: Save the Prompts You Reuse
+type: practice
+difficulty: intermediate
+description: The prompt you type every week should be a file. Write the catalogue of the ones
+  your team reuses.
+requirements:
+  - File ~/copilot/custom/prompt-files.md exists
+  - The document lists the reusable prompts
+  - The document states how each prompt is named and where it lives
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/custom/prompt-files.md
+    label: ~/copilot/custom/prompt-files.md
+  - validator: file_contains
+    path: /home/learner/copilot/custom/prompt-files.md
+    value: "review"
+    label: review prompt listed
+  - validator: file_contains
+    path: /home/learner/copilot/custom/prompt-files.md
+    value: "test"
+    label: test prompt listed
+  - validator: file_contains
+    path: /home/learner/copilot/custom/prompt-files.md
+    value: "commit"
+    label: commit prompt listed
+  - validator: file_contains
+    path: /home/learner/copilot/custom/prompt-files.md
+    value: "prompts"
+    label: location stated
+steps:
+  - title: Create the custom directory
+    detail: The catalogue lives with the instruction material.
+    command: mkdir -p ~/copilot/custom
+  - title: List the reusable prompts
+    detail: "The three everybody types: review the diff, write the test, write the commit
+      message."
+    command: >-
+      echo '# Prompt files\n\n## The reusable prompts\n\n- review the diff - the checklist the team already uses\n- write the test - the behaviour, the case and the rule about failing first\n- write the commit - the conventional subject and the why in the body' > ~/copilot/custom/prompt-files.md
+  - title: Write the naming and the location
+    detail: "One folder, named prompts, committed with the repository so the whole team gets
+      them."
+    command: >-
+      echo '\n## Naming and location\n\n- one folder for prompts, committed with the repository\n- named after the job, not the tool - review, write-test, write-commit\n- a prompt is versioned and reviewed like any other change' >> ~/copilot/custom/prompt-files.md
+  - title: Verify and submit
+    detail: cat the catalogue, then submit for validation.
+    command: cat ~/copilot/custom/prompt-files.md

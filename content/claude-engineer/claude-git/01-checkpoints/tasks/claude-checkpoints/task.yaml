@@ -1,0 +1,48 @@
+slug: claude-checkpoints
+title: Use Checkpoints as a Way Back
+type: guided
+difficulty: beginner
+description: When a session goes wrong you need somewhere to go back to. Write the checkpoint
+  discipline the team uses.
+requirements:
+  - File ~/.claude/git/checkpoints.md exists
+  - The document states when a checkpoint is taken
+  - The document states how to return to one
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/git/checkpoints.md
+    label: ~/.claude/git/checkpoints.md
+  - validator: file_contains
+    path: /home/learner/.claude/git/checkpoints.md
+    value: checkpoint
+    label: checkpoint rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/checkpoints.md
+    value: "Before"
+    label: timing rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/checkpoints.md
+    value: "stash"
+    label: stash rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/checkpoints.md
+    value: "commit"
+    label: commit rule stated
+steps:
+  - title: Create the git directory
+    detail: The git rules live with the rest of the configuration.
+    command: mkdir -p ~/.claude/git
+  - title: Write when a checkpoint happens
+    detail: "A checkpoint before every risky step - a bulk edit, a dependency change, a refactor
+      across files."
+    command: >-
+      echo '# Checkpoints\n\n## When a checkpoint is taken\n\nBefore every risky step - a bulk edit, a dependency change, a refactor across files. A checkpoint is a commit on a scratch branch, or a stash when the work is not ready.' > ~/.claude/git/checkpoints.md
+  - title: Write how to return to one
+    detail: "A checkpoint you cannot get back to is not a checkpoint. Name the command and the
+      branch."
+    command: >-
+      echo '\n## How to return\n\n- list the checkpoints with git log on the scratch branch\n- go back with git checkout on the branch, or restore the stash with git stash pop\n- the checkpoint branch is never merged and never pushed\n\n## Commits\n\nA checkpoint commit is a message and nothing else. The real history is written by hand, at the end, when the change is understood.' >> ~/.claude/git/checkpoints.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/git/checkpoints.md

@@ -1,0 +1,43 @@
+slug: claude-permission-set
+title: Set the Permission Set
+type: guided
+difficulty: beginner
+description: Every command the agent may run without asking is a decision you make once. Write
+  the permission set for your repository.
+requirements:
+  - File ~/.claude/security/permissions.md exists
+  - The document lists the commands allowed without approval
+  - The document lists the commands that always need a human
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/security/permissions.md
+    label: ~/.claude/security/permissions.md
+  - validator: file_contains
+    path: /home/learner/.claude/security/permissions.md
+    value: Allow
+    label: allow list present
+  - validator: file_contains
+    path: /home/learner/.claude/security/permissions.md
+    value: "ask"
+    label: ask list present
+  - validator: file_contains
+    path: /home/learner/.claude/security/permissions.md
+    value: Deny
+    label: deny list present
+  - validator: file_contains
+    path: /home/learner/.claude/security/permissions.md
+    value: "read"
+    label: read only rule stated
+steps:
+  - title: Create the security directory
+    detail: The permission set is part of the setup, so it is written down and reviewed.
+    command: mkdir -p ~/.claude/security
+  - title: Write the allow and the ask lists
+    detail: "Allow the read only commands and the test suite. Ask for anything that writes, and
+      deny the destructive ones outright."
+    command: >-
+      echo '# Permissions\n\n## Allow without asking\n\n- read only commands - cat, ls, grep, git status, git log\n- the build, the type check and the test suite\n- writing inside the working tree\n\n## Always ask\n\n- installing anything\n- anything outside the working tree\n- git push, and every deploy\n\n## Deny\n\n- rm with a recursive flag, and anything that rewrites history' > ~/.claude/security/permissions.md
+  - title: Verify and submit
+    detail: cat the permission set, then submit for validation.
+    command: cat ~/.claude/security/permissions.md

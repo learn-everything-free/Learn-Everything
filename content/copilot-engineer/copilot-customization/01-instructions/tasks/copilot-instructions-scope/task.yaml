@@ -1,0 +1,48 @@
+slug: copilot-instructions-scope
+title: Scope the Instructions
+type: practice
+difficulty: intermediate
+description: The instructions that fit one service do not fit the whole company. Write the
+  layering that keeps them relevant.
+requirements:
+  - File ~/copilot/custom/scope.md exists
+  - The document states where the instructions live
+  - The document states what belongs in a shared file and what stays local
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/custom/scope.md
+    label: ~/copilot/custom/scope.md
+  - validator: file_contains
+    path: /home/learner/copilot/custom/scope.md
+    value: "repository"
+    label: repository level stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/scope.md
+    value: "directory"
+    label: directory level stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/scope.md
+    value: "user"
+    label: user level stated
+  - validator: file_contains
+    path: /home/learner/copilot/custom/scope.md
+    value: "override"
+    label: precedence rule stated
+steps:
+  - title: Create the custom directory
+    detail: The layering rules live with the instruction material.
+    command: mkdir -p ~/copilot/custom
+  - title: Write the three levels
+    detail: "The repository file, the directory file that overrides it, and the user file that
+      applies to everything you open."
+    command: >-
+      echo '# Scoping the instructions\n\n## The three levels\n\n- repository - .github/copilot-instructions.md, committed, applies to everyone\n- directory - a nested instructions file, applies to that directory and below\n- user - your own settings, applies to every repository you open' > ~/copilot/custom/scope.md
+  - title: Write what is shared and what is local
+    detail: "Shared means every repository in the company. The language, the commit style and the
+      security rules are shared; the folder layout is not."
+    command: >-
+      echo '\n## Shared versus local\n\n- shared: the commit style, the branch naming, the security rules, the language\n- local: the folder layout, the framework, the naming style of the domain\n\n## Precedence\n\nThe narrower file overrides the wider one, but it may only add. A directory file may not contradict the repository rules - that is how the assistant ends up with two opinions.' >> ~/copilot/custom/scope.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/custom/scope.md

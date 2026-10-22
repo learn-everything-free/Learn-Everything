@@ -1,0 +1,7 @@
+slug: 01-explore-first
+title: Explore First
+summary: The agent reads the code before it changes it. Make that the rule, not the exception.
+order: 1
+tasks:
+  - claude-explore-before-edit
+  - claude-read-the-codebase

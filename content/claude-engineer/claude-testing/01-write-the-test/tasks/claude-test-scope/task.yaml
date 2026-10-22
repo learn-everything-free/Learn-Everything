@@ -1,0 +1,48 @@
+slug: claude-test-scope
+title: Scope a Test Properly
+type: practice
+difficulty: intermediate
+description: A test that covers everything asserts nothing. Write the rules for what a test
+  covers and what it leaves alone.
+requirements:
+  - File ~/.claude/testing/scope.md exists
+  - The document states what one test covers
+  - The document states what is never worth a test
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/testing/scope.md
+    label: ~/.claude/testing/scope.md
+  - validator: file_contains
+    path: /home/learner/.claude/testing/scope.md
+    value: "One behaviour"
+    label: one behaviour rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/scope.md
+    value: "edge case"
+    label: edge case rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/scope.md
+    value: "implementation"
+    label: implementation rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/scope.md
+    value: "getter"
+    label: trivial case rule stated
+steps:
+  - title: Create the testing directory
+    detail: The scope rules live with the briefs.
+    command: mkdir -p ~/.claude/testing
+  - title: Write what one test covers
+    detail: "One behaviour, one path through it. The name of the test is the sentence that says
+      what the system promises."
+    command: >-
+      echo '# Scoping a test\n\n## What one test covers\n\nOne behaviour, one path through it, and one edge case - the empty input, the missing row, the value at the limit. The test name is a sentence about what the system promises, and a failing name tells you what broke without opening the file.' > ~/.claude/testing/scope.md
+  - title: Write what is not worth a test
+    detail: "Getters, private helpers and framework code are not worth a test. Test the promise, not
+      the plumbing."
+    command: >-
+      echo '\n## What is not worth a test\n\n- a getter or a setter\n- a private helper that only exists to be called by one public function\n- the framework itself\n- the implementation detail - never assert on the internal call sequence' >> ~/.claude/testing/scope.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/testing/scope.md

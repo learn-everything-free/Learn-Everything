@@ -1,0 +1,48 @@
+slug: codex-tdd-loop
+title: Run the Red-Green Loop
+type: challenge
+difficulty: advanced
+description: Red, green, refactor - with an agent in the loop the discipline matters more, not
+  less. Write the loop your team runs.
+requirements:
+  - File ~/codex/tests/loop.md exists
+  - The document states the three steps of the loop
+  - The document states the rule about the agent and the red test
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/tests/loop.md
+    label: ~/codex/tests/loop.md
+  - validator: file_contains
+    path: /home/learner/codex/tests/loop.md
+    value: red
+    label: red step present
+  - validator: file_contains
+    path: /home/learner/codex/tests/loop.md
+    value: green
+    label: green step present
+  - validator: file_contains
+    path: /home/learner/codex/tests/loop.md
+    value: refactor
+    label: refactor step present
+  - validator: file_contains
+    path: /home/learner/codex/tests/loop.md
+    value: "one test"
+    label: one test at a time rule stated
+steps:
+  - title: Create the tests directory
+    detail: The loop is a shared habit, so it is written down.
+    command: mkdir -p ~/codex/tests
+  - title: Write the three steps
+    detail: "Red - write a failing test and run it. Green - make it pass with the smallest change.
+      Refactor - clean it up with the test still green."
+    command: >-
+      echo '# The loop\n\n## The three steps\n\n1. red - write one failing test and run it to see the failure\n2. green - the smallest change that makes it pass\n3. refactor - clean the code up while the test stays green' > ~/codex/tests/loop.md
+  - title: Write the rules for working with an agent
+    detail: "One test at a time, and never let the agent see a red test it did not write. The agent
+      implements against a red test, not against a guess."
+    command: >-
+      echo '\n## Working with an agent\n\n- one test at a time, and the agent sees the red test before it writes the implementation\n- the agent never changes the test to make it pass\n- the test is committed separately from the implementation\n- if the agent cannot make the test pass, it reports instead of rewriting the test' >> ~/codex/tests/loop.md
+  - title: Verify and submit
+    detail: cat the loop, then submit for validation.
+    command: cat ~/codex/tests/loop.md

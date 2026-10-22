@@ -1,0 +1,48 @@
+slug: codex-prompt-iteration
+title: Iterate a Request Instead of Restarting
+type: practice
+difficulty: intermediate
+description: When a run goes wrong, the fix is usually a correction, not a fresh start. Write
+  the iteration rules.
+requirements:
+  - File ~/codex/prompts/iterating.md exists
+  - The document states how to correct a run
+  - The document states when to start over instead
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/prompts/iterating.md
+    label: ~/codex/prompts/iterating.md
+  - validator: file_contains
+    path: /home/learner/codex/prompts/iterating.md
+    value: correct
+    label: correction rule stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/iterating.md
+    value: "keep the diff"
+    label: diff preservation stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/iterating.md
+    value: "start over"
+    label: restart rule stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/iterating.md
+    value: "scope"
+    label: scope correction stated
+steps:
+  - title: Create the prompts directory
+    detail: The iteration rules are shared, so they are written once.
+    command: mkdir -p ~/codex/prompts
+  - title: Write the correction rule
+    detail: "Correct the run, do not restart it. The work that was right is still right, and
+      throwing it away is the expensive part."
+    command: >-
+      echo '# Iterating a request\n\n## Correct, do not restart\n\nWhen a run goes wrong, correct it. Name the file that should not have changed, the behaviour that was missing, and keep the diff that was already right. Restarting throws away the work that was fine.' > ~/codex/prompts/iterating.md
+  - title: Write the restart rule
+    detail: "Start over when the plan was wrong, not when the run was - the plan is the expensive
+      mistake, and it is the one worth fixing."
+    command: >-
+      echo '\n## When to start over\n\nStart over when the plan was wrong, because the diff is built on it. Correct the scope instead when the plan was right and one step drifted.' >> ~/codex/prompts/iterating.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/codex/prompts/iterating.md

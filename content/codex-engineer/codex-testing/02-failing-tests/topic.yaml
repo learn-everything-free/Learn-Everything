@@ -1,0 +1,7 @@
+slug: 02-failing-tests
+title: Failing Tests
+summary: Read the failure, fix the cause, and keep the regression from coming back.
+order: 2
+tasks:
+  - codex-read-failure
+  - codex-tdd-loop

@@ -1,0 +1,5 @@
+slug: claude-testing
+title: Testing with Claude Code
+summary: Tests written first, failures read properly, and the regression that never comes back.
+path: claude-engineer
+order: 6

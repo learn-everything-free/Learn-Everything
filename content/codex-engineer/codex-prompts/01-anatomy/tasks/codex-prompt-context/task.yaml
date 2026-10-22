@@ -1,0 +1,48 @@
+slug: codex-prompt-context
+title: Curate the Context
+type: practice
+difficulty: intermediate
+description: Too much context blurs the task and too little makes it guess. Write the rules for
+  choosing what goes in.
+requirements:
+  - File ~/codex/prompts/context.md exists
+  - The document states what to include
+  - The document states what to leave out and what to paste instead
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/prompts/context.md
+    label: ~/codex/prompts/context.md
+  - validator: file_contains
+    path: /home/learner/codex/prompts/context.md
+    value: Include
+    label: include list present
+  - validator: file_contains
+    path: /home/learner/codex/prompts/context.md
+    value: Exclude
+    label: exclude list present
+  - validator: file_contains
+    path: /home/learner/codex/prompts/context.md
+    value: "lines"
+    label: line ranges stated
+  - validator: file_contains
+    path: /home/learner/codex/prompts/context.md
+    value: "summary"
+    label: summary rule stated
+steps:
+  - title: Create the prompts directory
+    detail: The context rules are shared, so they are written once.
+    command: mkdir -p ~/codex/prompts
+  - title: Write the include list
+    detail: "The instruction file, the files the task touches, and the failing output. Everything
+      else is a guess the agent has to make."
+    command: >-
+      echo '# Curating the context\n\n## Include\n\n- the repository instruction file\n- the files the task touches, and only the parts of them that matter\n- the error output or the failing test\n- the interface the change has to match' > ~/codex/prompts/context.md
+  - title: Write the exclude list
+    detail: "No whole files, no whole directories, no the entire log. And no secret values - a
+      prompt is a payload."
+    command: >-
+      echo '\n## Exclude\n\n- whole files when a few lines will do - quote the lines that matter\n- generated code and vendored dependencies\n- the entire log, a summary of the failure is enough\n- secret values of any kind, a prompt leaves your machine' >> ~/codex/prompts/context.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/codex/prompts/context.md

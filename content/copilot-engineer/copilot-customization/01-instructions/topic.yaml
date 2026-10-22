@@ -1,0 +1,7 @@
+slug: 01-instructions
+title: Instruction Files
+summary: The file the assistant reads before every suggestion.
+order: 1
+tasks:
+  - copilot-instructions-file
+  - copilot-instructions-scope

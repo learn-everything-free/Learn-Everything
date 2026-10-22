@@ -1,0 +1,5 @@
+slug: codex-testing
+title: Testing with Codex
+summary: Tests first, failures read properly, and the loop that keeps a change honest.
+path: codex-engineer
+order: 6

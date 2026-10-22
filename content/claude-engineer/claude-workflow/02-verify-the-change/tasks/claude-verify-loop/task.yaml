@@ -1,0 +1,48 @@
+slug: claude-verify-loop
+title: Run the Verification Loop
+type: practice
+difficulty: intermediate
+description: Build, test, read the diff - in that order, every time. Write the loop the team
+  runs before anything merges.
+requirements:
+  - File ~/.claude/workflow/verify.md exists
+  - The document lists the verification steps
+  - The document states what to do when a step fails
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/workflow/verify.md
+    label: ~/.claude/workflow/verify.md
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/verify.md
+    value: build
+    label: build step present
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/verify.md
+    value: test
+    label: test step present
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/verify.md
+    value: diff
+    label: diff step present
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/verify.md
+    value: "Stop."
+    label: stop rule stated
+steps:
+  - title: Create the workflow directory
+    detail: The loop is the last thing between the agent and the repository.
+    command: mkdir -p ~/.claude/workflow
+  - title: Write the three steps
+    detail: "Build, then test, then read the diff. The order matters - a diff read before the
+      tests pass is a diff read twice."
+    command: >-
+      echo '# The verification loop\n\n## The three steps\n\n1. run the build and the type check\n2. run the test suite and read the output\n3. read the diff, looking for the code that was not supposed to change' > ~/.claude/workflow/verify.md
+  - title: Write the stop rule
+    detail: "A failed step stops the loop. Do not let the agent explain the failure away and
+      continue."
+    command: >-
+      echo '\n## When a step fails\n\nStop. Do not continue with a failing build, and do not let the agent rewrite the test to make it pass. Fix the cause, then run the loop again from the top.' >> ~/.claude/workflow/verify.md
+  - title: Verify and submit
+    detail: cat the loop, then submit for validation.
+    command: cat ~/.claude/workflow/verify.md

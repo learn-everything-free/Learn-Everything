@@ -1,0 +1,48 @@
+slug: codex-verify-in-repo
+title: Verify the Change Against the Repo
+type: challenge
+difficulty: advanced
+description: The agent believes it is done. You check against the repository, not against its
+  summary. Write the verification routine.
+requirements:
+  - File ~/codex/repo/verification.md exists
+  - The document lists the checks to run
+  - The document states what to do when the agent reports success but the check fails
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/repo/verification.md
+    label: ~/codex/repo/verification.md
+  - validator: file_contains
+    path: /home/learner/codex/repo/verification.md
+    value: "build"
+    label: build check present
+  - validator: file_contains
+    path: /home/learner/codex/repo/verification.md
+    value: "test"
+    label: test check present
+  - validator: file_contains
+    path: /home/learner/codex/repo/verification.md
+    value: "diff"
+    label: diff review present
+  - validator: file_contains
+    path: /home/learner/codex/repo/verification.md
+    value: "claim"
+    label: claim check stated
+steps:
+  - title: Create the repo directory
+    detail: The verification routine belongs with the other repository notes.
+    command: mkdir -p ~/codex/repo
+  - title: List the checks
+    detail: "Run the build, run the tests, read the diff. The agent's summary is a claim, not
+      evidence."
+    command: >-
+      echo '# Verifying a change\n\n## The checks\n\n1. run the build and the type check yourself\n2. run the test suite and read the output, do not trust the summary\n3. read the diff line by line, and look for the code that was not supposed to change\n4. confirm the new test fails without the change' > ~/codex/repo/verification.md
+  - title: Write the rule for a false claim
+    detail: "When the check fails but the agent said it passed, that is a bug in the agent's
+      process, not a typo. Report it and fix the loop."
+    command: >-
+      echo '\n## When the claim and the check disagree\n\nThe check wins. A run that reports success while the build fails means the loop is broken - stop, report it, and fix the loop before the next task.' >> ~/codex/repo/verification.md
+  - title: Verify and submit
+    detail: cat the routine, then submit for validation.
+    command: cat ~/codex/repo/verification.md

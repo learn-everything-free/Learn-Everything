@@ -1,0 +1,5 @@
+slug: claude-git
+title: Git with Claude Code
+summary: Checkpoints, isolated worktrees and the commit discipline an agent session needs.
+path: claude-engineer
+order: 8

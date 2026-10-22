@@ -1,0 +1,52 @@
+slug: claude-test-first
+title: Ask for the Failing Test First
+type: guided
+difficulty: beginner
+description: A test that fails first proves it can fail at all. Write the brief that asks for
+  one.
+requirements:
+  - Directory ~/.claude/testing exists
+  - File ~/.claude/testing/brief.md exists
+  - The brief states the behaviour and the case
+  - The brief states that the test must be seen failing
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.claude/testing
+    label: ~/.claude/testing
+  - validator: file_exists
+    path: /home/learner/.claude/testing/brief.md
+    label: ~/.claude/testing/brief.md
+  - validator: file_contains
+    path: /home/learner/.claude/testing/brief.md
+    value: behaviour
+    label: behaviour stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/brief.md
+    value: "run it"
+    label: run requirement stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/brief.md
+    value: "failing"
+    label: failing test rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/brief.md
+    value: "before the implementation"
+    label: ordering rule stated
+steps:
+  - title: Create the testing directory
+    detail: The briefs live with the rest of the Claude configuration.
+    command: mkdir -p ~/.claude/testing
+  - title: Write the behaviour and the case
+    detail: "One behaviour, one case. The agent writes the test from the behaviour, not from the
+      code it will later change."
+    command: >-
+      echo '# Test brief\n\n## The behaviour\n\nThe refund endpoint refuses a refund larger than the captured amount.\n\n## The case\n\nA refund of 120 on a capture of 100.' > ~/.claude/testing/brief.md
+  - title: Write the ordering rule
+    detail: "Write the test, run it and watch it fail, and only then write the implementation.
+      The failure is the proof the test works."
+    command: >-
+      echo '\n## The rule\n\nWrite the test before the implementation, then run it and watch it fail. The failing output is the proof that the test is testing something.' >> ~/.claude/testing/brief.md
+  - title: Verify and submit
+    detail: cat the brief, then submit for validation.
+    command: cat ~/.claude/testing/brief.md

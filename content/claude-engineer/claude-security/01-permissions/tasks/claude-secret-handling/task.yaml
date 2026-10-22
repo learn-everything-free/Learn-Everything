@@ -1,0 +1,48 @@
+slug: claude-secret-handling
+title: Keep Secrets Out of the Context
+type: practice
+difficulty: intermediate
+description: Whatever you paste into a session leaves your machine. Write the rules that keep
+  credential values out of it.
+requirements:
+  - File ~/.claude/security/secrets.md exists
+  - The document states what never goes into the context
+  - The document states how a secret is passed to the agent instead
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/security/secrets.md
+    label: ~/.claude/security/secrets.md
+  - validator: file_contains
+    path: /home/learner/.claude/security/secrets.md
+    value: "never"
+    label: never rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/security/secrets.md
+    value: "environment"
+    label: environment rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/security/secrets.md
+    value: "reference"
+    label: reference by name rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/security/secrets.md
+    value: "redact"
+    label: redaction rule stated
+steps:
+  - title: Create the security directory
+    detail: The rules live with the permission set.
+    command: mkdir -p ~/.claude/security
+  - title: Write what never goes in
+    detail: "A secret value never goes into a prompt, a file the agent reads, or an issue. The
+      agent works with the name of the variable, not the value."
+    command: >-
+      echo '# Secrets\n\n## Never in the context\n\nA secret value never goes into a prompt, into a file the agent reads, or into an issue. The agent gets the name of the variable, never the value.' > ~/.claude/security/secrets.md
+  - title: Write the passing and the redaction rules
+    detail: "Read the value from the environment at run time, reference it by name, and redact
+      anything that was going to be pasted."
+    command: >-
+      echo '\n## How a secret is passed instead\n\n- read it from the environment at run time, never inline it in the command\n- reference it by name, so the agent never sees the value\n- redact the output before it is pasted - mask the last four characters of anything that looks like a key\n\n## Redaction\n\nBefore pasting any output, strip the values of every variable that looks like a credential. The paste is the leak, not the repository.' >> ~/.claude/security/secrets.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/security/secrets.md

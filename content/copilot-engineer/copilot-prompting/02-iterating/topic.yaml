@@ -1,0 +1,7 @@
+slug: 02-iterating
+title: Iterating
+summary: The second prompt is usually better than the first - and you should know when to stop.
+order: 2
+tasks:
+  - copilot-prompt-refine
+  - copilot-prompt-scope

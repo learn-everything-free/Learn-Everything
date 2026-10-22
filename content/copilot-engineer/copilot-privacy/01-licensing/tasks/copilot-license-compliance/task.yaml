@@ -1,0 +1,48 @@
+slug: copilot-license-compliance
+title: Check the Licensing Rules
+type: guided
+difficulty: beginner
+description: The suggestion is a starting point, not an answer - it may reproduce something you
+  cannot ship. Write the rule your team follows.
+requirements:
+  - File ~/copilot/legal/licensing.md exists
+  - The document states the rule for generated code
+  - The document states what to do when the origin of a snippet is unclear
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/legal/licensing.md
+    label: ~/copilot/legal/licensing.md
+  - validator: file_contains
+    path: /home/learner/copilot/legal/licensing.md
+    value: "similar"
+    label: similarity check stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/licensing.md
+    value: "licence"
+    label: licence rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/licensing.md
+    value: "review"
+    label: review rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/licensing.md
+    value: "open source"
+    label: open source rule stated
+steps:
+  - title: Create the legal directory
+    detail: The licensing rules are part of the setup, so they are written down.
+    command: mkdir -p ~/copilot/legal
+  - title: Write the rule for generated code
+    detail: "Treat a suggestion like a snippet from a stranger. It is fine to use, and it is your
+      responsibility to check it."
+    command: >-
+      echo '# Licensing\n\n## The rule for generated code\n\nA suggestion is treated like a snippet from a stranger - it may be fine to use, and it is your responsibility to check it. No suggestion is merged without a human reading it.' > ~/copilot/legal/licensing.md
+  - title: Write the similarity and the open source rules
+    detail: "If the output is too similar to a licensed work, rewrite it. And the licence of the
+      repository still applies to everything in it."
+    command: >-
+      echo '\n## When the origin is unclear\n\n- if a suggestion is too similar to a licensed work, do not use it - rewrite the idea instead\n- the licence of the repository still applies to everything the assistant writes into it\n- anything derived from an open source dependency keeps the notice of that dependency\n- when in doubt, the review is the answer: read the code, and the history' >> ~/copilot/legal/licensing.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/legal/licensing.md

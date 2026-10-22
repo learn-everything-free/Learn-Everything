@@ -1,0 +1,48 @@
+slug: copilot-prompt-instructions
+title: Write Instructions That Outlive the Chat
+type: practice
+difficulty: intermediate
+description: A chat message helps once. An instruction file helps every session. Write the
+  difference.
+requirements:
+  - File ~/copilot/prompts/instructions.md exists
+  - The document states what belongs in an instruction file
+  - The document states what belongs in a chat request instead
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/prompts/instructions.md
+    label: ~/copilot/prompts/instructions.md
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/instructions.md
+    value: "copilot-instructions.md"
+    label: instruction file named
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/instructions.md
+    value: "always"
+    label: always rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/instructions.md
+    value: "once"
+    label: one off rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/prompts/instructions.md
+    value: "convention"
+    label: convention rule stated
+steps:
+  - title: Create the prompts directory
+    detail: The distinction is worth writing down for the whole team.
+    command: mkdir -p ~/copilot/prompts
+  - title: Write what belongs in the instruction file
+    detail: "Anything that is true in every session: the conventions, the commands, the things
+      that are never allowed."
+    command: >-
+      echo '# Instructions versus chat\n\n## What belongs in copilot-instructions.md\n\n- the conventions that are always true in this repository\n- the commands that build, test and lint\n- the rules that are never broken - no new dependency without a reason\n\nA rule that is always true goes in the instruction file, once, and applies to every session.' > ~/copilot/prompts/instructions.md
+  - title: Write what belongs in the chat
+    detail: "Anything that is true of this one request: the ticket, the error, the deadline. Those
+      are said once."
+    command: >-
+      echo '\n## What belongs in the chat\n\n- the task, the ticket and the error\n- the deadline and the scope of this change\n- a decision that was made in this conversation only' >> ~/copilot/prompts/instructions.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/copilot/prompts/instructions.md

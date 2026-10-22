@@ -1,0 +1,48 @@
+slug: codex-search-strategy
+title: Search the Way a Maintainer Would
+type: practice
+difficulty: intermediate
+description: Searching by the name of a function finds the call site, not the definition. Write
+  the search strategy that finds the code that decides the behaviour.
+requirements:
+  - File ~/codex/repo/search.md exists
+  - The document states the order of the search
+  - The document states how to find the callers of a function
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/repo/search.md
+    label: ~/codex/repo/search.md
+  - validator: file_contains
+    path: /home/learner/codex/repo/search.md
+    value: Grep
+    label: grep strategy stated
+  - validator: file_contains
+    path: /home/learner/codex/repo/search.md
+    value: "callers"
+    label: caller search stated
+  - validator: file_contains
+    path: /home/learner/codex/repo/search.md
+    value: "definition"
+    label: definition search stated
+  - validator: file_contains
+    path: /home/learner/codex/repo/search.md
+    value: "behaviour"
+    label: behaviour search stated
+steps:
+  - title: Create the repo directory
+    detail: The search notes are per repository.
+    command: mkdir -p ~/codex/repo
+  - title: Write the search order
+    detail: "Search for the behaviour, not the name. The string a user sees is usually closer to
+      the behaviour than the function name is."
+    command: >-
+      echo '# Searching a repository\n\n## The order\n\n1. search the behaviour - the error message, the route path, the field name\n2. find the definition of the function that owns it\n3. find the callers of that function\n4. read the test that covers it' > ~/codex/repo/search.md
+  - title: Write the caller rule
+    detail: "Every caller is a place the change has to keep working. Grep for the name and read
+      each hit before you edit."
+    command: >-
+      echo '\n## Callers\n\nGrep for the name and read every caller before editing. A change that fixes one caller and breaks another is the failure mode this prevents.' >> ~/codex/repo/search.md
+  - title: Verify and submit
+    detail: cat the strategy, then submit for validation.
+    command: cat ~/codex/repo/search.md

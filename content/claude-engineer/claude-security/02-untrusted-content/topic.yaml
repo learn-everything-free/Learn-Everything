@@ -1,0 +1,8 @@
+slug: 02-untrusted-content
+title: Untrusted Content
+summary: The issue text, the web page and the dependency readme are all instructions you did not
+  write.
+order: 2
+tasks:
+  - claude-prompt-injection
+  - claude-safe-output

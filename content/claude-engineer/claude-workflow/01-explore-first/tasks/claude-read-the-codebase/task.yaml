@@ -1,0 +1,48 @@
+slug: claude-read-the-codebase
+title: Read a Codebase in Ten Minutes
+type: practice
+difficulty: intermediate
+description: A fixed routine for understanding an unfamiliar repository. Write the ten minute
+  version of it.
+requirements:
+  - File ~/.claude/workflow/read-codebase.md exists
+  - The document states the order of the sweep
+  - The document states what to write down at the end
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/workflow/read-codebase.md
+    label: ~/.claude/workflow/read-codebase.md
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/read-codebase.md
+    value: "directory"
+    label: directory sweep stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/read-codebase.md
+    value: "entry point"
+    label: entry point sweep stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/read-codebase.md
+    value: "routes"
+    label: routes sweep stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/read-codebase.md
+    value: "write down"
+    label: notes rule stated
+steps:
+  - title: Create the workflow directory
+    detail: The sweep is the same every time you open a new repository.
+    command: mkdir -p ~/.claude/workflow
+  - title: Write the sweep order
+    detail: "Structure first, then the entry point, then the routes, then one real request all
+      the way through."
+    command: >-
+      echo '# Reading a codebase in ten minutes\n\n## The sweep\n\n1. the directory layout - what are the big folders and what lives in them\n2. the entry point - where the process starts\n3. the routes - what the system exposes\n4. one request followed all the way through, from the route to the database' > ~/.claude/workflow/read-codebase.md
+  - title: Write the notes rule
+    detail: "Write down what you learned, in the memory file. The next session should not have to
+      rediscover the layout."
+    command: >-
+      echo '\n## What to write down\n\nThree lines in the memory file - where the entry point is, where the tests live, and the one command that runs them. That is what the next session needs.' >> ~/.claude/workflow/read-codebase.md
+  - title: Verify and submit
+    detail: cat the sweep, then submit for validation.
+    command: cat ~/.claude/workflow/read-codebase.md

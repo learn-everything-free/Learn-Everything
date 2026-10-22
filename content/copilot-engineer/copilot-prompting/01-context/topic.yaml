@@ -1,0 +1,7 @@
+slug: 01-context
+title: Context & Instructions
+summary: What the assistant already knows, and what you have to tell it.
+order: 1
+tasks:
+  - copilot-prompt-context
+  - copilot-prompt-instructions

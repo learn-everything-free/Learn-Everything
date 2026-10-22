@@ -1,0 +1,7 @@
+slug: 02-fix-the-failure
+title: Fix the Failure
+summary: Read the error, fix the cause, and keep the regression from coming back.
+order: 2
+tasks:
+  - claude-read-failing-test
+  - claude-regression-guard

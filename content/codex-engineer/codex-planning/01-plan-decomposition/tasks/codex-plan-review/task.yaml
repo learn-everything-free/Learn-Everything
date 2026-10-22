@@ -1,0 +1,48 @@
+slug: codex-plan-review
+title: Review a Plan Before the Edits Start
+type: practice
+difficulty: intermediate
+description: A plan is a claim about what the change will do. Read it the way you would read a
+  pull request - against the codebase it claims to change.
+requirements:
+  - File ~/codex/plans/review.md exists
+  - The document lists the questions to ask of a plan
+  - The document states what makes a plan get sent back
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/plans/review.md
+    label: ~/codex/plans/review.md
+  - validator: file_contains
+    path: /home/learner/codex/plans/review.md
+    value: files
+    label: file list question stated
+  - validator: file_contains
+    path: /home/learner/codex/plans/review.md
+    value: "test"
+    label: test question stated
+  - validator: file_contains
+    path: /home/learner/codex/plans/review.md
+    value: Reject
+    label: rejection criteria stated
+  - validator: file_contains
+    path: /home/learner/codex/plans/review.md
+    value: "existing"
+    label: reuse rule stated
+steps:
+  - title: Create the plans directory
+    detail: The review checklist is written once and used for every plan.
+    command: mkdir -p ~/codex/plans
+  - title: Write the questions
+    detail: "Does it name real files, does it add a test, does it reuse what already exists - those
+      three questions catch most bad plans."
+    command: >-
+      echo '# Reviewing a plan\n\n## The questions\n\n- do the files it names actually exist\n- does each step add or change a test\n- does it reuse the existing helper instead of writing a new one\n- is the change smaller than it needs to be' > ~/codex/plans/review.md
+  - title: Write the rejection criteria
+    detail: "A plan that touches a file nobody mentioned, or that rewrites working code, goes
+      back for a rewrite."
+    command: >-
+      echo '\n## Reject the plan when\n\n- it touches a file outside the scope you agreed\n- it rewrites existing working code instead of extending it\n- it has no test step\n- you cannot explain one of its steps to a colleague' >> ~/codex/plans/review.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/codex/plans/review.md

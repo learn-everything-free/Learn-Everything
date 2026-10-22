@@ -1,0 +1,48 @@
+slug: codex-narrow-the-change
+title: Narrow a Vague Request
+type: practice
+difficulty: intermediate
+description: Make it faster is not a task, it is a direction. Write the questions that turn a
+  vague request into a change with a boundary.
+requirements:
+  - File ~/codex/repo/narrowing.md exists
+  - The document lists the questions to ask
+  - The document states what a narrowed request looks like
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/codex/repo/narrowing.md
+    label: ~/codex/repo/narrowing.md
+  - validator: file_contains
+    path: /home/learner/codex/repo/narrowing.md
+    value: "which"
+    label: which questions stated
+  - validator: file_contains
+    path: /home/learner/codex/repo/narrowing.md
+    value: "measure"
+    label: measurement question stated
+  - validator: file_contains
+    path: /home/learner/codex/repo/narrowing.md
+    value: "acceptance criteria"
+    label: acceptance criteria stated
+  - validator: file_contains
+    path: /home/learner/codex/repo/narrowing.md
+    value: "one"
+    label: single behaviour rule stated
+steps:
+  - title: Create the repo directory
+    detail: The questions are the same in every repository.
+    command: mkdir -p ~/codex/repo
+  - title: Write the questions
+    detail: "Which user sees this, which path does the request take, and how will we measure
+      that it got better."
+    command: >-
+      echo '# Narrowing a request\n\n## The questions\n\n- which user hits this, and how often\n- which code path does the request take today\n- how do we measure that it got better\n- what must not change' > ~/codex/repo/narrowing.md
+  - title: Write what a narrowed request looks like
+    detail: "One behaviour, one acceptance criterion that can fail, and a named place in the
+      code."
+    command: >-
+      echo '\n## What a narrowed request looks like\n\nOne behaviour, one acceptance criteria that can fail, and a named place in the code. If the request still contains the word and, it is two tasks.' >> ~/codex/repo/narrowing.md
+  - title: Verify and submit
+    detail: cat the questions, then submit for validation.
+    command: cat ~/codex/repo/narrowing.md

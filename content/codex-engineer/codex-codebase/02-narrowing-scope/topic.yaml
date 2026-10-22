@@ -1,0 +1,7 @@
+slug: 02-narrowing-scope
+title: Narrowing the Scope
+summary: Turn a vague request into a change that fits the code that is already there.
+order: 2
+tasks:
+  - codex-narrow-the-change
+  - codex-verify-in-repo

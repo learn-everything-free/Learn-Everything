@@ -1,0 +1,52 @@
+slug: codex-prompt-anatomy
+title: Write the Three Parts of a Request
+type: guided
+difficulty: beginner
+description: Goal, context, constraints. Every request that works has all three. Write the
+  anatomy down.
+requirements:
+  - Directory ~/codex/prompts exists
+  - File ~/codex/prompts/anatomy.md exists
+  - The document defines the three parts
+  - The document gives an example of each part
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/codex/prompts
+    label: ~/codex/prompts
+  - validator: file_exists
+    path: /home/learner/codex/prompts/anatomy.md
+    label: ~/codex/prompts/anatomy.md
+  - validator: file_contains
+    path: /home/learner/codex/prompts/anatomy.md
+    value: goal
+    label: goal defined
+  - validator: file_contains
+    path: /home/learner/codex/prompts/anatomy.md
+    value: context
+    label: context defined
+  - validator: file_contains
+    path: /home/learner/codex/prompts/anatomy.md
+    value: constraints
+    label: constraints defined
+  - validator: file_contains
+    path: /home/learner/codex/prompts/anatomy.md
+    value: Example
+    label: examples given
+steps:
+  - title: Create the prompts directory
+    detail: The anatomy is a reference the team shares.
+    command: mkdir -p ~/codex/prompts
+  - title: Define the three parts
+    detail: "The goal says what changes. The context says where to look. The constraints say what
+      not to do."
+    command: >-
+      echo '# The anatomy of a request\n\n## The three parts\n\n- goal - what changes, in one sentence, from the outside\n- context - where the code is and what it does today\n- constraints - what must not change, and how the work is verified' > ~/codex/prompts/anatomy.md
+  - title: Give an example of each
+    detail: "An example teaches the shape faster than a paragraph. Use a real request from the
+      repository."
+    command: >-
+      echo '\n## Example\n\n- goal - the orders list endpoint accepts a cursor and returns the next page\n- context - src/server/orders/routes.ts already parses the limit parameter, and the query lives in src/server/orders/query.sql\n- constraints - do not change the response shape, add a test for the cursor, and do not touch the export route' >> ~/codex/prompts/anatomy.md
+  - title: Verify and submit
+    detail: cat the anatomy, then submit for validation.
+    command: cat ~/codex/prompts/anatomy.md

@@ -1,0 +1,48 @@
+slug: claude-regression-guard
+title: Guard the Regression
+type: challenge
+difficulty: advanced
+description: A bug that came back is a missing test, not bad luck. Write the rule that makes the
+  fix permanent.
+requirements:
+  - File ~/.claude/testing/regressions.md exists
+  - The document states what a fixed bug must leave behind
+  - The document states how the regression is caught before it ships
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/testing/regressions.md
+    label: ~/.claude/testing/regressions.md
+  - validator: file_contains
+    path: /home/learner/.claude/testing/regressions.md
+    value: "test"
+    label: test requirement stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/regressions.md
+    value: "reproduce"
+    label: reproduce rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/regressions.md
+    value: "commit"
+    label: commit rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/testing/regressions.md
+    value: "fails"
+    label: failing requirement stated
+steps:
+  - title: Create the testing directory
+    detail: The rule lives with the briefs.
+    command: mkdir -p ~/.claude/testing
+  - title: Write what a fixed bug leaves behind
+    detail: "A test that reproduces the bug, committed before the fix, and failing on the old
+      code. That is the whole guard."
+    command: >-
+      echo '# Guarding a regression\n\n## What a fixed bug leaves behind\n\n- a test that reproduces the bug, plus one edge case - the empty input, the missing row, the value at the limit\n- the test committed before the fix, and failing against the old code\n- the fix in the next commit, so the history shows the failure turning green\n\nA bug that returns is a missing test, not bad luck.' > ~/.claude/testing/regressions.md
+  - title: Write the catch rule
+    detail: "The regression test belongs to the fix, and the review checks that it exists
+      before the fix merges."
+    command: >-
+      echo '\n## Catching it before it ships\n\nThe regression test travels with the fix. The review checks that the test exists, that it fails on the old code, and that the suite fails if the fix is reverted.' >> ~/.claude/testing/regressions.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/testing/regressions.md

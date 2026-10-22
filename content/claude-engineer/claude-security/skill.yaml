@@ -1,0 +1,5 @@
+slug: claude-security
+title: Keeping Claude Code Safe
+summary: Permissions, secrets and the untrusted text that ends up in your context window.
+path: claude-engineer
+order: 7

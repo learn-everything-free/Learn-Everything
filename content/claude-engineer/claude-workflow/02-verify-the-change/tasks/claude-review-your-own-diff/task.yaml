@@ -1,0 +1,48 @@
+slug: claude-review-your-own-diff
+title: Make the Agent Review Its Own Diff
+type: challenge
+difficulty: advanced
+description: A second pass over the same diff catches what the first one missed. Write the review
+  prompt and the rules for taking it seriously.
+requirements:
+  - File ~/.claude/workflow/self-review.md exists
+  - The document states the questions the review must answer
+  - The document states when the agent must ask you instead of guessing
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/workflow/self-review.md
+    label: ~/.claude/workflow/self-review.md
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/self-review.md
+    value: "diff"
+    label: diff review stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/self-review.md
+    value: "unrelated"
+    label: unrelated change check stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/self-review.md
+    value: "ask"
+    label: escalation rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/self-review.md
+    value: "verify"
+    label: verification requirement stated
+steps:
+  - title: Create the workflow directory
+    detail: The self-review prompt lives with the rest of the workflow material.
+    command: mkdir -p ~/.claude/workflow
+  - title: Write the questions
+    detail: "What is in this diff that the task did not ask for, and what is missing from it? Those
+      two questions catch most of it."
+    command: >-
+      echo '# Reviewing your own diff\n\n## The questions\n\n- is there anything in this diff the task did not ask for - an unrelated rename, a reformatted file, a new dependency\n- is anything missing that the task needed - a test, an error path, a migration\n- does every line belong to the acceptance criteria' > ~/.claude/workflow/self-review.md
+  - title: Write the escalation and verification rules
+    detail: "If the review finds something ambiguous, the agent asks rather than deciding. And
+      every finding is verified before it is reported."
+    command: >-
+      echo '\n## Rules\n\n- when something is ambiguous, ask - do not decide on your own and do not widen the scope\n- verify every finding by reading the code, and report the file and the line\n- the review is not a summary of the change, it is a search for what is wrong with it' >> ~/.claude/workflow/self-review.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/workflow/self-review.md

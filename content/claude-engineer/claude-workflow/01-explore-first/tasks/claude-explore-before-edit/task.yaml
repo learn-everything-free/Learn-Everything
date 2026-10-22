@@ -1,0 +1,52 @@
+slug: claude-explore-before-edit
+title: Explore Before You Edit
+type: guided
+difficulty: beginner
+description: Editing before reading produces code that duplicates what already exists. Write the
+  rule that keeps the reading first.
+requirements:
+  - Directory ~/.claude/workflow exists
+  - File ~/.claude/workflow/explore.md exists
+  - The document states what to read before the first edit
+  - The document states when the exploration is enough
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.claude/workflow
+    label: ~/.claude/workflow
+  - validator: file_exists
+    path: /home/learner/.claude/workflow/explore.md
+    label: ~/.claude/workflow/explore.md
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/explore.md
+    value: CLAUDE.md
+    label: memory file named
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/explore.md
+    value: "callers"
+    label: caller search stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/explore.md
+    value: "test"
+    label: test reading stated
+  - validator: file_contains
+    path: /home/learner/.claude/workflow/explore.md
+    value: "enough"
+    label: stopping rule stated
+steps:
+  - title: Create the workflow directory
+    detail: The session rules live in one place, next to the settings.
+    command: mkdir -p ~/.claude/workflow
+  - title: Write what to read first
+    detail: "The memory file, the entry point, the callers of the thing you are changing, and the
+      test that covers it."
+    command: >-
+      echo '# Explore before you edit\n\n## What to read first\n\n1. CLAUDE.md - the rules the repository already states\n2. the entry point where the request arrives\n3. the callers of the function you are about to change\n4. the test that covers that function' > ~/.claude/workflow/explore.md
+  - title: Write the stopping rule
+    detail: "Stop reading when you can name the file you will edit, the helper you will reuse and
+      the test you will run. More reading than that is just delay."
+    command: >-
+      echo '\n## When the reading is enough\n\nStop when you can name the file to edit, the helper to reuse and the test to run. Reading past that point is delay, not diligence.' >> ~/.claude/workflow/explore.md
+  - title: Verify and submit
+    detail: cat the rule, then submit for validation.
+    command: cat ~/.claude/workflow/explore.md

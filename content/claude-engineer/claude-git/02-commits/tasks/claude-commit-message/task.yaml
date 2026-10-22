@@ -1,0 +1,48 @@
+slug: claude-commit-message
+title: Write the Commit Message
+type: practice
+difficulty: intermediate
+description: The commit message is the part of the change that survives. Write the rules the team
+  applies to every message.
+requirements:
+  - File ~/.claude/git/commits.md exists
+  - The document states the structure of a message
+  - The document states what a message must explain
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.claude/git/commits.md
+    label: ~/.claude/git/commits.md
+  - validator: file_contains
+    path: /home/learner/.claude/git/commits.md
+    value: conventional
+    label: conventional style stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/commits.md
+    value: "subject"
+    label: subject rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/commits.md
+    value: "body"
+    label: body rule stated
+  - validator: file_contains
+    path: /home/learner/.claude/git/commits.md
+    value: "why"
+    label: why rule stated
+steps:
+  - title: Create the git directory
+    detail: The commit rules live with the other git rules.
+    command: mkdir -p ~/.claude/git
+  - title: Write the structure
+    detail: "A conventional subject line, then a body that explains why. The body is the part
+      that gets read six months later."
+    command: >-
+      echo '# Commit messages\n\n## The structure\n\n- a conventional subject line - the type, then a short imperative summary in the lower case\n- a blank line\n- a body that explains the why, not the what' > ~/.claude/git/commits.md
+  - title: Write what the message must explain
+    detail: "Why the change was needed, and what the reviewer should look at first. If the change
+      was generated, say so."
+    command: >-
+      echo '\n## What the message explains\n\n- why the change was needed, in a sentence\n- the decision behind the approach, and what was rejected\n- anything the reviewer cannot see in the diff\n- when the change was written with an agent, that is stated in the message' >> ~/.claude/git/commits.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/.claude/git/commits.md

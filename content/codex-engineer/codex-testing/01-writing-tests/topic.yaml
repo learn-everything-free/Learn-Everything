@@ -1,0 +1,7 @@
+slug: 01-writing-tests
+title: Writing Tests
+summary: Get the test written first, then judge it like you would judge the implementation.
+order: 1
+tasks:
+  - codex-test-generation
+  - codex-test-review

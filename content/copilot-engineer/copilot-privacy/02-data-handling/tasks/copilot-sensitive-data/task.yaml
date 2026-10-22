@@ -1,0 +1,48 @@
+slug: copilot-sensitive-data
+title: Keep Sensitive Data Out
+type: challenge
+difficulty: advanced
+description: Not every repository may be used with an assistant. Write the classification that
+  decides which data the team may share and which stays local.
+requirements:
+  - File ~/copilot/legal/classification.md exists
+  - The document defines the data classes
+  - The document states the rule for each class
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/legal/classification.md
+    label: ~/copilot/legal/classification.md
+  - validator: file_contains
+    path: /home/learner/copilot/legal/classification.md
+    value: "public"
+    label: public class stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/classification.md
+    value: "internal"
+    label: internal class stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/classification.md
+    value: "restricted"
+    label: restricted class stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/classification.md
+    value: "approval"
+    label: approval rule stated
+steps:
+  - title: Create the legal directory
+    detail: The classification lives with the other legal notes.
+    command: mkdir -p ~/copilot/legal
+  - title: Define the three classes
+    detail: "Public, internal and restricted. The class decides the tool, not the other way
+      round."
+    command: >-
+      echo '# Data classification\n\n## The three classes\n\n- public - open source and documentation, no restrictions\n- internal - the code of the company, usable with the approved tooling\n- restricted - customer data, credentials, and anything under an agreement' > ~/copilot/legal/classification.md
+  - title: Write the rule for each class
+    detail: "Internal needs the approved tooling. Restricted needs an explicit approval, and
+      usually a person instead of a tool."
+    command: >-
+      echo '\n## The rules\n\n- public - any approved assistant\n- internal - the approved assistant, with the repository instructions loaded\n- restricted - only with an explicit approval from the data owner, and never pasted into a prompt' >> ~/copilot/legal/classification.md
+  - title: Verify and submit
+    detail: cat the classification, then submit for validation.
+    command: cat ~/copilot/legal/classification.md

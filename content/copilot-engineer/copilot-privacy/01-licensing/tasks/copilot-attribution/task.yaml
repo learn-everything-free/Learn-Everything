@@ -1,0 +1,48 @@
+slug: copilot-attribution
+title: Attribute What Was Machine-Written
+type: challenge
+difficulty: advanced
+description: Some licences and some policies require that machine-written code be declared. Write
+  the attribution rule for your repository.
+requirements:
+  - File ~/copilot/legal/attribution.md exists
+  - The document states when attribution is required
+  - The document states how the attribution is recorded
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/copilot/legal/attribution.md
+    label: ~/copilot/legal/attribution.md
+  - validator: file_contains
+    path: /home/learner/copilot/legal/attribution.md
+    value: "when"
+    label: trigger stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/attribution.md
+    value: "commit"
+    label: commit record stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/attribution.md
+    value: "reviewer"
+    label: reviewer rule stated
+  - validator: file_contains
+    path: /home/learner/copilot/legal/attribution.md
+    value: "not"
+    label: prohibition stated
+steps:
+  - title: Create the legal directory
+    detail: The attribution rules live with the licensing rules.
+    command: mkdir -p ~/copilot/legal
+  - title: Write when attribution is required
+    detail: "When the licence of the project requires it, when the client contract requires it,
+      or when a reviewer cannot otherwise tell."
+    command: >-
+      echo '# Attribution\n\n## When it is required\n\n- when the licence of the project requires generated code to be declared\n- when the client contract requires it\n- when a reviewer could not otherwise tell what was written by a person and what was not' > ~/copilot/legal/attribution.md
+  - title: Write how it is recorded
+    detail: "In the commit message, always, and in the pull request description when the change
+      is large. And the reviewer is still a person."
+    command: >-
+      echo '\n## How it is recorded\n\n- in the commit message, always, in one line\n- in the pull request description when the change is large\n- the named reviewer of the change is a person, never the assistant\n\n## Not required\n\nDo not add a marker to every line of generated code. It is noise, it does not survive a refactor, and it hides the one place that matters - the commit.' >> ~/copilot/legal/attribution.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/copilot/legal/attribution.md
