@@ -1,0 +1,49 @@
+slug: svc-boundaries
+title: Draw the Service Boundaries
+type: guided
+difficulty: beginner
+description: A boundary is a promise about who may change what. Write it down for the two
+  services, including which one owns each table.
+requirements:
+  - Directory ~/backend/services exists
+  - File ~/backend/services/README.md exists
+  - The document names the services
+  - The document states which service owns each table
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/backend/services
+    label: ~/backend/services
+  - validator: file_exists
+    path: /home/learner/backend/services/README.md
+    label: ~/backend/services/README.md
+  - validator: file_contains
+    path: /home/learner/backend/services/README.md
+    value: orders-service
+    label: orders service named
+  - validator: file_contains
+    path: /home/learner/backend/services/README.md
+    value: payment-service
+    label: payment service named
+  - validator: file_contains
+    path: /home/learner/backend/services/README.md
+    value: owns
+    label: data ownership stated
+  - validator: file_contains
+    path: /home/learner/backend/services/README.md
+    value: Boundary rule
+    label: boundary rule stated
+steps:
+  - title: Name the services
+    detail: "A service is named after the business capability it owns, not after the team that
+      wrote it."
+    command: >-
+      echo '# Services\n\n## orders-service\n\nOwns the order lifecycle - creation, state changes and the orders table.' > ~/backend/services/README.md
+  - title: Add the second service and the rule
+    detail: "payment-service owns the payments table. The boundary rule is the sentence nobody
+      is allowed to break."
+    command: >-
+      echo '\n## payment-service\n\nOwns the payments table and the capture and refund flows.\n\n## Boundary rule\n\nA service may only write the tables it owns. Everything else goes through an API or an event.' >> ~/backend/services/README.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/backend/services/README.md

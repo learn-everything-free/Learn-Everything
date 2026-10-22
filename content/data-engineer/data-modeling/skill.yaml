@@ -1,0 +1,5 @@
+slug: data-modeling
+title: Modeling & Warehousing
+summary: Star schemas, slowly changing dimensions and the layers between raw and ready.
+path: data-engineer
+order: 2

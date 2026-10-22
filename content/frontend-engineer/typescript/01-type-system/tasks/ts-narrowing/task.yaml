@@ -1,0 +1,41 @@
+slug: ts-narrowing
+title: Narrow an Unknown Type
+type: practice
+difficulty: intermediate
+description: Data from an API is unknown until you check it. Write the type guards that narrow it
+  before it reaches a component.
+requirements:
+  - File ~/frontend/src/types/guard.ts exists
+  - The file exports a type guard for the order
+  - The guard checks the shape of the value
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/types/guard.ts
+    label: ~/frontend/src/types/guard.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/guard.ts
+    value: "is Order"
+    label: type guard exported
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/guard.ts
+    value: "typeof"
+    label: guard checks the types
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/guard.ts
+    value: "in"
+    label: guard checks the keys
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/guard.ts
+    value: "unknown"
+    label: guard takes an unknown value
+steps:
+  - title: Write the guard signature
+    detail: "A type guard takes an unknown and returns a boolean - but the predicate says the
+      value is an Order when it is true."
+    command: >-
+      echo 'import type { Order } from "./order";\n\nexport function isOrder(value: unknown): value is Order {\n  if (typeof value !== "object") return false;\n  if (value === null) return false;\n  if (!("id" in value)) return false;\n  if (!("amountCents" in value)) return false;\n  if (typeof value.id !== "string") return false;\n  if (typeof value.amountCents !== "number") return false;\n  return true;\n}' > ~/frontend/src/types/guard.ts
+  - title: Verify and submit
+    detail: cat the file. A guard is only worth writing if it rejects the shapes you actually
+      receive.
+    command: cat ~/frontend/src/types/guard.ts

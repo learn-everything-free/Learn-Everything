@@ -1,0 +1,48 @@
+slug: css-layout
+title: Build a Layout with Grid
+type: guided
+difficulty: beginner
+description: Grid and flexbox are two different tools. Use grid for the page skeleton and flexbox
+  for the row inside it.
+requirements:
+  - Directory ~/frontend/src/styles exists
+  - File ~/frontend/src/styles/layout.css exists
+  - The file declares a grid layout with columns and a gap
+  - The file uses flexbox for the row layout
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/src/styles
+    label: ~/frontend/src/styles
+  - validator: file_exists
+    path: /home/learner/frontend/src/styles/layout.css
+    label: ~/frontend/src/styles/layout.css
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/layout.css
+    value: "display: grid"
+    label: grid layout declared
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/layout.css
+    value: "grid-template-columns"
+    label: columns defined
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/layout.css
+    value: "display: flex"
+    label: flexbox layout declared
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/layout.css
+    value: "gap"
+    label: gap used
+steps:
+  - title: Write the page grid
+    detail: "grid-template-columns with a repeat defines the skeleton, and gap keeps the spacing
+      consistent without margins."
+    command: >-
+      echo '.page {\n  display: grid;\n  grid-template-columns: repeat(12, 1fr);\n  gap: 16px;\n  padding: 24px;\n}' > ~/frontend/src/styles/layout.css
+  - title: Add the row layout
+    detail: "Flexbox is for one dimension - a row of items that should align and wrap."
+    command: >-
+      echo '\n\n.row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n}' >> ~/frontend/src/styles/layout.css
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/styles/layout.css

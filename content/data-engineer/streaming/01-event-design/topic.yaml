@@ -1,0 +1,7 @@
+slug: 01-event-design
+title: Event & Topic Design
+summary: Name the events, give them a schema, and choose the key that keeps the order.
+order: 1
+tasks:
+  - stream-event-schema
+  - stream-topic-layout

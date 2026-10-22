@@ -1,0 +1,45 @@
+slug: sql-index-strategy
+title: Index the Warehouse
+type: practice
+difficulty: intermediate
+description: An index is a bet on the queries you actually run. Write the indexes for the two hot
+  paths of the orders table.
+requirements:
+  - File ~/warehouse/indexes.sql exists
+  - The file creates a composite index over the status and the created_at column
+  - The file creates an index on the customer column
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/warehouse/indexes.sql
+    label: ~/warehouse/indexes.sql
+  - validator: file_contains
+    path: /home/learner/warehouse/indexes.sql
+    value: "CREATE INDEX"
+    label: index created
+  - validator: file_contains
+    path: /home/learner/warehouse/indexes.sql
+    value: status
+    label: status column indexed
+  - validator: file_contains
+    path: /home/learner/warehouse/indexes.sql
+    value: created_at
+    label: created_at column indexed
+  - validator: file_contains
+    path: /home/learner/warehouse/indexes.sql
+    value: customer_id
+    label: customer column indexed
+steps:
+  - title: Write the composite index
+    detail: "The order of the columns matters - equality first, range last. status is filtered on
+      exactly, created_at is sorted on."
+    command: >-
+      echo CREATE INDEX idx_orders_status_created_at ON orders (status, created_at DESC); > ~/warehouse/indexes.sql
+  - title: Add the customer index
+    detail: "Every dashboard groups by customer. Without this index the query scans the whole
+      fact table."
+    command: >-
+      echo '\nCREATE INDEX idx_orders_customer_id ON orders (customer_id);' >> ~/warehouse/indexes.sql
+  - title: Verify and submit
+    detail: cat the file. Every index should map to a query you have measured.
+    command: cat ~/warehouse/indexes.sql

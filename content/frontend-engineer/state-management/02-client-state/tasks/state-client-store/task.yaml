@@ -1,0 +1,49 @@
+slug: state-client-store
+title: Build a Small Shared Store
+type: practice
+difficulty: intermediate
+description: Not every piece of state needs a library. Write the small store the cart needs -
+  state, subscribe and update.
+requirements:
+  - Directory ~/frontend/src/store exists
+  - File ~/frontend/src/store/cart.ts exists
+  - The store exposes the state and a subscribe function
+  - The store exposes an action that updates the state
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/src/store
+    label: ~/frontend/src/store
+  - validator: file_exists
+    path: /home/learner/frontend/src/store/cart.ts
+    label: ~/frontend/src/store/cart.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/store/cart.ts
+    value: "getState"
+    label: state getter present
+  - validator: file_contains
+    path: /home/learner/frontend/src/store/cart.ts
+    value: "subscribe"
+    label: subscribe function present
+  - validator: file_contains
+    path: /home/learner/frontend/src/store/cart.ts
+    value: "setState"
+    label: state update present
+  - validator: file_contains
+    path: /home/learner/frontend/src/store/cart.ts
+    value: "export"
+    label: store exported
+steps:
+  - title: Write the store
+    detail: "The state is private, the actions are public. Everything that changes the state
+      goes through an action."
+    command: >-
+      echo 'export interface CartState {\n  readonly items: readonly string[];\n  readonly totalCents: number;\n}\n\nlet state: CartState = { items: [], totalCents: 0 };\nconst listeners = new Set<(next: CartState) => void>();' > ~/frontend/src/store/cart.ts
+  - title: Add the actions
+    detail: "Every action returns the new state and notifies the listeners. One code path for
+      updates, one place to test."
+    command: >-
+      echo '\n\nexport function getState(): CartState {\n  return state;\n}\n\nexport function subscribe(listener: (next: CartState) => void) {\n  listeners.add(listener);\n  return () => listeners.delete(listener);\n}\n\nexport function setState(next: CartState) {\n  state = next;\n  for (const listener of listeners) listener(next);\n}' >> ~/frontend/src/store/cart.ts
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/store/cart.ts

@@ -1,0 +1,7 @@
+slug: 02-rendering
+title: Rendering & Lists
+summary: Keys, empty states and the memoisation that is worth the complexity.
+order: 2
+tasks:
+  - react-list-keys
+  - react-memoisation

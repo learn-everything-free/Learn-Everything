@@ -1,0 +1,51 @@
+slug: queue-idempotent-consumer
+title: Make the Consumer Idempotent
+type: challenge
+difficulty: advanced
+description: The broker will send the message twice, and it is not a bug. Write the strategy that
+  makes the second delivery a no-op.
+requirements:
+  - File ~/backend/queues/idempotency.md exists
+  - The document names the idempotency key
+  - The document explains where the key is stored and for how long
+  - The document explains the deduplication window
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/queues/idempotency.md
+    label: ~/backend/queues/idempotency.md
+  - validator: file_contains
+    path: /home/learner/backend/queues/idempotency.md
+    value: idempotency_key
+    label: idempotency key named
+  - validator: file_contains
+    path: /home/learner/backend/queues/idempotency.md
+    value: unique
+    label: uniqueness enforced
+  - validator: file_contains
+    path: /home/learner/backend/queues/idempotency.md
+    value: deduplication
+    label: deduplication window stated
+  - validator: file_contains
+    path: /home/learner/backend/queues/idempotency.md
+    value: transaction
+    label: transaction boundary explained
+steps:
+  - title: Name the key and the storage
+    detail: "The idempotency_key is the event id. Store it with a unique constraint so the second
+      insert fails instead of duplicating the work."
+    command: >-
+      echo '# Idempotent consumers\n\n## The key\n\nThe idempotency_key is the event id. It is stored in the processed_events table with a unique constraint.' > ~/backend/queues/idempotency.md
+  - title: Explain the transaction boundary
+    detail: "The marker and the business change go into one transaction. If they do not, you
+      either lose work or duplicate it."
+    command: >-
+      echo '\n## Transaction boundary\n\nThe marker and the business change are written in the same transaction, so they commit or roll back together.' >> ~/backend/queues/idempotency.md
+  - title: State the deduplication window
+    detail: "Keep the marker for longer than the maximum redelivery window - the deduplication
+      window is how long you remember."
+    command: >-
+      echo '\n## Deduplication window\n\nThe deduplication window is seven days, which is longer than the maximum redelivery window of the broker.' >> ~/backend/queues/idempotency.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/backend/queues/idempotency.md

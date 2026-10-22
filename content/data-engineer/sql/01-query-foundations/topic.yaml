@@ -1,0 +1,7 @@
+slug: 01-query-foundations
+title: Query Foundations
+summary: Read a question, model it as a join, and get the rows back in the order you meant.
+order: 1
+tasks:
+  - sql-active-users
+  - sql-revenue-by-day

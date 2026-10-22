@@ -1,0 +1,48 @@
+slug: ts-model-domain
+title: Model the Domain
+type: guided
+difficulty: beginner
+description: The shape of an order should exist in one place. Write the types the whole
+  application shares.
+requirements:
+  - Directory ~/frontend/src/types exists
+  - File ~/frontend/src/types/order.ts exists
+  - The file exports an interface for the order
+  - The file exports the status as a union of string literals
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/src/types
+    label: ~/frontend/src/types
+  - validator: file_exists
+    path: /home/learner/frontend/src/types/order.ts
+    label: ~/frontend/src/types/order.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/order.ts
+    value: "export interface Order"
+    label: Order interface exported
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/order.ts
+    value: "export type OrderStatus"
+    label: status union exported
+  - validator: file_contains
+    path: /home/learner/frontend/src/types/order.ts
+    value: "readonly"
+    label: fields are readonly
+steps:
+  - title: Create the types directory
+    detail: Shared types live in one folder - a feature folder per domain if it grows.
+    command: mkdir -p ~/frontend/src/types
+  - title: Write the order interface
+    detail: "readonly means the shape cannot change under you. It is the cheapest immutability
+      you will ever get."
+    command: >-
+      echo 'export interface Order {\n  readonly id: string;\n  readonly customerId: string;\n  readonly amountCents: number;\n  readonly placedAt: string;\n}' > ~/frontend/src/types/order.ts
+  - title: Add the status union
+    detail: "A const array plus the indexed access type gives you a closed set the compiler
+      checks - and one list to keep in sync."
+    command: >-
+      echo '\n\nexport const ORDER_STATUSES = ["pending", "paid", "shipped", "cancelled"] as const;\n\nexport type OrderStatus = (typeof ORDER_STATUSES)[number];' >> ~/frontend/src/types/order.ts
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/types/order.ts

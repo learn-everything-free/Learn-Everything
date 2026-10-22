@@ -1,0 +1,48 @@
+slug: sql-revenue-by-day
+title: Aggregate With Window Functions
+type: practice
+difficulty: intermediate
+description: Totals tell you where you are, comparisons tell you where you are going. Write the
+  daily revenue query with a running total and a day-over-day comparison.
+requirements:
+  - File ~/warehouse/queries/revenue_by_day.sql exists
+  - The query groups by day and sums the revenue
+  - The query computes a running total with a window function
+  - The query compares each day with the previous one
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/warehouse/queries/revenue_by_day.sql
+    label: ~/warehouse/queries/revenue_by_day.sql
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/revenue_by_day.sql
+    value: GROUP BY
+    label: query groups by day
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/revenue_by_day.sql
+    value: SUM
+    label: query sums the revenue
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/revenue_by_day.sql
+    value: "SUM(revenue) OVER"
+    label: query computes a running total
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/revenue_by_day.sql
+    value: LAG
+    label: query compares with the previous day
+steps:
+  - title: Write the daily totals
+    detail: "date_trunc cuts the timestamp to the day, so every order lands in the right bucket.
+      sum turns the rows into revenue."
+    command: >-
+      echo SELECT date_trunc('day', created_at) AS day,\nSUM(amount) AS revenue\nFROM orders\nWHERE status = 'paid'\nGROUP BY day\nORDER BY day; > ~/warehouse/queries/revenue_by_day.sql
+  - title: Add the running total
+    detail: "A window function aggregates across rows without collapsing them. The ORDER BY inside
+      OVER is what makes the running total run in the right order."
+    command: >-
+      echo '\nSELECT day, revenue,\nSUM(revenue) OVER (ORDER BY day) AS running_total,\nLAG(revenue) OVER (ORDER BY day) AS previous_day\nFROM daily_revenue;' >> ~/warehouse/queries/revenue_by_day.sql
+  - title: Read the query back
+    detail: cat prints the whole thing. The window clause is the part people forget to read.
+    command: cat ~/warehouse/queries/revenue_by_day.sql
+  - title: Submit for validation
+    detail: The validator checks the aggregate and both window functions.

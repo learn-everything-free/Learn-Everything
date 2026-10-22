@@ -1,0 +1,7 @@
+slug: 02-transform-and-test
+title: Transforms & Contracts
+summary: Clean the data on the way in, and make the producer tell you what it sends.
+order: 2
+tasks:
+  - etl-sql-transform
+  - etl-data-contract

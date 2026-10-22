@@ -1,0 +1,41 @@
+slug: css-design-tokens
+title: Name the Design Tokens
+type: practice
+difficulty: intermediate
+description: A token is a decision with a name. Write the colour and spacing tokens so the
+  product has one source of truth.
+requirements:
+  - File ~/frontend/src/styles/tokens.css exists
+  - The file defines the colour tokens
+  - The file defines the spacing tokens on a scale
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/styles/tokens.css
+    label: ~/frontend/src/styles/tokens.css
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/tokens.css
+    value: "--color-"
+    label: colour tokens defined
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/tokens.css
+    value: "--space-"
+    label: spacing tokens defined
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/tokens.css
+    value: ":root"
+    label: tokens declared on the root
+steps:
+  - title: Write the colour tokens
+    detail: "Name colours by their role, not by their hue - ink and surface survive a dark mode
+      swap, black and white do not."
+    command: >-
+      echo ':root {\n  --color-ink: #1b1b19;\n  --color-smoke: #55534e;\n  --color-surface: #faf8f4;\n  --color-accent: #ff4704;\n  --color-border: #e3ded4;\n}' > ~/frontend/src/styles/tokens.css
+  - title: Add the spacing scale
+    detail: "One scale, used everywhere. A 4 pixel step keeps the rhythm consistent across
+      every screen."
+    command: >-
+      echo '\n\n  --space-1: 4px;\n  --space-2: 8px;\n  --space-3: 12px;\n  --space-4: 16px;\n  --space-6: 24px;\n  --space-8: 32px;\n}' >> ~/frontend/src/styles/tokens.css
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/styles/tokens.css

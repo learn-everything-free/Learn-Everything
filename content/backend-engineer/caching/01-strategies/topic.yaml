@@ -1,0 +1,7 @@
+slug: 01-strategies
+title: Cache Strategies
+summary: Read-through, write-around and the stampede you get when a hot key expires.
+order: 1
+tasks:
+  - cache-read-through
+  - cache-stampede

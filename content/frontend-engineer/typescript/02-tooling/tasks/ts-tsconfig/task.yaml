@@ -1,0 +1,43 @@
+slug: ts-tsconfig
+title: Configure the Compiler
+type: practice
+difficulty: intermediate
+description: The compiler settings decide which bugs reach the browser. Turn on the strict options
+  and the path aliases the project uses.
+requirements:
+  - Directory ~/frontend exists
+  - File ~/frontend/tsconfig.json exists
+  - The config enables strict mode
+  - The config maps the path aliases
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend
+    label: ~/frontend
+  - validator: file_exists
+    path: /home/learner/frontend/tsconfig.json
+    label: ~/frontend/tsconfig.json
+  - validator: file_contains
+    path: /home/learner/frontend/tsconfig.json
+    value: '"strict"'
+    label: strict mode enabled
+  - validator: file_contains
+    path: /home/learner/frontend/tsconfig.json
+    value: '"noUncheckedIndexedAccess"'
+    label: unchecked index access enabled
+  - validator: file_contains
+    path: /home/learner/frontend/tsconfig.json
+    value: '"paths"'
+    label: path aliases configured
+steps:
+  - title: Create the frontend directory
+    detail: The project root holds the config files and the source tree.
+    command: mkdir -p ~/frontend
+  - title: Write the compiler options
+    detail: "strict turns on the whole family of checks at once. Turning them on one by one
+      leaves holes in the codebase."
+    command: >-
+      echo '{\n  "compilerOptions": {\n    "target": "ES2022",\n    "module": "ESNext",\n    "moduleResolution": "bundler",\n    "strict": true,\n    "noUncheckedIndexedAccess": true,\n    "exactOptionalPropertyTypes": true,\n    "jsx": "react-jsx",\n    "baseUrl": ".",\n    "paths": {\n      "@/*": ["src/*"]\n    }\n  },\n  "include": ["src"]\n}' > ~/frontend/tsconfig.json
+  - title: Verify and submit
+    detail: cat the config. Every option here removes a class of runtime bug.
+    command: cat ~/frontend/tsconfig.json

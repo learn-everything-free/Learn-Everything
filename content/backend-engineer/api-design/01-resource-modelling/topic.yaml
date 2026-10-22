@@ -1,0 +1,7 @@
+slug: 01-resource-modelling
+title: Resource Modelling
+summary: Model the domain first, then expose it - and page through the result properly.
+order: 1
+tasks:
+  - api-openapi-contract
+  - api-pagination

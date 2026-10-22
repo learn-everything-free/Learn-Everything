@@ -1,0 +1,7 @@
+slug: 02-errors-and-versioning
+title: Errors & Versioning
+summary: One error shape for every failure, and a plan for the version you will break someday.
+order: 2
+tasks:
+  - api-error-envelope
+  - api-versioning

@@ -1,0 +1,48 @@
+slug: orch-retry-policy
+title: Set Retry and Backoff Policies
+type: challenge
+difficulty: advanced
+description: Transient failures are normal - a network hiccup is not a broken pipeline. Write the
+  policy that says when to try again and when to give up.
+requirements:
+  - File ~/orchestration/policies.yaml exists
+  - The policy states how many retries a task gets
+  - The policy states the backoff between attempts
+  - The policy states the deadline for a single task
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/orchestration/policies.yaml
+    label: ~/orchestration/policies.yaml
+  - validator: file_contains
+    path: /home/learner/orchestration/policies.yaml
+    value: max_retries
+    label: retry count stated
+  - validator: file_contains
+    path: /home/learner/orchestration/policies.yaml
+    value: backoff
+    label: backoff stated
+  - validator: file_contains
+    path: /home/learner/orchestration/policies.yaml
+    value: timeout_seconds
+    label: task deadline stated
+  - validator: file_contains
+    path: /home/learner/orchestration/policies.yaml
+    value: retryable_errors
+    label: retryable errors listed
+steps:
+  - title: Write the retry policy
+    detail: "max_retries is how many times a transient failure gets another go. Three is usually
+      enough - more just delays the alert."
+    command: >-
+      echo 'policies:\n  default:\n    max_retries: 3\n    backoff_seconds: 60\n    timeout_seconds: 3600' > ~/orchestration/policies.yaml
+  - title: List the retryable errors
+    detail: "Only retry what is worth retrying - a timeout or a dropped connection, never a
+      syntax error in your own SQL."
+    command: >-
+      echo '\n    retryable_errors: [timeout, connection_reset, throttle]\n    non_retryable_errors: [syntax_error, permission_denied]' >> ~/orchestration/policies.yaml
+  - title: Verify the policy
+    detail: cat prints the policy. Ask what happens when the fourth attempt fails.
+    command: cat ~/orchestration/policies.yaml
+  - title: Submit for validation
+    detail: The validator checks the retries, backoff, deadline and the error list.

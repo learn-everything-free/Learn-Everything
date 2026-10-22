@@ -1,0 +1,53 @@
+slug: sql-active-users
+title: Join and Filter Like a Pro
+type: guided
+difficulty: beginner
+description: The first query you ever write is a join. Build one that lists the active users and
+  the number of orders each of them placed.
+requirements:
+  - Directory ~/warehouse/queries exists
+  - File ~/warehouse/queries/active_users.sql exists
+  - The query selects from two tables and joins them
+  - The query filters on a status and orders the result
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/warehouse/queries
+    label: ~/warehouse/queries
+  - validator: file_exists
+    path: /home/learner/warehouse/queries/active_users.sql
+    label: ~/warehouse/queries/active_users.sql
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/active_users.sql
+    value: FROM
+    label: query selects from a table
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/active_users.sql
+    value: JOIN
+    label: query joins two tables
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/active_users.sql
+    value: WHERE
+    label: query filters the rows
+  - validator: file_contains
+    path: /home/learner/warehouse/queries/active_users.sql
+    value: GROUP BY
+    label: query aggregates per user
+steps:
+  - title: Create the queries directory
+    detail: Every query lives in version control - one folder per warehouse.
+    command: mkdir -p ~/warehouse/queries
+  - title: Write the select list
+    detail: "Start with what you want to see. u.id, u.name and the order count - the rest of the
+      query exists to produce these three things."
+    command: >-
+      echo SELECT u.id, u.name, count(o.id) AS order_count\nFROM users u\nJOIN orders o ON o.user_id = u.id\nWHERE u.status = 'active'\nGROUP BY u.id, u.name\nORDER BY order_count DESC\nLIMIT 100; > ~/warehouse/queries/active_users.sql
+  - title: Read the query back
+    detail: cat prints the file. Read it top to bottom - it should say what it does in plain words.
+    command: cat ~/warehouse/queries/active_users.sql
+  - title: Check the pieces
+    detail: "Four clauses carry the whole query - SELECT, FROM, WHERE and GROUP BY. If you cannot
+      name the clause a line belongs to, the line is in the wrong place."
+    command: grep SELECT ~/warehouse/queries/active_users.sql
+  - title: Submit for validation
+    detail: The validator checks the file and the four clauses your query needs.

@@ -1,0 +1,47 @@
+slug: svc-backward-compatibility
+title: Change the Contract Safely
+type: challenge
+difficulty: advanced
+description: Old clients and new servers have to coexist for at least one deployment. Write the
+  expand and contract plan that makes that possible.
+requirements:
+  - File ~/backend/services/compatibility.md exists
+  - The document describes the expand step
+  - The document describes the contract step
+  - The document states the backward compatibility rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/services/compatibility.md
+    label: ~/backend/services/compatibility.md
+  - validator: file_contains
+    path: /home/learner/backend/services/compatibility.md
+    value: expand
+    label: expand step described
+  - validator: file_contains
+    path: /home/learner/backend/services/compatibility.md
+    value: contract
+    label: contract step described
+  - validator: file_contains
+    path: /home/learner/backend/services/compatibility.md
+    value: backward
+    label: backward compatibility rule stated
+steps:
+  - title: Describe the expand step
+    detail: "Add the new field and keep the old one. Both are valid for as long as old clients
+      exist."
+    command: >-
+      echo '# Changing a contract safely\n\n## Step 1 - expand\n\nAdd the new field and keep serving the old one. Nothing breaks, because both shapes are valid.' > ~/backend/services/compatibility.md
+  - title: Describe the contract step
+    detail: "Only after every client has moved do you remove the old field. The contract step is
+      a separate deploy, days later."
+    command: >-
+      echo '\n## Step 2 - contract\n\nAfter every consumer has moved to the new shape, remove the old field in a separate deploy.' >> ~/backend/services/compatibility.md
+  - title: State the rule
+    detail: "The backward compatibility rule is what stops somebody doing both steps in one
+      release."
+    command: >-
+      echo '\n## Rule\n\nEvery change must stay backward compatible for at least one release, and the two steps never ship together.' >> ~/backend/services/compatibility.md
+  - title: Verify and submit
+    detail: cat the plan, then submit for validation.
+    command: cat ~/backend/services/compatibility.md

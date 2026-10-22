@@ -1,0 +1,46 @@
+slug: perf-vitals-budget
+title: Set a Performance Budget
+type: guided
+difficulty: beginner
+description: Pick the numbers you are willing to ship with, and write them down where the CI job can
+  read them.
+requirements:
+  - Directory ~/frontend/perf exists
+  - File ~/frontend/perf/budget.json exists
+  - The budget states the LCP, INP and CLS limits
+  - The budget states the device the numbers were measured on
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/perf
+    label: ~/frontend/perf
+  - validator: file_exists
+    path: /home/learner/frontend/perf/budget.json
+    label: ~/frontend/perf/budget.json
+  - validator: file_contains
+    path: /home/learner/frontend/perf/budget.json
+    value: LCP
+    label: LCP budget stated
+  - validator: file_contains
+    path: /home/learner/frontend/perf/budget.json
+    value: INP
+    label: INP budget stated
+  - validator: file_contains
+    path: /home/learner/frontend/perf/budget.json
+    value: CLS
+    label: CLS budget stated
+  - validator: file_contains
+    path: /home/learner/frontend/perf/budget.json
+    value: device
+    label: measurement device stated
+steps:
+  - title: Write the budget
+    detail: "The three vitals, their limits, and the device the limits were measured on. Without
+      the device the number means nothing."
+    command: >-
+      echo '{"device": "moto-g-power", "network": "slow-4g", "budgets": {"LCP": 2500, "INP": 200, "CLS": 0.1}}' > ~/frontend/perf/budget.json
+  - title: Verify the budget
+    detail: cat prints the budget. Compare it with the numbers your analytics actually report.
+    command: cat ~/frontend/perf/budget.json
+  - title: Submit for validation
+    detail: The validator checks the three vitals and the device.

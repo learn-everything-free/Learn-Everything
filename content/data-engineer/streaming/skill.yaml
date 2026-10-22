@@ -1,0 +1,5 @@
+slug: streaming
+title: Streaming & Event Pipelines
+summary: Events, topics and the delivery guarantees you can actually promise.
+path: data-engineer
+order: 5

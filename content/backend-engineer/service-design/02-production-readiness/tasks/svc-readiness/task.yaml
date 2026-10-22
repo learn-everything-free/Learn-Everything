@@ -1,0 +1,51 @@
+slug: svc-readiness
+title: Pass the Readiness Checklist
+type: practice
+difficulty: intermediate
+description: A service is ready when it can be observed, alerted on and run by somebody else at
+  3am. Write the checklist it has to pass.
+requirements:
+  - File ~/backend/services/readiness.md exists
+  - The document lists the health endpoints
+  - The document states the objective and the alert
+  - The document points at a runbook
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/services/readiness.md
+    label: ~/backend/services/readiness.md
+  - validator: file_contains
+    path: /home/learner/backend/services/readiness.md
+    value: "/healthz"
+    label: health endpoint listed
+  - validator: file_contains
+    path: /home/learner/backend/services/readiness.md
+    value: "/readyz"
+    label: readiness endpoint listed
+  - validator: file_contains
+    path: /home/learner/backend/services/readiness.md
+    value: slo
+    label: objective stated
+  - validator: file_contains
+    path: /home/learner/backend/services/readiness.md
+    value: runbook
+    label: runbook linked
+steps:
+  - title: List the health endpoints
+    detail: "/healthz says the process is alive, /readyz says it can serve traffic. They answer
+      different questions."
+    command: >-
+      echo '# Production readiness\n\n## Health\n\n- /healthz - the process is alive\n- /readyz - the service can serve traffic' > ~/backend/services/readiness.md
+  - title: State the objective and the alert
+    detail: "An objective without an alert is a wish. The alert is what turns the objective into
+      an action."
+    command: >-
+      echo '\n## Objective\n\nThe availability slo is 99.9 percent, alerted on when the error budget burns faster than the burn rate rule allows.' >> ~/backend/services/readiness.md
+  - title: Link the runbook
+    detail: "Every alert points at a runbook. If there is no runbook, the alert is only allowed to
+      page somebody who already knows the answer."
+    command: >-
+      echo '\n## Runbook\n\nThe runbook lives at runbooks/orders-service.md and is checked on every release.' >> ~/backend/services/readiness.md
+  - title: Verify and submit
+    detail: cat the checklist, then submit for validation.
+    command: cat ~/backend/services/readiness.md

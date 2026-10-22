@@ -1,0 +1,7 @@
+slug: 01-queue-design
+title: Queue & Consumer Design
+summary: Topics, partitions and the consumer group that does the work.
+order: 1
+tasks:
+  - queue-topic-design
+  - queue-consumer-design

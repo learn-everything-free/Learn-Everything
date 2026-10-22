@@ -1,0 +1,45 @@
+slug: queue-retry-dlq
+title: Retry, Then Give Up
+type: practice
+difficulty: intermediate
+description: Transient failures deserve another attempt, real failures do not. Write the policy
+  that decides which is which and where the exhausted messages go.
+requirements:
+  - File ~/backend/queues/retry-policy.yaml exists
+  - The policy states the retry count and the backoff
+  - The policy names the dead letter topic
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/queues/retry-policy.yaml
+    label: ~/backend/queues/retry-policy.yaml
+  - validator: file_contains
+    path: /home/learner/backend/queues/retry-policy.yaml
+    value: max_retries
+    label: retry count stated
+  - validator: file_contains
+    path: /home/learner/backend/queues/retry-policy.yaml
+    value: backoff
+    label: backoff stated
+  - validator: file_contains
+    path: /home/learner/backend/queues/retry-policy.yaml
+    value: dead_letter_topic
+    label: dead letter topic named
+  - validator: file_contains
+    path: /home/learner/backend/queues/retry-policy.yaml
+    value: retryable
+    label: retryable errors listed
+steps:
+  - title: Write the retry policy
+    detail: "max_retries with an exponential backoff - the wait grows so a struggling
+      dependency gets room to recover."
+    command: >-
+      echo 'retry_policy:\n  max_retries: 5\n  backoff: exponential\n  initial_delay_seconds: 5\n  max_delay_seconds: 300' > ~/backend/queues/retry-policy.yaml
+  - title: Name the dead letter topic
+    detail: "When the budget is spent the message goes to the dead letter topic, where somebody
+      can look at it."
+    command: >-
+      echo '\n  dead_letter_topic: order.created.dlq\n  retryable: [timeout, connection_reset, downstream_unavailable]\n  non_retryable: [validation_error, schema_mismatch]' >> ~/backend/queues/retry-policy.yaml
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/backend/queues/retry-policy.yaml

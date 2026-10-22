@@ -1,17 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPath, countTasks } from "@/lib/data";
+import { getPath, countTasks, paths } from "@/lib/data";
 import { getTool } from "@/lib/tools";
 import { Badge, Card, SectionHeader } from "@/components/ui";
 import { TaskProgressMeter } from "@/components/progress";
 import { ToolIcon } from "@/components/icons";
 
 export function generateStaticParams() {
-  return [
-    { slug: "devops-engineer" },
-    { slug: "ai-engineer" },
-    { slug: "mlops-engineer" },
-  ];
+  return paths.map((p) => ({ slug: p.slug }));
 }
 
 interface PageProps {

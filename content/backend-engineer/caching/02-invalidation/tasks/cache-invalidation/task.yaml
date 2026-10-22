@@ -1,0 +1,45 @@
+slug: cache-invalidation
+title: Invalidate from Events, Not from Code
+type: practice
+difficulty: intermediate
+description: Time based expiry is a guess. Write the event driven invalidation that drops the
+  entry the moment the data changes.
+requirements:
+  - File ~/backend/cache/invalidation.yaml exists
+  - The config maps a domain event to the keys it invalidates
+  - The config states the fallback expiry
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/cache/invalidation.yaml
+    label: ~/backend/cache/invalidation.yaml
+  - validator: file_contains
+    path: /home/learner/backend/cache/invalidation.yaml
+    value: events
+    label: events declared
+  - validator: file_contains
+    path: /home/learner/backend/cache/invalidation.yaml
+    value: invalidate
+    label: invalidation rule stated
+  - validator: file_contains
+    path: /home/learner/backend/cache/invalidation.yaml
+    value: "order_id"
+    label: key pattern stated
+  - validator: file_contains
+    path: /home/learner/backend/cache/invalidation.yaml
+    value: fallback_ttl_seconds
+    label: fallback expiry stated
+steps:
+  - title: Write the invalidation rules
+    detail: "Each event names the key pattern it invalidates. The pattern is built from the ids
+      in the event - that is why the events carry them."
+    command: >-
+      echo 'events:\n  - name: order.updated\n    invalidate:\n      - "orders:detail:{order_id}"\n      - "orders:list:{customer_id}"\n  - name: order.cancelled\n    invalidate:\n      - "orders:detail:{order_id}"' > ~/backend/cache/invalidation.yaml
+  - title: Add the fallback expiry
+    detail: "The fallback is the safety net for a missed event - the cache is still allowed to
+      expire on its own."
+    command: >-
+      echo '\nfallback_ttl_seconds: 900' >> ~/backend/cache/invalidation.yaml
+  - title: Verify and submit
+    detail: cat the config, then submit for validation.
+    command: cat ~/backend/cache/invalidation.yaml

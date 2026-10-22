@@ -1,0 +1,51 @@
+slug: etl-data-contract
+title: Write a Data Contract
+type: challenge
+difficulty: advanced
+description: The producer owns the shape of the data. Publish the contract, state how breaking
+  changes are handled, and nobody is surprised on a Monday morning.
+requirements:
+  - File ~/pipelines/contracts/orders.yaml exists
+  - The contract states the version and the schema
+  - The contract states the compatibility mode
+  - The contract states how a breaking change is announced
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/pipelines/contracts/orders.yaml
+    label: ~/pipelines/contracts/orders.yaml
+  - validator: file_contains
+    path: /home/learner/pipelines/contracts/orders.yaml
+    value: version
+    label: contract version stated
+  - validator: file_contains
+    path: /home/learner/pipelines/contracts/orders.yaml
+    value: schema
+    label: schema declared
+  - validator: file_contains
+    path: /home/learner/pipelines/contracts/orders.yaml
+    value: compatibility
+    label: compatibility mode stated
+  - validator: file_contains
+    path: /home/learner/pipelines/contracts/orders.yaml
+    value: breaking_change
+    label: breaking change policy stated
+steps:
+  - title: Write the contract header
+    detail: "The version is the contract. Consumers pin it, so a change means a new version
+      rather than a surprise."
+    command: >-
+      echo 'contract: orders\nversion: 3\nowner: orders-team\ncompatibility: backward' > ~/pipelines/contracts/orders.yaml
+  - title: Declare the schema
+    detail: "The schema is the promise about the columns - their names and their types, in the
+      order the producer writes them."
+    command: >-
+      echo '\nschema:\n  - name: order_id\n    type: string\n    required: true\n  - name: amount\n    type: number\n    required: true\n  - name: updated_at\n    type: timestamp\n    required: true' >> ~/pipelines/contracts/orders.yaml
+  - title: State the breaking change policy
+    detail: "A breaking change means a new major version, a notice period and a migration note.
+      Write it down before you need it."
+    command: >-
+      echo '\nbreaking_change:\n  notice_period_days: 30\n  requires: new_major_version\n  contact: orders-team@example.com' >> ~/pipelines/contracts/orders.yaml
+  - title: Verify and submit
+    detail: cat the contract, then submit for validation.
+    command: cat ~/pipelines/contracts/orders.yaml

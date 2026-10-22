@@ -1,0 +1,45 @@
+slug: css-type-scale
+title: Define a Type Scale
+type: practice
+difficulty: intermediate
+description: A type scale is a fixed set of sizes with a fixed ratio. Write it once and stop
+  picking pixel values by hand.
+requirements:
+  - File ~/frontend/src/styles/type.css exists
+  - The file defines the scale steps
+  - The file sets a line height and a fluid size
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/styles/type.css
+    label: ~/frontend/src/styles/type.css
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/type.css
+    value: "font-size"
+    label: font sizes set
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/type.css
+    value: "line-height"
+    label: line height set
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/type.css
+    value: "clamp("
+    label: fluid size used
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/type.css
+    value: ":root"
+    label: scale defined on the root
+steps:
+  - title: Write the scale
+    detail: "Define the steps as custom properties on the root - every component then uses the
+      same scale."
+    command: >-
+      echo ':root {\n  --text-xs: 0.75rem;\n  --text-sm: 0.875rem;\n  --text-base: 1rem;\n  --text-lg: 1.25rem;\n  --text-xl: 1.5rem;\n}' > ~/frontend/src/styles/type.css
+  - title: Add the line height and a fluid heading
+    detail: "clamp scales the size between a minimum and a maximum - no media queries needed
+      for the headline."
+    command: >-
+      echo '\n\nbody {\n  font-size: var(--text-base);\n  line-height: 1.5;\n}\n\nh1 {\n  font-size: clamp(1.75rem, 1rem + 3vw, 3rem);\n  line-height: 1.15;\n}' >> ~/frontend/src/styles/type.css
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/styles/type.css

@@ -1,0 +1,40 @@
+slug: state-url-state
+title: Put Filter State in the URL
+type: challenge
+difficulty: advanced
+description: State that belongs in the URL is shareable, bookmarkable and survives a refresh. Write
+  the hook that reads and writes it.
+requirements:
+  - File ~/frontend/src/hooks/useSearchParams.ts exists
+  - The hook reads the current search parameters
+  - The hook returns a setter that updates the URL
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/hooks/useSearchParams.ts
+    label: ~/frontend/src/hooks/useSearchParams.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useSearchParams.ts
+    value: "URLSearchParams"
+    label: url parameters used
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useSearchParams.ts
+    value: "searchParams"
+    label: parameters read
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useSearchParams.ts
+    value: "navigate"
+    label: url updated on change
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useSearchParams.ts
+    value: "export function useSearchParams"
+    label: hook exported
+steps:
+  - title: Write the hook
+    detail: "The hook reads the current parameters and returns a setter. The setter replaces the
+      query string, it does not append to it."
+    command: >-
+      echo 'import { useCallback } from "react";\n\nexport function useSearchParams() {\n  const searchParams = new URLSearchParams(window.location.search);\n  const navigate = useCallback((next: Record<string, string>) => {\n    const params = new URLSearchParams(next);\n    window.history.pushState({}, "", "?" + params.toString());\n  }, []);\n\n  return { searchParams, navigate };\n}' > ~/frontend/src/hooks/useSearchParams.ts
+  - title: Verify and submit
+    detail: cat the file. Ask what happens when the user presses the back button.
+    command: cat ~/frontend/src/hooks/useSearchParams.ts

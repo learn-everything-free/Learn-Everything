@@ -1,0 +1,7 @@
+slug: 02-a11y-and-testing
+title: Accessibility & Auditing
+summary: Semantics first, contrast second - and an audit that finds both.
+order: 2
+tasks:
+  - a11y-accessible-dialog
+  - a11y-contrast-audit

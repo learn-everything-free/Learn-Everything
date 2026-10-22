@@ -1,0 +1,7 @@
+slug: 02-production-readiness
+title: Production Readiness
+summary: Health checks, objectives and the migration that does not break the old version.
+order: 2
+tasks:
+  - svc-readiness
+  - svc-backward-compatibility

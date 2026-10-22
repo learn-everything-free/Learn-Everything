@@ -1,0 +1,45 @@
+slug: state-query-cache
+title: Name a Query and Its Cache Key
+type: guided
+difficulty: beginner
+description: Every request needs a stable identity - the cache key. Write the query definition
+  that names the key and says how long the data may be reused.
+requirements:
+  - Directory ~/frontend/src/api exists
+  - File ~/frontend/src/api/orders.ts exists
+  - The file defines the query key
+  - The file states how long the data stays fresh
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/src/api
+    label: ~/frontend/src/api
+  - validator: file_exists
+    path: /home/learner/frontend/src/api/orders.ts
+    label: ~/frontend/src/api/orders.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/orders.ts
+    value: "queryKey"
+    label: query key defined
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/orders.ts
+    value: "staleTime"
+    label: freshness window stated
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/orders.ts
+    value: "queryFn"
+    label: query function defined
+steps:
+  - title: Write the query function
+    detail: "The query function is the fetcher. It returns the parsed body - the cache does the
+      rest."
+    command: >-
+      echo 'import type { Order } from "../types/order";\n\nexport async function fetchOrders(cursor?: string): Promise<Order[]> {\n  const query = cursor ? "?cursor=" + cursor : "";\n  const response = await fetch("/api/orders" + query);\n  return (await response.json()) as Order[];\n}' > ~/frontend/src/api/orders.ts
+  - title: Add the query definition
+    detail: "The query key is a tuple - the resource and its parameters. Two different queries
+      must never share a key."
+    command: >-
+      echo '\n\nexport const ordersQuery = {\n  queryKey: ["orders", "list"],\n  queryFn: () => fetchOrders(),\n  staleTime: 30_000,\n};' >> ~/frontend/src/api/orders.ts
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/api/orders.ts

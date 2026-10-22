@@ -1,0 +1,49 @@
+slug: cache-hit-ratio
+title: Measure the Hit Ratio
+type: challenge
+difficulty: advanced
+description: A cache earns its keep with a hit ratio and a latency budget. Write the measurement
+  plan and the objective you will hold it to.
+requirements:
+  - File ~/backend/cache/metrics.md exists
+  - The document defines the hit ratio
+  - The document states the objective and the latency budget
+  - The document names the metric that is watched
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/cache/metrics.md
+    label: ~/backend/cache/metrics.md
+  - validator: file_contains
+    path: /home/learner/backend/cache/metrics.md
+    value: "hit ratio"
+    label: hit ratio defined
+  - validator: file_contains
+    path: /home/learner/backend/cache/metrics.md
+    value: SLO
+    label: objective stated
+  - validator: file_contains
+    path: /home/learner/backend/cache/metrics.md
+    value: p99
+    label: latency percentile named
+  - validator: file_contains
+    path: /home/learner/backend/cache/metrics.md
+    value: hits
+    label: hits and misses counted
+steps:
+  - title: Define the metric
+    detail: "hit ratio is hits divided by hits plus misses. Count both, and the ratio follows."
+    command: >-
+      echo '# Cache metrics\n\n## Hit ratio\n\nhit ratio = hits / (hits + misses), counted per namespace.' > ~/backend/cache/metrics.md
+  - title: State the objective
+    detail: "Give it a number and a deadline. Without one, every cache looks fine."
+    command: >-
+      echo '\n## Objective\n\nThe hit ratio SLO is 0.95 for the order detail namespace by the end of the quarter.' >> ~/backend/cache/metrics.md
+  - title: Watch the latency too
+    detail: "A cache that is slow is not a cache. The p99 lookup latency has a budget of two
+      milliseconds."
+    command: >-
+      echo '\n## Latency\n\nThe p99 lookup latency budget is 2ms, measured next to the hit ratio on the same dashboard.' >> ~/backend/cache/metrics.md
+  - title: Verify and submit
+    detail: cat the plan, then submit for validation.
+    command: cat ~/backend/cache/metrics.md

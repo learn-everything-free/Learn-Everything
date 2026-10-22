@@ -1,0 +1,7 @@
+slug: 02-layers-and-partitions
+title: Layers & Partitions
+summary: Raw, cleaned and curated - plus the physical layout that keeps queries fast.
+order: 2
+tasks:
+  - dm-medallion-layers
+  - dm-partitioning

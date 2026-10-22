@@ -1,0 +1,52 @@
+slug: react-use-orders-hook
+title: Move State Into a Hook
+type: practice
+difficulty: intermediate
+description: A component that fetches its own data cannot be reused or tested. Write the hook that
+  owns the state and the loading flag.
+requirements:
+  - Directory ~/frontend/src/hooks exists
+  - File ~/frontend/src/hooks/useOrders.ts exists
+  - The hook uses state and an effect
+  - The hook returns the orders and the loading flag
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/src/hooks
+    label: ~/frontend/src/hooks
+  - validator: file_exists
+    path: /home/learner/frontend/src/hooks/useOrders.ts
+    label: ~/frontend/src/hooks/useOrders.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useOrders.ts
+    value: "useState"
+    label: state hook used
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useOrders.ts
+    value: "useEffect"
+    label: effect hook used
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useOrders.ts
+    value: "loading"
+    label: loading flag returned
+  - validator: file_contains
+    path: /home/learner/frontend/src/hooks/useOrders.ts
+    value: "export function useOrders"
+    label: hook exported
+steps:
+  - title: Create the hooks directory
+    detail: Hooks get their own folder - a hook that is used twice deserves a name.
+    command: mkdir -p ~/frontend/src/hooks
+  - title: Write the state
+    detail: "Two pieces of state - the data and whether it is still on its way. They change
+      independently, so they are two hooks."
+    command: >-
+      echo 'import { useEffect, useState } from "react";\nimport type { Order } from "../types/order";\n\nexport function useOrders() {\n  const [orders, setOrders] = useState<Order[]>([]);\n  const [loading, setLoading] = useState(true);' > ~/frontend/src/hooks/useOrders.ts
+  - title: Add the effect
+    detail: "The effect owns the subscription. Its cleanup cancels the request when the component
+      unmounts or the dependency changes."
+    command: >-
+      echo '\n  useEffect(() => {\n    const controller = new AbortController();\n    fetchOrders(controller.signal).then(setOrders).finally(() => setLoading(false));\n    return () => controller.abort();\n  }, []);\n\n  return { orders, loading };\n}' >> ~/frontend/src/hooks/useOrders.ts
+  - title: Verify and submit
+    detail: cat the hook, then submit for validation.
+    command: cat ~/frontend/src/hooks/useOrders.ts

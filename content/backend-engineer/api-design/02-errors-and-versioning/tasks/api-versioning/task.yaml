@@ -1,0 +1,51 @@
+slug: api-versioning
+title: Version Without Breaking Clients
+type: challenge
+difficulty: advanced
+description: You will ship a breaking change. Decide now how versions are named, how they are
+  deprecated and when they are switched off.
+requirements:
+  - File ~/api/versioning.md exists
+  - The document states how the version is carried in the URL
+  - The document states the deprecation policy and the sunset date
+  - The document states how clients are told to migrate
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/api/versioning.md
+    label: ~/api/versioning.md
+  - validator: file_contains
+    path: /home/learner/api/versioning.md
+    value: "/v1"
+    label: version carried in the path
+  - validator: file_contains
+    path: /home/learner/api/versioning.md
+    value: deprecat
+    label: deprecation policy stated
+  - validator: file_contains
+    path: /home/learner/api/versioning.md
+    value: sunset
+    label: sunset date stated
+  - validator: file_contains
+    path: /home/learner/api/versioning.md
+    value: migration
+    label: migration path stated
+steps:
+  - title: State how the version is carried
+    detail: "The version lives in the path - /v1/orders. It is obvious in the logs, in the
+      dashboards and in the support tickets."
+    command: >-
+      echo '# API versioning\n\n## How the version is carried\n\nThe major version is part of the path: /v1/orders.' > ~/api/versioning.md
+  - title: Write the deprecation policy
+    detail: "A deprecation window has a length and a date. Pick both, publish them, and stick to
+      them."
+    command: >-
+      echo '\n## Deprecation policy\n\nA version is deprecated six months before it is switched off.' >> ~/api/versioning.md
+  - title: Name the sunset date
+    detail: "The sunset header tells every client exactly when the old version disappears -
+      no surprises in the changelog."
+    command: >-
+      echo '\n## Sunset\n\nThe sunset header carries the date the version is switched off. The migration guide ships with the deprecation notice.' >> ~/api/versioning.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/api/versioning.md

@@ -1,0 +1,7 @@
+slug: 02-delivery-semantics
+title: Delivery Semantics
+summary: At-least-once or exactly-once - and the code you write to live with the answer.
+order: 2
+tasks:
+  - stream-delivery-guarantees
+  - stream-late-events

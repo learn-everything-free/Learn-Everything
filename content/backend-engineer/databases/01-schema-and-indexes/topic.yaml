@@ -1,0 +1,7 @@
+slug: 01-schema-and-indexes
+title: Schemas & Indexes
+summary: Put the constraints in the database, and index the queries you actually run.
+order: 1
+tasks:
+  - db-table-design
+  - db-index-strategy

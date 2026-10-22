@@ -1,0 +1,53 @@
+slug: api-openapi-contract
+title: Write an OpenAPI Contract
+type: guided
+difficulty: beginner
+description: The specification is how clients are generated and how nobody has to ask what the
+  endpoint returns. Write it for the orders collection.
+requirements:
+  - Directory ~/api/openapi exists
+  - File ~/api/openapi/orders.yaml exists
+  - The spec declares its version, its paths and the responses
+  - The list operation documents a 200 response
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/api/openapi
+    label: ~/api/openapi
+  - validator: file_exists
+    path: /home/learner/api/openapi/orders.yaml
+    label: ~/api/openapi/orders.yaml
+  - validator: file_contains
+    path: /home/learner/api/openapi/orders.yaml
+    value: openapi
+    label: spec version declared
+  - validator: file_contains
+    path: /home/learner/api/openapi/orders.yaml
+    value: paths
+    label: paths declared
+  - validator: file_contains
+    path: /home/learner/api/openapi/orders.yaml
+    value: get
+    label: list operation declared
+  - validator: file_contains
+    path: /home/learner/api/openapi/orders.yaml
+    value: responses
+    label: responses declared
+steps:
+  - title: Create the api directory
+    detail: "Contracts live in the repository, not in a wiki - one directory per surface."
+    command: mkdir -p ~/api/openapi
+  - title: Write the spec header
+    detail: "openapi declares the specification version. Paths hold the operations, and every
+      operation documents its responses."
+    command: >-
+      echo 'openapi: 3.0.3\ninfo:\n  title: Orders API\n  version: 1.0.0\npaths:\n  /orders:\n    get:\n      summary: List orders\n      responses:\n        "200":\n          description: A page of orders' > ~/api/openapi/orders.yaml
+  - title: Document the response shape
+    detail: "Describe the body with a schema so client generators know what they are parsing."
+    command: >-
+      echo '\n          content:\n            application/json:\n              schema:\n                type: array\n                items:\n                  type: object' >> ~/api/openapi/orders.yaml
+  - title: Verify the contract
+    detail: cat prints the spec. Read it as somebody who has never met your service.
+    command: cat ~/api/openapi/orders.yaml
+  - title: Submit for validation
+    detail: The validator checks the version, the paths, the operation and the responses.

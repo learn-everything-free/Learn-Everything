@@ -1,0 +1,47 @@
+slug: stream-delivery-guarantees
+title: Choose a Delivery Guarantee
+type: challenge
+difficulty: advanced
+description: Brokers promise at-least-once, and exactly-once is a promise about state, not about
+  the wire. Write down what you promise and how you keep it.
+requirements:
+  - File ~/streaming/semantics.md exists
+  - The document states the delivery guarantee
+  - The document explains how the consumer stays idempotent
+  - The document names the dead letter handling
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/streaming/semantics.md
+    label: ~/streaming/semantics.md
+  - validator: file_contains
+    path: /home/learner/streaming/semantics.md
+    value: at-least-once
+    label: guarantee stated
+  - validator: file_contains
+    path: /home/learner/streaming/semantics.md
+    value: idempotent
+    label: idempotency explained
+  - validator: file_contains
+    path: /home/learner/streaming/semantics.md
+    value: "dead letter"
+    label: dead letter handling named
+steps:
+  - title: State the guarantee
+    detail: "at-least-once means a message can arrive twice - so every consumer has to be
+      idempotent. Promise less than the broker delivers."
+    command: >-
+      echo '# Delivery semantics\n\n## Guarantee\n\nThe broker delivers at-least-once. Consumers must be idempotent.' > ~/streaming/semantics.md
+  - title: Explain the idempotency strategy
+    detail: "Deduplicate on the event id, in the same transaction as the state change - that is
+      what makes it exactly-once in effect."
+    command: >-
+      echo '\n## Idempotency\n\nEvery event carries an event_id. The consumer records it in the same transaction as the state change.' >> ~/streaming/semantics.md
+  - title: Name the dead letter path
+    detail: "A message that fails after the retries goes to the dead letter topic, and somebody
+      has to look at it."
+    command: >-
+      echo '\n## Dead letter\n\nMessages that fail after the retry budget land in the dead letter topic and page the owner.' >> ~/streaming/semantics.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/streaming/semantics.md

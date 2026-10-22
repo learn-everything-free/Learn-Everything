@@ -1,0 +1,46 @@
+slug: api-error-envelope
+title: Standardise the Error Envelope
+type: practice
+difficulty: intermediate
+description: Every endpoint fails eventually. Give them all one shape so a client can handle the
+  failure with one code path.
+requirements:
+  - File ~/api/errors.md exists
+  - The document defines the fields every error carries
+  - The document lists the status codes the API uses
+  - The document includes the rate limit response
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/api/errors.md
+    label: ~/api/errors.md
+  - validator: file_contains
+    path: /home/learner/api/errors.md
+    value: error
+    label: envelope documented
+  - validator: file_contains
+    path: /home/learner/api/errors.md
+    value: status_code
+    label: status code field present
+  - validator: file_contains
+    path: /home/learner/api/errors.md
+    value: request_id
+    label: request id field present
+  - validator: file_contains
+    path: /home/learner/api/errors.md
+    value: 429
+    label: rate limit status documented
+steps:
+  - title: Write the envelope
+    detail: "Every error body carries the same fields - status_code, code, message and
+      request_id. The request id is what support asks for first."
+    command: >-
+      echo '# Error envelope\n\nEvery error response has the same shape:\n\n- status_code - the HTTP status\n- code - a stable machine readable string\n- message - a human readable sentence\n- request_id - correlates the error with the logs' > ~/api/errors.md
+  - title: List the status codes
+    detail: "Document the codes you actually return. The ones below are the ones every API ends up
+      using."
+    command: >-
+      echo '\n## Status codes\n\n- 400 - the request was malformed\n- 404 - the resource does not exist\n- 409 - the request conflicts with the current state\n- 429 - too many requests, slow down' >> ~/api/errors.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/api/errors.md

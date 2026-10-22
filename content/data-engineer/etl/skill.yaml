@@ -1,0 +1,5 @@
+slug: etl
+title: Batch Ingestion & ETL
+summary: Load the data twice without breaking anything - the art of idempotent pipelines.
+path: data-engineer
+order: 3

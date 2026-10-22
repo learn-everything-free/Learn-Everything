@@ -1,0 +1,42 @@
+slug: stream-topic-layout
+title: Lay Out Your Topics
+type: practice
+difficulty: intermediate
+description: One topic per event, split into partitions, with a retention window you chose on
+  purpose. Write the layout.
+requirements:
+  - File ~/streaming/topics.yaml exists
+  - The config names the topics and their partitions
+  - The config states the retention and the replication factor
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/streaming/topics.yaml
+    label: ~/streaming/topics.yaml
+  - validator: file_contains
+    path: /home/learner/streaming/topics.yaml
+    value: topics
+    label: topics declared
+  - validator: file_contains
+    path: /home/learner/streaming/topics.yaml
+    value: partitions
+    label: partition count stated
+  - validator: file_contains
+    path: /home/learner/streaming/topics.yaml
+    value: "retention.ms"
+    label: retention stated
+  - validator: file_contains
+    path: /home/learner/streaming/topics.yaml
+    value: replication_factor
+    label: replication stated
+steps:
+  - title: Write the topic layout
+    detail: "Partitions are the unit of parallelism and of ordering - more partitions means more
+      consumers, but never more order than partitions."
+    command: >-
+      echo 'topics:\n  - name: order_placed\n    partitions: 12\n    key: order_id\n    retention.ms: 604800000\n    replication_factor: 3\n  - name: order_shipped\n    partitions: 12\n    key: order_id\n    retention.ms: 2592000000\n    replication_factor: 3' > ~/streaming/topics.yaml
+  - title: Verify the layout
+    detail: cat prints the layout. Check the retention against how long a consumer may be down.
+    command: cat ~/streaming/topics.yaml
+  - title: Submit for validation
+    detail: The validator checks the topics, partitions, retention and replication.

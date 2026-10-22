@@ -1,0 +1,7 @@
+slug: 02-tooling
+title: Project & Tooling
+summary: The compiler configuration and the scripts that make the checks automatic.
+order: 2
+tasks:
+  - ts-tsconfig
+  - ts-package-scripts

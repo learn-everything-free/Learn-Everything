@@ -143,7 +143,7 @@ export default function Home() {
           <StatCard
             value={String(paths.length)}
             label="Structured Paths"
-            sub="DevOps, AI & MLOps"
+            sub="DevOps, AI, MLOps, Data & more"
           />
           <StatCard
             value="100%"

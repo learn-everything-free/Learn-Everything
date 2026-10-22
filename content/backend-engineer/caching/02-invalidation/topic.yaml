@@ -1,0 +1,7 @@
+slug: 02-invalidation
+title: Invalidation & Measurement
+summary: How a cached value is thrown away, and how you know the cache is worth keeping.
+order: 2
+tasks:
+  - cache-invalidation
+  - cache-hit-ratio

@@ -1,0 +1,5 @@
+slug: messaging
+title: Queues & Async Work
+summary: Move the slow work off the request path - and survive the message arriving twice.
+path: backend-engineer
+order: 4

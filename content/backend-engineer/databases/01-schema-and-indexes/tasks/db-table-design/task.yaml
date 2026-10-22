@@ -1,0 +1,54 @@
+slug: db-table-design
+title: Design Tables With Constraints
+type: guided
+difficulty: beginner
+description: Application code has bugs, constraints do not. Write the schema with the keys, the
+  nullability and the foreign keys spelled out.
+requirements:
+  - Directory ~/backend/db exists
+  - File ~/backend/db/schema.sql exists
+  - The schema declares a primary key and a foreign key
+  - The schema marks the required columns as NOT NULL
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/backend/db
+    label: ~/backend/db
+  - validator: file_exists
+    path: /home/learner/backend/db/schema.sql
+    label: ~/backend/db/schema.sql
+  - validator: file_contains
+    path: /home/learner/backend/db/schema.sql
+    value: "PRIMARY KEY"
+    label: primary key declared
+  - validator: file_contains
+    path: /home/learner/backend/db/schema.sql
+    value: "FOREIGN KEY"
+    label: foreign key declared
+  - validator: file_contains
+    path: /home/learner/backend/db/schema.sql
+    value: "NOT NULL"
+    label: required columns marked
+  - validator: file_contains
+    path: /home/learner/backend/db/schema.sql
+    value: CREATE TABLE
+    label: table created
+steps:
+  - title: Create the db directory
+    detail: Schema files live next to the code that queries them.
+    command: mkdir -p ~/backend/db
+  - title: Write the users table
+    detail: "A primary key is not optional, and an email is not optional either - the database
+      should refuse the bad row before your code sees it."
+    command: >-
+      echo CREATE TABLE users (\n  id BIGSERIAL PRIMARY KEY,\n  email TEXT NOT NULL UNIQUE,\n  created_at TIMESTAMPTZ NOT NULL DEFAULT now()\n); > ~/backend/db/schema.sql
+  - title: Add the orders table
+    detail: "The foreign key is the relationship. Without it, an order can point at a user that
+      never existed."
+    command: >-
+      echo '\nCREATE TABLE orders (\n  id BIGSERIAL PRIMARY KEY,\n  user_id BIGINT NOT NULL,\n  status TEXT NOT NULL,\n  amount NUMERIC NOT NULL,\n  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n  FOREIGN KEY (user_id) REFERENCES users(id)\n);' >> ~/backend/db/schema.sql
+  - title: Verify the schema
+    detail: cat prints the schema. Every rule you enforce here is a bug you will not debug.
+    command: cat ~/backend/db/schema.sql
+  - title: Submit for validation
+    detail: The validator checks the keys, the nullability and the foreign key.

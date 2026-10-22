@@ -1,0 +1,7 @@
+slug: 02-failure-handling
+title: Failure Handling
+summary: Retries, dead letters and the deduplication that makes a redelivery harmless.
+order: 2
+tasks:
+  - queue-retry-dlq
+  - queue-idempotent-consumer

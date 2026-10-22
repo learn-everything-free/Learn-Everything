@@ -1,0 +1,7 @@
+slug: 01-components-and-state
+title: Components & State
+summary: The component contract, and the two hooks that cover most of the work.
+order: 1
+tasks:
+  - react-order-row
+  - react-use-orders-hook

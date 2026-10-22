@@ -1,0 +1,7 @@
+slug: 01-dimensional-modeling
+title: Dimensional Modelling
+summary: Facts, dimensions and the rules that keep a warehouse from turning into a swamp.
+order: 1
+tasks:
+  - dm-star-schema
+  - dm-slowly-changing-dimension

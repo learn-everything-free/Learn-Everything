@@ -1,0 +1,44 @@
+slug: ts-package-scripts
+title: Wire the Scripts
+type: guided
+difficulty: beginner
+description: If the checks are not in package.json, nobody runs them. Write the scripts that make
+  typecheck, lint, test and build one command each.
+requirements:
+  - File ~/frontend/package.json exists
+  - The manifest declares the scripts
+  - The scripts cover typecheck, lint, test and build
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/package.json
+    label: ~/frontend/package.json
+  - validator: file_contains
+    path: /home/learner/frontend/package.json
+    value: '"scripts"'
+    label: scripts block present
+  - validator: file_contains
+    path: /home/learner/frontend/package.json
+    value: typecheck
+    label: typecheck script present
+  - validator: file_contains
+    path: /home/learner/frontend/package.json
+    value: lint
+    label: lint script present
+  - validator: file_contains
+    path: /home/learner/frontend/package.json
+    value: test
+    label: test script present
+  - validator: file_contains
+    path: /home/learner/frontend/package.json
+    value: build
+    label: build script present
+steps:
+  - title: Write the manifest
+    detail: "The scripts are the contract with your team - every command they run should be one
+      they can run locally."
+    command: >-
+      echo '{\n  "name": "orders-web",\n  "private": true,\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "typecheck": "tsc --noEmit",\n    "lint": "eslint src",\n    "test": "vitest run"\n  }\n}' > ~/frontend/package.json
+  - title: Verify and submit
+    detail: cat the manifest, then submit for validation.
+    command: cat ~/frontend/package.json

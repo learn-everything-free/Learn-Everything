@@ -1,0 +1,51 @@
+slug: sql-query-cost
+title: Read a Query Plan
+type: challenge
+difficulty: advanced
+description: The plan tells you what the database did. Read one, find the expensive step and write
+  down what you will change.
+requirements:
+  - File ~/warehouse/plan.md exists
+  - The document names the plan command and the scan types it showed
+  - The document names the step that cost the most
+  - The document states the change you will make
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/warehouse/plan.md
+    label: ~/warehouse/plan.md
+  - validator: file_contains
+    path: /home/learner/warehouse/plan.md
+    value: "EXPLAIN"
+    label: plan command named
+  - validator: file_contains
+    path: /home/learner/warehouse/plan.md
+    value: "Seq Scan"
+    label: sequential scan identified
+  - validator: file_contains
+    path: /home/learner/warehouse/plan.md
+    value: "Index Scan"
+    label: index scan identified
+  - validator: file_contains
+    path: /home/learner/warehouse/plan.md
+    value: Recommendation
+    label: recommendation written
+steps:
+  - title: Write the heading
+    detail: "Start with the query and the plan command. EXPLAIN ANALYZE runs the query and shows
+      the real timings."
+    command: >-
+      echo '# Query plan review\n\n## The query\n\nEXPLAIN ANALYZE the daily revenue query on the orders table.' > ~/warehouse/plan.md
+  - title: Record what the plan showed
+    detail: "A Seq Scan on a big table and an Index Scan on a small one - the scan type alone
+      tells you which index is missing."
+    command: >-
+      echo '\n## What the plan showed\n\nThe customer filter used a Seq Scan over the whole table, while the status filter used an Index Scan.' >> ~/warehouse/plan.md
+  - title: Write the recommendation
+    detail: "Name the change and the expected effect - an index on the filtered column, and a
+      scan of the rows instead of the table."
+    command: >-
+      echo '\n## Recommendation\n\nCreate the index on the filtered column so the planner can choose an Index Scan.' >> ~/warehouse/plan.md
+  - title: Verify and submit
+    detail: cat the review, then submit for validation.
+    command: cat ~/warehouse/plan.md

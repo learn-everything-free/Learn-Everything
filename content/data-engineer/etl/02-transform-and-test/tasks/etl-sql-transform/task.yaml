@@ -1,0 +1,39 @@
+slug: etl-sql-transform
+title: Deduplicate in SQL
+type: practice
+difficulty: intermediate
+description: Sources repeat themselves, and types arrive as strings. Write the transform that
+  keeps the newest row per key and casts the columns.
+requirements:
+  - File ~/pipelines/transforms/clean_orders.sql exists
+  - The query ranks the rows per key and keeps the newest one
+  - The query casts the amount column to a number
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/pipelines/transforms/clean_orders.sql
+    label: ~/pipelines/transforms/clean_orders.sql
+  - validator: file_contains
+    path: /home/learner/pipelines/transforms/clean_orders.sql
+    value: "ROW_NUMBER"
+    label: rows are ranked per key
+  - validator: file_contains
+    path: /home/learner/pipelines/transforms/clean_orders.sql
+    value: "CAST"
+    label: amount is cast
+  - validator: file_contains
+    path: /home/learner/pipelines/transforms/clean_orders.sql
+    value: "PARTITION BY"
+    label: partition key stated
+steps:
+  - title: Create the transforms directory
+    detail: Transforms get their own folder - they are the part of the pipeline you rewrite most.
+    command: mkdir -p ~/pipelines/transforms
+  - title: Write the deduplication
+    detail: "ROW_NUMBER over a PARTITION BY orders the rows per key, so you can keep exactly the
+      newest one."
+    command: >-
+      echo SELECT order_id, customer_id, CAST(amount AS NUMERIC) AS amount\nFROM (\n  SELECT order_id, customer_id, amount,\n    ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) AS rn\n  FROM staging_orders\n) ranked\nWHERE rn = 1; > ~/pipelines/transforms/clean_orders.sql
+  - title: Verify and submit
+    detail: cat the transform, then submit for validation.
+    command: cat ~/pipelines/transforms/clean_orders.sql

@@ -1,0 +1,46 @@
+slug: queue-topic-design
+title: Design the Topic Layout
+type: guided
+difficulty: beginner
+description: Topics are contracts with your own future self. Write the layout for the order
+  events, with the key that keeps them ordered.
+requirements:
+  - Directory ~/backend/queues exists
+  - File ~/backend/queues/topics.yaml exists
+  - The config names the topics, their partitions and their retention
+  - The config states the key of every topic
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/backend/queues
+    label: ~/backend/queues
+  - validator: file_exists
+    path: /home/learner/backend/queues/topics.yaml
+    label: ~/backend/queues/topics.yaml
+  - validator: file_contains
+    path: /home/learner/backend/queues/topics.yaml
+    value: topics
+    label: topics declared
+  - validator: file_contains
+    path: /home/learner/backend/queues/topics.yaml
+    value: partitions
+    label: partitions declared
+  - validator: file_contains
+    path: /home/learner/backend/queues/topics.yaml
+    value: retention
+    label: retention declared
+  - validator: file_contains
+    path: /home/learner/backend/queues/topics.yaml
+    value: key
+    label: partition key declared
+steps:
+  - title: Write the topic layout
+    detail: "One topic per event type. The key decides which partition the message lands in, and
+      therefore the order you get."
+    command: >-
+      echo 'topics:\n  - name: order.created\n    partitions: 12\n    key: order_id\n    retention: 7d\n  - name: payment.captured\n    partitions: 12\n    key: order_id\n    retention: 30d' > ~/backend/queues/topics.yaml
+  - title: Verify the layout
+    detail: cat prints the layout. Check that the key is the same on every related topic.
+    command: cat ~/backend/queues/topics.yaml
+  - title: Submit for validation
+    detail: The validator checks the topics, partitions, retention and key.

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { paths } from "@/lib/data";
 
 export function Footer() {
   return (
@@ -65,21 +66,16 @@ export function Footer() {
               Curriculum Paths
             </p>
             <ul className="mt-3 space-y-2 text-body-sm">
-              <li>
-                <Link href="/paths/devops-engineer" className="text-graphite hover:text-ink transition-colors">
-                  DevOps Engineer
-                </Link>
-              </li>
-              <li>
-                <Link href="/paths/ai-engineer" className="text-graphite hover:text-ink transition-colors">
-                  AI Engineer
-                </Link>
-              </li>
-              <li>
-                <Link href="/paths/mlops-engineer" className="text-graphite hover:text-ink transition-colors">
-                  MLOps Engineer
-                </Link>
-              </li>
+              {paths.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/paths/${p.slug}`}
+                    className="text-graphite hover:text-ink transition-colors"
+                  >
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <Link href="/paths" className="text-graphite hover:text-ink transition-colors">
                   Path Catalog

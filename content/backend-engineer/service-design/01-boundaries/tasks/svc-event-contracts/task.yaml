@@ -1,0 +1,45 @@
+slug: svc-event-contracts
+title: Publish the Event Contracts
+type: practice
+difficulty: intermediate
+description: An event is a promise to every consumer, present and future. Write the contract with
+  the version, the schema and the owner.
+requirements:
+  - File ~/backend/services/events.yaml exists
+  - The config names the events and their versions
+  - The config points at the schema and the owning service
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/services/events.yaml
+    label: ~/backend/services/events.yaml
+  - validator: file_contains
+    path: /home/learner/backend/services/events.yaml
+    value: events
+    label: events declared
+  - validator: file_contains
+    path: /home/learner/backend/services/events.yaml
+    value: version
+    label: version stated
+  - validator: file_contains
+    path: /home/learner/backend/services/events.yaml
+    value: schema
+    label: schema referenced
+  - validator: file_contains
+    path: /home/learner/backend/services/events.yaml
+    value: owner
+    label: owning service stated
+steps:
+  - title: Write the first event
+    detail: "Every event carries a name, a version and the schema it follows. The version is what
+      lets you evolve it later."
+    command: >-
+      echo 'events:\n  - name: order.created\n    version: 2\n    schema: schemas/order_created_v2.json\n    owner: orders-service\n    consumers: [payment-service, notification-service]' > ~/backend/services/events.yaml
+  - title: Add the second event
+    detail: "Keep the list short and accurate - an event nobody consumes is a liability, and an
+      event with no owner is a mystery."
+    command: >-
+      echo '\n  - name: payment.captured\n    version: 1\n    schema: schemas/payment_captured_v1.json\n    owner: payment-service\n    consumers: [orders-service]' >> ~/backend/services/events.yaml
+  - title: Verify and submit
+    detail: cat the config, then submit for validation.
+    command: cat ~/backend/services/events.yaml

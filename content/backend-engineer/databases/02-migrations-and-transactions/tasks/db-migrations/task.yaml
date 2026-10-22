@@ -1,0 +1,46 @@
+slug: db-migrations
+title: Write a Reversible Migration
+type: practice
+difficulty: intermediate
+description: A migration that cannot be undone is a migration you cannot deploy on a Friday. Write
+  the change and the way back.
+requirements:
+  - Directory ~/backend/db/migrations exists
+  - File ~/backend/db/migrations/001_create_orders.sql exists and creates the table
+  - File ~/backend/db/migrations/001_create_orders.down.sql exists and drops it
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/backend/db/migrations
+    label: ~/backend/db/migrations
+  - validator: file_exists
+    path: /home/learner/backend/db/migrations/001_create_orders.sql
+    label: 001_create_orders.sql
+  - validator: file_contains
+    path: /home/learner/backend/db/migrations/001_create_orders.sql
+    value: "CREATE TABLE"
+    label: migration creates the table
+  - validator: file_exists
+    path: /home/learner/backend/db/migrations/001_create_orders.down.sql
+    label: 001_create_orders.down.sql
+  - validator: file_contains
+    path: /home/learner/backend/db/migrations/001_create_orders.down.sql
+    value: "DROP TABLE"
+    label: rollback drops the table
+steps:
+  - title: Create the migrations directory
+    detail: Migrations are numbered in the order they run - the file name is the version.
+    command: mkdir -p ~/backend/db/migrations
+  - title: Write the migration
+    detail: "Number, name, change. The number is the version and the name says what changed."
+    command: >-
+      echo CREATE TABLE orders (\n  id BIGSERIAL PRIMARY KEY,\n  user_id BIGINT NOT NULL REFERENCES users(id),\n  status TEXT NOT NULL,\n  amount NUMERIC NOT NULL,\n  created_at TIMESTAMPTZ NOT NULL DEFAULT now()\n); > ~/backend/db/migrations/001_create_orders.sql
+  - title: Write the rollback
+    detail: "The down migration undoes exactly what the up migration did - and nothing more."
+    command: >-
+      echo DROP TABLE orders; > ~/backend/db/migrations/001_create_orders.down.sql
+  - title: Verify both files
+    detail: cat prints them side by side. If they do not match, one of them is lying.
+    command: cat ~/backend/db/migrations/001_create_orders.sql
+  - title: Submit for validation
+    detail: The validator checks that both files exist and that one creates and one drops.

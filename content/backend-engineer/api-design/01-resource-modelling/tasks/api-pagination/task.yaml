@@ -1,0 +1,46 @@
+slug: api-pagination
+title: Paginate Without Breaking Clients
+type: practice
+difficulty: intermediate
+description: Offset pagination dies at scale and breaks when rows are inserted. Write the cursor
+  based contract and the parameters that go with it.
+requirements:
+  - File ~/api/openapi/pagination.yaml exists
+  - The parameters include a limit and a cursor
+  - The response states how the next cursor is returned
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/api/openapi/pagination.yaml
+    label: ~/api/openapi/pagination.yaml
+  - validator: file_contains
+    path: /home/learner/api/openapi/pagination.yaml
+    value: limit
+    label: limit parameter declared
+  - validator: file_contains
+    path: /home/learner/api/openapi/pagination.yaml
+    value: cursor
+    label: cursor parameter declared
+  - validator: file_contains
+    path: /home/learner/api/openapi/pagination.yaml
+    value: next_cursor
+    label: response returns the next cursor
+  - validator: file_contains
+    path: /home/learner/api/openapi/pagination.yaml
+    value: maximum
+    label: limit maximum documented
+steps:
+  - title: Write the pagination parameters
+    detail: "limit caps the page size and cursor says where to continue. Both are optional, and
+      both have documented defaults."
+    command: >-
+      echo 'parameters:\n  - name: limit\n    in: query\n    schema:\n      type: integer\n      maximum: 100\n      default: 25\n  - name: cursor\n    in: query\n    schema:\n      type: string\n      description: opaque cursor from the previous page' > ~/api/openapi/pagination.yaml
+  - title: Describe the cursor in the response
+    detail: "The next cursor comes back in the body - the client never has to build it."
+    command: >-
+      echo '\nresponse:\n  next_cursor: the cursor to pass as the cursor parameter\n  has_more: true' >> ~/api/openapi/pagination.yaml
+  - title: Verify the contract
+    detail: cat prints the contract. A cursor is opaque - clients must not parse it.
+    command: cat ~/api/openapi/pagination.yaml
+  - title: Submit for validation
+    detail: The validator checks both parameters and the cursor in the response.

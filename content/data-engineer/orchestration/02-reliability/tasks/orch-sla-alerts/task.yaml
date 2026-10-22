@@ -1,0 +1,46 @@
+slug: orch-sla-alerts
+title: Alert on a Late Pipeline
+type: practice
+difficulty: intermediate
+description: Consumers need the data by a certain time, so the pipeline needs a deadline of its
+  own. Write the alert that fires when the daily load misses it.
+requirements:
+  - File ~/orchestration/alerts.yaml exists
+  - The alert states the deadline the pipeline must meet
+  - The alert states the condition that fires it
+  - The alert states how it notifies the team
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/orchestration/alerts.yaml
+    label: ~/orchestration/alerts.yaml
+  - validator: file_contains
+    path: /home/learner/orchestration/alerts.yaml
+    value: deadline
+    label: deadline stated
+  - validator: file_contains
+    path: /home/learner/orchestration/alerts.yaml
+    value: "on_failure"
+    label: trigger condition stated
+  - validator: file_contains
+    path: /home/learner/orchestration/alerts.yaml
+    value: notify
+    label: notification channel stated
+  - validator: file_contains
+    path: /home/learner/orchestration/alerts.yaml
+    value: severity
+    label: severity stated
+steps:
+  - title: Write the alert rule
+    detail: "deadline is the time the consumers need the data, on the clock the business cares
+      about - not the scheduler's timezone."
+    command: >-
+      echo 'alerts:\n  - name: DailyLoadLate\n    dag_id: daily_load\n    deadline: "07:00"\n    on_failure: [missing, failed, late]' > ~/orchestration/alerts.yaml
+  - title: Add the notification and severity
+    detail: "Page only what a human must fix tonight. Everything else is a ticket for the
+      morning."
+    command: >-
+      echo '\n    notify: ["#data-oncall", "data-platform@example.com"]\n    severity: page\n    runbook: https://wiki.example.com/daily-load' >> ~/orchestration/alerts.yaml
+  - title: Verify and submit
+    detail: cat the rule, then submit for validation.
+    command: cat ~/orchestration/alerts.yaml

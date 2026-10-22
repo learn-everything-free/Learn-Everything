@@ -1,0 +1,54 @@
+slug: orch-dag-dependencies
+title: Declare Task Dependencies
+type: guided
+difficulty: beginner
+description: The scheduler reads the dependencies, not the file order. Declare the tasks of the
+  daily load and what waits for what.
+requirements:
+  - Directory ~/orchestration/dags exists
+  - File ~/orchestration/dags/daily_load.py exists
+  - The file declares the tasks
+  - The file states what each task depends on
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/orchestration/dags
+    label: ~/orchestration/dags
+  - validator: file_exists
+    path: /home/learner/orchestration/dags/daily_load.py
+    label: ~/orchestration/dags/daily_load.py
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/daily_load.py
+    value: "def extract"
+    label: extract task declared
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/daily_load.py
+    value: "def transform"
+    label: transform task declared
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/daily_load.py
+    value: "def load"
+    label: load task declared
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/daily_load.py
+    value: depends_on
+    label: dependencies declared
+steps:
+  - title: Create the dags directory
+    detail: One file per DAG - the name of the file is the name of the schedule.
+    command: mkdir -p ~/orchestration/dags
+  - title: Declare the first task
+    detail: "extract, transform and load - the three verbs of every batch pipeline. Each one is a
+      function the scheduler can call."
+    command: >-
+      echo 'def extract():\n    return pull_rows_since_last_run()\n\ndef transform(rows):\n    return dedupe_and_type(rows)\n\ndef load(rows):\n    return write_to_warehouse(rows)' > ~/orchestration/dags/daily_load.py
+  - title: Declare the dependencies
+    detail: "depends_on is the whole point of a DAG - the scheduler works out the order, retries
+      and parallelism from it."
+    command: >-
+      echo '\n\ndaily_load = DAG(\n    dag_id="daily_load",\n    schedule_interval="@daily",\n    start_date=datetime(2026, 1, 1),\n)\n\nextract_task = PythonOperator(task_id="extract", python_callable=extract)\ntransform_task = PythonOperator(task_id="transform", python_callable=transform, depends_on=[extract_task])\nload_task = PythonOperator(task_id="load", python_callable=load, depends_on=[transform_task])' >> ~/orchestration/dags/daily_load.py
+  - title: Verify the DAG
+    detail: cat prints the file. Every task needs a dependency, or it runs at the wrong time.
+    command: cat ~/orchestration/dags/daily_load.py
+  - title: Submit for validation
+    detail: The validator checks the three tasks and the dependency declaration.

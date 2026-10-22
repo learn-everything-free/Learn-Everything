@@ -129,7 +129,7 @@ export function evaluateAchievements(
     {
       id: "polyglot",
       title: "Polyglot",
-      description: "Complete labs in all 3 paths.",
+      description: `Complete labs in all ${index.paths.length} paths.`,
       glyph: "❖",
       unlocked: index.paths.length > 0 && pathsTouched.size >= index.paths.length,
       hint: `${pathsTouched.size} / ${index.paths.length} paths`,

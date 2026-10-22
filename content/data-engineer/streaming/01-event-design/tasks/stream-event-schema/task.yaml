@@ -1,0 +1,49 @@
+slug: stream-event-schema
+title: Version an Event Schema
+type: guided
+difficulty: beginner
+description: Every event needs a schema, a version and a timestamp - consumers build their state
+  from it. Write the contract for the order placed event.
+requirements:
+  - Directory ~/streaming/schemas exists
+  - File ~/streaming/schemas/order_placed.json exists
+  - The schema names the event and its version
+  - The schema includes the identifier, the timestamp and the payload
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/streaming/schemas
+    label: ~/streaming/schemas
+  - validator: file_exists
+    path: /home/learner/streaming/schemas/order_placed.json
+    label: ~/streaming/schemas/order_placed.json
+  - validator: file_contains
+    path: /home/learner/streaming/schemas/order_placed.json
+    value: order_placed
+    label: event named
+  - validator: file_contains
+    path: /home/learner/streaming/schemas/order_placed.json
+    value: version
+    label: version declared
+  - validator: file_contains
+    path: /home/learner/streaming/schemas/order_placed.json
+    value: order_id
+    label: identifier present
+  - validator: file_contains
+    path: /home/learner/streaming/schemas/order_placed.json
+    value: occurred_at
+    label: event timestamp present
+steps:
+  - title: Create the schemas directory
+    detail: One file per event - the directory is the registry.
+    command: mkdir -p ~/streaming/schemas
+  - title: Write the event contract
+    detail: "The name and the version travel with every message. Consumers branch on the version,
+      not on the shape they happen to see."
+    command: >-
+      echo '{"name": "order_placed", "version": 2, "key": "order_id", "fields": {"order_id": "string", "customer_id": "string", "amount": "number", "occurred_at": "timestamp"}}' > ~/streaming/schemas/order_placed.json
+  - title: Verify the contract
+    detail: cat prints the schema. The key field decides the partitioning - choose it now.
+    command: cat ~/streaming/schemas/order_placed.json
+  - title: Submit for validation
+    detail: The validator checks the event name, the version and the required fields.

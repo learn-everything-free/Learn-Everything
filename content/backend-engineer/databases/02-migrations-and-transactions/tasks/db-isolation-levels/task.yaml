@@ -1,0 +1,45 @@
+slug: db-isolation-levels
+title: Pick the Right Isolation Level
+type: challenge
+difficulty: advanced
+description: Isolation levels trade correctness for concurrency. Write the policy for each
+  workload and name the anomaly each one prevents.
+requirements:
+  - File ~/backend/db/isolation.md exists
+  - The document maps the workloads to isolation levels
+  - The document names the anomalies the levels prevent
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/db/isolation.md
+    label: ~/backend/db/isolation.md
+  - validator: file_contains
+    path: /home/learner/backend/db/isolation.md
+    value: "READ COMMITTED"
+    label: read committed level used
+  - validator: file_contains
+    path: /home/learner/backend/db/isolation.md
+    value: "REPEATABLE READ"
+    label: repeatable read level used
+  - validator: file_contains
+    path: /home/learner/backend/db/isolation.md
+    value: "dirty read"
+    label: dirty read anomaly named
+  - validator: file_contains
+    path: /home/learner/backend/db/isolation.md
+    value: phantom
+    label: phantom anomaly named
+steps:
+  - title: Write the workload mapping
+    detail: "Read committed is the default for ordinary reads. Repeatable read is for reports
+      that must not see a half-finished state."
+    command: >-
+      echo '# Isolation levels\n\n## Workloads\n\n- order lookup: READ COMMITTED\n- financial report: REPEATABLE READ' > ~/backend/db/isolation.md
+  - title: Name the anomalies
+    detail: "A dirty read is a value that never existed. A phantom is a row that appears between
+      two reads of the same range."
+    command: >-
+      echo '\n## Anomalies prevented\n\nREAD COMMITTED prevents the dirty read. REPEATABLE READ also prevents the phantom read inside a transaction.' >> ~/backend/db/isolation.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/backend/db/isolation.md

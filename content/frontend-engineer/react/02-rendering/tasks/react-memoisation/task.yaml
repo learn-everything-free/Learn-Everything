@@ -1,0 +1,46 @@
+slug: react-memoisation
+title: Memoise the Expensive Parts
+type: challenge
+difficulty: advanced
+description: Memoisation is a trade - you pay for the comparison to save the recomputation. Apply it
+  where the work is actually expensive.
+requirements:
+  - File ~/frontend/src/components/OrderTable.tsx exists
+  - The component memoises an expensive calculation
+  - The component memoises a callback
+  - The component wraps the export in memo
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/components/OrderTable.tsx
+    label: ~/frontend/src/components/OrderTable.tsx
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderTable.tsx
+    value: "useMemo"
+    label: expensive calculation memoised
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderTable.tsx
+    value: "useCallback"
+    label: callback memoised
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderTable.tsx
+    value: "memo("
+    label: component wrapped in memo
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderTable.tsx
+    value: "export const OrderTable"
+    label: memoised component exported
+steps:
+  - title: Write the component
+    detail: "The export is the memoised component - the inner function stays the readable
+      implementation."
+    command: >-
+      echo 'import { memo, useCallback, useMemo } from "react";\nimport type { Order } from "../types/order";\n\ninterface OrderTableProps {\n  readonly orders: readonly Order[];\n  readonly onSelect: (id: string) => void;\n}\n\nfunction OrderTableImpl({ orders, onSelect }: OrderTableProps) {\n  const totalCents = useMemo(\n    () => orders.reduce((sum, order) => sum + order.amountCents, 0),\n    [orders],\n  );' > ~/frontend/src/components/OrderTable.tsx
+  - title: Add the callback and the export
+    detail: "useCallback keeps the function identity stable so the memoised children do not
+      re-render for nothing."
+    command: >-
+      echo '\n  const handleSelect = useCallback((id: string) => onSelect(id), [onSelect]);\n  return <div data-total={totalCents} onClick={() => handleSelect("first")} />;\n}\n\nexport const OrderTable = memo(OrderTableImpl);' >> ~/frontend/src/components/OrderTable.tsx
+  - title: Verify and submit
+    detail: cat the file. Ask whether the memo is worth its complexity here.
+    command: cat ~/frontend/src/components/OrderTable.tsx

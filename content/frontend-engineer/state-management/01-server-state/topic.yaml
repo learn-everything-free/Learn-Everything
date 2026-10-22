@@ -1,0 +1,7 @@
+slug: 01-server-state
+title: Server State
+summary: The data lives on the server - the cache is just a copy of it.
+order: 1
+tasks:
+  - state-query-cache
+  - state-mutation-invalidation

@@ -1,0 +1,51 @@
+slug: dm-slowly-changing-dimension
+title: Handle Changing Dimensions
+type: practice
+difficulty: intermediate
+description: A customer moves, a product is repriced - and yesterday's report must not change.
+  Document the Type 2 pattern that keeps history intact.
+requirements:
+  - File ~/warehouse/model/scd.md exists
+  - The document describes the Type 2 approach
+  - The document names the effective date columns
+  - The document explains how the current row is found
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/warehouse/model/scd.md
+    label: ~/warehouse/model/scd.md
+  - validator: file_contains
+    path: /home/learner/warehouse/model/scd.md
+    value: "Type 2"
+    label: Type 2 described
+  - validator: file_contains
+    path: /home/learner/warehouse/model/scd.md
+    value: effective_from
+    label: effective_from column named
+  - validator: file_contains
+    path: /home/learner/warehouse/model/scd.md
+    value: effective_to
+    label: effective_to column named
+  - validator: file_contains
+    path: /home/learner/warehouse/model/scd.md
+    value: "current row"
+    label: current row rule explained
+steps:
+  - title: Write the heading
+    detail: "Start with the decision - which type of slowly changing dimension you chose and
+      why."
+    command: >-
+      echo '# Slowly changing dimensions\n\n## Type 2 - keep the history\n\nEvery change closes the old row and opens a new one.' > ~/warehouse/model/scd.md
+  - title: Name the effective columns
+    detail: "effective_from and effective_to make the history queryable - a row is valid for the
+      period between the two dates."
+    command: >-
+      echo '\nColumns: customer_key, attribute, effective_from, effective_to.' >> ~/warehouse/model/scd.md
+  - title: Explain how the current row is found
+    detail: "The current row is the one with no end date yet. Query on it and every report agrees
+      on today."
+    command: >-
+      echo '\nThe current row is the one where effective_to is null.' >> ~/warehouse/model/scd.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/warehouse/model/scd.md

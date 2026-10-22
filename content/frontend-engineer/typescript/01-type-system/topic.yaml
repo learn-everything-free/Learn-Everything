@@ -1,0 +1,7 @@
+slug: 01-type-system
+title: The Type System
+summary: Describe your shapes once and let the compiler do the checking for you.
+order: 1
+tasks:
+  - ts-model-domain
+  - ts-narrowing

@@ -1,0 +1,7 @@
+slug: 01-core-web-vitals
+title: Core Web Vitals
+summary: LCP, INP and CLS - the three numbers that decide how the page feels.
+order: 1
+tasks:
+  - perf-vitals-budget
+  - perf-bundle-budget

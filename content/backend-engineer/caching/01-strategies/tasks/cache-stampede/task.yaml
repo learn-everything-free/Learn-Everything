@@ -1,0 +1,50 @@
+slug: cache-stampede
+title: Defend Against a Cache Stampede
+type: practice
+difficulty: intermediate
+description: When a hot key expires, a thousand requests hit the database at once. Write the
+  defence - a single flight, a short lock and a little jitter.
+requirements:
+  - File ~/backend/cache/stampede.md exists
+  - The document describes the single flight pattern
+  - The document states how the lock is released
+  - The document explains the role of jitter
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/cache/stampede.md
+    label: ~/backend/cache/stampede.md
+  - validator: file_contains
+    path: /home/learner/backend/cache/stampede.md
+    value: "single flight"
+    label: single flight described
+  - validator: file_contains
+    path: /home/learner/backend/cache/stampede.md
+    value: lock
+    label: lock described
+  - validator: file_contains
+    path: /home/learner/backend/cache/stampede.md
+    value: jitter
+    label: jitter explained
+  - validator: file_contains
+    path: /home/learner/backend/cache/stampede.md
+    value: stale
+    label: stale serving described
+steps:
+  - title: Describe the stampede
+    detail: "Start with the failure - a popular key expires and the whole fleet hits the
+      database at the same instant."
+    command: >-
+      echo '# Cache stampede\n\n## The failure\n\nA popular key expires and every request misses at the same moment, so the database sees a thundering herd.' > ~/backend/cache/stampede.md
+  - title: Describe the single flight
+    detail: "single flight means one request loads the value while the others wait for it. The
+      lock is held only for the load."
+    command: >-
+      echo '\n## The defence\n\nUse the single flight pattern: the first miss takes a short lock and loads the value, the others wait for it.' >> ~/backend/cache/stampede.md
+  - title: Add jitter and stale serving
+    detail: "jitter spreads the expiry times so keys do not all die together. Serving a stale value for a few seconds beats serving nothing."
+    command: >-
+      echo '\n## Expiry\n\nAdd jitter to the ttl so keys do not expire together, and serve a stale value while the refresh runs.' >> ~/backend/cache/stampede.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/backend/cache/stampede.md

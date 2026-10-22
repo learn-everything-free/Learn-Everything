@@ -1,0 +1,46 @@
+slug: a11y-accessible-dialog
+title: Build an Accessible Dialog
+type: practice
+difficulty: intermediate
+description: A modal that traps focus, names itself and closes on escape. Write the component with
+  the semantics a screen reader needs.
+requirements:
+  - File ~/frontend/src/components/AccessibleDialog.tsx exists
+  - The dialog declares its role and is labelled
+  - The dialog is marked as a modal
+  - The dialog handles the escape key
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/components/AccessibleDialog.tsx
+    label: ~/frontend/src/components/AccessibleDialog.tsx
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/AccessibleDialog.tsx
+    value: "role="
+    label: role declared
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/AccessibleDialog.tsx
+    value: "aria-modal"
+    label: modal state declared
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/AccessibleDialog.tsx
+    value: "aria-labelledby"
+    label: dialog is labelled
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/AccessibleDialog.tsx
+    value: "Escape"
+    label: escape key handled
+steps:
+  - title: Write the dialog markup
+    detail: "role and aria-modal tell the screen reader what this is. aria-labelledby points at
+      the element with the title."
+    command: >-
+      echo 'interface AccessibleDialogProps {\n  readonly open: boolean;\n  readonly titleId: string;\n  readonly onClose: () => void;\n}\n\nexport function AccessibleDialog({ open, titleId, onClose }: AccessibleDialogProps) {\n  if (!open) return null;\n  return (\n    <div role="dialog" aria-modal="true" aria-labelledby={titleId} className="dialog">\n      <h2 id={titleId}>Confirm</h2>\n      <button onClick={onClose}>Close</button>\n    </div>\n  );\n}' > ~/frontend/src/components/AccessibleDialog.tsx
+  - title: Add the keyboard handling
+    detail: "Escape closes the dialog, and Tab has to stay inside it. Both are keyboard
+      requirements, not extras."
+    command: >-
+      echo '\n\nuseEffect(() => {\n  const onKeyDown = (event: KeyboardEvent) => {\n    if (event.key === "Escape") onClose();\n  };\n  document.addEventListener("keydown", onKeyDown);\n  return () => document.removeEventListener("keydown", onKeyDown);\n}, [onClose]);' >> ~/frontend/src/components/AccessibleDialog.tsx
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/components/AccessibleDialog.tsx

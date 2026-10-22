@@ -1,0 +1,50 @@
+slug: a11y-contrast-audit
+title: Audit the Contrast
+type: challenge
+difficulty: advanced
+description: Text that cannot be read is a defect. Write the audit with the ratios, the rule that
+  applies and the fix you ship.
+requirements:
+  - File ~/frontend/a11y/audit.md exists
+  - The document states the contrast ratios the design must meet
+  - The document names the failing pair and the fix
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/a11y/audit.md
+    label: ~/frontend/a11y/audit.md
+  - validator: file_contains
+    path: /home/learner/frontend/a11y/audit.md
+    value: "4.5"
+    label: body text ratio stated
+  - validator: file_contains
+    path: /home/learner/frontend/a11y/audit.md
+    value: "3"
+    label: large text ratio stated
+  - validator: file_contains
+    path: /home/learner/frontend/a11y/audit.md
+    value: contrast
+    label: contrast discussed
+  - validator: file_contains
+    path: /home/learner/frontend/a11y/audit.md
+    value: Fix
+    label: fix documented
+steps:
+  - title: Write the thresholds
+    detail: "The rule is 4.5 to 1 for body text and 3 to 1 for large text and interface
+      boundaries."
+    command: >-
+      echo '# Contrast audit\n\n## Thresholds\n\nBody text needs a contrast ratio of at least 4.5 to 1. Large text and interface boundaries need at least 3 to 1.' > ~/frontend/a11y/audit.md
+  - title: Record the findings
+    detail: "Name the pair that fails and the ratio it actually has - a number, not a
+      feeling."
+    command: >-
+      echo '\n## Findings\n\nThe ash colour on the eggshell background scores 2.8 to 1 and fails the body text threshold.' >> ~/frontend/a11y/audit.md
+  - title: Write the fix
+    detail: "Darken the text token rather than patching one component - the fix belongs in the
+      token, not in the markup."
+    command: >-
+      echo '\n## Fix\n\nDarken the --color-ash token so every usage passes, then re-run the audit.' >> ~/frontend/a11y/audit.md
+  - title: Verify and submit
+    detail: cat the audit, then submit for validation.
+    command: cat ~/frontend/a11y/audit.md

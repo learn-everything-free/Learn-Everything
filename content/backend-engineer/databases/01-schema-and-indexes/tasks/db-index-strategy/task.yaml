@@ -1,0 +1,47 @@
+slug: db-index-strategy
+title: Index the Queries You Run
+type: practice
+difficulty: intermediate
+description: An index is a bet on the queries you actually run. Write the composite indexes for the
+  two hot paths of the orders table.
+requirements:
+  - File ~/backend/db/indexes.sql exists
+  - The file creates a composite index over the status and the created_at column
+  - The file creates an index on the foreign key
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/db/indexes.sql
+    label: ~/backend/db/indexes.sql
+  - validator: file_contains
+    path: /home/learner/backend/db/indexes.sql
+    value: "CREATE INDEX"
+    label: index created
+  - validator: file_contains
+    path: /home/learner/backend/db/indexes.sql
+    value: status
+    label: status column indexed
+  - validator: file_contains
+    path: /home/learner/backend/db/indexes.sql
+    value: created_at
+    label: created_at column indexed
+  - validator: file_contains
+    path: /home/learner/backend/db/indexes.sql
+    value: user_id
+    label: foreign key indexed
+steps:
+  - title: Write the first index
+    detail: "The order of the columns matters - equality first, range last. status is filtered on
+      exactly, created_at is sorted on."
+    command: >-
+      echo CREATE INDEX idx_orders_status_created_at ON orders (status, created_at DESC); > ~/backend/db/indexes.sql
+  - title: Add the foreign key index
+    detail: "Postgres does not create this one for you - and every join on user_id scans the
+      table until it exists."
+    command: >-
+      echo '\nCREATE INDEX idx_orders_user_id ON orders (user_id);' >> ~/backend/db/indexes.sql
+  - title: Verify the indexes
+    detail: cat prints the file. Every index should map to a query you have measured.
+    command: cat ~/backend/db/indexes.sql
+  - title: Submit for validation
+    detail: The validator checks both indexes and the columns they cover.

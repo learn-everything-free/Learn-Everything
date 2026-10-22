@@ -1,0 +1,5 @@
+slug: typescript
+title: TypeScript Essentials
+summary: Model the data at the edges, let the compiler catch the rest, and keep the build fast.
+path: frontend-engineer
+order: 1

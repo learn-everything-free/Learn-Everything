@@ -1,0 +1,5 @@
+slug: service-design
+title: Service Design & Reliability
+summary: Draw the boundaries, own the data, and be ready for the day the service is on fire.
+path: backend-engineer
+order: 5

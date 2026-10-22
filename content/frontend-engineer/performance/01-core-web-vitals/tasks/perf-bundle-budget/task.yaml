@@ -1,0 +1,44 @@
+slug: perf-bundle-budget
+title: Keep the Bundle Small
+type: practice
+difficulty: intermediate
+description: The fastest byte is the one you never ship. Write the size budget and the rule that
+  splits the code you do not need on first paint.
+requirements:
+  - File ~/frontend/perf/bundle.json exists
+  - The config states the maximum size per entry point
+  - The config states how the code is split and lazy loaded
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/perf/bundle.json
+    label: ~/frontend/perf/bundle.json
+  - validator: file_contains
+    path: /home/learner/frontend/perf/bundle.json
+    value: "maxSizeKb"
+    label: size limit stated
+  - validator: file_contains
+    path: /home/learner/frontend/perf/bundle.json
+    value: "lazy"
+    label: lazy loading configured
+  - validator: file_contains
+    path: /home/learner/frontend/perf/bundle.json
+    value: "manualChunks"
+    label: chunking configured
+  - validator: file_contains
+    path: /home/learner/frontend/perf/bundle.json
+    value: "entry"
+    label: entry points listed
+steps:
+  - title: Write the size budget
+    detail: "Set the limit per entry point, and make the CI job fail when it is exceeded."
+    command: >-
+      echo '{"entry": {"main": {"maxSizeKb": 180}, "admin": {"maxSizeKb": 320}}}' > ~/frontend/perf/bundle.json
+  - title: Add the splitting rules
+    detail: "manualChunks puts the vendor code in its own chunk so it is cached across
+      deploys."
+    command: >-
+      echo '\n"split": {"manualChunks": {"vendor": ["react", "react-dom"]}, "lazy": ["routes/settings", "routes/reports"]}' >> ~/frontend/perf/bundle.json
+  - title: Verify and submit
+    detail: cat the config, then submit for validation.
+    command: cat ~/frontend/perf/bundle.json

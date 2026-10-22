@@ -1,0 +1,45 @@
+slug: state-mutation-invalidation
+title: Invalidate After a Mutation
+type: practice
+difficulty: intermediate
+description: A write makes a cached read wrong. Write the mutation and the invalidation that
+  follows it.
+requirements:
+  - File ~/frontend/src/api/mutations.ts exists
+  - The file defines the cancel mutation
+  - The mutation invalidates the affected queries when it succeeds
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/api/mutations.ts
+    label: ~/frontend/src/api/mutations.ts
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/mutations.ts
+    value: "mutationFn"
+    label: mutation function defined
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/mutations.ts
+    value: "onSuccess"
+    label: success handler present
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/mutations.ts
+    value: "invalidateQueries"
+    label: queries invalidated
+  - validator: file_contains
+    path: /home/learner/frontend/src/api/mutations.ts
+    value: "cancelOrder"
+    label: cancel mutation named
+steps:
+  - title: Write the mutation
+    detail: "The mutation is the write - and the place where the cache starts lying about the
+      world."
+    command: >-
+      echo 'export const cancelOrder = {\n  mutationFn: async (orderId: string) => {\n    const response = await fetch("/api/orders/" + orderId + "/cancel", { method: "POST" });\n    if (!response.ok) throw new Error("cancel failed");\n    return orderId;\n  },' > ~/frontend/src/api/mutations.ts
+  - title: Add the invalidation
+    detail: "onSuccess invalidates every query that touched the order - the list and the
+      detail."
+    command: >-
+      echo '\n  onSuccess: (orderId: string) => {\n    invalidateQueries({ queryKey: ["orders"] });\n    invalidateQueries({ queryKey: ["orders", "detail", orderId] });\n  },\n};' >> ~/frontend/src/api/mutations.ts
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/api/mutations.ts

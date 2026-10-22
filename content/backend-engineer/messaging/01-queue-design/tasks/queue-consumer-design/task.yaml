@@ -1,0 +1,45 @@
+slug: queue-consumer-design
+title: Size the Consumer Group
+type: practice
+difficulty: intermediate
+description: Consumers within a group split the partitions, and each partition is handled by
+  exactly one of them. Write the consumer configuration.
+requirements:
+  - File ~/backend/queues/consumer.yaml exists
+  - The config states the concurrency and the group
+  - The config states the ordering guarantee and how offsets are committed
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/backend/queues/consumer.yaml
+    label: ~/backend/queues/consumer.yaml
+  - validator: file_contains
+    path: /home/learner/backend/queues/consumer.yaml
+    value: concurrency
+    label: concurrency stated
+  - validator: file_contains
+    path: /home/learner/backend/queues/consumer.yaml
+    value: group
+    label: consumer group stated
+  - validator: file_contains
+    path: /home/learner/backend/queues/consumer.yaml
+    value: ordering
+    label: ordering guarantee stated
+  - validator: file_contains
+    path: /home/learner/backend/queues/consumer.yaml
+    value: offset
+    label: offset handling stated
+steps:
+  - title: Write the consumer configuration
+    detail: "concurrency is how many messages one instance handles at once. More is not better
+      once the downstream starts to lag."
+    command: >-
+      echo 'consumer:\n  group: order-workers\n  concurrency: 8\n  max_poll_records: 100' > ~/backend/queues/consumer.yaml
+  - title: State the ordering guarantee
+    detail: "Ordering only holds inside a partition. Say so in the contract, so nobody builds a
+      feature on top of a promise you never made."
+    command: >-
+      echo '\nordering: per-key, guaranteed within a partition only\noffset_commit: after the handler returns' >> ~/backend/queues/consumer.yaml
+  - title: Verify and submit
+    detail: cat the config, then submit for validation.
+    command: cat ~/backend/queues/consumer.yaml

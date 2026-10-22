@@ -1,0 +1,7 @@
+slug: 01-foundations
+title: Layout & Typography
+summary: The two skills that decide whether a page feels designed or generated.
+order: 1
+tasks:
+  - css-layout
+  - css-type-scale

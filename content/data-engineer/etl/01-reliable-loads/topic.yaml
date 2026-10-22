@@ -1,0 +1,7 @@
+slug: 01-reliable-loads
+title: Reliable Loads
+summary: Jobs get retried, sources repeat themselves, and the table must still end up correct.
+order: 1
+tasks:
+  - etl-idempotent-load
+  - etl-incremental-watermark

@@ -1,0 +1,42 @@
+slug: css-dark-mode
+title: Ship a Dark Mode
+type: challenge
+difficulty: advanced
+description: Dark mode is a token swap, not a second stylesheet. Write the override that changes
+  the tokens and nothing else.
+requirements:
+  - File ~/frontend/src/styles/theme.css exists
+  - The file follows the system colour scheme
+  - The file overrides the tokens for the dark theme
+  - The file keeps a manual theme selector
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/styles/theme.css
+    label: ~/frontend/src/styles/theme.css
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/theme.css
+    value: "prefers-color-scheme"
+    label: system preference honoured
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/theme.css
+    value: "--color-ink"
+    label: ink token overridden
+  - validator: file_contains
+    path: /home/learner/frontend/src/styles/theme.css
+    value: "[data-theme"
+    label: manual theme selector supported
+steps:
+  - title: Write the system override
+    detail: "The media query follows the operating system - most users never touch the toggle
+      in their life."
+    command: >-
+      echo '@media (prefers-color-scheme: dark) {\n  :root {\n    --color-ink: #f5f2ec;\n    --color-smoke: #b4b0a8;\n    --color-surface: #16161a;\n    --color-border: #2b2b30;\n  }\n}' > ~/frontend/src/styles/theme.css
+  - title: Add the manual override
+    detail: "The manual selector has to win over the media query - put it after and keep the
+      same token names."
+    command: >-
+      echo '\n\n[data-theme="dark"] {\n  --color-ink: #f5f2ec;\n  --color-smoke: #b4b0a8;\n  --color-surface: #16161a;\n  --color-border: #2b2b30;\n}' >> ~/frontend/src/styles/theme.css
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/styles/theme.css

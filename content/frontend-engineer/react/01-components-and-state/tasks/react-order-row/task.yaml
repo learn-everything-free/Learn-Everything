@@ -1,0 +1,48 @@
+slug: react-order-row
+title: Write a Typed Component
+type: guided
+difficulty: beginner
+description: The props are the contract of a component. Write one that renders a single order and
+  refuses to render without what it needs.
+requirements:
+  - Directory ~/frontend/src/components exists
+  - File ~/frontend/src/components/OrderRow.tsx exists
+  - The component exports a typed props interface
+  - The component returns markup from the props
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/frontend/src/components
+    label: ~/frontend/src/components
+  - validator: file_exists
+    path: /home/learner/frontend/src/components/OrderRow.tsx
+    label: ~/frontend/src/components/OrderRow.tsx
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderRow.tsx
+    value: "export function OrderRow"
+    label: component exported
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderRow.tsx
+    value: "interface OrderRowProps"
+    label: props typed
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderRow.tsx
+    value: "readonly"
+    label: props are readonly
+steps:
+  - title: Create the components directory
+    detail: One folder per feature, or one folder for the shared components - be consistent.
+    command: mkdir -p ~/frontend/src/components
+  - title: Write the props
+    detail: "The props interface says exactly what the component needs. Readonly stops a parent
+      from mutating what it handed over."
+    command: >-
+      echo 'import type { Order } from "../types/order";\n\ninterface OrderRowProps {\n  readonly order: Order;\n  readonly onSelect?: (id: string) => void;\n}' > ~/frontend/src/components/OrderRow.tsx
+  - title: Write the component
+    detail: "The component is a pure function of its props. No fetching, no globals - that keeps
+      it testable."
+    command: >-
+      echo '\n\nexport function OrderRow({ order }: OrderRowProps) {\n  return (\n    <li className="order-row">\n      <span>{order.id}</span>\n      <span>{(order.amountCents / 100).toFixed(2)}</span>\n    </li>\n  );\n}' >> ~/frontend/src/components/OrderRow.tsx
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/components/OrderRow.tsx

@@ -1,0 +1,48 @@
+slug: etl-incremental-watermark
+title: Extract Only What Changed
+type: practice
+difficulty: intermediate
+description: Re-reading the whole table every hour is how pipelines fall over. Write the
+  incremental extract that only asks for rows newer than the last watermark.
+requirements:
+  - File ~/pipelines/incremental.py exists
+  - The script reads the current watermark
+  - The script filters the source on the watermark
+  - The script writes the new watermark back
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/pipelines/incremental.py
+    label: ~/pipelines/incremental.py
+  - validator: file_contains
+    path: /home/learner/pipelines/incremental.py
+    value: watermark
+    label: watermark handled
+  - validator: file_contains
+    path: /home/learner/pipelines/incremental.py
+    value: "def read_watermark"
+    label: watermark is read
+  - validator: file_contains
+    path: /home/learner/pipelines/incremental.py
+    value: "def write_watermark"
+    label: watermark is written back
+  - validator: file_contains
+    path: /home/learner/pipelines/incremental.py
+    value: "WHERE"
+    label: source is filtered
+steps:
+  - title: Write the watermark helpers
+    detail: "The watermark is the high-water mark of the last successful run. Keep it in the
+      metadata store, not in the code."
+    command: >-
+      echo 'def read_watermark(table):\n    return metadata.get(table, "1970-01-01T00:00:00Z")\n\ndef write_watermark(table, value):\n    metadata.set(table, value)' > ~/pipelines/incremental.py
+  - title: Add the incremental extract
+    detail: "Filter on the watermark instead of the whole table - and remember the timezone, or
+      you will silently skip rows."
+    command: >-
+      echo '\ndef extract(conn, table, since):\n    return conn.execute("SELECT * FROM " + table + " WHERE updated_at >= $1", [since])' >> ~/pipelines/incremental.py
+  - title: Verify the script
+    detail: cat prints the script. The watermark moves only after the load succeeds.
+    command: cat ~/pipelines/incremental.py
+  - title: Submit for validation
+    detail: The validator checks the watermark read, write and the filter.

@@ -1,0 +1,42 @@
+slug: dm-medallion-layers
+title: Define the Medallion Layers
+type: practice
+difficulty: intermediate
+description: Bronze, silver and gold - three layers with three different contracts. Write the
+  definition so every producer knows where its data belongs.
+requirements:
+  - File ~/warehouse/model/layers.yaml exists
+  - The config defines the bronze, silver and gold layers
+  - Each layer states what it contains and how long it is kept
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/warehouse/model/layers.yaml
+    label: ~/warehouse/model/layers.yaml
+  - validator: file_contains
+    path: /home/learner/warehouse/model/layers.yaml
+    value: bronze
+    label: bronze layer defined
+  - validator: file_contains
+    path: /home/learner/warehouse/model/layers.yaml
+    value: silver
+    label: silver layer defined
+  - validator: file_contains
+    path: /home/learner/warehouse/model/layers.yaml
+    value: gold
+    label: gold layer defined
+  - validator: file_contains
+    path: /home/learner/warehouse/model/layers.yaml
+    value: retention_days
+    label: retention stated
+steps:
+  - title: Write the layer definitions
+    detail: "bronze is the raw landing zone - append only, never transformed. silver is typed and
+      deduplicated. gold is shaped for a specific question."
+    command: >-
+      echo 'layers:\n  bronze:\n    description: raw events as they arrive, never modified\n    retention_days: 90\n  silver:\n    description: typed, deduplicated and joined to the model\n    retention_days: 365\n  gold:\n    description: curated tables for analytics and ML\n    retention_days: 1095' > ~/warehouse/model/layers.yaml
+  - title: Verify the definitions
+    detail: cat prints the config. Ask which layer a failed job should be re-run against.
+    command: cat ~/warehouse/model/layers.yaml
+  - title: Submit for validation
+    detail: The validator checks the three layers and the retention policy.

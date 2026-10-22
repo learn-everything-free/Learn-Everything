@@ -1,0 +1,48 @@
+slug: orch-slots-and-backfills
+title: Plan Slots and Backfills
+type: practice
+difficulty: intermediate
+description: Catchup runs, concurrency limits and backfills - the operational side of a schedule.
+  Write the configuration that keeps a backlog from melting the cluster.
+requirements:
+  - File ~/orchestration/dags/schedule.yaml exists
+  - The config states the schedule and whether catchup is allowed
+  - The config limits how many runs may be active
+  - The config describes how a backfill is run
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/orchestration/dags/schedule.yaml
+    label: ~/orchestration/dags/schedule.yaml
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/schedule.yaml
+    value: schedule_interval
+    label: schedule stated
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/schedule.yaml
+    value: catchup
+    label: catchup behaviour stated
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/schedule.yaml
+    value: max_active_runs
+    label: concurrency limited
+  - validator: file_contains
+    path: /home/learner/orchestration/dags/schedule.yaml
+    value: backfill
+    label: backfill procedure described
+steps:
+  - title: Write the schedule configuration
+    detail: "catchup decides what happens after a holiday - false means the missed days are
+      skipped, true means every one of them runs."
+    command: >-
+      echo 'dag_id: daily_load\nschedule_interval: "@daily"\ncatchup: false\nmax_active_runs: 3\nstart_date: "2026-01-01"' > ~/orchestration/dags/schedule.yaml
+  - title: Describe the backfill
+    detail: "A backfill is a deliberate re-run over a date range, throttled so it does not take
+      the warehouse down with it."
+    command: >-
+      echo '\nbackfill:\n  command: airflow dags backfill daily_load -s 2026-09-01 -e 2026-09-07\n  max_active_runs: 1\n  throttle: true' >> ~/orchestration/dags/schedule.yaml
+  - title: Verify the configuration
+    detail: cat prints the config. Read it as the operator who will run the backfill at midnight.
+    command: cat ~/orchestration/dags/schedule.yaml
+  - title: Submit for validation
+    detail: The validator checks the schedule, catchup, concurrency and backfill.

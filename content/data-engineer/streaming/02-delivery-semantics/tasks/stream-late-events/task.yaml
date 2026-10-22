@@ -1,0 +1,40 @@
+slug: stream-late-events
+title: Handle Late and Out-of-Order Events
+type: practice
+difficulty: intermediate
+description: Network delays mean events arrive late. Decide how long you wait, and what happens
+  to the ones that arrive after the deadline.
+requirements:
+  - File ~/streaming/watermark.yaml exists
+  - The config states the watermark delay
+  - The config states how long the engine waits before closing a window
+  - The config states what happens to events that arrive later
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/streaming/watermark.yaml
+    label: ~/streaming/watermark.yaml
+  - validator: file_contains
+    path: /home/learner/streaming/watermark.yaml
+    value: watermark_delay_ms
+    label: watermark delay stated
+  - validator: file_contains
+    path: /home/learner/streaming/watermark.yaml
+    value: allowed_lateness_ms
+    label: allowed lateness stated
+  - validator: file_contains
+    path: /home/learner/streaming/watermark.yaml
+    value: on_late_event
+    label: late event handling stated
+steps:
+  - title: Write the watermark configuration
+    detail: "watermark_delay_ms is how long the engine waits for stragglers before it closes a
+      window. Too short and you lose events, too long and you add latency."
+    command: >-
+      echo 'watermark:\n  watermark_delay_ms: 30000\n  allowed_lateness_ms: 60000\n  on_late_event: update_aggregate' > ~/streaming/watermark.yaml
+  - title: Verify the configuration
+    detail: cat prints the config. The numbers are a business decision - late data still has to
+      end up in the reports.
+    command: cat ~/streaming/watermark.yaml
+  - title: Submit for validation
+    detail: The validator checks the watermark delay, the lateness and the handling rule.

@@ -1,0 +1,43 @@
+slug: dm-partitioning
+title: Partition and Cluster Your Tables
+type: challenge
+difficulty: advanced
+description: Layout is performance. Decide how the fact table is partitioned, how it is clustered
+  and how long the history is kept.
+requirements:
+  - File ~/warehouse/model/partitions.yaml exists
+  - The config states the partition column
+  - The config states the clustering columns
+  - The config states the retention and the file size target
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/warehouse/model/partitions.yaml
+    label: ~/warehouse/model/partitions.yaml
+  - validator: file_contains
+    path: /home/learner/warehouse/model/partitions.yaml
+    value: partition_by
+    label: partition column stated
+  - validator: file_contains
+    path: /home/learner/warehouse/model/partitions.yaml
+    value: cluster_by
+    label: clustering columns stated
+  - validator: file_contains
+    path: /home/learner/warehouse/model/partitions.yaml
+    value: target_file_size_mb
+    label: file size target stated
+  - validator: file_contains
+    path: /home/learner/warehouse/model/partitions.yaml
+    value: retention_days
+    label: retention stated
+steps:
+  - title: Write the layout config
+    detail: "Partition by the column almost every query filters on - a date column for event
+      tables, an entity key for snapshot tables."
+    command: >-
+      echo 'table: fact_orders\npartition_by: date_key\ncluster_by: [customer_key, status]\ntarget_file_size_mb: 256\nretention_days: 1095' > ~/warehouse/model/partitions.yaml
+  - title: Verify the layout
+    detail: cat prints the config. Every clustered column should be one you filter or group by.
+    command: cat ~/warehouse/model/partitions.yaml
+  - title: Submit for validation
+    detail: The validator checks the partition, clustering, file size and retention.

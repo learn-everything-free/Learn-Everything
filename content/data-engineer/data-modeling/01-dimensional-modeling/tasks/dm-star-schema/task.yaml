@@ -1,0 +1,57 @@
+slug: dm-star-schema
+title: Design a Star Schema
+type: guided
+difficulty: beginner
+description: A star schema is one fact table surrounded by dimension tables. Write the model
+  document that names the tables, the grain and the joins.
+requirements:
+  - Directory ~/warehouse/model exists
+  - File ~/warehouse/model/dimensions.md exists
+  - The document names the fact table and its grain
+  - The document names at least two dimension tables and their join keys
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/warehouse/model
+    label: ~/warehouse/model
+  - validator: file_exists
+    path: /home/learner/warehouse/model/dimensions.md
+    label: ~/warehouse/model/dimensions.md
+  - validator: file_contains
+    path: /home/learner/warehouse/model/dimensions.md
+    value: fact_orders
+    label: fact table named
+  - validator: file_contains
+    path: /home/learner/warehouse/model/dimensions.md
+    value: dim_customer
+    label: customer dimension named
+  - validator: file_contains
+    path: /home/learner/warehouse/model/dimensions.md
+    value: dim_date
+    label: date dimension named
+  - validator: file_contains
+    path: /home/learner/warehouse/model/dimensions.md
+    value: Grain
+    label: grain of the fact table stated
+steps:
+  - title: Create the model directory
+    detail: The model document is reviewed like code - it lives with the pipeline that fills it.
+    command: mkdir -p ~/warehouse/model
+  - title: Name the fact table and its grain
+    detail: "The grain is the answer to one row is what. Say it out loud before you design
+      anything - it decides every key downstream."
+    command: >-
+      echo '# Order warehouse model\n\n## fact_orders\n\nGrain: one row per order line item.\nColumns: order_line_id, order_id, customer_key, date_key, product_key, amount; > ~/warehouse/model/dimensions.md
+  - title: Add the customer dimension
+    detail: "Dimensions hold the descriptive attributes. Join on the surrogate key, never on the
+      business key - business keys change."
+    command: >-
+      echo '\n## dim_customer\n\nJoin key: customer_key. Holds name, segment and country.' >> ~/warehouse/model/dimensions.md
+  - title: Add the date dimension
+    detail: "The date dimension is the one everybody underestimates - it carries weekday, month,
+      quarter and the fiscal calendar."
+    command: >-
+      echo '\n## dim_date\n\nJoin key: date_key. Holds day, weekday, month, quarter and fiscal period.' >> ~/warehouse/model/dimensions.md
+  - title: Verify and submit
+    detail: cat the document, then submit for validation.
+    command: cat ~/warehouse/model/dimensions.md

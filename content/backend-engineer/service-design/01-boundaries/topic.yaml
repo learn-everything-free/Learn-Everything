@@ -1,0 +1,7 @@
+slug: 01-boundaries
+title: Boundaries & Contracts
+summary: Who owns which table, and what the services say to each other.
+order: 1
+tasks:
+  - svc-boundaries
+  - svc-event-contracts

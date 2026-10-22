@@ -1,0 +1,46 @@
+slug: etl-idempotent-load
+title: Load Data Idempotently
+type: guided
+difficulty: beginner
+description: Pipelines get retried - the load has to converge to the same table every time. Write
+  the merge that updates changed rows and inserts the new ones.
+requirements:
+  - Directory ~/pipelines exists
+  - File ~/pipelines/load_ingest.sql exists
+  - The statement merges instead of blindly inserting
+  - The statement handles matched and unmatched rows
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/pipelines
+    label: ~/pipelines
+  - validator: file_exists
+    path: /home/learner/pipelines/load_ingest.sql
+    label: ~/pipelines/load_ingest.sql
+  - validator: file_contains
+    path: /home/learner/pipelines/load_ingest.sql
+    value: MERGE
+    label: statement merges the rows
+  - validator: file_contains
+    path: /home/learner/pipelines/load_ingest.sql
+    value: WHEN MATCHED
+    label: existing rows are updated
+  - validator: file_contains
+    path: /home/learner/pipelines/load_ingest.sql
+    value: WHEN NOT MATCHED
+    label: new rows are inserted
+steps:
+  - title: Create the pipelines directory
+    detail: Pipelines are code - they are versioned, reviewed and deployed like anything else.
+    command: mkdir -p ~/pipelines
+  - title: Open the merge statement
+    detail: "MERGE is the idempotent workhorse - it compares the source with the target and does
+      the right thing for every row."
+    command: >-
+      echo MERGE INTO orders AS target\nUSING staging_orders AS source\nON target.order_id = source.order_id\nWHEN MATCHED THEN\n  UPDATE SET status = source.status, amount = source.amount\nWHEN NOT MATCHED THEN\n  INSERT (order_id, status, amount)\n  VALUES (source.order_id, source.status, source.amount); > ~/pipelines/load_ingest.sql
+  - title: Read the statement back
+    detail: cat prints the statement. Read the ON clause first - it is the whole correctness
+      argument.
+    command: cat ~/pipelines/load_ingest.sql
+  - title: Submit for validation
+    detail: The validator checks that the load merges, updates and inserts.

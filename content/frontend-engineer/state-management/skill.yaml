@@ -1,0 +1,5 @@
+slug: state-management
+title: State & Data Fetching
+summary: Server state in the cache, client state in the store, and the rest in the URL.
+path: frontend-engineer
+order: 3

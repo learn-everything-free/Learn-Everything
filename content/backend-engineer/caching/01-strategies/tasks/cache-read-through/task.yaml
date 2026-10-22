@@ -1,0 +1,46 @@
+slug: cache-read-through
+title: Choose a Read-Through Policy
+type: guided
+difficulty: beginner
+description: A read-through cache keeps the calling code simple - it asks the cache and the cache
+  knows how to load. Write the policy.
+requirements:
+  - Directory ~/backend/cache exists
+  - File ~/backend/cache/policy.yaml exists
+  - The config names the strategy and the TTL
+  - The config names the key namespace and the serialisation format
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/backend/cache
+    label: ~/backend/cache
+  - validator: file_exists
+    path: /home/learner/backend/cache/policy.yaml
+    label: ~/backend/cache/policy.yaml
+  - validator: file_contains
+    path: /home/learner/backend/cache/policy.yaml
+    value: strategy
+    label: strategy declared
+  - validator: file_contains
+    path: /home/learner/backend/cache/policy.yaml
+    value: read-through
+    label: read-through strategy used
+  - validator: file_contains
+    path: /home/learner/backend/cache/policy.yaml
+    value: ttl_seconds
+    label: ttl stated
+  - validator: file_contains
+    path: /home/learner/backend/cache/policy.yaml
+    value: namespace
+    label: key namespace stated
+steps:
+  - title: Write the cache policy
+    detail: "read-through means the cache calls the loader on a miss. The calling code never
+      knows the difference."
+    command: >-
+      echo 'cache:\n  strategy: read-through\n  namespace: orders:v2\n  ttl_seconds: 300\n  serialisation: json\n  loader: db.orders.fetch' > ~/backend/cache/policy.yaml
+  - title: Verify the policy
+    detail: cat prints the policy. Ask what happens when the loader is slow.
+    command: cat ~/backend/cache/policy.yaml
+  - title: Submit for validation
+    detail: The validator checks the strategy, the TTL and the namespace.

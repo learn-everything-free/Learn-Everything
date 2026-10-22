@@ -1,0 +1,7 @@
+slug: 02-performance
+title: Indexes & Query Plans
+summary: Why the same query is fast on Monday and slow on Friday - and what the plan tells you.
+order: 2
+tasks:
+  - sql-index-strategy
+  - sql-query-cost

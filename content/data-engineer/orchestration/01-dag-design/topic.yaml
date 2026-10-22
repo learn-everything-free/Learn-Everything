@@ -1,0 +1,7 @@
+slug: 01-dag-design
+title: DAG Design
+summary: Declare what depends on what, and let the scheduler work out the order.
+order: 1
+tasks:
+  - orch-dag-dependencies
+  - orch-slots-and-backfills

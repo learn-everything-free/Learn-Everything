@@ -1,0 +1,45 @@
+slug: react-list-keys
+title: Render a List Correctly
+type: practice
+difficulty: intermediate
+description: React identifies rows by key. Use the stable identifier from the data, and render an
+  empty state instead of a blank list.
+requirements:
+  - File ~/frontend/src/components/OrderList.tsx exists
+  - The component maps over the orders
+  - The mapped rows use a stable key
+  - The component handles the empty case
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/frontend/src/components/OrderList.tsx
+    label: ~/frontend/src/components/OrderList.tsx
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderList.tsx
+    value: ".map("
+    label: orders are mapped
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderList.tsx
+    value: "key="
+    label: rows use a key
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderList.tsx
+    value: "length === 0"
+    label: empty state handled
+  - validator: file_contains
+    path: /home/learner/frontend/src/components/OrderList.tsx
+    value: "export function OrderList"
+    label: component exported
+steps:
+  - title: Write the empty state
+    detail: "An empty list is a state, not an absence. Say it in words the user understands."
+    command: >-
+      echo 'import type { Order } from "../types/order";\nimport { OrderRow } from "./OrderRow";\n\ninterface OrderListProps {\n  readonly orders: readonly Order[];\n}\n\nexport function OrderList({ orders }: OrderListProps) {\n  if (orders.length === 0) {\n    return <p className="empty-state">No orders yet.</p>;\n  }' > ~/frontend/src/components/OrderList.tsx
+  - title: Render the rows
+    detail: "The key is the stable identifier from the data - never the array index, or React
+      will reuse the wrong row."
+    command: >-
+      echo '\n  return (\n    <ul className="order-list">\n      {orders.map((order) => (\n        <OrderRow key={order.id} order={order} />\n      ))}\n    </ul>\n  );\n}' >> ~/frontend/src/components/OrderList.tsx
+  - title: Verify and submit
+    detail: cat the file, then submit for validation.
+    command: cat ~/frontend/src/components/OrderList.tsx
