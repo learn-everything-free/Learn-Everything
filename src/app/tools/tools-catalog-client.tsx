@@ -53,7 +53,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
             placeholder="Search tools by name, technology, or concept (e.g., Docker, K8s, RAG, Terraform)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-full border border-ink bg-eggshell py-3.5 pl-12 pr-6 text-body-sm text-ink placeholder:text-ash focus:border-ink focus:outline-hidden focus:ring-1 focus:ring-ink"
+            className="w-full rounded-none border border-ink bg-eggshell py-3.5 pl-12 pr-6 text-body-sm text-ink placeholder:text-ash focus:border-ink focus:outline-hidden focus:ring-1 focus:ring-ink"
           />
           {searchQuery && (
             <button
@@ -69,7 +69,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setSelectedCategory("All")}
-            className={`rounded-full px-4 py-1.5 text-label font-medium transition-all ${
+            className={`rounded-none px-4 py-1.5 text-label font-medium transition-all ${
               selectedCategory === "All"
                 ? "bg-ink text-eggshell"
                 : "border border-ink bg-eggshell text-graphite hover:bg-stone/60"
@@ -84,7 +84,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-label font-medium transition-all ${
+                className={`rounded-none px-4 py-1.5 text-label font-medium transition-all ${
                   isSelected
                     ? "bg-ink text-eggshell"
                     : "border border-ink bg-eggshell text-graphite hover:bg-stone/60"
@@ -119,7 +119,7 @@ export function ToolsCatalogClient({ taskCounts }: ToolsCatalogClientProps) {
               setSearchQuery("");
               setSelectedCategory("All");
             }}
-            className="mt-6 rounded-full border border-ink bg-eggshell px-4 py-2 text-body-sm font-medium text-ink hover:bg-stone"
+            className="mt-6 rounded-none border border-ink bg-eggshell px-4 py-2 text-body-sm font-medium text-ink hover:bg-stone"
           >
             Reset Filters
           </button>

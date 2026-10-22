@@ -68,7 +68,7 @@ export default function Home() {
                 lab drops every midnight.
               </p>
             </div>
-            <Link href="/dashboard" className="le-pill self-start md:self-auto">
+            <Link href="/dashboard" className="le-outline self-start md:self-auto">
               Open your dashboard
             </Link>
           </div>

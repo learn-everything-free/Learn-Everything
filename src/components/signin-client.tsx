@@ -99,13 +99,13 @@ export function SignInClient() {
           <div className="mt-8 space-y-3">
             <button
               onClick={() => router.push(callbackUrl)}
-              className="w-full rounded-full bg-ink px-5 py-3 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+              className="w-full rounded-none bg-ink px-5 py-3 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
             >
               Continue to your dashboard →
             </button>
             <button
               onClick={() => void signOut()}
-              className="w-full rounded-full border border-ink bg-eggshell px-5 py-3 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
+              className="w-full rounded-none border border-ink bg-eggshell px-5 py-3 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
             >
               Sign out
             </button>
@@ -128,7 +128,7 @@ export function SignInClient() {
                 key={p.id}
                 onClick={() => void choose(p.id)}
                 disabled={busy !== null}
-                className="flex w-full items-center justify-center gap-3 rounded-full border border-ink bg-eggshell px-5 py-3 text-body-sm font-medium text-ink transition-colors hover:bg-stone/60 disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-3 rounded-none border border-ink bg-eggshell px-5 py-3 text-body-sm font-medium text-ink transition-colors hover:bg-stone/60 disabled:opacity-60"
               >
                 {PROVIDER_ICONS[p.id]}
                 {busy === p.id ? "Redirecting…" : `Continue with ${p.name}`}

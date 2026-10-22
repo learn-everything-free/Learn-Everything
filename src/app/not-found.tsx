@@ -29,19 +29,19 @@ export default function NotFound() {
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/"
-          className="rounded-full bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+          className="rounded-none bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
         >
           Back home
         </Link>
         <Link
           href="/paths"
-          className="rounded-full border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone/80 hover:text-ink"
+          className="rounded-none border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone/80 hover:text-ink"
         >
           Learning Paths
         </Link>
         <Link
           href="/tools"
-          className="rounded-full border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-eggshell hover:text-ink"
+          className="rounded-none border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-eggshell hover:text-ink"
         >
           Tool Hubs
         </Link>

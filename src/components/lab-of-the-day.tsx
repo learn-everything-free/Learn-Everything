@@ -26,11 +26,11 @@ export function LabOfTheDay({ tasks }: { tasks: TaskIndexEntry[] }) {
       <div className="min-w-0">
         <p className="flex flex-wrap items-center gap-3">
           <span className="le-label text-smoke">Lab of the day</span>
-          <span className="rounded-full border border-ink/40 px-3 py-1 text-label uppercase tracking-[1px] text-graphite">
+          <span className="rounded-none border border-ink/40 px-3 py-1 text-label uppercase tracking-[1px] text-graphite">
             {pick.skillTitle}
           </span>
           {done && (
-            <span className="rounded-full border border-ink/40 px-3 py-1 text-label uppercase tracking-[1px] text-graphite">
+            <span className="rounded-none border border-ink/40 px-3 py-1 text-label uppercase tracking-[1px] text-graphite">
               ✓ Validated
             </span>
           )}

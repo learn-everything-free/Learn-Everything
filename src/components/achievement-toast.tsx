@@ -106,7 +106,7 @@ export function AchievementToaster({ index }: { index: AchievementIndex }) {
           <button
             onClick={() => removeToast(t.id)}
             aria-label="Dismiss"
-            className="shrink-0 rounded-full px-1.5 text-smoke transition-colors hover:text-ink"
+            className="shrink-0 rounded-none px-1.5 text-smoke transition-colors hover:text-ink"
           >
             ×
           </button>

@@ -10,7 +10,7 @@ export function CompletedBadge({ slug }: { slug: string }) {
   const { completed } = useProgress();
   if (!(slug in completed)) return null;
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-eggshell px-3 py-0.5 text-label font-medium tracking-tight text-graphite border border-ink/40 dark:bg-ink/10 dark:text-graphite dark:border-ink/40">
+    <span className="inline-flex items-center gap-1.5 rounded-none bg-eggshell px-3 py-0.5 text-label font-medium tracking-tight text-graphite border border-ink/40 dark:bg-ink/10 dark:text-graphite dark:border-ink/40">
       ✓ Completed
     </span>
   );
@@ -29,9 +29,9 @@ export function TaskProgressMeter({
   const pct = slugs.length === 0 ? 0 : Math.round((done / slugs.length) * 100);
   return (
     <div className="flex items-center gap-3">
-      <div className="h-1.5 w-28 overflow-hidden rounded-full bg-stone/80">
+      <div className="h-1.5 w-28 overflow-hidden rounded-none bg-stone/80">
         <div
-          className="h-full rounded-full bg-ink transition-all duration-300"
+          className="h-full rounded-none bg-ink transition-all duration-300"
           style={{ width: `${pct}%` }}
         />
       </div>

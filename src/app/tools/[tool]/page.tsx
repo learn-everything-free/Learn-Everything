@@ -107,7 +107,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
             </p>
             <Link
               href={`/lab/${relatedTasks[0].task.slug}`}
-              className="mt-2 inline-flex items-center justify-center rounded-full bg-ink px-4 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+              className="mt-2 inline-flex items-center justify-center rounded-none bg-ink px-4 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
             >
               Launch First Lab ⚡
             </Link>
@@ -193,7 +193,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                       </span>
                       <Link
                         href={`/lab/${task.slug}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-1.5 text-label font-medium text-eggshell transition-opacity hover:opacity-80"
+                        className="inline-flex items-center gap-1.5 rounded-none bg-ink px-4 py-1.5 text-label font-medium text-eggshell transition-opacity hover:opacity-80"
                       >
                         Open Lab ↗
                       </Link>
@@ -340,7 +340,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                 className="rounded-none border border-ink/40 bg-eggshell/40 p-7 dark:border-ink/40 dark:bg-amber-500/5"
               >
                 <div className="flex items-center gap-2">
-                  <span className="flex size-6 items-center justify-center rounded-full bg-amber-200 text-label font-bold text-amber-900 dark:bg-amber-500/20 dark:text-graphite">
+                  <span className="flex size-6 items-center justify-center rounded-none bg-amber-200 text-label font-bold text-amber-900 dark:bg-amber-500/20 dark:text-graphite">
                     !
                   </span>
                   <h3 className="text-body-sm font-semibold text-graphite">
@@ -388,7 +388,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                   key={i}
                   className="flex items-start gap-3 rounded-none border border-ink/60 bg-eggshell p-4"
                 >
-                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-graphite text-label font-bold mt-0.5 dark:bg-emerald-500/15 dark:text-graphite">
+                  <span className="flex size-5 shrink-0 items-center justify-center rounded-none bg-emerald-100 text-graphite text-label font-bold mt-0.5 dark:bg-emerald-500/15 dark:text-graphite">
                     ✓
                   </span>
                   <span className="text-body-sm text-graphite leading-relaxed">
@@ -418,13 +418,13 @@ export default async function ToolDetailPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-4">
               <Link
                 href={`/paths/${tool.relatedPathSlug}`}
-                className="rounded-full bg-eggshell px-6 py-3 text-body-sm font-medium text-ink transition-opacity hover:opacity-90"
+                className="rounded-none bg-eggshell px-6 py-3 text-body-sm font-medium text-ink transition-opacity hover:opacity-90"
               >
                 View Full Path ↗
               </Link>
               <Link
                 href="/tools"
-                className="rounded-full border border-ink/40 bg-ink px-6 py-3 text-body-sm font-medium text-eggshell transition-colors hover:bg-stone/20"
+                className="rounded-none border border-ink/40 bg-ink px-6 py-3 text-body-sm font-medium text-eggshell transition-colors hover:bg-stone/20"
               >
                 Browse All Tools
               </Link>

@@ -125,9 +125,9 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
             level {lvl.level} of {levelForXp(Infinity).level}
           </span>
         </div>
-        <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-stone/80">
+        <div className="mt-5 h-2 w-full overflow-hidden rounded-none bg-stone/80">
           <div
-            className="h-full rounded-full bg-ink transition-all duration-500"
+            className="h-full rounded-none bg-ink transition-all duration-500"
             style={{ width: `${levelPct}%` }}
           />
         </div>
@@ -158,9 +158,9 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
                         {done}/{path.taskSlugs.length} labs · {pct}%
                       </span>
                     </div>
-                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-stone/80">
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-none bg-stone/80">
                       <div
-                        className="h-full rounded-full bg-ink transition-all duration-500"
+                        className="h-full rounded-none bg-ink transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -168,7 +168,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
                   {cleared && (
                     <Link
                       href={`/certificates/${path.slug}`}
-                      className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-ink/40 bg-eggshell px-3 py-1 text-label font-medium text-graphite transition-colors hover:bg-ink/5 dark:border-ink/40 dark:bg-ink/10 dark:text-graphite"
+                      className="mt-2 inline-flex items-center gap-1.5 rounded-none border border-ink/40 bg-eggshell px-3 py-1 text-label font-medium text-graphite transition-colors hover:bg-ink/5 dark:border-ink/40 dark:bg-ink/10 dark:text-graphite"
                     >
                       🏅 View your certificate
                     </Link>
@@ -197,7 +197,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
           </div>
           <Link
             href="/paths"
-            className="mt-6 inline-flex rounded-full border border-ink bg-eggshell px-4 py-2 text-label font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
+            className="mt-6 inline-flex rounded-none border border-ink bg-eggshell px-4 py-2 text-label font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
           >
             Browse all paths →
           </Link>
@@ -218,7 +218,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
               <Link
                 key={r.slug}
                 href={`/lab/${r.slug}`}
-                className="group flex items-center gap-3 rounded-full border border-ink/80 bg-eggshell py-2 pl-4 pr-3 transition-colors hover:border-ink/30 hover:bg-eggshell"
+                className="group flex items-center gap-3 rounded-none border border-ink/80 bg-eggshell py-2 pl-4 pr-3 transition-colors hover:border-ink/30 hover:bg-eggshell"
               >
                 <span className="size-1.5 rounded-full bg-ink" aria-hidden />
                 <span className="text-body-sm font-medium text-ink">{r.entry.title}</span>
@@ -330,7 +330,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
             {index.tasks[0] && (
               <Link
                 href={`/lab/${index.tasks[0].slug}`}
-                className="mt-4 inline-flex rounded-full bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+                className="mt-4 inline-flex rounded-none bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
               >
                 Launch your first lab ⚡
               </Link>
@@ -347,7 +347,7 @@ export function DashboardClient({ index }: { index: CurriculumIndex }) {
                 }`}
               >
                 <div className="flex min-w-0 items-center gap-4">
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-ink/40 bg-eggshell font-mono text-label text-graphite dark:border-ink/40 dark:bg-ink/10 dark:text-graphite">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-none border border-ink/40 bg-eggshell font-mono text-label text-graphite dark:border-ink/40 dark:bg-ink/10 dark:text-graphite">
                     ✓
                   </span>
                   <div className="min-w-0">
@@ -431,13 +431,13 @@ function DataSection() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={download}
-            className="rounded-full bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+            className="rounded-none bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
           >
             Export progress ↓
           </button>
           <button
             onClick={() => fileRef.current?.click()}
-            className="rounded-full border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
+            className="rounded-none border border-ink bg-eggshell px-5 py-2.5 text-body-sm font-medium text-graphite transition-colors hover:bg-stone hover:text-ink"
           >
             Import a file…
           </button>

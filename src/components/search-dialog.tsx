@@ -73,7 +73,7 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
       <button
         onClick={() => setOpen(true)}
         aria-label="Search the site"
-        className="hidden items-center gap-2 whitespace-nowrap rounded-full border border-ink/80 bg-eggshell px-3.5 py-1.5 text-caption text-smoke transition-colors hover:bg-stone/60 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:flex"
+        className="hidden items-center gap-2 whitespace-nowrap rounded-none border border-ink/80 bg-eggshell px-3.5 py-1.5 text-caption text-smoke transition-colors hover:bg-stone/60 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:flex"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-3.5">
           <circle cx="11" cy="11" r="7" />
@@ -87,7 +87,7 @@ export function SearchDialog({ items }: { items: SearchItem[] }) {
       <button
         onClick={() => setOpen(true)}
         aria-label="Search the site"
-        className="flex size-9 items-center justify-center rounded-full border border-ink/80 bg-eggshell text-graphite transition-colors hover:bg-eggshell md:hidden"
+        className="flex size-9 items-center justify-center rounded-none border border-ink/80 bg-eggshell text-graphite transition-colors hover:bg-eggshell md:hidden"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4">
           <circle cx="11" cy="11" r="7" />

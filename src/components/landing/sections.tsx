@@ -209,7 +209,7 @@ export function CurriculumTable({ bars, totals }: { bars: Bar[]; totals: { label
                 No card, no seat licence, no trial that expires. The whole curriculum is MIT
                 licensed and self-hostable, and it stays up as long as the project does.
               </p>
-              <Link href="/paths" className="le-pill mt-6">
+              <Link href="/paths" className="le-outline mt-6">
                 Start a track
               </Link>
             </div>
@@ -300,7 +300,7 @@ export function FinalCta() {
           <Link href="/lab/linux-create-project" className="le-action">
             Start learning free
           </Link>
-          <Link href="/paths" className="le-pill">
+          <Link href="/paths" className="le-outline">
             Browse the tracks
           </Link>
         </div>

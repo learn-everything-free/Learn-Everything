@@ -106,7 +106,7 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
             href="/lab/linux-create-project"
             className={
               pathname === "/"
-                ? "le-pill hidden sm:inline-flex"
+                ? "le-outline hidden sm:inline-flex"
                 : "hidden whitespace-nowrap border border-ink bg-ink px-4 py-2 text-caption font-medium uppercase tracking-[0.083em] text-eggshell transition-opacity hover:opacity-85 sm:block"
             }
           >

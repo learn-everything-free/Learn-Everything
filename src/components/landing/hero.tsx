@@ -34,7 +34,7 @@ export function Hero({ tiles }: { tiles: LabTile[] }) {
             <Link href="/lab/linux-create-project" className="le-action">
               Start your first lab
             </Link>
-            <Link href="/paths" className="le-pill">
+            <Link href="/paths" className="le-outline">
               Browse the tracks
             </Link>
           </div>

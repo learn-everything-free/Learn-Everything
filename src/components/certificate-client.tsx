@@ -61,9 +61,9 @@ export function CertificateClient({
             </span>{" "}
             validated so far.
           </p>
-          <div className="mx-auto mt-6 h-2 max-w-xs overflow-hidden rounded-full bg-stone/80">
+          <div className="mx-auto mt-6 h-2 max-w-xs overflow-hidden rounded-none bg-stone/80">
             <div
-              className="h-full rounded-full bg-ink transition-all duration-500"
+              className="h-full rounded-none bg-ink transition-all duration-500"
               style={{
                 width: `${taskSlugs.length ? Math.round((doneSlugs.length / taskSlugs.length) * 100) : 0}%`,
               }}
@@ -71,7 +71,7 @@ export function CertificateClient({
           </div>
           <Link
             href={`/paths/${pathSlug}`}
-            className="mt-8 inline-flex rounded-full bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+            className="mt-8 inline-flex rounded-none bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
           >
             Back to the path →
           </Link>
@@ -112,12 +112,12 @@ export function CertificateClient({
               }}
               placeholder="Your name"
               maxLength={60}
-              className="w-48 rounded-full border border-ink bg-eggshell px-4 py-2 text-body-sm text-ink outline-none placeholder:text-ash focus:border-ink/40"
+              className="w-48 rounded-none border border-ink bg-eggshell px-4 py-2 text-body-sm text-ink outline-none placeholder:text-ash focus:border-ink/40"
             />
           )}
           <button
             onClick={() => window.print()}
-            className="rounded-full bg-ink px-5 py-2 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
+            className="rounded-none bg-ink px-5 py-2 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-85"
           >
             Print / Save as PDF
           </button>

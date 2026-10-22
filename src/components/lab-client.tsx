@@ -263,9 +263,9 @@ export function LabClient({
                   )}
                 </div>
               </div>
-              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-stone/70">
+              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-none bg-stone/70">
                 <div
-                  className="h-full rounded-full bg-ink transition-all duration-500"
+                  className="h-full rounded-none bg-ink transition-all duration-500"
                   style={{ width: `${passPct}%` }}
                 />
               </div>
@@ -322,7 +322,7 @@ export function LabClient({
                         <div className="flex items-center justify-between gap-4">
                           <span className="flex items-center gap-3">
                             <span
-                              className={`flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-mono-xs ${
+                              className={`flex size-5 shrink-0 items-center justify-center rounded-none font-mono text-mono-xs ${
                                 r.pass ? "bg-ink text-eggshell" : "border border-ink text-smoke"
                               }`}
                               aria-hidden
@@ -378,7 +378,7 @@ export function LabClient({
                             </code>
                             <button
                               onClick={() => runner(cmd)}
-                              className="shrink-0 rounded-full border border-ink bg-ink px-3 py-1 font-mono text-caption uppercase text-eggshell transition-opacity hover:opacity-80"
+                              className="shrink-0 rounded-none border border-ink bg-ink px-3 py-1 font-mono text-caption uppercase text-eggshell transition-opacity hover:opacity-80"
                               title={`Runs "${cmd}" in the terminal`}
                             >
                               Run ↘
@@ -396,7 +396,7 @@ export function LabClient({
                     </span>
                     <button
                       onClick={() => setRevealedSteps((n) => Math.min(n + 1, task.steps.length))}
-                      className="rounded-full border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
+                      className="rounded-none border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption uppercase text-graphite transition-colors hover:border-ink hover:text-ink"
                     >
                       Reveal next step
                     </button>
@@ -419,7 +419,7 @@ export function LabClient({
                   <div key={i} className={`flex ${m.role === "you" ? "justify-end" : "justify-start"}`}>
                     {m.role === "tutor" && (
                       <span
-                        className="mr-2.5 mt-1 flex size-6 shrink-0 items-center justify-center rounded-full bg-ink font-mono text-label font-bold text-eggshell"
+                        className="mr-2.5 mt-1 flex size-6 shrink-0 items-center justify-center rounded-none bg-ink font-mono text-label font-bold text-eggshell"
                         aria-hidden
                       >
                         T
@@ -428,8 +428,8 @@ export function LabClient({
                     <p
                       className={`max-w-[85%] px-4 py-2.5 text-body-sm ${
                         m.role === "you"
-                          ? "rounded-none rounded-br-[4px] bg-stone/60 text-graphite"
-                          : "rounded-none rounded-bl-[4px] bg-eggshell text-ink"
+                          ? "rounded-none bg-stone/60 text-graphite"
+                          : "rounded-none bg-eggshell text-ink"
                       }`}
                     >
                       {m.text || "…"}
@@ -444,7 +444,7 @@ export function LabClient({
                     <button
                       key={ask}
                       onClick={() => askTutor(ask)}
-                      className="rounded-full border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption text-graphite transition-colors hover:border-ink hover:text-ink"
+                      className="rounded-none border border-ink bg-eggshell px-3.5 py-1.5 font-mono text-caption text-graphite transition-colors hover:border-ink hover:text-ink"
                     >
                       {ask}
                     </button>
@@ -459,12 +459,12 @@ export function LabClient({
                   onKeyDown={(e) => e.key === "Enter" && askTutor()}
                   placeholder="Describe what you tried…"
                   disabled={tutorBusy}
-                  className="w-full rounded-full border border-ink bg-eggshell px-4 py-2.5 text-body-sm outline-none placeholder:text-ash focus:border-ink disabled:opacity-60"
+                  className="w-full rounded-none border border-ink bg-eggshell px-4 py-2.5 text-body-sm outline-none placeholder:text-ash focus:border-ink disabled:opacity-60"
                 />
                 <button
                   onClick={() => askTutor()}
                   disabled={tutorBusy}
-                  className="shrink-0 rounded-full border border-ink bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="shrink-0 rounded-none border border-ink bg-ink px-5 py-2.5 text-body-sm font-medium text-eggshell transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {tutorBusy ? "…" : "Ask"}
                 </button>
@@ -510,14 +510,14 @@ export function LabClient({
                   <div className="flex flex-wrap items-center gap-2">
                     <button
                       onClick={() => void share()}
-                      className="rounded-full border border-emerald-400/40 px-3 py-1 font-mono text-caption uppercase text-emerald-200 transition-colors hover:bg-emerald-400/10"
+                      className="rounded-none border border-emerald-400/40 px-3 py-1 font-mono text-caption uppercase text-emerald-200 transition-colors hover:bg-emerald-400/10"
                     >
                       {copied ? "Copied ✓" : "Share ↗"}
                     </button>
                     {nextTask && (
                       <Link
                         href={`/lab/${nextTask.slug}`}
-                        className="rounded-full bg-emerald-400 px-3 py-1 font-mono text-caption font-medium uppercase text-[#191918] transition-opacity hover:opacity-85"
+                        className="rounded-none bg-emerald-400 px-3 py-1 font-mono text-caption font-medium uppercase text-[#191918] transition-opacity hover:opacity-85"
                       >
                         Next: {nextTask.title} →
                       </Link>
@@ -528,7 +528,7 @@ export function LabClient({
               <div className="flex items-center justify-between border-t border-white/10 px-5 py-3">
                 <button
                   onClick={reset}
-                  className="rounded-full border border-white/20 px-4 py-1.5 font-mono text-caption uppercase text-ash transition-colors hover:border-[#ebe8e4] hover:text-[#ebe8e4]"
+                  className="rounded-none border border-white/20 px-4 py-1.5 font-mono text-caption uppercase text-ash transition-colors hover:border-[#ebe8e4] hover:text-[#ebe8e4]"
                 >
                   Reset Lab
                 </button>
@@ -538,7 +538,7 @@ export function LabClient({
                 <button
                   onClick={submit}
                   disabled={!hasRuntimeChecks}
-                  className={`rounded-full px-5 py-1.5 font-mono text-caption uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-40 ${
+                  className={`rounded-none px-5 py-1.5 font-mono text-caption uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-40 ${
                     passed
                       ? "bg-emerald-400 text-[#191918] hover:opacity-85"
                       : liveAllPass

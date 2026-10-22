@@ -159,7 +159,7 @@ export default async function PathPage({ params }: PageProps) {
                   )}
                   <Link
                     href={`/paths/${path.slug}/${skill.slug}`}
-                    className="inline-flex items-center gap-1 rounded-full bg-ink px-3.5 py-1.5 font-medium text-eggshell hover:opacity-85"
+                    className="inline-flex items-center gap-1 rounded-none bg-ink px-3.5 py-1.5 font-medium text-eggshell hover:opacity-85"
                   >
                     Open Skill Lessons ↗
                   </Link>

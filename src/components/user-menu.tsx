@@ -59,7 +59,7 @@ export function UserMenu() {
         <button
           onClick={() => setOpen((o) => !o)}
           aria-label="Account menu"
-          className="flex size-9 items-center justify-center overflow-hidden rounded-full border border-ink/80 bg-eggshell transition-colors hover:bg-eggshell"
+          className="flex size-9 items-center justify-center overflow-hidden rounded-none border border-ink/80 bg-eggshell transition-colors hover:bg-eggshell"
         >
           {session.user.image ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -108,7 +108,7 @@ export function UserMenu() {
           setOpen((o) => !o);
           void loadProviders();
         }}
-        className="hidden whitespace-nowrap rounded-full bg-ink px-4 py-2 text-label font-medium text-eggshell transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-eggshell sm:block"
+        className="hidden whitespace-nowrap rounded-none bg-ink px-4 py-2 text-label font-medium text-eggshell transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-eggshell sm:block"
       >
         Sign in
       </button>

@@ -90,7 +90,7 @@ export default async function SkillPage({ params }: PageProps) {
             </p>
             <Link
               href={`/tools/${tool.slug}`}
-              className="mt-1 inline-flex items-center justify-center rounded-full bg-ink px-4 py-2 text-label font-medium text-eggshell hover:opacity-85"
+              className="mt-1 inline-flex items-center justify-center rounded-none bg-ink px-4 py-2 text-label font-medium text-eggshell hover:opacity-85"
             >
               Open {tool.name} Hub ↗
             </Link>

@@ -37,7 +37,7 @@ export function Footer() {
               href="https://github.com/NotHarshhaa/Learn-Everything"
               target="_blank"
               rel="noreferrer"
-              className="le-pill mt-7"
+              className="le-outline mt-7"
             >
               Star on GitHub
             </a>

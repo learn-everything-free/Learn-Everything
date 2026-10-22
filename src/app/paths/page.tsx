@@ -114,7 +114,7 @@ export default function PathsPage() {
                     </span>
                     <Link
                       href={`/paths/${p.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-label font-medium text-eggshell transition-opacity hover:opacity-85"
+                      className="inline-flex items-center gap-1.5 rounded-none bg-ink px-4 py-2 text-label font-medium text-eggshell transition-opacity hover:opacity-85"
                     >
                       Open Curriculum ↗
                     </Link>
