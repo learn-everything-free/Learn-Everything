@@ -1,0 +1,48 @@
+slug: cdc-schema-change
+title: Handle a Column Change
+type: practice
+difficulty: intermediate
+description: A renamed column or a dropped one breaks every consumer downstream. Write the rule
+  for meeting the change halfway.
+requirements:
+  - File ~/cdc/evolution.yaml exists
+  - The config states the expand and the contract steps
+  - The config states how the sink tolerates the new column
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/cdc/evolution.yaml
+    label: ~/cdc/evolution.yaml
+  - validator: file_contains
+    path: /home/learner/cdc/evolution.yaml
+    value: expand
+    label: expand step stated
+  - validator: file_contains
+    path: /home/learner/cdc/evolution.yaml
+    value: contract
+    label: contract step stated
+  - validator: file_contains
+    path: /home/learner/cdc/evolution.yaml
+    value: nullable
+    label: nullable column rule stated
+  - validator: file_contains
+    path: /home/learner/cdc/evolution.yaml
+    value: backward
+    label: backward compatibility stated
+steps:
+  - title: Create the cdc directory
+    detail: The evolution rules live with the capture configuration.
+    command: mkdir -p ~/cdc
+  - title: Write the two steps
+    detail: "Expand first - add the new column, keep the old one. Contract later, once every
+      consumer has moved."
+    command: >-
+      echo 'schema_evolution:\n  strategy: expand_contract\n  expand:\n    - add the new column as nullable and backfill it\n    - write to both the old and the new column for one release\n  contract:\n    - drop the old column only after every consumer has moved' > ~/cdc/evolution.yaml
+  - title: State the compatibility rule
+    detail: "The capture layer must accept a row it has never seen before - a new column it does
+      not know about is ignored, not fatal."
+    command: >-
+      echo '\n  backward_compatible: true\n  unknown_column: ignore\n  type_change: read_as_string_until_backfilled' >> ~/cdc/evolution.yaml
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/cdc/evolution.yaml

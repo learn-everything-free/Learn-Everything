@@ -1,0 +1,48 @@
+slug: test-load-profile
+title: Define the Load You Must Survive
+type: challenge
+difficulty: advanced
+description: Performance is a requirement, not a hope. Write the load profile the service has to
+  hold and the thresholds that fail the build.
+requirements:
+  - File ~/tests/load.yaml exists
+  - The file states the traffic the service must handle
+  - The file states the latency and error thresholds
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/tests/load.yaml
+    label: ~/tests/load.yaml
+  - validator: file_contains
+    path: /home/learner/tests/load.yaml
+    value: rps
+    label: request rate stated
+  - validator: file_contains
+    path: /home/learner/tests/load.yaml
+    value: p95
+    label: latency percentile stated
+  - validator: file_contains
+    path: /home/learner/tests/load.yaml
+    value: error_rate
+    label: error rate threshold stated
+  - validator: file_contains
+    path: /home/learner/tests/load.yaml
+    value: duration
+    label: test duration stated
+steps:
+  - title: Create the tests directory
+    detail: The load profile is the number the team agrees to defend.
+    command: mkdir -p ~/tests
+  - title: Write the traffic and the duration
+    detail: "Peak traffic with a ramp, then a steady period long enough for the slow paths to
+      show up."
+    command: >-
+      echo 'load:\n  rps: 500\n  ramp_up_seconds: 60\n  duration: 300\n  concurrent_users: 100' > ~/tests/load.yaml
+  - title: Write the thresholds
+    detail: "The p95 latency and the error rate are the two numbers that fail the build. Without
+      a threshold, a load test is just a slow test."
+    command: >-
+      echo '\nthresholds:\n  p95_latency_ms: 400\n  p99_latency_ms: 900\n  error_rate: 0.001\n  on_breach: fail_build' >> ~/tests/load.yaml
+  - title: Verify and submit
+    detail: cat the profile, then submit for validation.
+    command: cat ~/tests/load.yaml

@@ -1,0 +1,7 @@
+slug: 01-passwords-and-sessions
+title: Passwords & Sessions
+summary: Store the hash, not the password, and give the session the settings it deserves.
+order: 1
+tasks:
+  - auth-password-hashing
+  - auth-session-tokens

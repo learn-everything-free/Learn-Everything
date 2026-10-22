@@ -1,0 +1,40 @@
+slug: form-server-action
+title: Validate on the Server
+type: practice
+difficulty: intermediate
+description: The client can be bypassed, so the server validates the same schema and maps the
+  failure back to the form. Write the action.
+requirements:
+  - File ~/app/forms/server-action.ts exists
+  - The action parses the payload with the shared schema
+  - The action maps a failure back to the form errors
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/app/forms/server-action.ts
+    label: ~/app/forms/server-action.ts
+  - validator: file_contains
+    path: /home/learner/app/forms/server-action.ts
+    value: "use server action"
+    label: server action declared
+  - validator: file_contains
+    path: /home/learner/app/forms/server-action.ts
+    value: "safeParse"
+    label: schema parse used
+  - validator: file_contains
+    path: /home/learner/app/forms/server-action.ts
+    value: "checkoutSchema"
+    label: shared schema reused
+  - validator: file_contains
+    path: /home/learner/app/forms/server-action.ts
+    value: "fieldErrors"
+    label: errors mapped back to fields
+steps:
+  - title: Write the action
+    detail: "The action takes the form data, parses it with the same schema the client used, and
+      returns either the result or the field errors."
+    command: >-
+      echo '"use server action";\n\nimport { checkoutSchema } from "./schema";\n\nexport async function submitCheckout(formData: FormData) {\n  const parsed = checkoutSchema.safeParse(Object.fromEntries(formData));\n  if (!parsed.success) {\n    return { fieldErrors: parsed.error.flatten().fieldErrors };\n  }\n  return { ok: true, orderId: await createOrder(parsed.data) };\n}' > ~/app/forms/server-action.ts
+  - title: Verify and submit
+    detail: cat the action, then submit for validation.
+    command: cat ~/app/forms/server-action.ts

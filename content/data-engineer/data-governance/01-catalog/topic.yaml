@@ -1,0 +1,7 @@
+slug: 01-catalog
+title: Catalog & Lineage
+summary: The entry that says what a dataset is, and the graph that says what depends on it.
+order: 1
+tasks:
+  - catalog-entry
+  - lineage-graph

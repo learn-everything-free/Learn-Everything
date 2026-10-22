@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { paths } from "@/lib/data";
+import { LogoMark } from "@/components/brand/logo";
 
 // DESIGN.md — footer on the canvas, separated by a single hairline.
 // No fill, no shadow, uppercase column labels.
@@ -26,9 +27,12 @@ export function Footer() {
       <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr_1fr_1fr]">
           <div>
-            <p className="text-[18px] font-medium tracking-[-0.01em] text-ink underline decoration-ink/30 underline-offset-[6px]">
-              Learn Everything
-            </p>
+            <div className="flex items-center gap-3 text-ink">
+              <LogoMark className="size-[26px] shrink-0" />
+              <p className="text-[18px] font-medium tracking-[-0.01em] underline decoration-ink/30 underline-offset-[6px]">
+                Learn Everything
+              </p>
+            </div>
             <p className="mt-5 max-w-sm text-body-sm text-graphite leading-relaxed">
               Nine career tracks, 240 hands-on labs and a real terminal in every browser tab. Free,
               open source, and built for people who are starting out.

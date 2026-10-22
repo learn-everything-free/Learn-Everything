@@ -1,0 +1,7 @@
+slug: 02-storage-and-caching
+title: Storage & Caching
+summary: Where a browser keeps your data, and how long it decides to keep it.
+order: 2
+tasks:
+  - browser-storage
+  - browser-cache

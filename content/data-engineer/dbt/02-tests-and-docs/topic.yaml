@@ -1,0 +1,7 @@
+slug: 02-tests-and-docs
+title: Tests & Documentation
+summary: The checks that fail the build, and the documentation that makes a model usable.
+order: 2
+tasks:
+  - dbt-tests
+  - dbt-docs

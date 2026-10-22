@@ -1,0 +1,5 @@
+slug: change-data-capture
+title: Change Data Capture
+summary: Read the log instead of polling the table, and keep the schema stable while you do it.
+path: data-engineer
+order: 6

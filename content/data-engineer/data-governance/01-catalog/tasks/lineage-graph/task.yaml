@@ -1,0 +1,48 @@
+slug: lineage-graph
+title: Map the Lineage
+type: practice
+difficulty: intermediate
+description: Lineage is the answer to what breaks when this table changes. Write the graph of
+  upstream sources and downstream consumers.
+requirements:
+  - File ~/governance/lineage.yaml exists
+  - The file lists the upstream nodes
+  - The file lists the downstream nodes and the edges between them
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/governance/lineage.yaml
+    label: ~/governance/lineage.yaml
+  - validator: file_contains
+    path: /home/learner/governance/lineage.yaml
+    value: upstream
+    label: upstream nodes listed
+  - validator: file_contains
+    path: /home/learner/governance/lineage.yaml
+    value: downstream
+    label: downstream nodes listed
+  - validator: file_contains
+    path: /home/learner/governance/lineage.yaml
+    value: edges
+    label: edges declared
+  - validator: file_contains
+    path: /home/learner/governance/lineage.yaml
+    value: "stg_orders"
+    label: a concrete node present
+steps:
+  - title: Create the governance directory
+    detail: The lineage map lives with the catalog.
+    command: mkdir -p ~/governance
+  - title: Write the upstream side
+    detail: "Upstream is where the data comes from - the raw tables, the APIs, the files somebody
+      drops in a bucket."
+    command: >-
+      echo 'lineage:\n  upstream:\n    - node: raw.orders\n      type: table\n    - node: accounts-api\n      type: api' > ~/governance/lineage.yaml
+  - title: Write the downstream side and the edges
+    detail: "Downstream is who depends on it. The edges are what a change to a column has to
+      travel along."
+    command: >-
+      echo '\n  downstream:\n    - node: stg_orders\n      type: model\n    - node: revenue_daily\n      type: model\n    - node: revenue_dashboard\n      type: dashboard\n  edges:\n    - from: raw.orders\n      to: stg_orders\n    - from: stg_orders\n      to: revenue_daily\n    - from: revenue_daily\n      to: revenue_dashboard' >> ~/governance/lineage.yaml
+  - title: Verify and submit
+    detail: cat the graph, then submit for validation.
+    command: cat ~/governance/lineage.yaml

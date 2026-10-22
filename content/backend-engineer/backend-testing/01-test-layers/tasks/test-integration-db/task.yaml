@@ -1,0 +1,48 @@
+slug: test-integration-db
+title: Make the Database Testable
+type: practice
+difficulty: intermediate
+description: Integration tests fail for boring reasons - a leftover row, a migration that did not
+  run. Write the database strategy that removes them.
+requirements:
+  - File ~/tests/integration.md exists
+  - The document states how the test database is provisioned
+  - The document states how migrations and isolation are handled
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/tests/integration.md
+    label: ~/tests/integration.md
+  - validator: file_contains
+    path: /home/learner/tests/integration.md
+    value: container
+    label: database provisioning stated
+  - validator: file_contains
+    path: /home/learner/tests/integration.md
+    value: Migrations
+    label: migration handling stated
+  - validator: file_contains
+    path: /home/learner/tests/integration.md
+    value: Isolation
+    label: isolation stated
+  - validator: file_contains
+    path: /home/learner/tests/integration.md
+    value: truncate
+    label: cleanup strategy stated
+steps:
+  - title: Create the tests directory
+    detail: The integration notes live with the rest of the test strategy.
+    command: mkdir -p ~/tests
+  - title: Write the provisioning and migration rules
+    detail: "A fresh container per run, migrations applied before the suite, and no shared
+      database between branches."
+    command: >-
+      echo '# Integration test database\n\n## Provisioning\n\nA container per run, started from a pinned image, never a shared instance.\n\n## Migrations\n\nEvery migration is applied before the suite runs, exactly as in production.' > ~/tests/integration.md
+  - title: Write the isolation and cleanup rules
+    detail: "Each test starts from an empty schema. Truncating between tests is faster than a
+      transaction rollback and gives the same guarantee."
+    command: >-
+      echo '\n## Isolation\n\nEach test starts from a clean schema - truncate the tables between tests, and never share a database across branches.' >> ~/tests/integration.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/tests/integration.md

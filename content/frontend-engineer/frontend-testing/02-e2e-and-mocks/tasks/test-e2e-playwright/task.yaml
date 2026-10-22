@@ -1,0 +1,48 @@
+slug: test-e2e-playwright
+title: Keep the E2E Suite Small
+type: practice
+difficulty: intermediate
+description: One end-to-end test should be worth the minutes it costs. Write the rules for the
+  suite that ships with the product.
+requirements:
+  - File ~/tests/e2e.md exists
+  - The document names the journeys worth covering
+  - The document states how flaky tests are handled
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/tests/e2e.md
+    label: ~/tests/e2e.md
+  - validator: file_contains
+    path: /home/learner/tests/e2e.md
+    value: e2e
+    label: e2e scope stated
+  - validator: file_contains
+    path: /home/learner/tests/e2e.md
+    value: Playwright
+    label: tool named
+  - validator: file_contains
+    path: /home/learner/tests/e2e.md
+    value: flaky
+    label: flaky handling stated
+  - validator: file_contains
+    path: /home/learner/tests/e2e.md
+    value: "checkout"
+    label: critical journey named
+steps:
+  - title: Create the tests directory
+    detail: The e2e rules are the ones that keep the suite worth running.
+    command: mkdir -p ~/tests
+  - title: Name the journeys worth covering
+    detail: "Sign in, the checkout, and the one flow that earns money. Everything else belongs
+      in a component test."
+    command: >-
+      echo '# End to end (e2e) tests\n\n## The journeys worth covering\n\n- sign in and get back in after a refresh\n- the checkout, from cart to confirmation\n- the one flow that earns money, with the money\n\nRun them with Playwright, in a real browser, against a real build.' > ~/tests/e2e.md
+  - title: Write the flaky rule
+    detail: "A flaky test is worse than no test - it teaches the team to ignore red. Quarantine it
+      the day it flakes."
+    command: >-
+      echo '\n## Flaky tests\n\nA flaky test is quarantined the day it flakes and gets a ticket. The suite stays small enough that everyone runs it, and a red build is always a real signal.' >> ~/tests/e2e.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/tests/e2e.md

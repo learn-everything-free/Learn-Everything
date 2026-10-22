@@ -1,0 +1,48 @@
+slug: cdc-offset-tracking
+title: Resume From a Checkpoint
+type: practice
+difficulty: intermediate
+description: A connector that dies has to come back to exactly where it was. Write the offset
+  policy that makes that possible.
+requirements:
+  - File ~/cdc/offsets.md exists
+  - The document states where the offset is stored
+  - The document states how a restart resumes
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/cdc/offsets.md
+    label: ~/cdc/offsets.md
+  - validator: file_contains
+    path: /home/learner/cdc/offsets.md
+    value: offset
+    label: offset storage stated
+  - validator: file_contains
+    path: /home/learner/cdc/offsets.md
+    value: checkpoint
+    label: checkpoint stated
+  - validator: file_contains
+    path: /home/learner/cdc/offsets.md
+    value: resume
+    label: resume rule stated
+  - validator: file_contains
+    path: /home/learner/cdc/offsets.md
+    value: "at least once"
+    label: delivery semantics stated
+steps:
+  - title: Create the cdc directory
+    detail: The offset notes live with the capture configuration.
+    command: mkdir -p ~/cdc
+  - title: State where the offset lives
+    detail: "The offset goes to durable storage - a table, not a file on the connector's disk -
+      and it is committed with the data, or the two drift."
+    command: >-
+      echo '# Offsets and checkpoints\n\n## Where the offset lives\n\nIn a durable table next to the data, committed in the same transaction as the batch it describes. A file on the connector disk is lost with the container.' > ~/cdc/offsets.md
+  - title: Write the resume rule and the semantics
+    detail: "On restart the connector reads the last committed offset and resumes from there.
+      Delivery is at least once, so the sink has to be idempotent."
+    command: >-
+      echo '\n## Restart\n\nOn restart, read the last committed offset and resume from that point exactly - never from the start of the log.\n\n## Semantics\n\nDelivery is at least once, so the sink applies changes idempotently. A duplicate event is a fact to dedupe, not an error.' >> ~/cdc/offsets.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/cdc/offsets.md

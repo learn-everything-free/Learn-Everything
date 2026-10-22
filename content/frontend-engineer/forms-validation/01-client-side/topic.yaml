@@ -1,0 +1,7 @@
+slug: 01-client-side
+title: Client-Side Validation
+summary: The schema that describes the form, and the error messages it produces.
+order: 1
+tasks:
+  - form-schema
+  - form-errors

@@ -1,0 +1,7 @@
+slug: 02-schema-evolution
+title: Schema Evolution
+summary: The source table will change anyway. Decide how you meet it halfway.
+order: 2
+tasks:
+  - cdc-schema-change
+  - cdc-dedupe

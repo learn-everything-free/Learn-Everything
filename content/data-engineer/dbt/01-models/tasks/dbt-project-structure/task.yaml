@@ -1,0 +1,52 @@
+slug: dbt-project-structure
+title: Lay Out the Project
+type: guided
+difficulty: beginner
+description: The project file decides where the models live and which profile they run with. Write
+  it.
+requirements:
+  - Directory ~/dbt exists
+  - File ~/dbt/dbt_project.yml exists
+  - The config names the project, the profile and the model paths
+  - The config states the materialisation strategy
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/dbt
+    label: ~/dbt
+  - validator: file_exists
+    path: /home/learner/dbt/dbt_project.yml
+    label: ~/dbt/dbt_project.yml
+  - validator: file_contains
+    path: /home/learner/dbt/dbt_project.yml
+    value: "name:"
+    label: project name declared
+  - validator: file_contains
+    path: /home/learner/dbt/dbt_project.yml
+    value: "profile:"
+    label: profile declared
+  - validator: file_contains
+    path: /home/learner/dbt/dbt_project.yml
+    value: "model-paths"
+    label: model paths declared
+  - validator: file_contains
+    path: /home/learner/dbt/dbt_project.yml
+    value: "materialized:"
+    label: materialisation stated
+steps:
+  - title: Create the dbt directory
+    detail: The project root holds the configuration and the models.
+    command: mkdir -p ~/dbt
+  - title: Write the project config
+    detail: "name identifies the project, profile names the connection, and model-paths says where
+      the SQL lives."
+    command: >-
+      echo 'name: acme_orders\nversion: 1.0.0\nconfig-version: 2\nprofile: warehouse_dev\nmodel-paths: ["models"]\nseed-paths: ["seeds"]\ntest-paths: ["tests"]' > ~/dbt/dbt_project.yml
+  - title: State the materialisation strategy
+    detail: "Staging models are views, because they are cheap and always read from the source. The
+      marts are tables, because everything downstream reads them."
+    command: >-
+      echo '\nmodels:\n  acme_orders:\n    materialized: table\n    staging:\n      materialized: view' >> ~/dbt/dbt_project.yml
+  - title: Verify and submit
+    detail: cat the config, then submit for validation.
+    command: cat ~/dbt/dbt_project.yml

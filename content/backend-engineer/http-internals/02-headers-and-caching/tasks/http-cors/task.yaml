@@ -1,0 +1,46 @@
+slug: http-cors
+title: Configure CORS Properly
+type: challenge
+difficulty: advanced
+description: CORS is a browser feature, and the most common way to break it is to answer every
+  origin. Write the configuration that is open where it must be and closed where it must be.
+requirements:
+  - File ~/http/cors.yaml exists
+  - The file states the allowed origins
+  - The file states the allowed methods and headers
+  - The file states the credentials rule and the preflight cache
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/http/cors.yaml
+    label: ~/http/cors.yaml
+  - validator: file_contains
+    path: /home/learner/http/cors.yaml
+    value: Access-Control-Allow-Origin
+    label: allow origin header present
+  - validator: file_contains
+    path: /home/learner/http/cors.yaml
+    value: allowed_methods
+    label: allowed methods stated
+  - validator: file_contains
+    path: /home/learner/http/cors.yaml
+    value: credentials
+    label: credentials rule stated
+  - validator: file_contains
+    path: /home/learner/http/cors.yaml
+    value: preflight
+    label: preflight cache stated
+steps:
+  - title: Write the allowed origins
+    detail: "Name the origins you actually serve. A wildcard with credentials is rejected by the
+      browser, so the two settings have to agree."
+    command: >-
+      echo 'cors:\n  allowed_origins:\n    - https://app.acme.com\n    - https://checkout.acme.com\n  credentials: true\n  max_age: 600' > ~/http/cors.yaml
+  - title: Add the methods and headers
+    detail: "Only the verbs the browser client really uses, and the headers it really sends. The
+      preflight answer is cached for max_age seconds."
+    command: >-
+      echo '\n  allowed_methods: [GET, POST, PUT, DELETE]\n  allowed_headers: [Content-Type, Authorization]\n  response_headers: [Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers]\n  preflight_cache_seconds: 600' >> ~/http/cors.yaml
+  - title: Verify and submit
+    detail: cat the configuration, then submit for validation.
+    command: cat ~/http/cors.yaml

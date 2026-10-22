@@ -1,0 +1,43 @@
+slug: dbt-staging-models
+title: Write a Staging Model
+type: practice
+difficulty: intermediate
+description: A staging model is a view that renames, casts and nothing else. Write one that the
+  rest of the warehouse can rely on.
+requirements:
+  - Directory ~/dbt/models/staging exists
+  - File ~/dbt/models/staging/stg_orders.sql exists
+  - The model renames the raw columns and casts the types
+  - The model selects from the source with a ref
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/dbt/models/staging
+    label: ~/dbt/models/staging
+  - validator: file_exists
+    path: /home/learner/dbt/models/staging/stg_orders.sql
+    label: ~/dbt/models/staging/stg_orders.sql
+  - validator: file_contains
+    path: /home/learner/dbt/models/staging/stg_orders.sql
+    value: "with source as"
+    label: source CTE declared
+  - validator: file_contains
+    path: /home/learner/dbt/models/staging/stg_orders.sql
+    value: "cast"
+    label: types cast
+  - validator: file_contains
+    path: /home/learner/dbt/models/staging/stg_orders.sql
+    value: "select"
+    label: select statement present
+steps:
+  - title: Create the models directory
+    detail: Staging models live in their own folder, one folder per layer.
+    command: mkdir -p ~/dbt/models/staging
+  - title: Write the staging model
+    detail: "A CTE for the source, then a select that renames and casts. No joins, no filters, no
+      cleverness in staging."
+    command: >-
+      echo 'with source as (\n\n    select * from {{ source("raw", "orders") }}\n\n)\n\nselect\n    id as order_id,\n    cast(customer_id as bigint) as customer_id,\n    cast(total_amount as numeric(12, 2)) as amount,\n    created_at as ordered_at\nfrom source' > ~/dbt/models/staging/stg_orders.sql
+  - title: Verify and submit
+    detail: cat the model, then submit for validation.
+    command: cat ~/dbt/models/staging/stg_orders.sql

@@ -1,0 +1,5 @@
+slug: backend-testing
+title: Testing Backend Code
+summary: The test pyramid, the database that lies to you, and the load you have to survive.
+path: backend-engineer
+order: 8

@@ -1,0 +1,48 @@
+slug: auth-token-expiry
+title: Write the Token Policy
+type: challenge
+difficulty: advanced
+description: Short-lived access tokens, rotating refresh tokens, and a revocation path that actually
+  works. Write the policy.
+requirements:
+  - File ~/.auth/token-policy.md exists
+  - The policy states the lifetime of each kind of token
+  - The policy states how refresh tokens rotate and how access is revoked
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.auth/token-policy.md
+    label: ~/.auth/token-policy.md
+  - validator: file_contains
+    path: /home/learner/.auth/token-policy.md
+    value: access token
+    label: access token lifetime stated
+  - validator: file_contains
+    path: /home/learner/.auth/token-policy.md
+    value: refresh token
+    label: refresh token lifetime stated
+  - validator: file_contains
+    path: /home/learner/.auth/token-policy.md
+    value: rotate
+    label: refresh rotation stated
+  - validator: file_contains
+    path: /home/learner/.auth/token-policy.md
+    value: revoke
+    label: revocation stated
+steps:
+  - title: Create the auth directory
+    detail: The token policy lives with the rest of the security configuration.
+    command: mkdir -p ~/.auth
+  - title: State the lifetimes
+    detail: "An access token lives minutes, a refresh token lives weeks. The shorter the access
+      token, the less a leak costs."
+    command: >-
+      echo '# Token policy\n\n## Lifetimes\n\n- access token - 15 minutes, never stored on the client\n- refresh token - 30 days, stored in a httpOnly cookie' > ~/.auth/token-policy.md
+  - title: Write the rotation and revocation rules
+    detail: "Every refresh issues a new refresh token and invalidates the old one, so a stolen
+      token is single use."
+    command: >-
+      echo '\n## Rotation and revocation\n\n- rotate the refresh token on every use, invalidating the previous one\n- revoke the whole family on a detected reuse\n- revoke every session when the password changes' >> ~/.auth/token-policy.md
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/.auth/token-policy.md

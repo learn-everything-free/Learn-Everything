@@ -1,0 +1,51 @@
+slug: test-rtl
+title: Test the Way a User Sees It
+type: guided
+difficulty: beginner
+description: Testing library React renders the component and queries it the way a screen reader
+  would. Write the approach your team follows.
+requirements:
+  - Directory ~/tests exists
+  - File ~/tests/component.md exists
+  - The document states the three steps of a component test
+  - The document states why queries use roles
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/tests
+    label: ~/tests
+  - validator: file_exists
+    path: /home/learner/tests/component.md
+    label: ~/tests/component.md
+  - validator: file_contains
+    path: /home/learner/tests/component.md
+    value: render
+    label: render step stated
+  - validator: file_contains
+    path: /home/learner/tests/component.md
+    value: queryByRole
+    label: role query stated
+  - validator: file_contains
+    path: /home/learner/tests/component.md
+    value: "user event"
+    label: user interaction stated
+  - validator: file_contains
+    path: /home/learner/tests/component.md
+    value: accessibility
+    label: accessibility rationale stated
+steps:
+  - title: Create the tests directory
+    detail: The testing approach is a document the team agrees on.
+    command: mkdir -p ~/tests
+  - title: Write the three steps
+    detail: "Render the component, interact with it, then assert on what the user can see."
+    command: >-
+      echo '# Component tests\n\n## The three steps\n\n1. render the component with the props it needs\n2. interact with it through a user event - a click, a type, a submit\n3. assert on what is visible afterwards' > ~/tests/component.md
+  - title: Explain the role query
+    detail: "Querying by role finds the element the way an accessibility tree does, so the test
+      fails when the interface becomes unreachable - not when a class name changes."
+    command: >-
+      echo '\n## Why roles\n\nQuery with queryByRole and the accessible name. It keeps the test honest about accessibility, because an element without a role is an element nobody can reach.' >> ~/tests/component.md
+  - title: Verify and submit
+    detail: cat the approach, then submit for validation.
+    command: cat ~/tests/component.md

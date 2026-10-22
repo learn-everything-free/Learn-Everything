@@ -1,0 +1,48 @@
+slug: test-contract-tests
+title: Write the Contract Rules
+type: practice
+difficulty: intermediate
+description: When two teams own the same endpoint, the contract is the test. Write the rules for
+  consumer-driven contracts.
+requirements:
+  - File ~/tests/contracts.md exists
+  - The document states who provides and who consumes
+  - The document states what a breaking change is
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/tests/contracts.md
+    label: ~/tests/contracts.md
+  - validator: file_contains
+    path: /home/learner/tests/contracts.md
+    value: provider
+    label: provider role stated
+  - validator: file_contains
+    path: /home/learner/tests/contracts.md
+    value: consumer
+    label: consumer role stated
+  - validator: file_contains
+    path: /home/learner/tests/contracts.md
+    value: breaking
+    label: breaking change defined
+  - validator: file_contains
+    path: /home/learner/tests/contracts.md
+    value: version
+    label: versioning rule stated
+steps:
+  - title: Create the tests directory
+    detail: Contract rules are agreed with the consumers, not published to them.
+    command: mkdir -p ~/tests
+  - title: Write the roles
+    detail: "The provider owns the endpoint and publishes the contract; the consumer writes a test
+      that asserts the behaviour it depends on."
+    command: >-
+      echo '# Contract tests\n\n## The roles\n\n- provider - the service that owns the endpoint and publishes the contract\n- consumer - the team that calls it and writes a test for the behaviour it needs' > ~/tests/contracts.md
+  - title: Define breaking changes and versioning
+    detail: "Removing a field, renaming one or tightening a type is breaking. Additive changes are
+      not, and they do not need a new version."
+    command: >-
+      echo '\n## What is a breaking change\n\nRemoving a field, renaming a field or narrowing a type is breaking. A new optional field is not.\n\n## Versioning\n\nThe version moves only for a breaking change, and the old version keeps working for one release.' >> ~/tests/contracts.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/tests/contracts.md

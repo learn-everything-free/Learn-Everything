@@ -1,0 +1,5 @@
+slug: authentication
+title: Authentication & Authorisation
+summary: Passwords, sessions, tokens and scopes - who is calling, and what they may do.
+path: backend-engineer
+order: 6

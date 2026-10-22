@@ -1,0 +1,7 @@
+slug: 01-request-lifecycle
+title: Request Lifecycle
+summary: What actually happens between the client and your handler.
+order: 1
+tasks:
+  - http-methods-idempotency
+  - http-status-codes

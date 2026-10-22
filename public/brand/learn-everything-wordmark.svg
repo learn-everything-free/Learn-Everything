@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 48" width="320" height="48" role="img" aria-labelledby="le-title">
+  <title id="le-title">Learn Everything</title>
+  <text x="0" y="33" fill="#403a34" font-family="Inter, 'Neue Haas Grotesk Display', 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" letter-spacing="-0.3">Learn Everything</text>
+  <line x1="0" y1="42" x2="290" y2="42" stroke="#403a34" stroke-width="1" opacity="0.3"/>
+</svg>

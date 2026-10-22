@@ -1,0 +1,7 @@
+slug: 02-privacy
+title: Privacy & Retention
+summary: Know what is personal, mask it in the right places, and delete it when you must.
+order: 2
+tasks:
+  - pii-classification
+  - retention-policy

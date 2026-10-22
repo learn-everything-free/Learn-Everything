@@ -1,0 +1,52 @@
+slug: catalog-entry
+title: Write a Catalog Entry
+type: guided
+difficulty: beginner
+description: The catalog entry is where a dataset earns its name - who owns it, what it holds and
+  how sensitive it is. Write one.
+requirements:
+  - Directory ~/governance/catalog exists
+  - File ~/governance/catalog/users.yaml exists
+  - The entry names the owner and describes the dataset
+  - The entry lists the columns and the classification
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/governance/catalog
+    label: ~/governance/catalog
+  - validator: file_exists
+    path: /home/learner/governance/catalog/users.yaml
+    label: ~/governance/catalog/users.yaml
+  - validator: file_contains
+    path: /home/learner/governance/catalog/users.yaml
+    value: owner
+    label: owner declared
+  - validator: file_contains
+    path: /home/learner/governance/catalog/users.yaml
+    value: description
+    label: description present
+  - validator: file_contains
+    path: /home/learner/governance/catalog/users.yaml
+    value: columns
+    label: columns listed
+  - validator: file_contains
+    path: /home/learner/governance/catalog/users.yaml
+    value: classification
+    label: classification declared
+steps:
+  - title: Create the catalog directory
+    detail: One file per dataset, in a directory that mirrors the warehouse.
+    command: mkdir -p ~/governance/catalog
+  - title: Write the entry
+    detail: "The owner is a team, the description says what the dataset holds, and the
+      classification says how sensitive it is."
+    command: >-
+      echo 'name: users\nowner: growth-team\ndescription: One row per registered user, updated hourly from the accounts service\nclassification: confidential' > ~/governance/catalog/users.yaml
+  - title: List the columns
+    detail: "Every column, its type and whether it holds personal data. The classification of the
+      dataset is the strictest of its columns."
+    command: >-
+      echo '\ncolumns:\n  - name: user_id\n    type: string\n  - name: email\n    type: string\n    pii: true\n  - name: country\n    type: string\n    pii: false' >> ~/governance/catalog/users.yaml
+  - title: Verify and submit
+    detail: cat the entry, then submit for validation.
+    command: cat ~/governance/catalog/users.yaml

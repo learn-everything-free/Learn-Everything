@@ -1,0 +1,48 @@
+slug: test-msw-handlers
+title: Mock the Network, Not the Code
+type: challenge
+difficulty: advanced
+description: Mocking your own modules means every test asserts your implementation. Mocking at the
+  network boundary keeps the test honest. Write the handler plan.
+requirements:
+  - File ~/tests/msw.md exists
+  - The document states where the mocking happens
+  - The document lists the handlers and the states they return
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/tests/msw.md
+    label: ~/tests/msw.md
+  - validator: file_contains
+    path: /home/learner/tests/msw.md
+    value: msw
+    label: tool named
+  - validator: file_contains
+    path: /home/learner/tests/msw.md
+    value: handlers
+    label: handlers stated
+  - validator: file_contains
+    path: /home/learner/tests/msw.md
+    value: rest
+    label: rest handlers named
+  - validator: file_contains
+    path: /home/learner/tests/msw.md
+    value: "500"
+    label: error state covered
+steps:
+  - title: Create the tests directory
+    detail: The mock plan is part of the test strategy.
+    command: mkdir -p ~/tests
+  - title: Write where the mocking happens
+    detail: "Mock at the network boundary with a service worker, not inside your modules. Then
+      the real request code still runs in the test."
+    command: >-
+      echo '# Mocking the network\n\n## Where the mocking happens\n\nAt the network boundary, with msw. The service worker intercepts the request, so the real fetch code, the real retry logic and the real error handling all still run.' > ~/tests/msw.md
+  - title: List the handlers and the states
+    detail: "Every handler needs its happy path and at least one failure, because the failure
+      is the branch nobody tests."
+    command: >-
+      echo '\n## The handlers\n\n- rest - GET /api/orders returns a list, and a 500 for the error state\n- rest - POST /api/orders returns 201, and a 422 with a body for the validation error\n\nThe failure states are the ones worth writing, because they are the branches nobody exercises.' >> ~/tests/msw.md
+  - title: Verify and submit
+    detail: cat the plan, then submit for validation.
+    command: cat ~/tests/msw.md

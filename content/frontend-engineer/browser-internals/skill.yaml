@@ -1,0 +1,5 @@
+slug: browser-internals
+title: How the Browser Works
+summary: The rendering pipeline, the storage APIs and the caches between you and the user.
+path: frontend-engineer
+order: 6

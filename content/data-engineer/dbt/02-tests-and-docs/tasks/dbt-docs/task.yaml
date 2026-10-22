@@ -1,0 +1,48 @@
+slug: dbt-docs
+title: Document the Models
+type: challenge
+difficulty: advanced
+description: Documentation is what turns a table into a product. Write the rules for describing
+  the models and for declaring who consumes them.
+requirements:
+  - File ~/dbt/docs.md exists
+  - The document states what every model description must contain
+  - The document states how consumers are declared
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/dbt/docs.md
+    label: ~/dbt/docs.md
+  - validator: file_contains
+    path: /home/learner/dbt/docs.md
+    value: description
+    label: description rule stated
+  - validator: file_contains
+    path: /home/learner/dbt/docs.md
+    value: column
+    label: column documentation stated
+  - validator: file_contains
+    path: /home/learner/dbt/docs.md
+    value: exposure
+    label: exposure rule stated
+  - validator: file_contains
+    path: /home/learner/dbt/docs.md
+    value: owner
+    label: ownership rule stated
+steps:
+  - title: Create the dbt directory
+    detail: The documentation rules live with the project.
+    command: mkdir -p ~/dbt
+  - title: Write the description rules
+    detail: "A model description says what the model is, the grain, and when not to use it. Every
+      column gets a description too."
+    command: >-
+      echo '# Documenting models\n\n## What a description must contain\n\n- what the model is, in one sentence\n- the grain - one row is exactly what\n- when not to use it\n- every column documented, with its unit and its nullability' > ~/dbt/docs.md
+  - title: Write the exposure and ownership rules
+    detail: "An exposure declares a downstream consumer, which is how the lineage graph gets its
+      edges. Every model has an owner."
+    command: >-
+      echo '\n## Consumers and ownership\n\n- declare every dashboard or application that reads a model as an exposure, so the lineage shows who depends on what\n- every model has an owner, and a model without one is not published\n- the exposure and the owner are reviewed like any other change' >> ~/dbt/docs.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/dbt/docs.md

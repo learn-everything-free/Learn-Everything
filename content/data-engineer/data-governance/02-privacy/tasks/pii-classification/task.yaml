@@ -1,0 +1,48 @@
+slug: pii-classification
+title: Register the Personal Data
+type: practice
+difficulty: intermediate
+description: You cannot mask what you have not listed. Write the registry of the personal fields in
+  the warehouse and what happens to each one.
+requirements:
+  - File ~/governance/pii.yaml exists
+  - The file lists the personal fields
+  - The file states the masking rule for each one
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/governance/pii.yaml
+    label: ~/governance/pii.yaml
+  - validator: file_contains
+    path: /home/learner/governance/pii.yaml
+    value: pii
+    label: pii flag present
+  - validator: file_contains
+    path: /home/learner/governance/pii.yaml
+    value: email
+    label: email field listed
+  - validator: file_contains
+    path: /home/learner/governance/pii.yaml
+    value: mask
+    label: masking rule stated
+  - validator: file_contains
+    path: /home/learner/governance/pii.yaml
+    value: "raw"
+    label: raw layer rule stated
+steps:
+  - title: Create the governance directory
+    detail: The registry lives with the lineage map.
+    command: mkdir -p ~/governance
+  - title: List the personal fields
+    detail: "Every field that identifies a person, with the layer it lives in. The registry is
+      generated from the models, not written by hand."
+    command: >-
+      echo 'pii_registry:\n  - field: users.email\n    pii: direct\n    layer: raw\n  - field: users.ip_address\n    pii: indirect\n    layer: raw\n  - field: orders.customer_id\n    pii: pseudonymous\n    layer: mart' > ~/governance/pii.yaml
+  - title: State the masking rules
+    detail: "Mask or tokenise in the raw layer, keep the raw value only where the law allows it,
+      and never let a personal field reach a model training set."
+    command: >-
+      echo '\nmasking:\n  - field: users.email\n    rule: tokenise in the mart, keep the raw value in the vault only\n  - field: users.ip_address\n    rule: truncate to the network prefix everywhere else\n  - never ship a pii field into a feature or model training set' >> ~/governance/pii.yaml
+  - title: Verify and submit
+    detail: cat the registry, then submit for validation.
+    command: cat ~/governance/pii.yaml

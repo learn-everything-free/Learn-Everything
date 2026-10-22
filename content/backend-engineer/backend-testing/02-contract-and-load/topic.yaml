@@ -1,0 +1,7 @@
+slug: 02-contract-and-load
+title: Contracts & Load
+summary: What the consumers promise, and what the service has to survive.
+order: 2
+tasks:
+  - test-contract-tests
+  - test-load-profile

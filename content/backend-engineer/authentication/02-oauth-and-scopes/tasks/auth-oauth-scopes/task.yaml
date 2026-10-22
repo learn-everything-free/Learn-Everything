@@ -1,0 +1,40 @@
+slug: auth-oauth-scopes
+title: Define the Scopes
+type: practice
+difficulty: intermediate
+description: Scopes are how an API says what a caller may do. Write the scope catalogue for the
+  orders service, with the exact verbs your routes check.
+requirements:
+  - File ~/.auth/scopes.yaml exists
+  - The file lists the read and write scopes
+  - Each scope names the operations it allows
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.auth/scopes.yaml
+    label: ~/.auth/scopes.yaml
+  - validator: file_contains
+    path: /home/learner/.auth/scopes.yaml
+    value: scopes
+    label: scopes declared
+  - validator: file_contains
+    path: /home/learner/.auth/scopes.yaml
+    value: "read:orders"
+    label: read scope present
+  - validator: file_contains
+    path: /home/learner/.auth/scopes.yaml
+    value: "write:orders"
+    label: write scope present
+  - validator: file_contains
+    path: /home/learner/.auth/scopes.yaml
+    value: "admin:refunds"
+    label: privileged scope present
+steps:
+  - title: Write the scope catalogue
+    detail: "Name scopes after what they allow, not after who holds them. A scope is checked by the
+      route, so it has to match the route."
+    command: >-
+      echo 'scopes:\n  - name: read:orders\n    operations: [list_orders, get_order]\n  - name: write:orders\n    operations: [create_order, update_order]\n  - name: admin:refunds\n    operations: [refund_order]' > ~/.auth/scopes.yaml
+  - title: Verify and submit
+    detail: cat the catalogue, then submit for validation.
+    command: cat ~/.auth/scopes.yaml

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 396 52" width="396" height="52" role="img" aria-labelledby="le-title">
+  <title id="le-title">Learn Everything</title>
+  <rect x="0" y="0" width="48" height="48" fill="none" stroke="#403a34" stroke-width="1.6"/>
+  <polyline points="12.5,11.5 21,21 12.5,30.5" fill="none" stroke="#403a34" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="25" y="28" width="12" height="3.5" fill="#403a34"/>
+  <text x="68" y="33" fill="#403a34" font-family="Inter, 'Neue Haas Grotesk Display', 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" letter-spacing="-0.3">Learn Everything</text>
+  <line x1="68" y1="42" x2="358" y2="42" stroke="#403a34" stroke-width="1" opacity="0.3"/>
+</svg>

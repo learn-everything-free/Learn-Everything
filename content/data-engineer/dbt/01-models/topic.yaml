@@ -1,0 +1,7 @@
+slug: 01-models
+title: Models & Projects
+summary: The project layout, and the staging layer that keeps everything else readable.
+order: 1
+tasks:
+  - dbt-project-structure
+  - dbt-staging-models

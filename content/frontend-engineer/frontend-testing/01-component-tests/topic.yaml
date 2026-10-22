@@ -1,0 +1,7 @@
+slug: 01-component-tests
+title: Component Tests
+summary: Render it like a user would, query it the way a user would.
+order: 1
+tasks:
+  - test-rtl
+  - test-user-behaviour

@@ -1,0 +1,7 @@
+slug: 01-rendering
+title: The Rendering Pipeline
+summary: What the browser does between your HTML arriving and the pixels appearing.
+order: 1
+tasks:
+  - browser-critical-path
+  - browser-reflow

@@ -1,0 +1,5 @@
+slug: http-internals
+title: HTTP & Networking
+summary: Methods, status codes, caching headers and the browser-facing rules of the wire.
+path: backend-engineer
+order: 7

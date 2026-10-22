@@ -1,0 +1,48 @@
+slug: retention-policy
+title: Write the Retention Policy
+type: challenge
+difficulty: advanced
+description: Keeping data forever is not neutral - it is a growing liability. Write the retention
+  windows and the jobs that enforce them.
+requirements:
+  - File ~/governance/retention.yaml exists
+  - The file states the retention window for each dataset class
+  - The file states how the deletion is executed and proven
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/governance/retention.yaml
+    label: ~/governance/retention.yaml
+  - validator: file_contains
+    path: /home/learner/governance/retention.yaml
+    value: retention_days
+    label: retention window stated
+  - validator: file_contains
+    path: /home/learner/governance/retention.yaml
+    value: delete
+    label: deletion stated
+  - validator: file_contains
+    path: /home/learner/governance/retention.yaml
+    value: expire
+    label: expiry stated
+  - validator: file_contains
+    path: /home/learner/governance/retention.yaml
+    value: audit
+    label: audit trail stated
+steps:
+  - title: Create the governance directory
+    detail: The policy lives with the rest of the governance material.
+    command: mkdir -p ~/governance
+  - title: Write the retention windows
+    detail: "Raw events are short lived, curated marts are kept longer, and anything personal
+      has the shortest window of all."
+    command: >-
+      echo 'retention:\n  - dataset: raw.events\n    retention_days: 90\n  - dataset: marts.orders\n    retention_days: 1095\n  - dataset: raw.users\n    retention_days: 180' > ~/governance/retention.yaml
+  - title: State how the deletion runs and is proven
+    detail: "Expiry is a partition drop, deletion is a delete, and both leave an audit record -
+      otherwise you cannot prove the data is gone."
+    command: >-
+      echo '\nenforcement:\n  - expire: drop the partition older than the retention window\n  - delete: run the delete job on the personal tables\n  - audit: write a row per job run with the rows affected, kept for seven years' >> ~/governance/retention.yaml
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/governance/retention.yaml

@@ -1,0 +1,7 @@
+slug: 02-headers-and-caching
+title: Headers & Caching
+summary: The headers that decide whether a response is reused, and who may call it at all.
+order: 2
+tasks:
+  - http-cache-headers
+  - http-cors

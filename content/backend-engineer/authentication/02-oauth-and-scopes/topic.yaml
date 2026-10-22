@@ -1,0 +1,7 @@
+slug: 02-oauth-and-scopes
+title: OAuth & Scopes
+summary: Delegated access, the scopes that bound it, and the tokens that carry it.
+order: 2
+tasks:
+  - auth-oauth-scopes
+  - auth-token-expiry

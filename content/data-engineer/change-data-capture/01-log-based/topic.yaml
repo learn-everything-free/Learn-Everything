@@ -1,0 +1,7 @@
+slug: 01-log-based
+title: Reading the Log
+summary: Replication slots, publications and the offset that tells you where you were.
+order: 1
+tasks:
+  - cdc-log-reader
+  - cdc-offset-tracking

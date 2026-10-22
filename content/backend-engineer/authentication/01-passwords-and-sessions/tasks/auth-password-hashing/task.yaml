@@ -1,0 +1,52 @@
+slug: auth-password-hashing
+title: Define a Password Policy
+type: guided
+difficulty: beginner
+description: How you store a password decides whether a breach is a nuisance or a catastrophe.
+  Write the hashing policy your service will follow.
+requirements:
+  - Directory ~/.auth exists
+  - File ~/.auth/password-policy.yaml exists
+  - The policy names the hashing algorithm and its cost
+  - The policy states the minimum length and the salt rule
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/.auth
+    label: ~/.auth
+  - validator: file_exists
+    path: /home/learner/.auth/password-policy.yaml
+    label: ~/.auth/password-policy.yaml
+  - validator: file_contains
+    path: /home/learner/.auth/password-policy.yaml
+    value: algorithm
+    label: algorithm declared
+  - validator: file_contains
+    path: /home/learner/.auth/password-policy.yaml
+    value: argon2
+    label: argon2 chosen
+  - validator: file_contains
+    path: /home/learner/.auth/password-policy.yaml
+    value: cost
+    label: cost declared
+  - validator: file_contains
+    path: /home/learner/.auth/password-policy.yaml
+    value: min_length
+    label: minimum length declared
+steps:
+  - title: Create the auth directory
+    detail: One directory holds the security configuration for the whole service.
+    command: mkdir -p ~/.auth
+  - title: Write the hashing policy
+    detail: "argon2id with a memory cost is the modern default - it is deliberately slow, which
+      is the point."
+    command: >-
+      echo 'passwords:\n  algorithm: argon2id\n  cost: 19\n  memory_kib: 65536\n  parallelism: 1' > ~/.auth/password-policy.yaml
+  - title: Add the length and salt rules
+    detail: "A minimum length beats a complexity rule, and every hash gets its own random salt -
+      never a global one."
+    command: >-
+      echo '\n  min_length: 12\n  max_length: 200\n  salt: per_password_random\n  pepper: secret_manager' >> ~/.auth/password-policy.yaml
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/.auth/password-policy.yaml

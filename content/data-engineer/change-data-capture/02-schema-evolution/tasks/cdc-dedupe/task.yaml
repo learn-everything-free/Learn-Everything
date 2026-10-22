@@ -1,0 +1,48 @@
+slug: cdc-dedupe
+title: Make the Sink Idempotent
+type: challenge
+difficulty: advanced
+description: At-least-once delivery means the same change can arrive twice. Write the strategy
+  that makes the second copy a no-op.
+requirements:
+  - File ~/cdc/dedupe.md exists
+  - The document states the deduplication key
+  - The document states how the sink applies a change
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/cdc/dedupe.md
+    label: ~/cdc/dedupe.md
+  - validator: file_contains
+    path: /home/learner/cdc/dedupe.md
+    value: idempotent
+    label: idempotency explained
+  - validator: file_contains
+    path: /home/learner/cdc/dedupe.md
+    value: "primary key"
+    label: dedupe key stated
+  - validator: file_contains
+    path: /home/learner/cdc/dedupe.md
+    value: upsert
+    label: upsert strategy stated
+  - validator: file_contains
+    path: /home/learner/cdc/dedupe.md
+    value: "Ordering"
+    label: ordering handled
+steps:
+  - title: Create the cdc directory
+    detail: The dedupe notes live with the capture configuration.
+    command: mkdir -p ~/cdc
+  - title: State the deduplication key
+    detail: "The key is the primary key of the target table. A change with a key that already
+      exists is an update, not an insert."
+    command: >-
+      echo '# Deduplication in the sink\n\n## The key\n\nThe primary key of the target table. An incoming change with a key that already exists is an update, not a new row.' > ~/cdc/dedupe.md
+  - title: Write the apply strategy and the ordering rule
+    detail: "Upsert on the key, and apply changes in commit order - a late change must not
+      overwrite a newer one."
+    command: >-
+      echo '\n## Applying a change\n\nThe sink upserts on the primary key, so applying the same change twice leaves the same result. The apply is idempotent by construction, not by a check.\n\n## Ordering\n\nChanges are applied in commit order, and each row carries the commit it came from, so a late event cannot overwrite a newer value.' >> ~/cdc/dedupe.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/cdc/dedupe.md

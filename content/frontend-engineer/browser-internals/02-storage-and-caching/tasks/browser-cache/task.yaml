@@ -1,0 +1,48 @@
+slug: browser-cache
+title: Write the Caching Strategy
+type: challenge
+difficulty: advanced
+description: The HTTP cache and the service worker cache are two different systems with two
+  different rules. Write the strategy that keeps both of them honest.
+requirements:
+  - File ~/app/cache-strategy.md exists
+  - The document states how the HTTP cache is used
+  - The document states how the service worker cache behaves
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/app/cache-strategy.md
+    label: ~/app/cache-strategy.md
+  - validator: file_contains
+    path: /home/learner/app/cache-strategy.md
+    value: Cache-Control
+    label: http cache headers used
+  - validator: file_contains
+    path: /home/learner/app/cache-strategy.md
+    value: "service worker"
+    label: service worker covered
+  - validator: file_contains
+    path: /home/learner/app/cache-strategy.md
+    value: stale
+    label: stale handling stated
+  - validator: file_contains
+    path: /home/learner/app/cache-strategy.md
+    value: version
+    label: cache versioning stated
+steps:
+  - title: Create the app directory
+    detail: The strategy lives with the rest of the application notes.
+    command: mkdir -p ~/app
+  - title: Write the HTTP cache rules
+    detail: "Immutable assets get a long max-age, HTML gets no-cache, and everything else is
+      revalidated with an ETag."
+    command: >-
+      echo '# Caching strategy\n\n## The HTTP cache\n\n- hashed assets - Cache-Control with a one year max-age, immutable\n- HTML - no-cache, always revalidated with an ETag\n- API responses - short max-age, stale while revalidating' > ~/app/cache-strategy.md
+  - title: Write the service worker rules
+    detail: "A service worker cache is yours to manage. Name a version, clean the old caches on
+      activate, and never serve stale without saying so."
+    command: >-
+      echo '\n## The service worker cache\n\n- every cache is named with a version, and the old ones are deleted on activate\n- a cached response is marked stale and revalidated in the background\n- an offline response is labelled offline so the interface can say so' >> ~/app/cache-strategy.md
+  - title: Verify and submit
+    detail: cat the strategy, then submit for validation.
+    command: cat ~/app/cache-strategy.md

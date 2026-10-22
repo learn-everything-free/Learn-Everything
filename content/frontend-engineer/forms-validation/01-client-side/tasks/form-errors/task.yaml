@@ -1,0 +1,48 @@
+slug: form-errors
+title: Write Error Messages People Can Use
+type: practice
+difficulty: intermediate
+description: An error message is a sentence about what to do next, tied to the field it belongs
+  to. Write the strategy.
+requirements:
+  - File ~/app/forms/errors.md exists
+  - The document states how a message is worded
+  - The document states how errors are attached to their field and announced
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/app/forms/errors.md
+    label: ~/app/forms/errors.md
+  - validator: file_contains
+    path: /home/learner/app/forms/errors.md
+    value: message
+    label: message rules stated
+  - validator: file_contains
+    path: /home/learner/app/forms/errors.md
+    value: field
+    label: field binding stated
+  - validator: file_contains
+    path: /home/learner/app/forms/errors.md
+    value: aria
+    label: accessibility of errors stated
+  - validator: file_contains
+    path: /home/learner/app/forms/errors.md
+    value: summary
+    label: error summary addressed
+steps:
+  - title: Create the forms directory
+    detail: The strategy lives with the form code.
+    command: mkdir -p ~/app/forms
+  - title: Write the message rules
+    detail: "Say what happened and what to do about it. 'Invalid input' is not a message, it is a
+      shrug."
+    command: >-
+      echo '# Error messages\n\n## The wording\n\nEvery message says what happened and what to do next. "Enter a date in the format 2026-01-31", never "invalid input".' > ~/app/forms/errors.md
+  - title: Write the binding and the announcement
+    detail: "Bind the error to its field with aria-describedby, mark the field invalid, and
+      announce it in a summary at the top of the form."
+    command: >-
+      echo '\n## Binding and announcement\n\n- bind each message to its field with aria-describedby and set aria-invalid\n- list every error in a summary at the top of the form, focused on submit\n- never rely on colour alone - the message carries the meaning' >> ~/app/forms/errors.md
+  - title: Verify and submit
+    detail: cat the strategy, then submit for validation.
+    command: cat ~/app/forms/errors.md

@@ -1,0 +1,52 @@
+slug: browser-critical-path
+title: Trace the Critical Path
+type: guided
+difficulty: beginner
+description: The browser parses, lays out, paints and composites. Write the order down so you know
+  which of your files is holding the page up.
+requirements:
+  - Directory ~/perf exists
+  - File ~/perf/critical-path.md exists
+  - The document lists the phases in order
+  - The document states which resources block the first paint
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/perf
+    label: ~/perf
+  - validator: file_exists
+    path: /home/learner/perf/critical-path.md
+    label: ~/perf/critical-path.md
+  - validator: file_contains
+    path: /home/learner/perf/critical-path.md
+    value: HTML
+    label: HTML phase present
+  - validator: file_contains
+    path: /home/learner/perf/critical-path.md
+    value: CSS
+    label: CSS phase present
+  - validator: file_contains
+    path: /home/learner/perf/critical-path.md
+    value: DOM
+    label: DOM phase present
+  - validator: file_contains
+    path: /home/learner/perf/critical-path.md
+    value: paint
+    label: paint phase present
+steps:
+  - title: Create the perf directory
+    detail: The notes live with the rest of the performance material.
+    command: mkdir -p ~/perf
+  - title: Write the phases
+    detail: "Parse the HTML, build the DOM, parse the CSS, build the CSSOM, combine them into the
+      render tree, lay it out, paint, composite."
+    command: >-
+      echo '# The critical path\n\n## The phases\n\n1. parse the HTML and build the DOM\n2. parse the CSS and build the CSSOM\n3. combine them into the render tree\n4. layout, then paint, then composite' > ~/perf/critical-path.md
+  - title: State what blocks the first paint
+    detail: "Stylesheets block rendering, scripts block parsing. Everything else can wait for the
+      first paint."
+    command: >-
+      echo '\n## What blocks the first paint\n\n- a stylesheet in the head blocks rendering until it is parsed\n- a script without the async attribute blocks parsing\n- a web font blocks the text that uses it' >> ~/perf/critical-path.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/perf/critical-path.md

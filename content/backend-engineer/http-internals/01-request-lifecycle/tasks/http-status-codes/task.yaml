@@ -1,0 +1,52 @@
+slug: http-status-codes
+title: Map Outcomes to Status Codes
+type: practice
+difficulty: intermediate
+description: The status code is part of the contract - it tells the client whether to retry, to
+  fix its request, or to give up. Write the mapping.
+requirements:
+  - File ~/http/status-codes.md exists
+  - The document maps the outcomes to status codes
+  - The document states which codes are safe to retry
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/http/status-codes.md
+    label: ~/http/status-codes.md
+  - validator: file_contains
+    path: /home/learner/http/status-codes.md
+    value: 200
+    label: success code documented
+  - validator: file_contains
+    path: /home/learner/http/status-codes.md
+    value: 404
+    label: not found documented
+  - validator: file_contains
+    path: /home/learner/http/status-codes.md
+    value: 409
+    label: conflict documented
+  - validator: file_contains
+    path: /home/learner/http/status-codes.md
+    value: 429
+    label: rate limit documented
+  - validator: file_contains
+    path: /home/learner/http/status-codes.md
+    value: retry
+    label: retry guidance stated
+steps:
+  - title: Create the http directory
+    detail: The status code table is a reference the whole team reads.
+    command: mkdir -p ~/http
+  - title: Write the outcome mapping
+    detail: "200 for a read, 201 for a create, 400 for a bad request, 404 for a missing resource, 409
+      for a conflict, 429 for a rate limit."
+    command: >-
+      echo '# Status codes\n\n- 200 - the request succeeded\n- 201 - the resource was created\n- 400 - the request was malformed\n- 404 - the resource does not exist\n- 409 - the request conflicts with the current state\n- 429 - too many requests' > ~/http/status-codes.md
+  - title: Add the retry guidance
+    detail: "Only the codes that mean try again later. Everything else is a bug on one side or the
+      other."
+    command: >-
+      echo '\n## Retries\n\nRetry only on 429 and on 5xx, with exponential backoff. A 4xx is the client being wrong, so retrying it just wastes the budget.' >> ~/http/status-codes.md
+  - title: Verify and submit
+    detail: cat the table, then submit for validation.
+    command: cat ~/http/status-codes.md

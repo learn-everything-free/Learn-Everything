@@ -1,0 +1,47 @@
+slug: form-schema
+title: Write the Form Schema
+type: guided
+difficulty: beginner
+description: The schema is the single description of what the form accepts, shared by the
+  interface and the server. Write it.
+requirements:
+  - Directory ~/app/forms exists
+  - File ~/app/forms/schema.ts exists
+  - The schema declares the fields and their types
+  - The schema states the validation rules
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/app/forms
+    label: ~/app/forms
+  - validator: file_exists
+    path: /home/learner/app/forms/schema.ts
+    label: ~/app/forms/schema.ts
+  - validator: file_contains
+    path: /home/learner/app/forms/schema.ts
+    value: "z.object"
+    label: object schema declared
+  - validator: file_contains
+    path: /home/learner/app/forms/schema.ts
+    value: "email"
+    label: email field declared
+  - validator: file_contains
+    path: /home/learner/app/forms/schema.ts
+    value: "min"
+    label: length rule declared
+steps:
+  - title: Create the forms directory
+    detail: Form code belongs together, away from the page that renders it.
+    command: mkdir -p ~/app/forms
+  - title: Write the schema
+    detail: "z.object describes the shape, and each field carries its own rule. The type comes
+      from the schema, never from a cast."
+    command: >-
+      echo 'import { z } from "zod";\n\nexport const checkoutSchema = z.object({\n  email: z.string().email(),\n  quantity: z.number().int().min(1).max(10),\n  notes: z.string().max(500).optional(),\n});' > ~/app/forms/schema.ts
+  - title: Add the inferred type
+    detail: "Infer the type from the schema, so the form and the type can never drift apart."
+    command: >-
+      echo '\nexport type CheckoutForm = z.infer<typeof checkoutSchema>;' >> ~/app/forms/schema.ts
+  - title: Verify and submit
+    detail: cat the schema, then submit for validation.
+    command: cat ~/app/forms/schema.ts

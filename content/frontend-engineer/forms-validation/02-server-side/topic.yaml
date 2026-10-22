@@ -1,0 +1,7 @@
+slug: 02-server-side
+title: Server-Side Validation
+summary: The client is a convenience; the server is the authority.
+order: 2
+tasks:
+  - form-server-action
+  - form-pending-state

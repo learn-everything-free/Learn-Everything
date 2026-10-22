@@ -1,0 +1,48 @@
+slug: form-pending-state
+title: Design the Pending State
+type: challenge
+difficulty: advanced
+description: Between the click and the answer there is a second of uncertainty, and the interface
+  has to say something. Write the states the form moves through.
+requirements:
+  - File ~/app/forms/pending.md exists
+  - The document lists the states of a submission
+  - The document states the rule for double submissions
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/app/forms/pending.md
+    label: ~/app/forms/pending.md
+  - validator: file_contains
+    path: /home/learner/app/forms/pending.md
+    value: pending
+    label: pending state described
+  - validator: file_contains
+    path: /home/learner/app/forms/pending.md
+    value: disabled
+    label: disabled state described
+  - validator: file_contains
+    path: /home/learner/app/forms/pending.md
+    value: Optimistic
+    label: optimistic state addressed
+  - validator: file_contains
+    path: /home/learner/app/forms/pending.md
+    value: "double"
+    label: double submission rule stated
+steps:
+  - title: Create the forms directory
+    detail: The state design lives with the form code.
+    command: mkdir -p ~/app/forms
+  - title: List the states
+    detail: "idle, pending, success and error. Every one of them is a design decision, not an
+      afterthought."
+    command: >-
+      echo '# Submission states\n\n## The states\n\n- idle - the form is ready, the button is enabled\n- pending - the request is in flight, the button is disabled and the fields are locked\n- success - the order is confirmed and the form is replaced\n- error - the failures are shown next to their fields' > ~/app/forms/pending.md
+  - title: Write the double submission and optimistic rules
+    detail: "Disable the button the moment it is pressed, and treat the id as the idempotency key
+      so a double submission cannot create two orders."
+    command: >-
+      echo '\n## Double submissions\n\nDisable the button on the first click and keep it disabled until the request settles. Send the form id as an idempotency key, so a double submission cannot create two orders.\n\n## Optimistic updates\n\nOnly for a change you can undo - show the new value, keep the old one, and roll back on failure.' >> ~/app/forms/pending.md
+  - title: Verify and submit
+    detail: cat the states, then submit for validation.
+    command: cat ~/app/forms/pending.md

@@ -1,0 +1,45 @@
+slug: http-cache-headers
+title: Set the Cache Headers
+type: practice
+difficulty: intermediate
+description: A response with the right cache headers is served without touching your server. Write
+  the policy for the orders API.
+requirements:
+  - File ~/http/cache-headers.yaml exists
+  - The file states the Cache-Control policy
+  - The file states the ETag and the validation rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/http/cache-headers.yaml
+    label: ~/http/cache-headers.yaml
+  - validator: file_contains
+    path: /home/learner/http/cache-headers.yaml
+    value: Cache-Control
+    label: cache control declared
+  - validator: file_contains
+    path: /home/learner/http/cache-headers.yaml
+    value: max-age
+    label: max age declared
+  - validator: file_contains
+    path: /home/learner/http/cache-headers.yaml
+    value: ETag
+    label: etag declared
+  - validator: file_contains
+    path: /home/learner/http/cache-headers.yaml
+    value: "304"
+    label: conditional request handled
+steps:
+  - title: Write the cache policy
+    detail: "A short max-age with must-revalidate keeps the list fresh while still absorbing the
+      repeat traffic."
+    command: >-
+      echo 'cache:\n  Cache-Control: public, max-age=60, must-revalidate\n  Vary: Accept, Authorization' > ~/http/cache-headers.yaml
+  - title: Add the ETag rule
+    detail: "An ETag is a fingerprint of the response. When the client sends it back, the server
+      answers 304 with no body - that is the whole point."
+    command: >-
+      echo '\n  ETag: weak_hash_of_body\n  on_if_none_match: 304\n  never_cache: [POST /orders, GET /orders/{id}/payment]' >> ~/http/cache-headers.yaml
+  - title: Verify and submit
+    detail: cat the policy, then submit for validation.
+    command: cat ~/http/cache-headers.yaml

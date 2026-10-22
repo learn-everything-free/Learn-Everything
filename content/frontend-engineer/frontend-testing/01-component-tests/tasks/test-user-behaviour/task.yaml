@@ -1,0 +1,48 @@
+slug: test-user-behaviour
+title: Test Behaviour, Not Implementation
+type: practice
+difficulty: intermediate
+description: The value of a test is what it protects. Write the rule that keeps the suite about
+  behaviour.
+requirements:
+  - File ~/tests/behaviour.md exists
+  - The document states what to assert on
+  - The document states what not to couple the tests to
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/tests/behaviour.md
+    label: ~/tests/behaviour.md
+  - validator: file_contains
+    path: /home/learner/tests/behaviour.md
+    value: behaviour
+    label: behaviour rule stated
+  - validator: file_contains
+    path: /home/learner/tests/behaviour.md
+    value: implementation
+    label: implementation coupling named
+  - validator: file_contains
+    path: /home/learner/tests/behaviour.md
+    value: snapshot
+    label: snapshot testing addressed
+  - validator: file_contains
+    path: /home/learner/tests/behaviour.md
+    value: "user"
+    label: user perspective stated
+steps:
+  - title: Create the tests directory
+    detail: The rule is one page, and it saves an afternoon every time it is forgotten.
+    command: mkdir -p ~/tests
+  - title: Write what to assert on
+    detail: "Assert on what the user sees and can do. If the assertion would still pass with a
+      broken interface, it is not testing the interface."
+    command: >-
+      echo '# Testing behaviour\n\n## What to assert on\n\nWhat the user can see and do - the text on screen, the state after a click, the request that left the browser. Every assertion should be phrased from the user perspective.' > ~/tests/behaviour.md
+  - title: Write what to avoid
+    detail: "Internal state, private function names and whole-tree snapshots all break on a
+      refactor without telling you anything."
+    command: >-
+      echo '\n## What to avoid\n\n- asserting on internal state or private function names\n- a whole component snapshot, which fails on every unrelated change\n- coupling the test to the implementation instead of the behaviour' >> ~/tests/behaviour.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/tests/behaviour.md

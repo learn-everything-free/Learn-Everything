@@ -1,0 +1,48 @@
+slug: cdc-log-reader
+title: Configure the Replication Slot
+type: guided
+difficulty: beginner
+description: The slot is a place in the write-ahead log that a reader can follow. Write the
+  configuration that points it at your tables.
+requirements:
+  - Directory ~/cdc exists
+  - File ~/cdc/config.yaml exists
+  - The config names the publication and the slot
+  - The config states the replica identity setting
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/cdc
+    label: ~/cdc
+  - validator: file_exists
+    path: /home/learner/cdc/config.yaml
+    label: ~/cdc/config.yaml
+  - validator: file_contains
+    path: /home/learner/cdc/config.yaml
+    value: publication
+    label: publication declared
+  - validator: file_contains
+    path: /home/learner/cdc/config.yaml
+    value: slot
+    label: slot declared
+  - validator: file_contains
+    path: /home/learner/cdc/config.yaml
+    value: "REPLICA IDENTITY"
+    label: replica identity stated
+steps:
+  - title: Create the cdc directory
+    detail: One directory holds the whole capture configuration.
+    command: mkdir -p ~/cdc
+  - title: Write the slot and publication
+    detail: "The slot is a named position in the log. The publication lists the tables whose
+      changes you want."
+    command: >-
+      echo 'cdc:\n  slot: orders_slot\n  publication:\n    name: orders_pub\n    tables: [public.orders, public.order_items]' > ~/cdc/config.yaml
+  - title: State the replica identity setting
+    detail: "REPLICA IDENTITY FULL is what makes an update carry the whole row instead of just
+      the key. It costs write volume, so use it per table, not per database."
+    command: >-
+      echo '\n  replica_identity: "REPLICA IDENTITY FULL"\n  snapshot_mode: initial\n  parallel_workers: 4' >> ~/cdc/config.yaml
+  - title: Verify and submit
+    detail: cat the configuration, then submit for validation.
+    command: cat ~/cdc/config.yaml

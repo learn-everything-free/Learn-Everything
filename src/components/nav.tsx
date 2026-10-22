@@ -8,6 +8,7 @@ import { useProgress, totalXp } from "@/lib/progress";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserMenu } from "@/components/user-menu";
 import { SearchDialog } from "@/components/search-dialog";
+import { LogoMark } from "@/components/brand/logo";
 import type { SearchItem } from "@/lib/search-index";
 
 // DESIGN.md — a single thin top bar, defined by typography and a hairline.
@@ -45,8 +46,9 @@ export function Nav({ searchItems = [] }: { searchItems?: SearchItem[] }) {
     <header className="sticky top-0 z-40 border-b border-ink/70 bg-eggshell/95 backdrop-blur-sm">
       <div className="mx-auto flex h-[68px] max-w-[1400px] items-center justify-between gap-4 px-5 sm:px-8">
         {/* Wordmark */}
-        <Link href="/" className="group flex shrink-0 items-center gap-3">
-          <span className="text-[18px] font-medium tracking-[-0.01em] text-ink underline decoration-ink/30 underline-offset-[6px] group-hover:decoration-ink">
+        <Link href="/" className="group flex shrink-0 items-center gap-3 text-ink">
+          <LogoMark className="size-[26px] shrink-0" />
+          <span className="text-[18px] font-medium tracking-[-0.01em] underline decoration-ink/30 underline-offset-[6px] group-hover:decoration-ink">
             Learn Everything
           </span>
         </Link>

@@ -9,6 +9,7 @@ import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useProgress } from "@/lib/progress";
+import { LogoMark } from "@/components/brand/logo";
 
 const NAME_KEY = "learn-everything.certificate-name.v1";
 
@@ -160,10 +161,13 @@ export function CertificateClient({
             <p className="text-body-sm font-medium text-ink">{issued}</p>
           </div>
           <div className="text-right">
-            <p className="border-t border-ink pt-2 font-mono text-body-sm text-ink">
-              Learn Everything
+            <div className="flex items-center justify-end gap-2 border-t border-ink pt-2 text-ink">
+              <LogoMark className="size-[18px] shrink-0" />
+              <span className="text-body-sm font-medium">Learn Everything</span>
+            </div>
+            <p className="mt-1 font-mono text-caption uppercase text-ash">
+              validator-verified, not self-reported
             </p>
-            <p className="mt-1 font-mono text-caption text-ash">validator-verified, not self-reported</p>
           </div>
         </div>
       </div>

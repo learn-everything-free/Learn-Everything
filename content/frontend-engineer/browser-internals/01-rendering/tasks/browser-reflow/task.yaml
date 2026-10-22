@@ -1,0 +1,48 @@
+slug: browser-reflow
+title: Stop the Layout Thrash
+type: practice
+difficulty: intermediate
+description: Reading a layout property right after writing one forces the browser to recalculate
+  the page in the middle of a frame. Write the rules that avoid it.
+requirements:
+  - File ~/perf/reflow.md exists
+  - The document explains what forces a reflow
+  - The document states the batching rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/perf/reflow.md
+    label: ~/perf/reflow.md
+  - validator: file_contains
+    path: /home/learner/perf/reflow.md
+    value: reflow
+    label: reflow explained
+  - validator: file_contains
+    path: /home/learner/perf/reflow.md
+    value: layout
+    label: layout triggers listed
+  - validator: file_contains
+    path: /home/learner/perf/reflow.md
+    value: batch
+    label: batching rule stated
+  - validator: file_contains
+    path: /home/learner/perf/reflow.md
+    value: requestAnimationFrame
+    label: animation frame fix stated
+steps:
+  - title: Create the perf directory
+    detail: The notes live with the rest of the performance material.
+    command: mkdir -p ~/perf
+  - title: Write what forces a reflow
+    detail: "Reading a geometry property - offsetHeight, getBoundingClientRect - right after
+      changing the DOM forces the browser to lay the page out again."
+    command: >-
+      echo '# Reflow and thrash\n\n## What forces a reflow\n\nWriting a size or position and then reading a geometry property forces the browser to recalculate the layout immediately. Doing it in a loop is layout thrash.' > ~/perf/reflow.md
+  - title: State the batching rule
+    detail: "Separate the reads from the writes, and keep every measurement in one batch at the
+      start of the frame."
+    command: >-
+      echo '\n## The batching rule\n\nRead every measurement first, then write every change. Schedule the whole batch inside requestAnimationFrame so it lands in one frame.' >> ~/perf/reflow.md
+  - title: Verify and submit
+    detail: cat the rules, then submit for validation.
+    command: cat ~/perf/reflow.md

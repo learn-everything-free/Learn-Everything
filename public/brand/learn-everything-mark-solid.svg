@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-labelledby="le-title">
+  <title id="le-title">Learn Everything</title>
+  <rect width="48" height="48" fill="#403a34"/>
+  <polyline points="14.5,13.5 24,24 14.5,34.5" fill="none" stroke="#f6f1eb" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="28.5" y="30.5" width="12" height="4.5" fill="#f6f1eb"/>
+</svg>

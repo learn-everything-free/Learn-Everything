@@ -1,0 +1,55 @@
+slug: dbt-tests
+title: Write the Tests
+type: practice
+difficulty: intermediate
+description: Tests are the contract with the people who query the model. Write the schema file
+  with the generic and the singular tests.
+requirements:
+  - Directory ~/dbt/models exists
+  - File ~/dbt/models/schema.yml exists
+  - The file declares the model and its columns
+  - The file declares the generic and the singular tests
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/dbt/models
+    label: ~/dbt/models
+  - validator: file_exists
+    path: /home/learner/dbt/models/schema.yml
+    label: ~/dbt/models/schema.yml
+  - validator: file_contains
+    path: /home/learner/dbt/models/schema.yml
+    value: "models:"
+    label: models block present
+  - validator: file_contains
+    path: /home/learner/dbt/models/schema.yml
+    value: "columns:"
+    label: columns declared
+  - validator: file_contains
+    path: /home/learner/dbt/models/schema.yml
+    value: unique
+    label: unique test present
+  - validator: file_contains
+    path: /home/learner/dbt/models/schema.yml
+    value: not_null
+    label: not null test present
+  - validator: file_contains
+    path: /home/learner/dbt/models/schema.yml
+    value: relationships
+    label: relationship test present
+steps:
+  - title: Create the models directory
+    detail: The schema file lives beside the models it describes.
+    command: mkdir -p ~/dbt/models
+  - title: Declare the model and its columns
+    detail: "The model and its columns, with the tests that make the columns trustworthy."
+    command: >-
+      echo 'version: 2\nmodels:\n  - name: stg_orders\n    description: One row per order, renamed and typed\n    columns:\n      - name: order_id\n        description: The primary key of the order\n        tests:\n          - unique\n          - not_null\n      - name: customer_id\n        tests:\n          - not_null\n          - relationships:\n              to: ref("stg_customers")\n              field: customer_id' > ~/dbt/models/schema.yml
+  - title: Add the singular test
+    detail: "Generic tests cover the column rules. A singular test covers the rule nobody can
+      express as a column test."
+    command: >-
+      echo '\n  - name: stg_orders_amount_is_not_negative\n    description: A negative amount means the source is wrong\n    data_tests:\n      - accept_values:\n          values: [true]\n          arguments:\n            row_condition: "amount >= 0"' >> ~/dbt/models/schema.yml
+  - title: Verify and submit
+    detail: cat the schema, then submit for validation.
+    command: cat ~/dbt/models/schema.yml

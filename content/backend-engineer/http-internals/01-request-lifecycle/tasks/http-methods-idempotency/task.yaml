@@ -1,0 +1,47 @@
+slug: http-methods-idempotency
+title: Choose Methods That Are Safe to Retry
+type: guided
+difficulty: beginner
+description: A client will retry what it is not sure about, so the method you choose decides whether
+  a retry duplicates an order. Write the contract.
+requirements:
+  - Directory ~/http exists
+  - File ~/http/api-contract.yaml exists
+  - The file lists the methods and what each one does
+  - The file marks which methods are idempotent
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/http
+    label: ~/http
+  - validator: file_exists
+    path: /home/learner/http/api-contract.yaml
+    label: ~/http/api-contract.yaml
+  - validator: file_contains
+    path: /home/learner/http/api-contract.yaml
+    value: GET
+    label: GET documented
+  - validator: file_contains
+    path: /home/learner/http/api-contract.yaml
+    value: POST
+    label: POST documented
+  - validator: file_contains
+    path: /home/learner/http/api-contract.yaml
+    value: PUT
+    label: PUT documented
+  - validator: file_contains
+    path: /home/learner/http/api-contract.yaml
+    value: idempotent
+    label: idempotency stated
+steps:
+  - title: Create the http directory
+    detail: The wire contract is a document, not a memory.
+    command: mkdir -p ~/http
+  - title: Write the method contract
+    detail: "GET reads, POST creates, PUT replaces, PATCH changes part of it, DELETE removes. The
+      verbs carry the retry semantics."
+    command: >-
+      echo 'methods:\n  - method: GET\n    purpose: read a resource\n    idempotent: true\n  - method: POST\n    purpose: create a resource\n    idempotent: false\n  - method: PUT\n    purpose: replace a resource\n    idempotent: true' > ~/http/api-contract.yaml
+  - title: Verify and submit
+    detail: cat the contract, then submit for validation.
+    command: cat ~/http/api-contract.yaml

@@ -1,0 +1,5 @@
+slug: data-governance
+title: Governance & Lineage
+summary: Who owns the data, where it came from, and what must never leave the building.
+path: data-engineer
+order: 8

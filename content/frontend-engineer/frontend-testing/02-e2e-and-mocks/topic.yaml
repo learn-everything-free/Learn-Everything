@@ -1,0 +1,7 @@
+slug: 02-e2e-and-mocks
+title: E2E & Mocks
+summary: The slow suite you keep small, and the network you fake in the fast one.
+order: 2
+tasks:
+  - test-e2e-playwright
+  - test-msw-handlers

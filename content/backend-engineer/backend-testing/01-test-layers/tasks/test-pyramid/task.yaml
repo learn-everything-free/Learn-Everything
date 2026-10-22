@@ -1,0 +1,52 @@
+slug: test-pyramid
+title: Define the Test Layers
+type: guided
+difficulty: beginner
+description: Unit, integration and end-to-end tests answer different questions and cost different
+  amounts. Write what each layer covers in your service.
+requirements:
+  - Directory ~/tests exists
+  - File ~/tests/strategy.md exists
+  - The document describes all three layers
+  - The document states the proportion rule
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/tests
+    label: ~/tests
+  - validator: file_exists
+    path: /home/learner/tests/strategy.md
+    label: ~/tests/strategy.md
+  - validator: file_contains
+    path: /home/learner/tests/strategy.md
+    value: unit
+    label: unit layer described
+  - validator: file_contains
+    path: /home/learner/tests/strategy.md
+    value: integration
+    label: integration layer described
+  - validator: file_contains
+    path: /home/learner/tests/strategy.md
+    value: end-to-end
+    label: end-to-end layer described
+  - validator: file_contains
+    path: /home/learner/tests/strategy.md
+    value: ratio
+    label: proportion rule stated
+steps:
+  - title: Create the tests directory
+    detail: The test strategy is a document the team argues about once, not on every pull request.
+    command: mkdir -p ~/tests
+  - title: Write the three layers
+    detail: "Unit tests cover the logic, integration tests cover the wiring to real dependencies,
+      end-to-end tests cover the paths users actually take."
+    command: >-
+      echo '# Test strategy\n\n## The layers\n\n- unit - pure logic, no network, no database, milliseconds\n- integration - the service wired to a real database and a real queue\n- end-to-end - the deployed system, exercised through the API' > ~/tests/strategy.md
+  - title: State the proportion rule
+    detail: "A wide base of unit tests and a thin spike of end-to-end tests. The ratio is what
+      keeps the suite fast enough to run on every save."
+    command: >-
+      echo '\n## The ratio\n\nKeep the ratio at roughly 70 percent unit, 20 percent integration and 10 percent end-to-end, and the suite stays under ten minutes.' >> ~/tests/strategy.md
+  - title: Verify and submit
+    detail: cat the strategy, then submit for validation.
+    command: cat ~/tests/strategy.md

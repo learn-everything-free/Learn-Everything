@@ -1,0 +1,45 @@
+slug: auth-session-tokens
+title: Design a Session
+type: practice
+difficulty: intermediate
+description: A session cookie is a bearer token with your name on it. Write the cookie settings and
+  the rule for rotating the session after every privilege change.
+requirements:
+  - File ~/.auth/sessions.yaml exists
+  - The file states the cookie flags
+  - The file states the session lifetime and the rotation rule
+environment: ubuntu:24.04
+validation:
+  - validator: file_exists
+    path: /home/learner/.auth/sessions.yaml
+    label: ~/.auth/sessions.yaml
+  - validator: file_contains
+    path: /home/learner/.auth/sessions.yaml
+    value: httponly
+    label: httponly flag set
+  - validator: file_contains
+    path: /home/learner/.auth/sessions.yaml
+    value: samesite
+    label: samesite flag set
+  - validator: file_contains
+    path: /home/learner/.auth/sessions.yaml
+    value: max_age_seconds
+    label: session lifetime declared
+  - validator: file_contains
+    path: /home/learner/.auth/sessions.yaml
+    value: rotate
+    label: rotation rule stated
+steps:
+  - title: Write the cookie settings
+    detail: "httponly keeps the cookie out of JavaScript, secure keeps it off plain HTTP, and
+      samesite stops it riding along on other people's requests."
+    command: >-
+      echo 'session_cookie:\n  name: le_session\n  httponly: true\n  secure: true\n  samesite: lax\n  path: /' > ~/.auth/sessions.yaml
+  - title: Add the lifetime and the rotation rule
+    detail: "Rotate the session identifier whenever the privilege level changes - a password
+      change, a new device, an admin grant."
+    command: >-
+      echo '\n  max_age_seconds: 604800\n  idle_timeout_seconds: 86400\n  rotate_on: [privilege_change, password_change, sign_in]\n  revoke_on: [sign_out, password_reset]' >> ~/.auth/sessions.yaml
+  - title: Verify and submit
+    detail: cat the settings, then submit for validation.
+    command: cat ~/.auth/sessions.yaml

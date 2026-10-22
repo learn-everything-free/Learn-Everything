@@ -1,0 +1,51 @@
+slug: browser-storage
+title: Pick the Right Storage API
+type: practice
+difficulty: intermediate
+description: Four storage APIs, four different jobs. Write the decision for your application.
+requirements:
+  - Directory ~/app exists
+  - File ~/app/storage.md exists
+  - The document compares the storage APIs
+  - The document states what must never be stored client side
+environment: ubuntu:24.04
+validation:
+  - validator: directory_exists
+    path: /home/learner/app
+    label: ~/app
+  - validator: file_exists
+    path: /home/learner/app/storage.md
+    label: ~/app/storage.md
+  - validator: file_contains
+    path: /home/learner/app/storage.md
+    value: localStorage
+    label: localStorage covered
+  - validator: file_contains
+    path: /home/learner/app/storage.md
+    value: sessionStorage
+    label: sessionStorage covered
+  - validator: file_contains
+    path: /home/learner/app/storage.md
+    value: IndexedDB
+    label: IndexedDB covered
+  - validator: file_contains
+    path: /home/learner/app/storage.md
+    value: cookie
+    label: cookies covered
+steps:
+  - title: Create the app directory
+    detail: The decision notes live with the rest of the application material.
+    command: mkdir -p ~/app
+  - title: Compare the four APIs
+    detail: "localStorage is synchronous and small, sessionStorage dies with the tab, IndexedDB is
+      asynchronous and large, cookies are sent with every request."
+    command: >-
+      echo '# Client storage\n\n## The four APIs\n\n- localStorage - synchronous, string only, about 5 MB, shared across tabs\n- sessionStorage - the same, but cleared when the tab closes\n- IndexedDB - asynchronous, structured, large enough for real data\n- cookie - small, sent with every request, readable by the server' > ~/app/storage.md
+  - title: State what must never be stored
+    detail: "Access tokens in localStorage are readable by any script on the page. Say so
+      explicitly so the rule survives the next sprint."
+    command: >-
+      echo '\n## Never on the client\n\n- access tokens in localStorage\n- customer personal data that the server did not send for caching\n- anything a user would be upset to read in a shared browser' >> ~/app/storage.md
+  - title: Verify and submit
+    detail: cat the notes, then submit for validation.
+    command: cat ~/app/storage.md
